@@ -7,6 +7,7 @@ setwd("/Users/abel.vertesy/Dropbox/Abel.IMBA/Zacc/ggExpress/")
 # ------------------------------------------------------------------------------------------------
 kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 
+
 # ------------------------------------------------------------------------------------------------
 qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
                    , title = F, fname = F, ...) {
