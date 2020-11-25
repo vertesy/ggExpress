@@ -1,6 +1,7 @@
+# try(source("~/GitHub/Packages/ggExpressDev/ggExpress.functions.R"), silent = T)
+
 require(ggpubr)
 require(cowplot)
-setwd("/Users/abel.vertesy/Dropbox/Abel.IMBA/Zacc/ggExpress/")
 
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
@@ -14,7 +15,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
   if(isFALSE(title)) title = substitute(ggobj)
   if(isFALSE(fname)) fname <- kpp(title, ext)
   print(paste0(getwd(),"/", fname))
-  save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
+  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
 }
 # qqSave(ggobj = qplot(12))
 
@@ -28,7 +29,7 @@ qqCovert.hist <- function(namedVec=1:14) {
 # qqCovert.hist()
 
 # ------------------------------------------------------------------------------------------------
-shistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, ...) {
+shistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
   df <- qqCovert.hist(namedVec = vec)
@@ -38,20 +39,19 @@ shistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, ...) {
                 , color = "names", fill = "names"
                 , palette = 'jco', ...
   ) +
-    # if (vline) geom_vline(xintercept = vline) +
-    if (length(unique(df$"names")) == 1) theme(legend.position = "none")
-
+  if (length(unique(df$"names")) == 1) theme(legend.position = "none")
+  if (vline) p <- p + geom_vline(xintercept = vline)
   fname = kpp(plotname, "hist",  ext)
   qqSave(ggobj = p, title = plotname, fname = fname)
-  p
+  if (plot) p
 }
-shistogram(weight2, vline = 60)
-shistogram(weight)
+# shistogram(weight2, vline = 60)
+# shistogram(weight)
 
 
 
 # ------------------------------------------------------------------------------------------------
-sdensity <- function(vec, ext = "pdf", xlab = F, ...) {
+sdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
   df <- qqCovert.hist(namedVec = vec)
@@ -65,14 +65,14 @@ sdensity <- function(vec, ext = "pdf", xlab = F, ...) {
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   fname = kpp(plotname, "dens",  ext)
   qqSave(ggobj = p, title = plotname, fname = fname)
-  p
+  if (plot) p
 }
-sdensity(weight)
-sdensity(weight2)
+# sdensity(weight)
+# sdensity(weight2)
 
 
 # ------------------------------------------------------------------------------------------------
-sbarplot <- function(vec, ext = "pdf", xlab = F, ...) {
+sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
   df <- qqCovert.hist(namedVec = vec)
@@ -83,16 +83,16 @@ sbarplot <- function(vec, ext = "pdf", xlab = F, ...) {
                  , palette = 'jco', ...
   ) + grids(axis ='y') +
     theme(legend.position = "none")
-
+  if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar",  ext)
   qqSave(ggobj = p, title = plotname, fname = fname)
-  p
+  if (plot) p
 }
-weight3 <- weight2[1:12]
-sbarplot(weight2)
-
-sbarplot(weight3)
-get_palette("jco", k=1)
+# weight3 <- weight2[1:12]
+# sbarplot(weight2)
+#
+# sbarplot(weight3)
+# get_palette("jco", k=1)
 
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
