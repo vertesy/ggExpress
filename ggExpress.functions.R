@@ -86,6 +86,29 @@ sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
 # get_palette("jco", k=1)
 
 # ------------------------------------------------------------------------------------------------
+# sscatter ------------------------------------------------------------------------------------------------
+sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
+                     , hline = F, vline = F, plot = TRUE
+                     , ...) {
+
+  plotname <- kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix)
+  vars <- colnames(tbl_X_Y_Col_etc)
+
+  df <- tbl_X_Y_Col_etc
+
+  p <- ggscatter(data = df, x = vars[1], y = vars[2], color = vars[3]
+                 , title = plotname, ...) +
+    grids(axis ='xy')
+  if (hline) p <- p + geom_hline(yintercept = hline)
+  if (vline) p <- p + geom_hline(xintercept = vline)
+  fname = kpp(plotname, "scatter",  ext)
+  qqSave(ggobj = p, title = plotname, fname = fname)
+  if (plot) p
+}
+# sscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
+#          , ellipse = F, mean.point = TRUE, star.plot = TRUE)
+
+
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
