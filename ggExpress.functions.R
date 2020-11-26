@@ -9,15 +9,6 @@ require(cowplot)
 kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 
 
-# ------------------------------------------------------------------------------------------------
-qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
-                   , title = F, fname = F, ...) {
-  if(isFALSE(title)) title = substitute(ggobj)
-  if(isFALSE(fname)) fname <- kpp(title, ext)
-  print(paste0(getwd(),"/", fname))
-  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
-}
-# qqSave(ggobj = qplot(12))
 
 # ------------------------------------------------------------------------------------------------
 qqCovert.hist <- function(namedVec=1:14) {
@@ -99,6 +90,34 @@ sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
+## -------------------------------------------------------------------------------------------------
+qqSaveA4p <- function(ggobj, ext =c("png", "pdf")[1]) {
+  title = substitute(ggobj)
+  save_plot(plot = ggobj, filename = kpp(title, ext), base_height = hA4, base_width = wA4)
+}
+
+
+qqSaveA4l <- function(ggobj, ext =c("png", "pdf")[1]) {
+  title = substitute(ggobj)
+  save_plot(plot = ggobj, filename = kpp(title, ext), base_height = wA4, base_width =hA4 )
+}
+
+
+qqSaveA5l <- function(ggobj, ext =c("png", "pdf")[1]) {
+  title = substitute(ggobj)
+  save_plot(plot = ggobj, filename = kpp(title, ext), base_height = hA4/2, base_width = 8.27 )
+}
+
+# ------------------------------------------------------------------------------------------------
+qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
+                   , title = F, fname = F, ...) {
+  if(isFALSE(title)) title = substitute(ggobj)
+  if(isFALSE(fname)) fname <- kpp(title, ext)
+  print(paste0(getwd(),"/", fname))
+  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
+}
+# qqSave(ggobj = qplot(12))
+
 
 # ------------------------------------------------------------------------
 # ------------------------------------------------------------------------
