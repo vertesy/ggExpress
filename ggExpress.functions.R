@@ -88,7 +88,7 @@ sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
 # ------------------------------------------------------------------------------------------------
 # sscatter ------------------------------------------------------------------------------------------------
 sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
-                     , hline = F, vline = F, plot = TRUE
+                     , hline = F, vline = F, plot = TRUE, width = 7, height =  width
                      , ...) {
 
   plotname <- kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix)
@@ -102,7 +102,7 @@ sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (vline) p <- p + geom_hline(xintercept = vline)
   fname = kpp(plotname, "scatter",  ext)
-  qqSave(ggobj = p, title = plotname, fname = fname)
+  qqSave(ggobj = p, title = plotname, fname = fname, w = width, h = height)
   if (plot) p
 }
 # sscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
