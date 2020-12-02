@@ -8,9 +8,27 @@ require(cowplot)
 # ------------------------------------------------------------------------------------------------
 kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 
+# qqSave ------------------------------------------------------------------------------------------------
+qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
+                   , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
+                   , title = F, fname = F, ...) {
+  if(isFALSE(title)) title = substitute(ggobj)
+  if(isFALSE(fname)) fname <- kpp(title, ext)
+  if(!isFALSE(page)) {
+    wA4 <-8.27
+    hA4 <- 11.69
+    if ( page == "A4p" ) { w = wA4; h = hA4}
+    if ( page == "A4l" ) { w = hA4; h = wA4}
+    if ( page == "A5p" ) { w = wA4/2; h = hA4/2}
+    if ( page == "A5l" ) { w = hA4/2; h = wA4/2}
+  }
+  print(paste0(getwd(),"/", fname))
+  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
+}
+# qqSave(ggobj = qplot(12))
 
 
-# ------------------------------------------------------------------------------------------------
+# qqCovert.hist ------------------------------------------------------------------------------------------------
 qqCovert.hist <- function(namedVec=1:14) {
   df <- tibble::as.tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
@@ -114,39 +132,7 @@ sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
 # ------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------
 ## -------------------------------------------------------------------------------------------------
-qqSaveA4p <- function(ggobj, ext =c("png", "pdf")[1],
-                      title = substitute(ggobj), fname = F, ...) {
-  if(isFALSE(title)) title = substitute(ggobj)
-  if(isFALSE(fname)) fname <- kpp(title, ext)
 
-  save_plot(plot = ggobj, filename = kpp(title, ext), base_height = hA4, base_width = wA4, ...)
-}
-
-
-qqSaveA4l <- function(ggobj, ext =c("png", "pdf")[1],
-                      title = substitute(ggobj), fname = F, ...) {
-    if(isFALSE(title)) title = substitute(ggobj)
-    if(isFALSE(fname)) fname <- kpp(title, ext)
-    save_plot(plot = ggobj, filename = kpp(title, ext), base_height = wA4, base_width =hA4, ...)
-}
-
-
-qqSaveA5l <- function(ggobj, ext =c("png", "pdf")[1],
-                      title = substitute(ggobj), fname = F, ...) {
-  if(isFALSE(title)) title = substitute(ggobj)
-  if(isFALSE(fname)) fname <- kpp(title, ext)
-  save_plot(plot = ggobj, filename = kpp(title, ext), base_height = hA4/2, base_width = 8.27, ...)
-}
-
-# ------------------------------------------------------------------------------------------------
-qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
-                   , title = substitute(ggobj), fname = F, ...) {
-  if(isFALSE(title)) title = substitute(ggobj)
-  if(isFALSE(fname)) fname <- kpp(title, ext)
-  print(paste0(getwd(),"/", fname))
-  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
-}
-# qqSave(ggobj = qplot(12))
 
 
 # ------------------------------------------------------------------------
