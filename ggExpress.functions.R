@@ -4,7 +4,22 @@ require(ggpubr)
 require(cowplot)
 
 # ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
+# percentage_formatter ------------------------------------------------------------------------------------------------
+#' percentage_formatter
+#'
+#' Parse a string of 0-100% from a number between 0 and 1.
+#' @param x A vector of numbers between 0-1.
+#' @param digitz Number of digits to keep. 3 by default.
+#' @export
+#' @examples percentage_formatter (x = 4.2822212, digitz = 3)
+
+percentage_formatter <- function(x, digitz = 3) {
+  a = paste(100 * signif(x, digitz), "%", sep = " ")
+  a[a == "NaN %"] = NaN
+  a[a == "NA %"] = NA
+  return(a)
+}
+
 # ------------------------------------------------------------------------------------------------
 kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 
@@ -28,20 +43,20 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
 # qqSave(ggobj = qplot(12))
 
 
-# qqCovert.hist ------------------------------------------------------------------------------------------------
-qqCovert.hist <- function(namedVec=1:14) {
+# qqqCovert.named.vec2tbl ------------------------------------------------------------------------------------------------
+qqqCovert.named.vec2tbl <- function(namedVec=1:14) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
   df <- tibble::as.tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
   df$"names" <- if(!is.null(nm)) nm else rep(".", length(namedVec))
   df
 }
-# qqCovert.hist()
+# qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
 
 # ------------------------------------------------------------------------------------------------
-shistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, ...) {
+qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
-  df <- qqCovert.hist(namedVec = vec)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec)
   p <- gghistogram(data = df, x = "value"
                 , title = plotname, xlab = xlab
                 , add = "median"
@@ -54,16 +69,16 @@ shistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, ...)
   qqSave(ggobj = p, title = plotname, fname = fname)
   if (plot) p
 }
-# shistogram(weight2, vline = 60)
-# shistogram(weight)
+# qhistogram(weight2, vline = 60)
+# qhistogram(weight)
 
 
 
 # ------------------------------------------------------------------------------------------------
-sdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
+qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
-  df <- qqCovert.hist(namedVec = vec)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
@@ -76,15 +91,15 @@ sdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
   qqSave(ggobj = p, title = plotname, fname = fname)
   if (plot) p
 }
-# sdensity(weight)
-# sdensity(weight2)
+# qdensity(weight)
+# qdensity(weight2)
 
 
 # ------------------------------------------------------------------------------------------------
-sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
+qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
-  df <- qqCovert.hist(namedVec = vec)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
@@ -98,14 +113,35 @@ sbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
   if (plot) p
 }
 # weight3 <- weight2[1:12]
-# sbarplot(weight2)
+# qbarplot(weight2)
 #
-# sbarplot(weight3)
+# qbarplot(weight3)
 # get_palette("jco", k=1)
 
 # ------------------------------------------------------------------------------------------------
-# sscatter ------------------------------------------------------------------------------------------------
-sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
+# qpie ------------------------------------------------------------------------------------------------
+qpie <- function(vec, ext = "pdf", plot = TRUE, pcdigits = 2, ...) {
+  plotname <- as.character(substitute(vec))
+  df <- qqqCovert.named.vec2tbl(namedVec = vec)
+  if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
+  pcX <- df$"value" / sum(df$"value")
+  labsx <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+  labs <- paste(df$names, "\n", labsx)
+
+  p <- ggpubr::ggpie(data = df, x = "value", label = labs
+                     , fill = "names", color = "white",
+                     , title = plotname,
+                     palette = 'jco'
+  ) + theme(legend.position = "none")
+  fname = kpp(plotname, "pie",  ext)
+  qqSave(ggobj = p, title = plotname, fname = fname)
+  if (plot) p
+}
+xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
+
+
+# qscatter ------------------------------------------------------------------------------------------------
+qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
                      , hline = F, vline = F, plot = TRUE, width = 7, height =  width
                      , ...) {
 
@@ -123,7 +159,7 @@ sscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
   qqSave(ggobj = p, title = plotname, fname = fname, w = width, h = height)
   if (plot) p
 }
-# sscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
+# qscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
 #          , ellipse = F, mean.point = TRUE, star.plot = TRUE)
 
 
