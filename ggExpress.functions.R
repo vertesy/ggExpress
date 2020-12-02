@@ -38,14 +38,14 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
     if ( page == "A5l" ) { w = hA4/2; h = wA4/2}
   }
   print(paste0(getwd(),"/", fname))
-  cowplot::save_plot(plot = ggobj, filename = fname, base_height = w, base_width = h, ...)
+  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
 }
 # qqSave(ggobj = qplot(12))
 
 
 # qqqCovert.named.vec2tbl ------------------------------------------------------------------------------------------------
 qqqCovert.named.vec2tbl <- function(namedVec=1:14) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-  df <- tibble::as.tibble(cbind("value" = namedVec))
+  df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
   df$"names" <- if(!is.null(nm)) nm else rep(".", length(namedVec))
   df
@@ -120,24 +120,27 @@ qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
 
 # ------------------------------------------------------------------------------------------------
 # qpie ------------------------------------------------------------------------------------------------
-qpie <- function(vec, ext = "pdf", plot = TRUE, pcdigits = 2, ...) {
-  plotname <- as.character(substitute(vec))
+qpie <- function(vec, ext = "pdf", plot = TRUE, w = 5, h = w
+                 , LegendSide = T, LegendTitle = as.character(substitute(vec))
+                 , plotname = as.character(substitute(vec))
+                 , pcdigits = 2, NamedSlices =F , ...) {
+  # plotname <- as.character(substitute(vec))
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   pcX <- df$"value" / sum(df$"value")
-  labsx <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
-  labs <- paste(df$names, "\n", labsx)
+  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+  if (NamedSlices) labs <- paste(df$names, "\n", labs)
 
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
                      , fill = "names", color = "white",
-                     , title = plotname,
-                     palette = 'jco'
-  ) + theme(legend.position = "none")
+                     , title = plotname
+                     , palette = 'jco', ...)
+  if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
   fname = kpp(plotname, "pie",  ext)
-  qqSave(ggobj = p, title = plotname, fname = fname)
+  qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
   if (plot) p
 }
-xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
+# xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
 
 # qscatter ------------------------------------------------------------------------------------------------
