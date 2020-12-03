@@ -96,27 +96,33 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE
-                     , xlab.angle = 45, ...) {
+qbarplot <- function(vec, ext = "pdf", plot = TRUE
+                     , hline = F, filtercol = 1
+                     , xlab.angle = 45, xlab = F, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
+
+  # df[["col"]] <- if (hline && filtercol) ifelse(df$"value" > hline, "green", "red") else "#EFC000FF"
+  df[["col"]] <- if (hline && filtercol) (df$"value" > hline) else "#EFC000FF"
+
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
-                 , color = "#EFC000FF", fill = "#EFC000FF"
+                 , color = "col", fill = "col"
                  , palette = 'jco', ...
   ) + grids(axis ='y') +
     theme(
       legend.position = "none",
       axis.text.x = element_text(angle = xlab.angle, hjust = 1)
-      )
+    )
 
   if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar",  ext)
   qqSave(ggobj = p, title = plotname, fname = fname)
   if (plot) p
 }
+
 # weight3 <- weight2[1:12]
 # qbarplot(weight2)
 #
