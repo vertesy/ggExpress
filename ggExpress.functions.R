@@ -96,7 +96,8 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, ...) {
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
+qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE
+                     , xlab.angle = 45, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
@@ -106,7 +107,11 @@ qbarplot <- function(vec, ext = "pdf", xlab = F, hline = F, plot = TRUE, ...) {
                  , color = "#EFC000FF", fill = "#EFC000FF"
                  , palette = 'jco', ...
   ) + grids(axis ='y') +
-    theme(legend.position = "none")
+    theme(
+      legend.position = "none",
+      axis.text.x = element_text(angle = xlab.angle, hjust = 1)
+      )
+
   if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar",  ext)
   qqSave(ggobj = p, title = plotname, fname = fname)
