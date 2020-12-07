@@ -100,7 +100,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 # ------------------------------------------------------------------------------------------------
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , hline = F, filtercol = 1
-                     , xlab.angle = 45, xlab = F
+                     , xlab.angle = 90, xlab = F
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
   if(isFALSE(xlab)) xlab = plotname
@@ -126,11 +126,9 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
   if (plot) p
 }
 
-# weight3 <- weight2[1:12]
-# qbarplot(weight2)
-#
+# weight3 <- runif(12)
 # qbarplot(weight3)
-# get_palette("jco", k=1)
+
 
 # ------------------------------------------------------------------------------------------------
 # qpie ------------------------------------------------------------------------------------------------
