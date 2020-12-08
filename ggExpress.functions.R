@@ -1,4 +1,8 @@
+######################################################################
+# ggExpress is the fastest way to create, annotate and export plots in R.
+######################################################################
 # try(source("~/GitHub/Packages/ggExpressDev/ggExpress.functions.R"), silent = T)
+# try(source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R"), silent = T)
 
 require(ggpubr)
 require(cowplot)
@@ -14,7 +18,7 @@ require(cowplot)
 #' @examples percentage_formatter (x = 4.2822212, digitz = 3)
 
 percentage_formatter <- function(x, digitz = 3) {
-  a = paste(100 * signif(x, digitz), "%", sep = " ")
+  a = paste(100 * signif (x, digitz), "%", sep = " ")
   a[a == "NaN %"] = NaN
   a[a == "NA %"] = NA
   return(a)
@@ -27,10 +31,10 @@ kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, ...) {
-  if(isFALSE(title)) title = substitute(ggobj)
-  if(isFALSE(fname)) fname <- kpp(title, ext)
-  if(!isFALSE(page)) {
-    wA4 <-8.27
+  if (isFALSE(title)) title = substitute(ggobj)
+  if (isFALSE(fname)) fname <- kpp(title, ext)
+  if (!isFALSE(page)) {
+    wA4 <- 8.27
     hA4 <- 11.69
     if ( page == "A4p" ) { w = wA4; h = hA4}
     if ( page == "A4l" ) { w = hA4; h = wA4}
@@ -47,7 +51,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
 qqqCovert.named.vec2tbl <- function(namedVec=1:14) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
   df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
-  df$"names" <- if(!is.null(nm)) nm else rep(".", length(namedVec))
+  df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
   df
 }
 # qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
@@ -56,7 +60,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14) { # Convert a named vector to
 qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE
                         , w = w, h = h, ...) {
   plotname <- as.character(substitute(vec))
-  if(isFALSE(xlab)) xlab = plotname
+  if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
   p <- gghistogram(data = df, x = "value"
                 , title = plotname, xlab = xlab
@@ -79,7 +83,7 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
-  if(isFALSE(xlab)) xlab = plotname
+  if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
@@ -103,7 +107,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
                      , xlab.angle = 90, xlab = F
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
-  if(isFALSE(xlab)) xlab = plotname
+  if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
@@ -126,7 +130,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
   if (plot) p
 }
 
-# weight3 <- runif(12)
+# weight3 <- runif (12)
 # qbarplot(weight3)
 
 
@@ -141,11 +145,11 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   pcX <- df$"value" / sum(df$"value")
-  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+  labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
 
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
-                     , fill = "names", color = "white",
+                     , fill = "names", color = "white"
                      , title = plotname
                      , palette = 'jco', ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
