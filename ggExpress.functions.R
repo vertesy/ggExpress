@@ -27,7 +27,7 @@ percentage_formatter <- function(x, digitz = 3) {
 kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 
 # qqSave ------------------------------------------------------------------------------------------------
-qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
+qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, ...) {
   if (isFALSE(title)) title = substitute(ggobj)
@@ -41,6 +41,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[2], w =4, h = w
     if ( page == "A5l" ) { w = hA4/2; h = wA4/2}
   }
   print(paste0(getwd(),"/", fname))
+  # ggsave(plot = ggobj, filename = fname)
   cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
 }
 # qqSave(ggobj = qplot(12))
@@ -93,7 +94,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
   ) +
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   fname = kpp(plotname, "dens",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
 }
 # qdensity(weight)
@@ -125,7 +126,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
 
   if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
 }
 
@@ -153,7 +154,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
                      , palette = 'jco', ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
   fname = kpp(plotname, "pie",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
 }
 # xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
@@ -175,7 +176,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (vline) p <- p + geom_hline(xintercept = vline)
   fname = kpp(plotname, "scatter",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
 }
 # qscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
