@@ -71,7 +71,7 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
   if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   if (vline) p <- p + geom_vline(xintercept = vline)
   fname = kpp(plotname, "hist",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
 }
 # qhistogram(weight2, vline = 60)
