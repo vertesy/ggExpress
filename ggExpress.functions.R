@@ -17,7 +17,7 @@ require(cowplot)
 #' @examples percentage_formatter (x = 4.2822212, digitz = 3)
 
 percentage_formatter <- function(x, digitz = 3) {
-  a = paste(100 * signif (x, digitz), "%", sep = " ")
+  a = paste(100 * signif(x, digitz), "%", sep = " ")
   a[a == "NaN %"] = NaN
   a[a == "NA %"] = NA
   return(a)
@@ -48,7 +48,10 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
 
 
 # qqqCovert.named.vec2tbl ------------------------------------------------------------------------------------------------
-qqqCovert.named.vec2tbl <- function(namedVec=1:14) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, thr = 25) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+  nr.uniq.names <- length(unique(names(namedVec)))
+  if (nr.uniq.names > thr & verbose)  print("Vector has", thr, "+ names. Can mess up auto-color legends.")
+  if (nr.uniq.names < 1 & verbose) print("Vector has no names")
   df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
   df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
@@ -62,6 +65,7 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
+
   p <- gghistogram(data = df, x = "value"
                 , title = plotname, xlab = xlab
                 , add = "median"
@@ -85,6 +89,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
+  stopifnot(length(unique(df$"names")) < 25)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
@@ -109,8 +114,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
-  if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
+  if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   # df[["col"]] <- if (hline && filtercol) ifelse(df$"value" > hline, "green", "red") else "#EFC000FF"
   df[["col"]] <- if (hline && filtercol) (df$"value" > hline) else "#EFC000FF"
 
