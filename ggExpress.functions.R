@@ -35,10 +35,10 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
   if (!isFALSE(page)) {
     wA4 <- 8.27
     hA4 <- 11.69
-    if ( page == "A4p" ) { w = wA4; h = hA4}
-    if ( page == "A4l" ) { w = hA4; h = wA4}
-    if ( page == "A5p" ) { w = wA4/2; h = hA4/2}
-    if ( page == "A5l" ) { w = hA4/2; h = wA4/2}
+    if ( page == "A4p" ) { w = wA4; h = hA4 }
+    if ( page == "A4l" ) { w = hA4; h = wA4 }
+    if ( page == "A5p" ) { w = wA4/2; h = hA4/2 }
+    if ( page == "A5l" ) { w = hA4/2; h = wA4/2 }
   }
   print(paste0(getwd(),"/", fname))
   # ggsave(plot = ggobj, filename = fname)
@@ -48,10 +48,16 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
 
 
 # qqqCovert.named.vec2tbl ------------------------------------------------------------------------------------------------
-qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, thr = 25) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 25) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+
+  # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))
   if (nr.uniq.names > thr & verbose)  print("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
+  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
+  if (strip.too.many.names & an.issue.w.names) names(namedVec) <- rep("x", length(namedVec))
+  if (length(unique(names(namedVec))) > thr) print("Vector has", thr, "+ names. Can mess up auto-color legends.")
+
   df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
   df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
@@ -89,7 +95,6 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
-  stopifnot(length(unique(df$"names")) < 25)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
@@ -148,7 +153,6 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
                  , w = 5, h = w, ...) {
   # plotname <- as.character(substitute(vec))
   df <- qqqCovert.named.vec2tbl(namedVec = vec)
-  if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
