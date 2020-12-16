@@ -12,7 +12,7 @@ require(cowplot)
 # Explicit dependencies on MarkdownReportsDev
 ######################################################################
 
-# - ...
+# - llogit
 
 ######################################################################
 # Duplicated functions to avoid dependencies
@@ -97,8 +97,13 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
 }
 # qqSave(ggobj = qplot(12))
 
+# ------------------------------------------------------------------------------------------------
+qMarkdownImageLink <- function(file_name = fname) {
+  llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
+}
 
-# qqqCovert.named.vec2tbl ------------------------------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------------------------------
 qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 25) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -118,7 +123,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 # ------------------------------------------------------------------------------------------------
-qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE
+qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                         , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
@@ -135,6 +140,7 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
   fname = kpp(plotname, "hist",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
+  if (mdlink & save) qMarkdownImageLink(fname)
 }
 # weight <- rnorm(1000); qhistogram(weight, vline = 3)
 
@@ -142,7 +148,7 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
 
 
 # ------------------------------------------------------------------------------------------------
-qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
+qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
@@ -158,13 +164,14 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE
   fname = kpp(plotname, "dens",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
+  if (mdlink & save) qMarkdownImageLink(fname)
 }
 # qdensity(weight)
 # qdensity(weight2)
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
+qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , xlab.angle = 90, xlab = F
                      , w = 5, h = w, ...) {
@@ -190,6 +197,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
   fname = kpp(plotname, "bar",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
+  if (mdlink & save) qMarkdownImageLink(fname)
 }
 
 # weight3 <- runif (12)
@@ -198,7 +206,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
 
 # ------------------------------------------------------------------------------------------------
 # qpie ------------------------------------------------------------------------------------------------
-qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
+qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , LegendSide = T, LegendTitle = as.character(substitute(vec))
                  , plotname = as.character(substitute(vec))
                  , pcdigits = 2, NamedSlices =F
@@ -217,13 +225,14 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE
   fname = kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
+  if (mdlink & save) qMarkdownImageLink(fname)
 }
 # xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
 
 # qscatter ------------------------------------------------------------------------------------------------
 qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
-                     , hline = F, vline = F, plot = TRUE, save = TRUE
+                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, ...) {
 
   plotname <- kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix)
@@ -239,6 +248,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
   fname = kpp(plotname, "scatter",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (plot) p
+  if (mdlink & save) qMarkdownImageLink(fname)
 }
 # qscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
 #          , ellipse = F, mean.point = TRUE, star.plot = TRUE)
