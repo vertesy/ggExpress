@@ -261,8 +261,3 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
 # ------------------------------------------------------------------------------------------------
 
 
-
-# iprint <- function (...) {
-#   argument_list <- c(...)
-#   print(paste(argument_list, collapse = " "))
-# }
