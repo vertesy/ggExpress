@@ -104,7 +104,7 @@ qMarkdownImageLink <- function(file_name = fname) {
 
 
 # ------------------------------------------------------------------------------------------------
-qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 25) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))
