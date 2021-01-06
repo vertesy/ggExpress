@@ -124,10 +124,9 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 # ------------------------------------------------------------------------------------------------
 qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                        , w = 5, h = w, ...) {
-  plotname <- as.character(substitute(vec))
+                        , plotname = as.character(substitute(vec)), w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, ...)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
   p <- gghistogram(data = df, x = "value"
                 , title = plotname, xlab = xlab
@@ -152,7 +151,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, ...)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
@@ -177,7 +176,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 5, h = w, ...) {
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, ...)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   # df[["col"]] <- if (hline && filtercol) ifelse(df$"value" > hline, "green", "red") else "#EFC000FF"
@@ -212,7 +211,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , pcdigits = 2, NamedSlices =F
                  , w = 5, h = w, ...) {
   # plotname <- as.character(substitute(vec))
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, ...)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
