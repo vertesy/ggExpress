@@ -81,7 +81,7 @@ kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, ...) {
-  if (isFALSE(title)) title = substitute(ggobj)
+  if (isFALSE(title)) title <- as.character(substitute(ggobj))
   if (isFALSE(fname)) fname <- kpp(title, ext)
   if (!isFALSE(page)) {
     wA4 <- 8.27
