@@ -93,7 +93,9 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
   }
   print(paste0(getwd(),"/", fname))
   # ggsave(plot = ggobj, filename = fname)
-  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, title = ww.ttl_field(title), ...)
+  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h
+                     # , title = ww.ttl_field(title)
+                     , ...)
 }
 # qqSave(ggobj = qplot(12))
 
