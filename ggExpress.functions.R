@@ -97,7 +97,10 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
                      # , title = ww.ttl_field(title)
                      , ...)
 }
-# qqSave(ggobj = qplot(12))
+# xplot <- qplot(12)
+# qqSave(ggobj = xplot)
+# qqSave(ggobj = xplot, ext = "pdf")
+
 
 # ------------------------------------------------------------------------------------------------
 qMarkdownImageLink <- function(file_name = fname) {
