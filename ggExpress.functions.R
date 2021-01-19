@@ -143,8 +143,8 @@ qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save
   if (vline) p <- p + geom_vline(xintercept = vline)
   fname = kpp(plotname, "hist",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (plot) p
   if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
 }
 # weight <- rnorm(1000); qhistogram(weight, vline = 3)
 
@@ -167,8 +167,8 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   fname = kpp(plotname, "dens",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (plot) p
   if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
 }
 # qdensity(weight)
 # qdensity(weight2)
@@ -200,8 +200,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
   if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (plot) p
   if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
 }
 
 # weight3 <- runif (12)
@@ -228,8 +228,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
   fname = kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (plot) p
   if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
 }
 # xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
@@ -251,8 +251,8 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
   if (vline) p <- p + geom_hline(xintercept = vline)
   fname = kpp(plotname, "scatter",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (plot) p
   if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
 }
 # qscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
 #          , ellipse = F, mean.point = TRUE, star.plot = TRUE)
