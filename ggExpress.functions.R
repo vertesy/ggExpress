@@ -6,6 +6,7 @@
 
 require(ggpubr)
 require(cowplot)
+require(MarkdownReports) # https://github.com/vertesy/MarkdownReportsDev
 
 
 ######################################################################
@@ -104,7 +105,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
 
 # ------------------------------------------------------------------------------------------------
 qMarkdownImageLink <- function(file_name = fname) {
-  llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
+  if(require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
 }
 
 
@@ -128,7 +129,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 # ------------------------------------------------------------------------------------------------
-qhistogram <-  function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
+qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                         , plotname = as.character(substitute(vec)), w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
@@ -235,27 +236,28 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = ""
+qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = "", cols = c(FALSE , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, ...) {
-
   plotname <- kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix)
   vars <- colnames(tbl_X_Y_Col_etc)
-
   df <- tbl_X_Y_Col_etc
 
-  p <- ggscatter(data = df, x = vars[1], y = vars[2], color = vars[3]
+  p <- ggscatter(data = df, x = vars[1], y = vars[2], color = cols
                  , title = plotname, ...) +
     grids(axis ='xy')
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (vline) p <- p + geom_hline(xintercept = vline)
+
   fname = kpp(plotname, "scatter",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
-# qscatter(tbl_X_Y_Col_etc = Jaccard.vs.CellCount, suffix = "Star"
-#          , ellipse = F, mean.point = TRUE, star.plot = TRUE)
+# dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12)))
+# qscatter(dfx, suffix = "2D.gaussian")
+
+
 
 
 # ------------------------------------------------------------------------------------------------
