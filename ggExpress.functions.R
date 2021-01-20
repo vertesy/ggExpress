@@ -176,11 +176,14 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
+qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
+                     , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , xlab.angle = 90, xlab = F
                      , w = 5, h = w, ...) {
-  plotname <- as.character(substitute(vec))
+
+  plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
+
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
@@ -192,7 +195,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , title = plotname, xlab = xlab
                  , color = "col", fill = "col"
                  , palette = 'jco', ...
-  ) + grids(axis ='y') +
+  ) + grids(axis = 'y') +
     theme(
       legend.position = "none",
       axis.text.x = element_text(angle = xlab.angle, hjust = 1)
@@ -236,16 +239,16 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", suffix = "", cols = c(FALSE , 3)[1]
+qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols = c(FALSE , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, ...) {
-  plotname <- kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix)
+  plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
 
   p <- ggscatter(data = df, x = vars[1], y = vars[2], color = cols
                  , title = plotname, ...) +
-    grids(axis ='xy')
+    grids(axis = 'xy')
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (vline) p <- p + geom_hline(xintercept = vline)
 
