@@ -202,7 +202,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
     )
 
   if (hline) p <- p + geom_hline(yintercept = hline)
-  fname = kpp(plotname, "bar",  ext)
+  fname = kpp(plotname, "bar", ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -218,6 +218,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , LegendSide = T, LegendTitle = as.character(substitute(vec))
                  , plotname = as.character(substitute(vec))
                  , pcdigits = 2, NamedSlices =F
+                 , color.palette = 'jco'
                  , w = 5, h = w, ...) {
   # plotname <- as.character(substitute(vec))
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
@@ -228,7 +229,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
                      , fill = "names", color = "white"
                      , title = plotname
-                     , palette = 'jco', ...)
+                     , palette = color.palette, ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
   fname = kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
@@ -245,7 +246,6 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols =
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
-
   p <- ggscatter(data = df, x = vars[1], y = vars[2], color = cols
                  , title = plotname, ...) +
     grids(axis = 'xy')
