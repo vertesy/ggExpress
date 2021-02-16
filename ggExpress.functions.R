@@ -180,7 +180,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
                      , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , xlab.angle = 90, xlab = F
-                     , w = 5, h = w, ...) {
+                     , w = round(length(vec)*0.2), h = 5, ...) {
 
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
 
