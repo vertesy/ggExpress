@@ -109,6 +109,13 @@ qMarkdownImageLink <- function(file_name = fname) {
 }
 
 
+
+# ------------------------------------------------------------------------------------------------
+qqqAxisLength <- function(vec = 1:20, minLength=6) {
+  max(round(length(vec)*0.2), minLength)
+}
+
+
 # ------------------------------------------------------------------------------------------------
 qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
@@ -180,7 +187,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
                      , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , xlab.angle = 90, xlab = F
-                     , w = round(length(vec)*0.2), h = 5, ...) {
+                     , w = qqqAxisLength(vec), h = 5, ...) {
 
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
 
