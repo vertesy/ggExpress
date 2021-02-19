@@ -186,6 +186,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
 qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
                      , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
+                     , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , w = qqqAxisLength(vec), h = 5, ...) {
 
@@ -196,12 +197,14 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   # df[["col"]] <- if (hline && filtercol) ifelse(df$"value" > hline, "green", "red") else "#EFC000FF"
-  df[["col"]] <- if (hline && filtercol) (df$"value" > hline) else "#EFC000FF"
+  df[["col"]] <- if (hline && filtercol) (df$"value" > hline) else rep(col, length(vec))[1:length(vec)]
+  # print(df[["col"]])
+  print(df)
 
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
                  , color = "col", fill = "col"
-                 , palette = 'jco', ...
+                 , palette = palette_use, ...
   ) + grids(axis = 'y') +
     theme(
       legend.position = "none",
