@@ -250,7 +250,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols = c(FALSE , 3)[1]
+qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols = c(NULL , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, ...) {
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
