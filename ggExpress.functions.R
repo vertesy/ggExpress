@@ -6,7 +6,9 @@
 
 require(ggpubr)
 require(cowplot)
-require(MarkdownReports) # https://github.com/vertesy/MarkdownReportsDev
+try(require(MarkdownReports), silent = TRUE)
+try(require(MarkdownReportsDev), silent = TRUE)
+ # https://github.com/vertesy/MarkdownReportsDev
 
 
 ######################################################################
