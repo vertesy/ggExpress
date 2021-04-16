@@ -6,7 +6,10 @@
 
 require(ggpubr)
 require(cowplot)
-require(MarkdownReports) # https://github.com/vertesy/MarkdownReportsDev
+suppressWarnings(vx <- require(MarkdownReportsDev)); if (!vx) MarkdownReports # Either version is fine, preffered dev.
+
+
+# https://github.com/vertesy/MarkdownReportsDev
 
 
 ######################################################################
