@@ -106,7 +106,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
 
 # ------------------------------------------------------------------------------------------------
 qMarkdownImageLink <- function(file_name = fname) {
-  if(require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
+  if (require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
 }
 
 
