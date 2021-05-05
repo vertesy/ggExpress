@@ -82,7 +82,7 @@ kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 # ------------------------------------------------------------------------------------------------
 qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
-                   , title = F, fname = F, ...) {
+                   , title = F, fname = F, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
   if (isFALSE(fname)) fname <- kpp(title, ext)
   if (!isFALSE(page)) {
@@ -95,6 +95,7 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
   }
   print(paste0(getwd(),"/", fname))
   # ggsave(plot = ggobj, filename = fname)
+  if (!is.null(suffix)) fname <- ppp(fname, suffix)
   cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h
                      # , title = ww.ttl_field(title)
                      , ...)
@@ -138,7 +139,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 # ------------------------------------------------------------------------------------------------
 qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                        , plotname = as.character(substitute(vec)), w = 5, h = w, ...) {
+                        , plotname = as.character(substitute(vec)), w = 5, h = w, suffix = NULL, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
@@ -151,7 +152,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
   if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   if (vline) p <- p + geom_vline(xintercept = vline)
   fname = kpp(plotname, "hist",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -162,7 +163,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
 
 # ------------------------------------------------------------------------------------------------
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                     , w = 5, h = w, ...) {
+                     , w = 5, h = w, suffix = NULL, ...) {
   plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
@@ -175,7 +176,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
   ) +
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   fname = kpp(plotname, "dens",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -189,7 +190,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
                      , hline = F, filtercol = 1
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
-                     , w = qqqAxisLength(vec), h = 5, ...) {
+                     , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
 
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
 
@@ -214,7 +215,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
 
   if (hline) p <- p + geom_hline(yintercept = hline)
   fname = kpp(plotname, "bar", ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -230,7 +231,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , plotname = as.character(substitute(vec))
                  , pcdigits = 2, NamedSlices =F
                  , color.palette = 'jco'
-                 , w = 5, h = w, ...) {
+                 , w = 5, h = w, suffix = NULL, ...) {
   # plotname <- as.character(substitute(vec))
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
   pcX <- df$"value" / sum(df$"value")
@@ -243,7 +244,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , palette = color.palette, ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
   fname = kpp(plotname, "pie",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -253,7 +254,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 # qscatter ------------------------------------------------------------------------------------------------
 qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols = c(NULL , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                     , w = 7, h = w, ...) {
+                     , w = 7, h = w, suffix = NULL, ...) {
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
@@ -264,7 +265,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols =
   if (vline) p <- p + geom_vline(xintercept = vline)
 
   fname = kpp(plotname, "scatter",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
