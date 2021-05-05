@@ -84,7 +84,8 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (isFALSE(fname)) fname <- kpp(title, ext)
+  if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
+
   if (!isFALSE(page)) {
     wA4 <- 8.27
     hA4 <- 11.69
@@ -95,7 +96,6 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
   }
   print(paste0(getwd(),"/", fname))
   # ggsave(plot = ggobj, filename = fname)
-  if (!is.null(suffix)) fname <- ppp(fname, suffix)
   cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h
                      # , title = ww.ttl_field(title)
                      , ...)
@@ -151,8 +151,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
   ) +
   if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   if (vline) p <- p + geom_vline(xintercept = vline)
-  fname = kpp(plotname, "hist",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
+  fname = kpp(plotname, suffix, "hist", ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -175,8 +175,8 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
                  , palette = 'jco', ...
   ) +
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
-  fname = kpp(plotname, "dens",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
+  fname = kpp(plotname, suffix, "dens",  ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -185,7 +185,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
+qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , palette_use = 'jco', col = as.character(1:3)[1]
@@ -214,8 +214,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F, suffix = ""
     )
 
   if (hline) p <- p + geom_hline(yintercept = hline)
-  fname = kpp(plotname, "bar", ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
+  fname = kpp(plotname, suffix, "bar", ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -243,8 +243,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , title = plotname
                      , palette = color.palette, ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
-  fname = kpp(plotname, "pie",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
+  fname = kpp(plotname, suffix, "pie",  ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
@@ -252,7 +252,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols = c(NULL , 3)[1]
+qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F
+                     , cols = c(NULL , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, suffix = NULL, ...) {
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
@@ -264,8 +265,8 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols =
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (vline) p <- p + geom_vline(xintercept = vline)
 
-  fname = kpp(plotname, "scatter",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, suffix = suffix)
+  fname = kpp(plotname, suffix, "scatter",  ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
