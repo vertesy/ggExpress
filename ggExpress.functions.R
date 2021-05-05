@@ -261,7 +261,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F, suffix = "", cols =
                  , title = plotname, ...) +
     grids(axis = 'xy')
   if (hline) p <- p + geom_hline(yintercept = hline)
-  if (vline) p <- p + geom_vline(xintercep = vline)
+  if (vline) p <- p + geom_vline(xintercept = vline)
 
   fname = kpp(plotname, "scatter",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
