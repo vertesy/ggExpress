@@ -191,17 +191,16 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
-
   plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
-  # df[["col"]] <- if (hline && filtercol) ifelse(df$"value" > hline, "green", "red") else "#EFC000FF"
-  df[["col"]] <- if (hline && filtercol) (df$"value" > hline) else rep(col, length(vec))[1:length(vec)]
-  # print(df[["col"]])
-  print(df)
+
+  df[["col"]] <- if (hline) {
+    if (filtercol == 1 ) (df$"value" > hline) else if (filtercol == -1 ) (df$"value" < hline)
+  } else {rep(col, length(vec))[1:length(vec)]}
 
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
@@ -221,7 +220,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 }
 
 # weight3 <- runif (12)
-# qbarplot(weight3)
+# qbarplot(weight3, filtercol = -1, hline = .5)
+# qbarplot(weight3, filtercol = 1, hline = .5)
 
 
 # ------------------------------------------------------------------------------------------------
