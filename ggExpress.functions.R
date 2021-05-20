@@ -227,7 +227,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 # ------------------------------------------------------------------------------------------------
 # qpie ------------------------------------------------------------------------------------------------
 qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
-                 , LegendSide = T, LegendTitle = as.character(substitute(vec))
+                 , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
                  , plotname = as.character(substitute(vec))
                  , pcdigits = 2, NamedSlices =F
                  , color.palette = 'jco'
@@ -243,6 +243,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , title = plotname
                      , palette = color.palette, ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
+  p <- if (NoLegend) p + NoLegend() else p
   fname = kpp(plotname, suffix, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
