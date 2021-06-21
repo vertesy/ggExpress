@@ -139,7 +139,9 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 # ------------------------------------------------------------------------------------------------
 qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                        , plotname = as.character(substitute(vec)), w = 5, h = w, suffix = NULL, ...) {
+                       , plotname = make.names(as.character(substitute(vec)))
+                       , logX = F, logY = F
+                       , w = 5, h = w, suffix = NULL, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
@@ -150,6 +152,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
                 , palette = 'jco', ...
   ) +
   if (length(unique(df$"names")) == 1) theme(legend.position = "none")
+  if (logX) p <- p + scale_x_log10()
+  if (logY) p <- p + scale_y_log10()
   if (vline) p <- p + geom_vline(xintercept = vline)
   fname = kpp(plotname, suffix, "hist", ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
@@ -163,8 +167,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
 
 # ------------------------------------------------------------------------------------------------
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
+                     , plotname = make.names(as.character(substitute(vec)))
                      , w = 5, h = w, suffix = NULL, ...) {
-  plotname <- as.character(substitute(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
 
@@ -191,7 +195,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
-  plotname <- if (isFALSE(title)) kpp(as.character(substitute(vec)), suffix) else title
+  plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
@@ -228,7 +232,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 # qpie ------------------------------------------------------------------------------------------------
 qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
-                 , plotname = as.character(substitute(vec))
+                 , plotname = make.names(as.character(substitute(vec)))
                  , pcdigits = 2, NamedSlices =F
                  , color.palette = 'jco'
                  , w = 5, h = w, suffix = NULL, ...) {
@@ -257,7 +261,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F
                      , cols = c(NULL , 3)[1]
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, suffix = NULL, ...) {
-  plotname <- if (isFALSE(title)) kpp(as.character(substitute(tbl_X_Y_Col_etc)), suffix) else title
+  plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
   p <- ggscatter(data = df, x = vars[1], y = vars[2], color = cols
