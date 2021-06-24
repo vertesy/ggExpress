@@ -38,7 +38,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
   if (logX) p <- p + scale_x_log10()
   if (logY) p <- p + scale_y_log10()
   if (vline) p <- p + geom_vline(xintercept = vline)
-  fname = kpp(plotname, suffix, "hist", ext)
+  fname = kpp(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -65,7 +65,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
     if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   if (logX) p <- p + scale_x_log10()
   if (logY) p <- p + scale_y_log10()
-  fname = kpp(plotname, suffix, "dens",  ext)
+  fname = kpp(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY),  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -105,7 +105,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (logY) p <- p + scale_y_log10()
-  fname = kpp(plotname, suffix, "bar", ext)
+  fname = kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -161,7 +161,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F
 
   if (logX) p <- p + scale_x_log10()
   if (logY) p <- p + scale_y_log10()
-  fname = kpp(plotname, suffix, "scatter",  ext)
+  fname = kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
