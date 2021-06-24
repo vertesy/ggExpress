@@ -13,6 +13,19 @@
 # - llogit
 
 ######################################################################
+# Explicit dependencies on CodeAndRoll
+######################################################################
+
+# - flag.nameiftrue
+
+# flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = "") { # Returns the name and its value, if its TRUE.
+#   output = if (toggle) { paste0(prefix, (substitute(toggle)), suffix)
+#   } else {paste0(prefix, name.if.not, suffix)}
+#   if (length(output) > 1) output = output[length(output)]  # fix for when input is a list element like p$'myparam'
+#   return(output)
+# } # returns the name if its value is true
+
+######################################################################
 # Duplicated functions to avoid dependencies
 ######################################################################
 
@@ -134,6 +147,13 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 
+
+# ------------------------------------------------------------------------------------------------
+qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+  vec <- tibble.input[[value.column]]
+  names(vec) <- tibble.input[[name.column]]
+  vec
+}
 
 
 # ------------------------------------------------------------------------------------------------
