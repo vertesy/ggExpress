@@ -81,6 +81,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , logY = F
+                     , label = NULL
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
   plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
 
@@ -96,6 +97,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
                  , color = "col", fill = "col"
+                 , label = label
                  , palette = palette_use, ...
   ) + grids(axis = 'y') +
     theme(
