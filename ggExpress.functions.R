@@ -124,6 +124,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
                  , plotname = make.names(as.character(substitute(vec)))
                  , pcdigits = 2, NamedSlices =F
+                 , custom.order = F
                  , color.palette = 'jco'
                  , w = 5, h = w, suffix = NULL, ...) {
   # plotname <- as.character(substitute(vec))
@@ -131,6 +132,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
+  print(df)
+  if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
 
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
                      , fill = "names", color = "white"
