@@ -125,6 +125,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , plotname = make.names(as.character(substitute(vec)))
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
+                 # , custom.margin = F
                  , color.palette = 'jco'
                  , w = 5, h = w, suffix = NULL, ...) {
   # plotname <- as.character(substitute(vec))
@@ -140,6 +141,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , title = plotname
                      , palette = color.palette, ...)
   if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
+  # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
+
   p <- if (NoLegend) p + NoLegend() else p
   fname = kpp(plotname, suffix, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
