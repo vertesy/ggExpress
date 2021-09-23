@@ -89,10 +89,12 @@ kpp <- function(...) { paste(..., sep = '.', collapse = '.') }
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
-qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
+qqSave <- function(ggobj, w =4, h = w
+                   , ext =c("png", "pdf")[1], also.pdf = FALSE
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
+  if (also.pdf) fname2 <- if (isFALSE(fname)) kpp(title, suffix, 'pdf') else kpp(fname, 'pdf')
   if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
 
   if (!isFALSE(page)) {
@@ -104,10 +106,9 @@ qqSave <- function(ggobj, ext =c("png", "pdf")[1], w =4, h = w
     if ( page == "A5l" ) { w = hA4/2; h = wA4/2 }
   }
   print(paste0(getwd(),"/", fname))
-  # ggsave(plot = ggobj, filename = fname)
-  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h
-                     # , title = ww.ttl_field(title)
-                     , ...)
+
+  if (also.pdf) cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h, ...)
+  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
 }
 # xplot <- qplot(12)
 # qqSave(ggobj = xplot)

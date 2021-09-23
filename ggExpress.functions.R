@@ -153,8 +153,9 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F
+qscatter <- function(tbl_X_Y_Col_etc, title = F
                      , cols = c(NULL , 3)[1]
+                     , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, suffix = NULL, ...) {
@@ -170,7 +171,7 @@ qscatter <- function(tbl_X_Y_Col_etc, ext = "pdf", title =F
   if (logX) p <- p + scale_x_log10()
   if (logY) p <- p + scale_y_log10()
   fname = kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
