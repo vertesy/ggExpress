@@ -24,9 +24,10 @@ try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
 qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                        , plotname = make.names(as.character(substitute(vec)))
                        , logX = F, logY = F
+                       , max.names = 50
                        , w = 5, h = w, suffix = NULL, ...) {
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
   p <- gghistogram(data = df, x = "value"
                 , title = plotname, xlab = xlab
@@ -52,9 +53,10 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , plotname = make.names(as.character(substitute(vec)))
                      , logX = F, logY = F
+                     , max.names = 50
                      , w = 5, h = w, suffix = NULL, ...) {
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
   p <- ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
@@ -82,11 +84,12 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , xlab.angle = 90, xlab = F
                      , logY = F
                      , label = NULL
+                     , max.names = 50
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
   plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
 
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
@@ -127,9 +130,10 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                  , custom.order = F
                  # , custom.margin = F
                  , color.palette = 'jco'
+                 , max.names = 50
                  , w = 5, h = w, suffix = NULL, ...) {
   # plotname <- as.character(substitute(vec))
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = 50)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
