@@ -85,6 +85,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , logY = F
                      , label = NULL
                      , max.names = 50
+                     , limitsize = FALSE
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
   plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
 
@@ -111,7 +112,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
   if (hline) p <- p + geom_hline(yintercept = hline)
   if (logY) p <- p + scale_y_log10()
   fname = kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
