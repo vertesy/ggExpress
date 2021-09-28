@@ -87,31 +87,37 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , max.names = 50
                      , limitsize = FALSE
                      , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
+
   plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
-
-  df[["col"]] <- if (hline) {
+  df[["colour"]] <- if (hline & filtercol != 0) {
     if (filtercol == 1 ) (df$"value" > hline) else if (filtercol == -1 ) (df$"value" < hline)
-  } else {rep(col, length(vec))[1:length(vec)]}
+  } else if (length(col) == length(vec)) {
+    as.character(col)
+  } else {
+    as.character(rep(col, length(vec))[1:length(vec)])
+  }
+  print(df)
 
-  p <- ggbarplot(data = df, x = "names", y = "value"
-                 , title = plotname, xlab = xlab
-                 , color = col, fill = col
-                 , label = label
-                 , palette = palette_use, ...
-  ) + grids(axis = 'y') +
-    theme(
+  p <- ggpubr::ggbarplot(data = df, x = "names", y = "value"
+                         , title = plotname, xlab = xlab
+                         , color = 'colour', fill = 'colour'
+                         , label = label
+                         , palette = palette_use, ...
+  ) + ggpubr::grids(axis = 'y') +
+    ggplot2::theme(
       legend.position = "none",
-      axis.text.x = element_text(angle = xlab.angle, hjust = 1)
+      axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)
     )
 
-  if (hline) p <- p + geom_hline(yintercept = hline)
-  if (logY) p <- p + scale_y_log10()
-  fname = kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  fname <- kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
