@@ -100,7 +100,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 
   p <- ggbarplot(data = df, x = "names", y = "value"
                  , title = plotname, xlab = xlab
-                 , color = "col", fill = "col"
+                 , color = col, fill = col
                  , label = label
                  , palette = palette_use, ...
   ) + grids(axis = 'y') +
