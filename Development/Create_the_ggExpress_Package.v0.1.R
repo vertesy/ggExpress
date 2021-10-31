@@ -34,7 +34,7 @@ BackupDir = "~/GitHub/Packages/ggExpressDev/Development/"
 dir.create(BackupDir)
 
 # devtools::use_package("vioplot")
-DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate and export plots in R."
+DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate and export plots in R"
     , "Author" = person(given = "Abel", family = "Vertesy", email = "abel.vertesy@imba.oeaw.ac.at", role =  c("aut", "cre") )
     , "Authors@R" = 'person(given = "Abel", family = "Vertesy", email = "a.vertesy@imba.oeaw.ac.at", role =  c("aut", "cre") )'
     , "Description" = "ggExpress is a set of R functions that allows you to generate precise figures easily,
@@ -60,7 +60,7 @@ if ( !dir.exists(RepositoryDir) ) { create(path = RepositoryDir, description = D
 } else {
     getwd()
     try(file.remove(c("DESCRIPTION","NAMESPACE", "ggExpressDev.Rproj")))
-    create_package(path = RepositoryDir, fields = DESCRIPTION)
+    create_package(path = RepositoryDir, fields = DESCRIPTION, open = F)
 }
 
 

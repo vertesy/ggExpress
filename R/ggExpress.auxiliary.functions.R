@@ -30,90 +30,59 @@
 ######################################################################
 
 
-# MarkdownReportsDev.R
-
-#' unless.specified
-#'
-#' Return value X (TRUE by default) unless the variable is defined.
-#' If defined, it returns the variable.
-#' @param NameOfaVariable Name of a possibly defined variable to be tested.
-#' @param def Default return value
-#' @export
-#' @examples unless.specified("xsadasf32", 2); Num = 22; unless.specified("Num", 1); unless.specified("c", 333)
-
-unless.specified <- function(NameOfaVariable, def = TRUE) {
-  if (exists(NameOfaVariable))
-    get(NameOfaVariable)
-  else
-    def
-}
-
 
 # MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
-#' ww.ttl_field
+#' Collapse vector to a string, separated by dots
 #'
-#' Internal function. Creates the string written into the PDF files "Title' (metadata) field.
-#' @param flname Name of the plot
-#' @param creator String X in: "plotblabla by X". Default: "ggExpress".
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
-#' @examples ww.ttl_field("/Users/myplot.jpg")
-
-ww.ttl_field <- function(plotname, creator = "ggExpress") {
-  paste0(basename(plotname), " by "
-         , unless.specified("b.scriptname", def = creator) )
-}
-
-
-# MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
-#' percentage_formatter
 #'
-#' Parse a string of 0-100% from a number between 0 and 1.
-#' @param x A vector of numbers between 0-1.
-#' @param digitz Number of digits to keep. 3 by default.
-#' @export
-#' @examples percentage_formatter(x = 4.2822212, digitz = 3)
+#' @examples kpp(1,3, 'sdasd'); kpp(1:3, 'sdasd')
 
-percentage_formatter <- function(x, digitz = 3) {
-  a = paste(100 * signif(x, digitz), "%", sep = " ")
-  a[a == "NaN %"] = NaN
-  a[a == "NA %"] = NA
-  return(a)
-}
+kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.'), "\\.+$") } # remove trailing dots
 
-# MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
-#' Title
-#'
-#' @param ...
+
+# CodeAndRoll.R ------------------------------------------------------------------------------------------------
+
+#' flag.nameiftrue
+#' Aux function for parsing filenames. Returns a variable's name if its value is TRUE.
+#' @param toggle Variable name to return as string, if its value is TRUE.
+#' @param prefix prefix
+#' @param suffix suffix
+#' @param name.if.not Alternative name to return, "" by default.
 #'
 #' @return
 #' @export
 #'
-#' @examples
+#' @examples a=TRUE; b=FALSE; flag.nameiftrue(a); flag.nameiftrue(b)
 
-kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.'), "\\.+$") } # remove trailing dots
+flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = "") { # Returns the name and its value, if its TRUE.
+  output = if (toggle) { paste0(prefix, (substitute(toggle)), suffix)
+  } else {paste0(prefix, name.if.not, suffix)}
+  if (length(output) > 1) output = output[length(output)]  # fix for when input is a list element like p$'myparam'
+  return(output)
+} # returns the name if its value is true
 
 ######################################################################
 # Original functions
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
-#' Title
+#' Quick-Save ggplot objects
 #'
-#' @param ggobj
-#' @param w
-#' @param h
-#' @param ext
-#' @param also.pdf
-#' @param page
-#' @param title
-#' @param fname
-#' @param suffix
-#' @param ...
-#'
-#' @return
+#' @param ggobj ggobj
+#' @param w width of the plot.
+#' @param h height of the plot.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf also.pdf
+#' @param page page
+#' @param title title
+#' @param fname fname
+#' @param suffix A suffix added to the filename. NULL by default.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
-#' @examples
+#' @examples xplot <- qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
 
 qqSave <- function(ggobj, w =4, h = w
                    , ext =c("png", "pdf")[1], also.pdf = FALSE
@@ -136,53 +105,49 @@ qqSave <- function(ggobj, w =4, h = w
   if (also.pdf) cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h, ...)
   cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
 }
-# xplot <- qplot(12)
-# qqSave(ggobj = xplot)
-# qqSave(ggobj = xplot, ext = "pdf")
+
 
 
 # ------------------------------------------------------------------------------------------------
-#' Title
+#' Insert Markdown image link to .md report
 #'
-#' @param file_name
-#'
-#' @return
+#' @param file_name file_name
 #' @export
 #'
-#' @examples
-qMarkdownImageLink <- function(file_name = fname) {
-  if (require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
+#' @examples qMarkdownImageLink(file_name = "myplot.pdf")
+
+qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
+  if (require(MarkdownReports)) MarkdownReportsDev::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
 }
 
 
 
+
 # ------------------------------------------------------------------------------------------------
-#' Title
+#' Define Axis Length
 #'
-#' @param vec
-#' @param minLength
-#'
-#' @return
+#' @param vec The variable to plot.
+#' @param minLength minLength
 #' @export
 #'
-#' @examples
+#' @examples qqqAxisLength()
+
 qqqAxisLength <- function(vec = 1:20, minLength=6) {
   max(round(length(vec)*0.2), minLength)
 }
 
 
 # ------------------------------------------------------------------------------------------------
-#' Title
-#'
-#' @param namedVec
-#' @param verbose
-#' @param strip.too.many.names
-#' @param thr
-#'
-#' @return
+#' qqqCovert.named.vec2tbl
+#' Covert a named vector to a table.
+#' @param namedVec namedVec
+#' @param verbose verbose
+#' @param strip.too.many.names strip.too.many.names
+#' @param thr thr
 #' @export
 #'
-#' @examples
+#' @examples qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
+
 qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -198,56 +163,37 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
   df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
   df
 }
-# qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
 
 
 
 
 # ------------------------------------------------------------------------------------------------
-#' Title
-#'
-#' @param tibble.input
-#' @param name.column
-#' @param value.column
-#'
-#' @return
+#' qqqCovert.tbl2vec
+#' Covert a table to a named vector.
+#' @param tibble.input tibble.input
+#' @param name.column name.column
+#' @param value.column value.column
 #' @export
 #'
-#' @examples
-qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+#' @examples a=1:5; x= tibble::tibble(a, a * 2); qqqCovert.tbl2vec(x)
+
+qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
   vec <- tibble.input[[value.column]]
   names(vec) <- tibble.input[[name.column]]
   vec
 }
 
 # ------------------------------------------------------------------------------------------------
-#' Title
-#'
-#' @param string
-#' @param suffix_tag
-#'
-#' @return
+#' qqqParsePlotname
+#' Parse Plotname from variable name.
+#' @param string string
+#' @param suffix_tag suffix_tag
 #' @export
 #'
-#' @examples
+#' @examples qqqParsePlotname()
+
 qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
   nm <- make.names(as.character(substitute(string)))
   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
   return(nm)
 }
-# qqqParsePlotname()
-
-
-# ------------------------------------------------------------------------------------------------
-
-
-# ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
-
-# ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------
-
-

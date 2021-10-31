@@ -4,16 +4,17 @@
 # try(source("~/GitHub/Packages/ggExpressDev/ggExpress.functions.R"), silent = T)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R"), silent = T)
 
-require(ggpubr)
-require(cowplot)
-suppressWarnings(vx <- require(MarkdownReportsDev)); if (!vx) MarkdownReports # Either version is fine, preffered dev.
- # https://github.com/vertesy/MarkdownReportsDev
+# require(tidyverse)
+# require(ggpubr)
+# require(cowplot)
+# suppressWarnings(vx <- require(MarkdownReportsDev)); if (!vx) MarkdownReports # Either version is fine, preffered dev.
+# https://github.com/vertesy/MarkdownReportsDev
 
 
 ######################################################################
 # Auxiliary functions for ggExpress
 ######################################################################
-try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
+# try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
 
 
 ######################################################################
@@ -38,9 +39,7 @@ try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... ...
-#'
-#' @return
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
@@ -63,17 +62,17 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
     as.character(rep(col, length(vec))[1:length(vec)])
   }
 
-  p <- gghistogram(data = df, x = "value"
+  p <- ggpubr::gghistogram(data = df, x = "value"
                    , title = plotname, xlab = xlab
                    , add = "median"
                    # , color = "names", fill = "names"
                    , color = 'colour', fill = 'colour'
                    , palette = 'jco', ...
   ) +
-    if (length(unique(df$"names")) == 1) theme(legend.position = "none")
-  if (logX) p <- p + scale_x_log10()
-  if (logY) p <- p + scale_y_log10()
-  if (vline) p <- p + geom_vline(xintercept = vline)
+    if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+  if (logX) p <- p + ggplot2::scale_x_log10()
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   fname = kpp(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -99,9 +98,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... ...
-#'
-#' @return
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qdensity(weight)
@@ -116,15 +113,15 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
-  p <- ggdensity(data = df, x = "value" # , y = "..count.."
+  p <- ggpubr::ggdensity(data = df, x = "value" # , y = "..count.."
                  , title = plotname, xlab = xlab
                  , add = "median", rug = TRUE
                  , color = "names", fill = "names"
                  , palette = 'jco', ...
   ) +
-    if (length(unique(df$"names")) == 1) theme(legend.position = "none")
-  if (logX) p <- p + scale_x_log10()
-  if (logY) p <- p + scale_y_log10()
+    if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+  if (logX) p <- p + ggplot2::scale_x_log10()
+  if (logY) p <- p + ggplot2::scale_y_log10()
   fname = kpp(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY),  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -155,12 +152,12 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param limitsize limitsize
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... ...
-#'
-#' @return
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
-#' @examples
+#' @examples weight3 <- runif (12);
+#' qbarplot(weight3, filtercol = -1, hline = .5);
+#' qbarplot(weight3, filtercol = 1, hline = .5)
 
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
@@ -209,9 +206,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
   if (plot) p
 }
 
-# weight3 <- runif (12)
-# qbarplot(weight3, filtercol = -1, hline = .5)
-# qbarplot(weight3, filtercol = 1, hline = .5)
+
 
 
 # ------------------------------------------------------------------------------------------------
@@ -234,9 +229,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... ...
-#'
-#' @return
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
@@ -263,7 +256,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , fill = "names", color = "white"
                      , title = plotname
                      , palette = color.palette, ...)
-  if (LegendSide) p <- ggpar(p, legend = "right", legend.title = LegendTitle)
+  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
 
   p <- if (NoLegend) p + NoLegend() else p
@@ -293,9 +286,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... ...
-#'
-#' @return
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")
@@ -312,14 +303,14 @@ qscatter <- function(tbl_X_Y_Col_etc
   # plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
-  p <- ggscatter(data = df, x = vars[1], y = vars[2], color = col
+  p <- ggpubr::ggscatter(data = df, x = vars[1], y = vars[2], color = col
                  , title = plotname, ...) +
-    grids(axis = 'xy')
-  if (hline) p <- p + geom_hline(yintercept = hline)
-  if (vline) p <- p + geom_vline(xintercept = vline)
+    ggpubr::grids(axis = 'xy')
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
-  if (logX) p <- p + scale_x_log10()
-  if (logY) p <- p + scale_y_log10()
+  if (logX) p <- p + ggplot2::scale_x_log10()
+  if (logY) p <- p + ggplot2::scale_y_log10()
   fname = kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -346,161 +337,3 @@ qscatter <- function(tbl_X_Y_Col_etc
 # ------------------------------------------------------------------------------------------------
 
 
-
-# MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
-#' Collapse vector to a string, separated by dots
-#'
-#' @param ... ...
-#'
-#' @return
-#' @export
-#'
-#' @examples
-
-kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.'), "\\.+$") } # remove trailing dots
-
-######################################################################
-# Original functions
-######################################################################
-
-# ------------------------------------------------------------------------------------------------
-#' Quick-Save ggplot objects
-#'
-#' @param ggobj ggobj
-#' @param w width of the plot.
-#' @param h height of the plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
-#' @param page page
-#' @param title title
-#' @param fname fname
-#' @param suffix A suffix added to the filename. NULL by default.
-#' @param ... ...
-#'
-#' @return
-#' @export
-#'
-#' @examples xplot <- qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
-
-qqSave <- function(ggobj, w =4, h = w
-                   , ext =c("png", "pdf")[1], also.pdf = FALSE
-                   , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
-                   , title = F, fname = F, suffix = NULL, ...) {
-  if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) kpp(title, suffix, 'pdf') else kpp(fname, 'pdf')
-  if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
-
-  if (!isFALSE(page)) {
-    wA4 <- 8.27
-    hA4 <- 11.69
-    if ( page == "A4p" ) { w = wA4; h = hA4 }
-    if ( page == "A4l" ) { w = hA4; h = wA4 }
-    if ( page == "A5p" ) { w = wA4/2; h = hA4/2 }
-    if ( page == "A5l" ) { w = hA4/2; h = wA4/2 }
-  }
-  print(paste0(getwd(),"/", fname))
-
-  if (also.pdf) cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h, ...)
-  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
-}
-
-
-
-# ------------------------------------------------------------------------------------------------
-#' Insert Markdown image link to .md report
-#'
-#' @param file_name file_name
-#'
-#' @return
-#' @export
-#'
-#' @examples qMarkdownImageLink("myplot.pdf")
-
-qMarkdownImageLink <- function(file_name = fname) {
-  if (require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
-}
-
-
-
-# ------------------------------------------------------------------------------------------------
-#' Define Axis Length
-#'
-#' @param vec The variable to plot.
-#' @param minLength minLength
-#'
-#' @return
-#' @export
-#'
-#' @examples qqqAxisLength()
-
-qqqAxisLength <- function(vec = 1:20, minLength=6) {
-  max(round(length(vec)*0.2), minLength)
-}
-
-
-# ------------------------------------------------------------------------------------------------
-#' qqqCovert.named.vec2tbl
-#' Covert a named vector to a table.
-#' @param namedVec namedVec
-#' @param verbose verbose
-#' @param strip.too.many.names strip.too.many.names
-#' @param thr thr
-#'
-#' @return
-#' @export
-#'
-#' @examples qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
-
-qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-
-  # Check naming issues
-  nr.uniq.names <- length(unique(names(namedVec)))
-  if (nr.uniq.names > thr & verbose)  print("Vector has", thr, "+ names. Can mess up auto-color legends.")
-  if (nr.uniq.names < 1 & verbose) print("Vector has no names")
-  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
-  if (strip.too.many.names & an.issue.w.names) names(namedVec) <- rep("x", length(namedVec))
-  if (length(unique(names(namedVec))) > thr) print("Vector has", thr, "+ names. Can mess up auto-color legends.")
-
-  df <- tibble::as_tibble(cbind("value" = namedVec))
-  nm <- names(namedVec)
-  df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
-  df
-}
-
-
-
-
-# ------------------------------------------------------------------------------------------------
-#' qqqCovert.tbl2vec
-#' Covert a table to a named vector.
-#' @param tibble.input tibble.input
-#' @param name.column name.column
-#' @param value.column value.column
-#'
-#' @return
-#' @export
-#'
-#' @examples a=1:5; x= dplyr::tibble(a, a * 2); qqqCovert.tbl2vec(x)
-
-qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-  vec <- tibble.input[[value.column]]
-  names(vec) <- tibble.input[[name.column]]
-  vec
-}
-
-# ------------------------------------------------------------------------------------------------
-#' qqqParsePlotname
-#' Parse Plotname from variable name.
-#' @param string string
-#' @param suffix_tag suffix_tag
-#'
-#' @return
-#' @export
-#'
-#' @examples qqqParsePlotname()
-
-qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
-  nm <- make.names(as.character(substitute(string)))
-  if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
-  return(nm)
-}
