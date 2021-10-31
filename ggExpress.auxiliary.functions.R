@@ -156,6 +156,12 @@ qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, v
 }
 
 # ------------------------------------------------------------------------------------------------
+qqqParsePlotname <- function(string = "sadsad", suffix= NULL) { # parse plot name from variable name and suffix
+  nm <- make.names(as.character(substitute(string)))
+  if (!is.null(suffix) & !isFALSE(suffix)) nm <- kpp(nm, suffix)
+  return(nm)
+}
+# qqqParsePlotname()
 
 
 # ------------------------------------------------------------------------------------------------
