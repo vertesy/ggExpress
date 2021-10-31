@@ -21,22 +21,32 @@ try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
-qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
+qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
                        , suffix = NULL
                        , plotname = qqqParsePlotname(vec, suffix)
+                       , vline = F, filtercol = NULL
                        , logX = F, logY = F
                        , max.names = 50
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
+  df[["colour"]] <- if (vline & filtercol != 0) {
+    if (filtercol == 1 ) (df$"value" > vline) else if (filtercol == -1 ) (df$"value" < vline)
+  } else if (length(col) == length(vec)) {
+    as.character(col)
+  } else {
+    as.character(rep(col, length(vec))[1:length(vec)])
+  }
+
   p <- gghistogram(data = df, x = "value"
-                , title = plotname, xlab = xlab
-                , add = "median"
-                , color = "names", fill = "names"
-                , palette = 'jco', ...
+                   , title = plotname, xlab = xlab
+                   , add = "median"
+                   # , color = "names", fill = "names"
+                   , color = 'colour', fill = 'colour'
+                   , palette = 'jco', ...
   ) +
-  if (length(unique(df$"names")) == 1) theme(legend.position = "none")
+    if (length(unique(df$"names")) == 1) theme(legend.position = "none")
   if (logX) p <- p + scale_x_log10()
   if (logY) p <- p + scale_y_log10()
   if (vline) p <- p + geom_vline(xintercept = vline)
@@ -45,7 +55,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
-# weight <- rnorm(1000); qhistogram(weight, vline = 3)
+
+# weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
 
 
