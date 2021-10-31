@@ -22,10 +22,11 @@ try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
 
 # ------------------------------------------------------------------------------------------------
 qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                       , plotname = make.names(as.character(substitute(vec)))
+                       , suffix = NULL
+                       , plotname = qqqParsePlotname(vec, suffix)
                        , logX = F, logY = F
                        , max.names = 50
-                       , w = 5, h = w, suffix = NULL, ...) {
+                       , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
@@ -50,11 +51,13 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, vline = F, plot = TRUE, save 
 
 
 # ------------------------------------------------------------------------------------------------
-qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                     , plotname = make.names(as.character(substitute(vec)))
+qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
+                     , suffix = NULL
+                     , plotname = qqqParsePlotname(vec, suffix)
+                     , save = TRUE, mdlink = TRUE
                      , logX = F, logY = F
                      , max.names = 50
-                     , w = 5, h = w, suffix = NULL, ...) {
+                     , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
@@ -77,7 +80,10 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlin
 
 
 # ------------------------------------------------------------------------------------------------
-qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
+qbarplot <- function(vec, ext = "pdf", plot = TRUE
+                     , suffix = NULL
+                     , plotname = qqqParsePlotname(vec, suffix)
+                     # , title = F
                      , save = TRUE, mdlink = TRUE
                      , hline = F, filtercol = 1
                      , palette_use = 'jco', col = as.character(1:3)[1]
@@ -86,9 +92,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
                      , label = NULL
                      , max.names = 50
                      , limitsize = FALSE
-                     , w = qqqAxisLength(vec), h = 5, suffix = NULL, ...) {
-
-  plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(vec))), suffix) else title
+                     , w = qqqAxisLength(vec), h = 5, ...) {
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
@@ -131,15 +135,16 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE, title =F
 # ------------------------------------------------------------------------------------------------
 # qpie ------------------------------------------------------------------------------------------------
 qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
+                 , suffix = NULL
+                 , plotname = qqqParsePlotname(vec, suffix)
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
-                 , plotname = make.names(as.character(substitute(vec)))
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
                  # , custom.margin = F
                  , color.palette = 'jco'
                  , max.names = 50
-                 , w = 5, h = w, suffix = NULL, ...) {
-  # plotname <- as.character(substitute(vec))
+                 , w = 5, h = w, ...) {
+
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
@@ -164,13 +169,16 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # qscatter ------------------------------------------------------------------------------------------------
-qscatter <- function(tbl_X_Y_Col_etc, title = F
+qscatter <- function(tbl_X_Y_Col_etc
+                     , suffix = NULL
+                     , plotname = qqqParsePlotname(vec, suffix)
+                     # , title = F
                      , cols = c(NULL , 3)[1]
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
-                     , w = 7, h = w, suffix = NULL, ...) {
-  plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
+                     , w = 7, h = w, ...) {
+  # plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
   p <- ggscatter(data = df, x = vars[1], y = vars[2], color = cols
