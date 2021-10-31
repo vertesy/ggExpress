@@ -81,6 +81,15 @@ percentage_formatter <- function(x, digitz = 3) {
 }
 
 # MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.'), "\\.+$") } # remove trailing dots
 
 ######################################################################
@@ -88,6 +97,24 @@ kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.')
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param ggobj
+#' @param w
+#' @param h
+#' @param ext
+#' @param also.pdf
+#' @param page
+#' @param title
+#' @param fname
+#' @param suffix
+#' @param ...
+#'
+#' @return
+#' @export
+#'
+#' @examples
+
 qqSave <- function(ggobj, w =4, h = w
                    , ext =c("png", "pdf")[1], also.pdf = FALSE
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
@@ -115,6 +142,14 @@ qqSave <- function(ggobj, w =4, h = w
 
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param file_name
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qMarkdownImageLink <- function(file_name = fname) {
   if (require(MarkdownReports)) llogit(kollapse("![", file_name, "]", "(", file_name, ")", print = FALSE))
 }
@@ -122,12 +157,32 @@ qMarkdownImageLink <- function(file_name = fname) {
 
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param vec
+#' @param minLength
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qqqAxisLength <- function(vec = 1:20, minLength=6) {
   max(round(length(vec)*0.2), minLength)
 }
 
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param namedVec
+#' @param verbose
+#' @param strip.too.many.names
+#' @param thr
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -149,6 +204,16 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param tibble.input
+#' @param name.column
+#' @param value.column
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
   vec <- tibble.input[[value.column]]
   names(vec) <- tibble.input[[name.column]]
@@ -156,6 +221,15 @@ qqqCovert.tbl2vec <- function(tibble.input = pld.rate.HQ.UVI, name.column = 1, v
 }
 
 # ------------------------------------------------------------------------------------------------
+#' Title
+#'
+#' @param string
+#' @param suffix_tag
+#'
+#' @return
+#' @export
+#'
+#' @examples
 qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
   nm <- make.names(as.character(substitute(string)))
   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
