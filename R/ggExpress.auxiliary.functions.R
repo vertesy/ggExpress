@@ -1,13 +1,13 @@
 ######################################################################
 # ggExpress is the fastest way to create, annotate and export plots in R.
 ######################################################################
-# try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"), silent = T)
+# try(source("~/GitHub/Packages/ggExpressDev/R/ggExpress.auxiliary.functions.R"), silent = T)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R"), silent = T)
 
 
 
 ######################################################################
-# Explicit dependencies on MarkdownReportsDev
+# Explicit dependencies on MarkdownReports
 ######################################################################
 
 # - llogit
@@ -31,7 +31,7 @@
 
 
 
-# MarkdownReportsDev.R ------------------------------------------------------------------------------------------------
+# MarkdownReports.R ------------------------------------------------------------------------------------------------
 #' Collapse vector to a string, separated by dots
 #'
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
@@ -117,7 +117,7 @@ qqSave <- function(ggobj, w =4, h = w
 #' @examples qMarkdownImageLink(file_name = "myplot.pdf")
 
 qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
-  if (require(MarkdownReports)) MarkdownReportsDev::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
+  if (require(MarkdownReports)) MarkdownReports::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
 }
 
 

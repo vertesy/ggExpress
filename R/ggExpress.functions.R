@@ -1,20 +1,19 @@
 ######################################################################
 # ggExpress is the fastest way to create, annotate and export plots in R.
 ######################################################################
-# try(source("~/GitHub/Packages/ggExpressDev/ggExpress.functions.R"), silent = T)
+# try(source("~/GitHub/Packages/ggExpressDev/R/ggExpress.functions.R"), silent = T)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R"), silent = T)
 
 # require(tidyverse)
 # require(ggpubr)
 # require(cowplot)
-# suppressWarnings(vx <- require(MarkdownReportsDev)); if (!vx) MarkdownReports # Either version is fine, preffered dev.
-# https://github.com/vertesy/MarkdownReportsDev
+# require(MarkdownReports) # https://github.com/vertesy/MarkdownReports
 
 
 ######################################################################
 # Auxiliary functions for ggExpress
 ######################################################################
-# try(source("~/GitHub/Packages/ggExpressDev/ggExpress.auxiliary.functions.R"))
+# try(source("~/GitHub/Packages/ggExpressDev/R/ggExpress.auxiliary.functions.R"))
 
 
 ######################################################################
