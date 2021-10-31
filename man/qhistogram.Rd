@@ -13,10 +13,12 @@ qhistogram(
   mdlink = TRUE,
   suffix = NULL,
   plotname = qqqParsePlotname(vec, suffix),
-  vline = F,
-  filtercol = NULL,
   logX = F,
   logY = F,
+  vline = F,
+  filtercol = 0,
+  palette_use = "jco",
+  col = as.character(1:3)[1],
   max.names = 50,
   w = 5,
   h = w,
@@ -40,13 +42,17 @@ qhistogram(
 
 \item{plotname}{The name of the file and title of the plot.}
 
+\item{logX}{Make X axis log10-scale.}
+
+\item{logY}{Make Y axis log10-scale.}
+
 \item{vline}{Draw a vertical line on the plot.}
 
 \item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
-\item{logX}{Make X axis log10-scale.}
+\item{palette_use}{GGpubr Color palette to use.}
 
-\item{logY}{Make Y axis log10-scale.}
+\item{col}{Color of the plot.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

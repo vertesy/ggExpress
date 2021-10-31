@@ -46,7 +46,7 @@ qbarplot(
 
 \item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
-\item{palette_use}{palette_use}
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{col}{Color of the plot.}
 

@@ -82,7 +82,7 @@ flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = 
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
 #' @export
 #'
-#' @examples xplot <- qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
+#' @examples xplot <- ggplot2::qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
 
 qqSave <- function(ggobj, w =4, h = w
                    , ext =c("png", "pdf")[1], also.pdf = FALSE

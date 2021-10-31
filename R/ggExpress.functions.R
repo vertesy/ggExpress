@@ -34,6 +34,8 @@
 #' @param plotname The name of the file and title of the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr Color palette to use.
+#' @param col Color of the plot.
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
@@ -44,11 +46,13 @@
 #'
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
+
 qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
                        , suffix = NULL
                        , plotname = qqqParsePlotname(vec, suffix)
-                       , vline = F, filtercol = NULL
                        , logX = F, logY = F
+                       , vline = F, filtercol = 0
+                       , palette_use = 'jco', col = as.character(1:3)[1]
                        , max.names = 50
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -63,11 +67,11 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
   }
 
   p <- ggpubr::gghistogram(data = df, x = "value"
-                   , title = plotname, xlab = xlab
-                   , add = "median"
-                   # , color = "names", fill = "names"
-                   , color = 'colour', fill = 'colour'
-                   , palette = 'jco', ...
+                           , title = plotname, xlab = xlab
+                           , add = "median"
+                           # , color = "names", fill = "names"
+                           , color = 'colour', fill = 'colour'
+                           , palette = 'jco', ...
   ) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
@@ -142,7 +146,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use palette_use
+#' @param palette_use GGpubr Color palette to use.
 #' @param col Color of the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree.
 #' @param xlab X-axis label.
