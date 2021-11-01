@@ -1,5 +1,6 @@
-# ggExpressDev
-Development of ggExpress package for quick ggpubr based plotting
+# ggExpress
+Development of the ggExpress package for quick ggpubr based plotting. 
+This package is work in progress.
 
 <img width="706" alt="image" src="https://user-images.githubusercontent.com/5101911/99193282-4c06b980-2778-11eb-8c74-37293a8a245c.png">
 
@@ -26,28 +27,28 @@ Install directly from **GitHub** via **devtools** with one R command:
 ```R
 # install.packages("devtools"); # If you don't have it.
 require("devtools")
-devtools::install_github(repo = "vertesy/ggExpressDev")
+devtools::install_github(repo = "vertesy/ggExpress")
 ```
 
 ...then simply load the package:
 
 ```R
-require("ggExpressDev")
+require("ggExpress")
 ```
 
 Alternatively, you simply source it from the web. 
 *This way function help will not work, and you will have no local copy of the code on your hard drive.*
 
 ```r
-source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/R/ggExpress.functions.R")
-source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/R/ggExpress.auxiliary.functions.R")
+source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.functions.R")
+source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.auxiliary.functions.R")
 ```
 
 
 
 ### Troubleshooting
 
-*If you encounter a **bug**, something doesn't work or unclear, please let me know by raising an issue on [ggExpressDev](https://github.com/vertesy/ggExpressDev/issues) – Please check if it has been asked.*
+*If you encounter a **bug**, something doesn't work or unclear, please let me know by raising an issue on [ggExpress](https://github.com/vertesy/ggExpress/issues) – Please check if it has been asked.*
 
 ## Usage
 
@@ -57,7 +58,7 @@ require(ggpubr)
 require(cowplot)
 require(MarkdownReports) # https://github.com/vertesy/MarkdownReportsDev
 
-source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R")
+source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.functions.R")
 
 
 weight <- rnorm(1000); 
