@@ -1,8 +1,8 @@
 ######################################################################
 # ggExpress is the fastest way to create, annotate and export plots in R.
 ######################################################################
-# try(source("~/GitHub/Packages/ggExpressDev/R/ggExpress.functions.R"), silent = T)
-# try(source("https://raw.githubusercontent.com/vertesy/ggExpressDev/main/ggExpress.functions.R"), silent = T)
+# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.functions.R"), silent = T)
+# try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.functions.R"), silent = T)
 
 # require(tidyverse)
 # require(ggpubr)
@@ -13,7 +13,7 @@
 ######################################################################
 # Auxiliary functions for ggExpress
 ######################################################################
-# try(source("~/GitHub/Packages/ggExpressDev/R/ggExpress.auxiliary.functions.R"))
+# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.auxiliary.functions.R"))
 
 
 ######################################################################
