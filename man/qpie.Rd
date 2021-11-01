@@ -60,7 +60,7 @@ qpie(
 
 \item{h}{height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should  work).}
+\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
 Pie chart

@@ -36,7 +36,7 @@ qqSave(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should  work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Quick-Save ggplot objects

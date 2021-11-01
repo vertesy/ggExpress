@@ -34,7 +34,7 @@
 # MarkdownReports.R ------------------------------------------------------------------------------------------------
 #' Collapse vector to a string, separated by dots
 #'
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples kpp(1,3, 'sdasd'); kpp(1:3, 'sdasd')
@@ -79,7 +79,7 @@ flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = 
 #' @param title title
 #' @param fname fname
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param ... Pass any other parameter of the corresponding plotting function (most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #' @export
 #'
 #' @examples xplot <- ggplot2::qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")

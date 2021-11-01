@@ -40,7 +40,7 @@
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
@@ -101,7 +101,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qdensity(weight)
@@ -155,7 +155,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param limitsize limitsize
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples weight3 <- runif (12);
@@ -232,7 +232,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
@@ -289,7 +289,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should  work).
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")

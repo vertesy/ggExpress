@@ -2,7 +2,7 @@
 # Create_the_ggExpress_Package.v0.1.R
 # 31 10 2021
 ######################################################################################################
-# source("/Users/abel.vertesy/GitHub/Packages/ggExpressDev/Development/Create_the_ggExpress_Package.v0.1.R")
+# source("/Users/abel.vertesy/GitHub/Packages/ggExpress/Development/Create_the_ggExpress_Package.v0.1.R")
 rm(list = ls(all.names = TRUE));
 try(dev.off(), silent = TRUE)
 # install.packages("devtools")
@@ -23,14 +23,14 @@ if (print == TRUE) {
 }
 
 # Setup ------------------------
-PackageName = 	"ggExpressDev"
+PackageName = 	"ggExpress"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
 fname = 	kollapse(PackageName, ".R")
 Package_FnP = 	kollapse(RepositoryDir, "R/", fname)
 
-BackupDir = "~/GitHub/Packages/ggExpressDev/Development/"
+BackupDir = "~/GitHub/Packages/ggExpress/Development/"
 dir.create(BackupDir)
 
 # devtools::use_package("vioplot")
@@ -45,13 +45,12 @@ DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate 
     4. Describe your figures & findings in the same report in a clear and nicely formatted way, parsed from your variables into english sentences.
     5. Share your report, by exporting your report to .pdf, .html or .docx, or via Github or a personal website."
     , "License" = "GPL-3 + file LICENSE"
-    , "Version" = "0.1.2"
-    # , "Version" = "4.0.0"
+    , "Version" = "0.1.3"
     , "Packaged" =  Sys.time()
     , "Repository" =  "CRAN"
     , "Imports" = "tidyverse, cowplot, ggpubr, stats, methods, sm, graphics, grDevices, gplots, RColorBrewer, sessioninfo, MarkdownReports"
     # , "Suggests" = ""
-    , "BugReports"= "https://github.com/vertesy/ggExpressDev/issues"
+    , "BugReports"= "https://github.com/vertesy/ggExpress/issues"
 )
 
 
@@ -59,7 +58,7 @@ setwd(RepositoryDir)
 if ( !dir.exists(RepositoryDir) ) { create(path = RepositoryDir, description = DESCRIPTION, rstudio = TRUE)
 } else {
     getwd()
-    try(file.remove(c("DESCRIPTION","NAMESPACE", "ggExpressDev.Rproj")))
+    try(file.remove(c("DESCRIPTION","NAMESPACE", "ggExpress.Rproj")))
     create_package(path = RepositoryDir, fields = DESCRIPTION, open = F)
 }
 
@@ -88,8 +87,8 @@ document()
 # Install your package ------------------------------------------------
 # # setwd(RepositoryDir)
 install(RepositoryDir)
-# require("ggExpressDev")
-# # remove.packages("ggExpressDev")
+# require("ggExpress")
+# # remove.packages("ggExpress")
 # # Test your package ------------------------------------------------
 # help("wplot")
 # cat("\014")
@@ -97,13 +96,13 @@ install(RepositoryDir)
 
 
 # Test if you can install from github ------------------------------------------------
-# devtools::install_github(repo = "vertesy/ggExpressDev")
+# devtools::install_github(repo = "vertesy/ggExpress")
 
 # require("ggExpress")
 
 # Clean up if not needed anymore ------------------------------------------------
 # View(installed.packages())
-# remove.packages("ggExpressDev")
+# remove.packages("ggExpress")
 
 check(RepositoryDir, cran = TRUE)
 # as.package(RepositoryDir)
@@ -115,5 +114,5 @@ check(RepositoryDir, cran = TRUE)
 # # desc$get(ggExpress)
 #
 #
-# system("cd ~/GitHub/ggExpressDev/; ls -a; open .Rbuildignore")
+# system("cd ~/GitHub/ggExpress/; ls -a; open .Rbuildignore")
 #
