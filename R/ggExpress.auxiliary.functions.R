@@ -12,18 +12,6 @@
 
 # - llogit
 
-######################################################################
-# Explicit dependencies on CodeAndRoll
-######################################################################
-
-# - flag.nameiftrue
-
-# flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = "") { # Returns the name and its value, if its TRUE.
-#   output = if (toggle) { paste0(prefix, (substitute(toggle)), suffix)
-#   } else {paste0(prefix, name.if.not, suffix)}
-#   if (length(output) > 1) output = output[length(output)]  # fix for when input is a list element like p$'myparam'
-#   return(output)
-# } # returns the name if its value is true
 
 ######################################################################
 # Duplicated functions to avoid dependencies
@@ -31,37 +19,6 @@
 
 
 
-# MarkdownReports.R ------------------------------------------------------------------------------------------------
-#' Collapse vector to a string, separated by dots
-#'
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#' @export
-#'
-#' @examples kpp(1,3, 'sdasd'); kpp(1:3, 'sdasd')
-
-kpp <- function(...) { stringr::str_remove(paste(..., sep = '.', collapse = '.'), "\\.+$") } # remove trailing dots
-
-
-# CodeAndRoll.R ------------------------------------------------------------------------------------------------
-
-#' flag.nameiftrue
-#' Aux function for parsing filenames. Returns a variable's name if its value is TRUE.
-#' @param toggle Variable name to return as string, if its value is TRUE.
-#' @param prefix prefix
-#' @param suffix suffix
-#' @param name.if.not Alternative name to return, "" by default.
-#'
-#' @return
-#' @export
-#'
-#' @examples a=TRUE; b=FALSE; flag.nameiftrue(a); flag.nameiftrue(b)
-
-flag.nameiftrue <- function(toggle, prefix = NULL, suffix = NULL, name.if.not = "") { # Returns the name and its value, if its TRUE.
-  output = if (toggle) { paste0(prefix, (substitute(toggle)), suffix)
-  } else {paste0(prefix, name.if.not, suffix)}
-  if (length(output) > 1) output = output[length(output)]  # fix for when input is a list element like p$'myparam'
-  return(output)
-} # returns the name if its value is true
 
 ######################################################################
 # Original functions
@@ -89,8 +46,8 @@ qqSave <- function(ggobj, w =4, h = w
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = F, fname = F, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) kpp(title, suffix, 'pdf') else kpp(fname, 'pdf')
-  if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
+  if (also.pdf) fname2 <- if (isFALSE(fname)) Stringendo::kpp(title, suffix, 'pdf') else Stringendo::kpp(fname, 'pdf')
+  if (isFALSE(fname)) fname <- Stringendo::kpp(title, suffix, ext)
 
   if (!isFALSE(page)) {
     wA4 <- 8.27
@@ -194,6 +151,6 @@ qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) {
 
 qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
   nm <- make.names(as.character(substitute(string)))
-  if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
+  if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
   return(nm)
 }

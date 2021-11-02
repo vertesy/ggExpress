@@ -76,7 +76,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
-  fname = kpp(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+  fname = Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -125,7 +125,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
-  fname = kpp(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY),  ext)
+  fname = Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY),  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -203,7 +203,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  fname <- kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+  fname <- Stringendo::kpp(plotname, suffix, "bar", Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -263,7 +263,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
 
   p <- if (NoLegend) p + NoLegend() else p
-  fname = kpp(plotname, suffix, "pie",  ext)
+  fname = Stringendo::kpp(plotname, suffix, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -303,7 +303,7 @@ qscatter <- function(tbl_X_Y_Col_etc
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
                      , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
   df <- tbl_X_Y_Col_etc
   p <- ggpubr::ggscatter(data = df, x = vars[1], y = vars[2], color = col
@@ -314,7 +314,7 @@ qscatter <- function(tbl_X_Y_Col_etc
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
-  fname = kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+  fname = Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
