@@ -2,8 +2,7 @@
 % Please edit documentation in R/ggExpress.auxiliary.functions.R
 \name{qqqParsePlotname}
 \alias{qqqParsePlotname}
-\title{qqqParsePlotname
-Parse Plotname from variable name.}
+\title{qqqParsePlotname}
 \usage{
 qqqParsePlotname(string = "sadsad", suffix_tag = NULL)
 }
@@ -13,7 +12,6 @@ qqqParsePlotname(string = "sadsad", suffix_tag = NULL)
 \item{suffix_tag}{suffix_tag}
 }
 \description{
-qqqParsePlotname
 Parse Plotname from variable name.
 }
 \examples{

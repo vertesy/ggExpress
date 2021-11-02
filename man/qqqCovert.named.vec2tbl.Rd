@@ -2,8 +2,7 @@
 % Please edit documentation in R/ggExpress.auxiliary.functions.R
 \name{qqqCovert.named.vec2tbl}
 \alias{qqqCovert.named.vec2tbl}
-\title{qqqCovert.named.vec2tbl
-Covert a named vector to a table.}
+\title{qqqCovert.named.vec2tbl}
 \usage{
 qqqCovert.named.vec2tbl(
   namedVec = 1:14,
@@ -22,7 +21,6 @@ qqqCovert.named.vec2tbl(
 \item{thr}{thr}
 }
 \description{
-qqqCovert.named.vec2tbl
 Covert a named vector to a table.
 }
 \examples{

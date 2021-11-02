@@ -21,7 +21,7 @@
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
-#' Histogram
+#' @title Histogram
 #'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
@@ -86,7 +86,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
 
 # ------------------------------------------------------------------------------------------------
-#' Density plot
+#' @title Density plot
 #'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
@@ -134,7 +134,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 
 
 # ------------------------------------------------------------------------------------------------
-#' Barplot
+#' @title Barplot
 #'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
@@ -213,7 +213,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 
 # ------------------------------------------------------------------------------------------------
-#' Pie chart
+#' @title Pie chart
 #'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
@@ -272,7 +272,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 
 
 # ------------------------------------------------------------------------------------------------
-#' Scatter plot
+#' @title Scatter plot
 #'
 #' @param tbl_X_Y_Col_etc tbl_X_Y_Col_etc
 #' @param suffix A suffix added to the filename. NULL by default.
@@ -290,13 +290,13 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
 #' @param w width of the plot.
 #' @param h height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @import ggpubr
 #' @export
-#'
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")
 
 qscatter <- function(tbl_X_Y_Col_etc
                      , suffix = NULL
-                     , plotname = qqqParsePlotname(vec, suffix)
+                     , plotname = qqqParsePlotname(tbl_X_Y_Col_etc, suffix)
                      # , title = F
                      , col = c(NULL , 3)[1]
                      , ext = "png", also.pdf = T

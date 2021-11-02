@@ -25,7 +25,7 @@
 ######################################################################
 
 # ------------------------------------------------------------------------------------------------
-#' Quick-Save ggplot objects
+#' @title Quick-Save ggplot objects
 #'
 #' @param ggobj ggobj
 #' @param w width of the plot.
@@ -66,7 +66,7 @@ qqSave <- function(ggobj, w =4, h = w
 
 
 # ------------------------------------------------------------------------------------------------
-#' Insert Markdown image link to .md report
+#' @title Insert Markdown image link to .md report
 #'
 #' @param file_name file_name
 #' @export
@@ -81,7 +81,7 @@ qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
 
 
 # ------------------------------------------------------------------------------------------------
-#' Define Axis Length
+#' @title Define Axis Length
 #'
 #' @param vec The variable to plot.
 #' @param minLength minLength
@@ -95,8 +95,8 @@ qqqAxisLength <- function(vec = 1:20, minLength=6) {
 
 
 # ------------------------------------------------------------------------------------------------
-#' qqqCovert.named.vec2tbl
-#' Covert a named vector to a table.
+#' @title qqqCovert.named.vec2tbl
+#' @description Covert a named vector to a table.
 #' @param namedVec namedVec
 #' @param verbose verbose
 #' @param strip.too.many.names strip.too.many.names
@@ -125,8 +125,8 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 # ------------------------------------------------------------------------------------------------
-#' qqqCovert.tbl2vec
-#' Covert a table to a named vector.
+#' @title qqqCovert.tbl2vec
+#' @description Covert a table to a named vector.
 #' @param tibble.input tibble.input
 #' @param name.column name.column
 #' @param value.column value.column
@@ -141,8 +141,8 @@ qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) {
 }
 
 # ------------------------------------------------------------------------------------------------
-#' qqqParsePlotname
-#' Parse Plotname from variable name.
+#' @title qqqParsePlotname
+#' @description Parse Plotname from variable name.
 #' @param string string
 #' @param suffix_tag suffix_tag
 #' @export
