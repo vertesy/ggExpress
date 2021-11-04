@@ -82,7 +82,8 @@ document()
 
 # Install your package ------------------------------------------------
 # # setwd(RepositoryDir)
-install(RepositoryDir)
+install(RepositoryDir, upgrade = F)
+
 # require("ggExpress")
 # # remove.packages("ggExpress")
 # # Test your package ------------------------------------------------
@@ -121,5 +122,8 @@ depFile = paste0(RepositoryDir, 'Development/Dependencies.R')
 sink(file = depFile); print(f.deps); sink()
 p.deps <- gsub(x = names(f.deps), pattern = 'package:', replacement = '')
 write(x = p.deps, file = depFile, append = T)
+p.dep.declared <- trimws(unlist(strsplit(DESCRIPTION$Imports, ",")))
+p.dep.new <- sort(union( p.deps, p.dep.declared))
+# clipr::write_clip(p.dep.new)
 
 
