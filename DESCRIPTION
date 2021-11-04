@@ -1,7 +1,7 @@
 Package: ggExpress
 Title: ggExpress is the fastest way to create, annotate and export plots
     in R
-Version: 0.1.5
+Version: 0.1.6
 Authors@R: 
     person(given = "Abel",
            family = "Vertesy",
@@ -23,6 +23,8 @@ Description: ggExpress is a set of R functions that allows you to generate
     Github or a personal website.
 License: GPL-3 + file LICENSE
 BugReports: https://github.com/vertesy/ggExpress/issues
+Depends: 
+    Stringendo
 Imports: 
     cowplot,
     ggpubr,
@@ -37,7 +39,7 @@ Imports:
     tidyverse
 Encoding: UTF-8
 LazyData: true
-Packaged: 2021-11-02 11:00:13
+Packaged: 2021-11-04 22:28:29
 Repository: CRAN
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
