@@ -40,6 +40,7 @@
 #' @export
 #'
 #' @examples xplot <- ggplot2::qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
+#' @importFrom cowplot save_plot
 
 qqSave <- function(ggobj, w =4, h = w
                    , ext =c("png", "pdf")[1], also.pdf = FALSE
@@ -72,9 +73,11 @@ qqSave <- function(ggobj, w =4, h = w
 #' @export
 #'
 #' @examples qMarkdownImageLink(file_name = "myplot.pdf")
+#' @importFrom MarkdownHelpers llogit
 
 qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
-  if (require(MarkdownReports)) MarkdownReports::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
+  MarkdownHelpers::llogit()(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
+
 }
 
 
