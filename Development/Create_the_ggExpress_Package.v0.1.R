@@ -40,10 +40,10 @@ DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate 
     4. Describe your figures & findings in the same report in a clear and nicely formatted way, parsed from your variables into english sentences.
     5. Share your report, by exporting your report to .pdf, .html or .docx, or via Github or a personal website."
     , "License" = "GPL-3 + file LICENSE"
-    , "Version" = "0.2.0"
+    , "Version" = "0.2.1"
     , "Packaged" =  Sys.time()
     , "Repository" =  "CRAN"
-    , "Depends" =  "Stringendo, MarkdownHelpers, ggplot, ggpubr"
+    , "Depends" =  "Stringendo, MarkdownHelpers, ggplot2, ggpubr"
     , "Imports" = "cowplot, graphics, grDevices, MarkdownReports, methods, RColorBrewer, sessioninfo, Seurat, sm, stats, tidyverse"
     # , "Suggests" = ""
     , "BugReports"= "https://github.com/vertesy/ggExpress/issues"
