@@ -5,13 +5,15 @@ $`character(0)`
 [13] "scale_y_log10" "theme"        
 
 $`package:base`
- [1] "as.character" "c"            "colnames"     "factor"       "isFALSE"     
- [6] "length"       "paste"        "print"        "rep"          "signif"      
-[11] "substitute"   "sum"          "unique"      
+ [1] "as.character" "c"            "colnames"     "factor"      
+ [5] "isFALSE"      "length"       "paste"        "print"       
+ [9] "rep"          "signif"       "substitute"   "sum"         
+[13] "unique"      
 
 $`package:ggExpress`
-[1] "qMarkdownImageLink"      "qqqAxisLength"           "qqqCovert.named.vec2tbl"
-[4] "qqqParsePlotname"        "qqSave"                 
+[1] "qMarkdownImageLink"      "qqqAxisLength"          
+[3] "qqqCovert.named.vec2tbl" "qqqParsePlotname"       
+[5] "qqSave"                 
 
 $`package:Stringendo`
 [1] "flag.nameiftrue" "kpp"            

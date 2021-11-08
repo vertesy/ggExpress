@@ -43,8 +43,8 @@ DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate 
     , "Version" = "0.2.0"
     , "Packaged" =  Sys.time()
     , "Repository" =  "CRAN"
-    , "Depends" =  "Stringendo, MarkdownHelpers"
-    , "Imports" = "tidyverse, cowplot, ggpubr, stats, methods, sm, graphics, grDevices, RColorBrewer, sessioninfo, MarkdownReports"
+    , "Depends" =  "Stringendo, MarkdownHelpers, ggplot, ggpubr"
+    , "Imports" = "cowplot, graphics, grDevices, MarkdownReports, methods, RColorBrewer, sessioninfo, Seurat, sm, stats, tidyverse"
     # , "Suggests" = ""
     , "BugReports"= "https://github.com/vertesy/ggExpress/issues"
 )

@@ -261,8 +261,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
                      , palette = color.palette, ...)
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
-
-  p <- if (NoLegend) p + NoLegend() else p
+  # p <- if (NoLegend) p + NoLegend() else p
+  p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
   fname = Stringendo::kpp(plotname, suffix, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
