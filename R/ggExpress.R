@@ -36,7 +36,7 @@
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
 
-qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = TRUE
+qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = FALSE
                        , suffix = NULL
                        , plotname = qqqParsePlotname(vec, suffix)
                        , logX = F, logY = F
@@ -99,7 +99,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , suffix = NULL
                      , plotname = qqqParsePlotname(vec, suffix)
-                     , save = TRUE, mdlink = TRUE
+                     , save = TRUE, mdlink = FALSE
                      , logX = F, logY = F
                      , max.names = 50
                      , w = 5, h = w, ...) {
@@ -156,7 +156,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
                      , plotname = qqqParsePlotname(vec, suffix)
                      # , title = F
-                     , save = TRUE, mdlink = TRUE
+                     , save = TRUE, mdlink = FALSE
                      , hline = F, filtercol = 1
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
@@ -227,7 +227,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
-qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = TRUE
+qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , suffix = NULL
                  , plotname = qqqParsePlotname(vec, suffix)
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
@@ -291,7 +291,7 @@ qscatter <- function(tbl_X_Y_Col_etc
                      , col = c(NULL , 3)[1]
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
-                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = TRUE
+                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
   vars <- colnames(tbl_X_Y_Col_etc)
@@ -447,6 +447,9 @@ qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) {
 qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
   nm <- make.names(as.character(substitute(string)))
   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
+  print(11)
+  print(nm)
+
   return(nm)
 }
 
