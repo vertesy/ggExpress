@@ -17,7 +17,7 @@ qscatter(
   vline = F,
   plot = TRUE,
   save = TRUE,
-  mdlink = TRUE,
+  mdlink = FALSE,
   w = 7,
   h = w,
   ...

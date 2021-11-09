@@ -11,7 +11,7 @@ qbarplot(
   suffix = NULL,
   plotname = qqqParsePlotname(vec, suffix),
   save = TRUE,
-  mdlink = TRUE,
+  mdlink = FALSE,
   hline = F,
   filtercol = 1,
   palette_use = "jco",

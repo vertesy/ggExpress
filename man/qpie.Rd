@@ -9,7 +9,7 @@ qpie(
   ext = "pdf",
   plot = TRUE,
   save = TRUE,
-  mdlink = TRUE,
+  mdlink = FALSE,
   suffix = NULL,
   plotname = qqqParsePlotname(vec, suffix),
   LegendSide = T,

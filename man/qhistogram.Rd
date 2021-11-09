@@ -10,7 +10,7 @@ qhistogram(
   xlab = F,
   plot = TRUE,
   save = TRUE,
-  mdlink = TRUE,
+  mdlink = FALSE,
   suffix = NULL,
   plotname = qqqParsePlotname(vec, suffix),
   logX = F,

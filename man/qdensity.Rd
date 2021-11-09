@@ -12,7 +12,7 @@ qdensity(
   suffix = NULL,
   plotname = qqqParsePlotname(vec, suffix),
   save = TRUE,
-  mdlink = TRUE,
+  mdlink = FALSE,
   logX = F,
   logY = F,
   max.names = 50,
