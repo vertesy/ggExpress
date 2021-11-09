@@ -368,8 +368,7 @@ qqSave <- function(ggobj, w =4, h = w
 #' @importFrom MarkdownHelpers llogit
 
 qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
-  MarkdownHelpers::llogit()(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
-
+  llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
 }
 
 
