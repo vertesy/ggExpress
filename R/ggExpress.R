@@ -457,6 +457,36 @@ qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
+#' q32_A4_plot
+#' Plot up to 6 panels (3-by-2) on vertically standing A4 page.
+#' @param plot_list A list of ggplot objects, each of which is one panel.
+#' @param pname Plotname, Default: F
+#' @param suffix A suffix added to the filename, Default: NULL
+#' @param scale Scaling factor of the canvas, Default: 1
+#' @param nrow number of rows for panelson the page, Default: 2
+#' @param ncol number of columns for panelson the page, Default: 2
+#' @param h height of the plot, Default: wA4 * scale
+#' @param w width of the plot, Default: hA4 * scale
+#' @param ... Pass any other parameter to the internally called functions (most of them should work).
+#' @param extension file extension
+#' @export
+#'
+#' @examples # q32_A4_plot()
+
+q32vA4_grid_plot <- function(plot_list, pname = F, suffix = NULL, plot =F
+                        , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
+                        , h = hA4 * scale, w = wA4 * scale, scale = 1
+                        , ...) { # Save 4 umaps on an A4 page.
+  print("Plot panels on 3-by-2 vertical A4 page.")
+  stopifnot(length(plot_list)<7)
+
+  if (pname==F) pname =  sppp(substitute(plot_list), suffix)
+  fname = kpp(pname, extension)
+  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...  )
+  cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
+  ww.FnP_parser(fname)
+}
+q32vA4_grid_plot(Fig.SX2.panels)
 
 
 
