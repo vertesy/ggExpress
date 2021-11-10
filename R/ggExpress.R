@@ -486,7 +486,7 @@ q32vA4_grid_plot <- function(plot_list, pname = F, suffix = NULL, plot =F
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
-q32vA4_grid_plot(Fig.SX2.panels)
+
 
 
 
