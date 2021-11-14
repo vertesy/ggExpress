@@ -422,7 +422,7 @@ qviolin <- function(df_XYcol
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @import ggpubr
 #' @export
-#' @examples dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")
+#' @examples dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
 
 qscatter <- function(df_XYcol
                      , suffix = NULL
@@ -435,7 +435,6 @@ qscatter <- function(df_XYcol
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
   p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2], color = col
                          , title = plotname, ...) +

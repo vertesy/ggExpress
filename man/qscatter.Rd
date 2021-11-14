@@ -60,5 +60,5 @@ qscatter(
 Scatter plot
 }
 \examples{
-dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")
+dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
 }
