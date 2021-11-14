@@ -2,12 +2,11 @@
 % Please edit documentation in R/ggExpress.R
 \name{q32vA4_grid_plot}
 \alias{q32vA4_grid_plot}
-\title{q32_A4_plot
-Plot up to 6 panels (3-by-2) on vertically standing A4 page.}
+\title{q32_A4_plot}
 \usage{
 q32vA4_grid_plot(
   plot_list,
-  pname = F,
+  plotname = F,
   suffix = NULL,
   plot = F,
   nrow = 3,
@@ -22,13 +21,13 @@ q32vA4_grid_plot(
 \arguments{
 \item{plot_list}{A list of ggplot objects, each of which is one panel.}
 
-\item{pname}{Plotname, Default: F}
+\item{plotname}{Plot name, Default: F}
 
 \item{suffix}{A suffix added to the filename, Default: NULL}
 
-\item{nrow}{number of rows for panelson the page, Default: 2}
+\item{nrow}{number of rows for panels on the page, Default: 2}
 
-\item{ncol}{number of columns for panelson the page, Default: 2}
+\item{ncol}{number of columns for panels on the page, Default: 2}
 
 \item{extension}{file extension}
 
@@ -41,7 +40,6 @@ q32vA4_grid_plot(
 \item{...}{Pass any other parameter to the internally called functions (most of them should work).}
 }
 \description{
-q32_A4_plot
 Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 }
 \examples{
