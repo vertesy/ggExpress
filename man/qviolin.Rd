@@ -5,13 +5,13 @@
 \title{qviolin plot}
 \usage{
 qviolin(
-  tbl_X_Y_Col_etc,
+  df_XYcol,
   suffix = NULL,
   title = F,
   stat.test = T,
   stat.method = NULL,
   stat.label.y.npc = "top",
-  stat.label.x = NULL,
+  stat.label.x = 0.5,
   ext = "png",
   also.pdf = T,
   logY = F,
@@ -26,7 +26,7 @@ qviolin(
 )
 }
 \arguments{
-\item{tbl_X_Y_Col_etc}{Data, as 2 column data frame, where col.1 is X axis.}
+\item{df_XYcol}{Data, as 2 column data frame, where col.1 is X axis.}
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 

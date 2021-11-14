@@ -107,10 +107,10 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
 
   p <- ggpubr::ggdensity(data = df, x = "value" # , y = "..count.."
-                 , title = plotname, xlab = xlab
-                 , add = "median", rug = TRUE
-                 , color = "names", fill = "names"
-                 , palette = 'jco', ...
+                         , title = plotname, xlab = xlab
+                         , add = "median", rug = TRUE
+                         , color = "names", fill = "names"
+                         , palette = 'jco', ...
   ) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
@@ -166,8 +166,10 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , limitsize = FALSE
                      , w = qqqAxisLength(vec), h = 5, ...) {
 
+
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif(df>  100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   df[["colour"]] <- if (hline & filtercol != 0) {
@@ -239,6 +241,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , w = 5, h = w, ...) {
 
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif(df>  100)
+
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
@@ -264,7 +268,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 # _________________________________________________________________________________________________
 #' @title qboxplot plot
 #'
-#' @param tbl_X_Y_Col_etc Data, as 2 column data frame, where col.1 is X axis.
+#' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
 #' @param col Color of the plot.
@@ -293,9 +297,9 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 # @param plotname The name of the file and title of the plot.
 
 
-qboxplot <- function(tbl_X_Y_Col_etc
+qboxplot <- function(df_XYcol
                      , suffix = NULL
-                     # , plotname = qqqParsePlotname(tbl_X_Y_Col_etc, suffix)
+                     # , plotname = qqqParsePlotname(df_XYcol, suffix)
                      , outlier.shape = NULL
                      , title = F
                      , stat.test = T
@@ -306,12 +310,11 @@ qboxplot <- function(tbl_X_Y_Col_etc
                      , logY = F #, logX = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                      , w = 7, h = w, ...) {
-  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
-  vars <- colnames(tbl_X_Y_Col_etc)
-  df <- tbl_X_Y_Col_etc
-  nrCategories.DFcol1 <- length(table(tbl_X_Y_Col_etc[,1]))
-  stopif(nrCategories.DFcol1>  100)
-  p <- ggpubr::ggboxplot(data = df, x = vars[1], y = vars[2], fill = vars[1]
+  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  vars <- colnames(df_XYcol)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
+
+  p <- ggpubr::ggboxplot(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                          # , fill = fill
                          , outlier.shape = outlier.shape
                          , title = plotname, ...) +
@@ -334,7 +337,7 @@ qboxplot <- function(tbl_X_Y_Col_etc
 # _________________________________________________________________________________________________
 #' @title qviolin plot
 #'
-#' @param tbl_X_Y_Col_etc Data, as 2 column data frame, where col.1 is X axis.
+#' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
 #' @param col Color of the plot.
@@ -361,25 +364,24 @@ qboxplot <- function(tbl_X_Y_Col_etc
 # @param plotname The name of the file and title of the plot.
 
 
-qviolin <- function(tbl_X_Y_Col_etc
+qviolin <- function(df_XYcol
                     , suffix = NULL
-                    # , plotname = qqqParsePlotname(tbl_X_Y_Col_etc, suffix)
+                    # , plotname = qqqParsePlotname(df_XYcol, suffix)
                     # , outlier.shape = NULL
                     , title = F
                     , stat.test = T
                     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-                    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
+                    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     # , fill = c(NULL , 3)[1]
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                     , w = 7, h = w, ...) {
-  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
-  vars <- colnames(tbl_X_Y_Col_etc)
-  df <- tbl_X_Y_Col_etc
-  nrCategories.DFcol1 <- length(table(tbl_X_Y_Col_etc[,1]))
-  stopif(nrCategories.DFcol1>  100)
-  p <- ggpubr::ggviolin(data = df, x = vars[1], y = vars[2], fill = vars[1]
+  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  vars <- colnames(df_XYcol)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
+
+  p <- ggpubr::ggviolin(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                         # , fill = fill
                         # , outlier.shape = outlier.shape
                         , title = plotname, ...) +
@@ -402,7 +404,7 @@ qviolin <- function(tbl_X_Y_Col_etc
 # _________________________________________________________________________________________________
 #' @title Scatter plot
 #'
-#' @param tbl_X_Y_Col_etc Data, as 2 column data frame, where col.1 is X axis.
+#' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The name of the file and title of the plot.
 #' @param col Color of the plot.
@@ -422,20 +424,21 @@ qviolin <- function(tbl_X_Y_Col_etc
 #' @export
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12))); qscatter(dfx, suffix = "2D.gaussian")
 
-qscatter <- function(tbl_X_Y_Col_etc
+qscatter <- function(df_XYcol
                      , suffix = NULL
-                     , plotname = qqqParsePlotname(tbl_X_Y_Col_etc, suffix)
+                     , plotname = qqqParsePlotname(df_XYcol, suffix)
                      # , title = F
                      , col = c(NULL , 3)[1]
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                      , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(tbl_X_Y_Col_etc))), suffix) else title
-  vars <- colnames(tbl_X_Y_Col_etc)
-  df <- tbl_X_Y_Col_etc
-  p <- ggpubr::ggscatter(data = df, x = vars[1], y = vars[2], color = col
-                 , title = plotname, ...) +
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  vars <- colnames(df_XYcol)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
+
+  p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2], color = col
+                         , title = plotname, ...) +
     ggpubr::grids(axis = 'xy')
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
@@ -612,9 +615,9 @@ qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot
 #' @examples # q32_A4_plot()
 
 q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
-                        , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
-                        , h = hA4 * scale, w = wA4 * scale, scale = 1
-                        , ...) { # Save 4 umaps on an A4 page.
+                             , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
+                             , h = hA4 * scale, w = wA4 * scale, scale = 1
+                             , ...) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
   stopifnot(length(plot_list)<7)
 
