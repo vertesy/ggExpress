@@ -41,6 +41,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , plotname = qqqParsePlotname(vec, suffix)
                        , logX = F, logY = F
                        , vline = F, filtercol = 0
+                       , add = "median"
                        , palette_use = 'jco', col = as.character(1:3)[1]
                        , max.names = 50
                        , w = 5, h = w, ...) {
@@ -57,10 +58,10 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
   p <- ggpubr::gghistogram(data = df, x = "value"
                            , title = plotname, xlab = xlab
-                           , add = "median"
+                           , add = add
                            # , color = "names", fill = "names"
                            , color = 'colour', fill = 'colour'
-                           , palette = 'jco', ...
+                           , palette = palette_use, ...
   ) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
@@ -87,6 +88,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
+#' @param palette_use GGpubr Color palette to use.
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
@@ -101,6 +103,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , plotname = qqqParsePlotname(vec, suffix)
                      , save = TRUE, mdlink = FALSE
                      , logX = F, logY = F
+                     , palette_use = 'jco'
                      , max.names = 50
                      , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -110,7 +113,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                          , title = plotname, xlab = xlab
                          , add = "median", rug = TRUE
                          , color = "names", fill = "names"
-                         , palette = 'jco', ...
+                         , palette = palette_use, ...
   ) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
@@ -220,7 +223,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param pcdigits pcdigits
 #' @param NamedSlices NamedSlices
 #' @param custom.order custom.order
-#' @param color.palette color.palette
+#' @param palette_use GGpubr Color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
@@ -236,7 +239,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
                  # , custom.margin = F
-                 , color.palette = 'jco'
+                 , palette_use = 'jco'
                  , max.names = 50
                  , w = 5, h = w, ...) {
 
@@ -252,7 +255,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
                      , fill = "names", color = "white"
                      , title = plotname
-                     , palette = color.palette, ...)
+                     , palette = palette_use, ...)
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
   # p <- if (NoLegend) p + NoLegend() else p
@@ -284,6 +287,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
@@ -306,6 +310,7 @@ qboxplot <- function(df_XYcol
                      # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                      , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
                      # , fill = c(NULL , 3)[1]
+                     , palette_use = 'jco'
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
@@ -316,6 +321,7 @@ qboxplot <- function(df_XYcol
 
   p <- ggpubr::ggboxplot(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                          # , fill = fill
+                         , palette = palette_use
                          , outlier.shape = outlier.shape
                          , title = plotname, ...) +
     ggpubr::grids(axis = 'y')
@@ -351,6 +357,7 @@ qboxplot <- function(df_XYcol
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
@@ -373,6 +380,7 @@ qviolin <- function(df_XYcol
                     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     # , fill = c(NULL , 3)[1]
+                    , palette_use = 'jco'
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
@@ -382,9 +390,11 @@ qviolin <- function(df_XYcol
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
   p <- ggpubr::ggviolin(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
+                        , title = plotname
                         # , fill = fill
                         # , outlier.shape = outlier.shape
-                        , title = plotname, ...) +
+                        , palette = palette_use
+                        , ...) +
     ggpubr::grids(axis = 'y')
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
@@ -415,6 +425,7 @@ qviolin <- function(df_XYcol
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param plot Display the plot.
+#' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
@@ -429,6 +440,7 @@ qscatter <- function(df_XYcol
                      , plotname = qqqParsePlotname(df_XYcol, suffix)
                      # , title = F
                      , col = c(NULL , 3)[1]
+                     , palette_use = 'jco'
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
@@ -436,7 +448,9 @@ qscatter <- function(df_XYcol
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
 
-  p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2], color = col
+  p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2]
+                         , palette = palette_use
+                         , color = col
                          , title = plotname, ...) +
     ggpubr::grids(axis = 'xy')
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
@@ -597,7 +611,7 @@ qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
-#' @title  q32_A4_plot
+#' @title  q32vA4_grid_plot
 #' @description Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
 #' @param plotname Plot name, Default: F
@@ -611,7 +625,7 @@ qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot
 #' @param extension file extension
 #' @export
 #'
-#' @examples # q32_A4_plot()
+#' @examples # q32vA4_grid_plot()
 
 q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
                              , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
@@ -631,6 +645,38 @@ q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
 
 
 # _________________________________________________________________________________________________
+#' @title  q31vA4_grid_plot
+#' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
+#' @param plot_list A list of ggplot objects, each of which is one panel.
+#' @param plotname Plot name, Default: F
+#' @param suffix A suffix added to the filename, Default: NULL
+#' @param scale Scaling factor of the canvas, Default: 1
+#' @param nrow number of rows for panels on the page, Default: 2
+#' @param ncol number of columns for panels on the page, Default: 2
+#' @param h height of the plot, Default: wA4 * scale
+#' @param w width of the plot, Default: hA4 * scale
+#' @param ... Pass any other parameter to the internally called functions (most of them should work).
+#' @param extension file extension
+#' @export
+#'
+#' @examples # q31vA4_grid_plot()
+
+q31vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
+                             , nrow = 3, ncol = 1, extension = c('pdf', 'png')[2]
+                             , h = hA4 * scale, w = wA4 * scale, scale = 1
+                             , ...) { # Save 4 umaps on an A4 page.
+  print("Plot panels on 3-by-2 vertical A4 page.")
+  stopifnot(length(plot_list)<7)
+
+  if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
+  fname = kpp(plotname, extension)
+  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...  )
+  cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
+  ww.FnP_parser(fname)
+}
+
+
+
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
