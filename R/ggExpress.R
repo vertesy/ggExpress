@@ -645,7 +645,7 @@ q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
 
 
 # _________________________________________________________________________________________________
-#' @title  q31vA4_grid_plot
+#' @title  qA4_grid_plot
 #' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
 #' @param plotname Plot name, Default: F
@@ -659,18 +659,21 @@ q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
 #' @param extension file extension
 #' @export
 #'
-#' @examples # q31vA4_grid_plot()
+#' @examples # qA4_grid_plot()
 
-q31vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
-                             , nrow = 3, ncol = 1, extension = c('pdf', 'png')[2]
-                             , h = hA4 * scale, w = wA4 * scale, scale = 1
-                             , ...) { # Save 4 umaps on an A4 page.
-  print("Plot panels on 3-by-2 vertical A4 page.")
+qA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
+                          , nrow = 3, ncol = 2
+                          , extension = c('pdf', 'png')[2]
+                          , h = hA4 * scale, w = wA4 * scale
+                          , scale = 1
+                          , labels = LETTERS[1:length(plot_list)]
+                          , ...) { # Save 4 umaps on an A4 page.
+  iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
   stopifnot(length(plot_list)<7)
 
   if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname = kpp(plotname, extension)
-  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...  )
+  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  )
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
