@@ -172,7 +172,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif(df>  100)
+  # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
   df[["colour"]] <- if (hline & filtercol != 0) {
@@ -244,7 +244,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , w = 5, h = w, ...) {
 
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif(df>  100)
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > 100)
 
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
