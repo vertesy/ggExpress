@@ -6,8 +6,8 @@
 \usage{
 q32vA4_grid_plot(
   plot_list,
-  plotname = F,
   suffix = NULL,
+  plotname = sppp(substitute(plot_list), suffix),
   plot = F,
   nrow = 3,
   ncol = 2,
@@ -21,9 +21,9 @@ q32vA4_grid_plot(
 \arguments{
 \item{plot_list}{A list of ggplot objects, each of which is one panel.}
 
-\item{plotname}{Plot name, Default: F}
-
 \item{suffix}{A suffix added to the filename, Default: NULL}
+
+\item{plotname}{Plot name, Default: F}
 
 \item{nrow}{number of rows for panels on the page, Default: 2}
 

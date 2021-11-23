@@ -38,7 +38,7 @@
 
 qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = FALSE
                        , suffix = NULL
-                       , plotname = kpp(substitute(vec), suffix, trim = T)
+                       , plotname = sppp(substitute(vec), suffix)
                        , logX = F, logY = F
                        , vline = F, filtercol = 0
                        , add = "median"
@@ -100,7 +100,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , suffix = NULL
-                     , plotname = kpp(substitute(vec), suffix, trim = T)
+                     , plotname = sppp(substitute(vec), suffix)
                      , save = TRUE, mdlink = FALSE
                      , logX = F, logY = F
                      , palette_use = 'jco'
@@ -157,7 +157,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
-                     , plotname = kpp(substitute(vec), suffix, trim = T)
+                     , plotname = sppp(substitute(vec), suffix)
                      # , title = F
                      , save = TRUE, mdlink = FALSE
                      , hline = F, filtercol = 1
@@ -234,7 +234,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , suffix = NULL
-                 , plotname = kpp(substitute(vec), suffix, trim = T)
+                 , plotname = sppp(substitute(vec), suffix)
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
@@ -303,7 +303,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 
 qboxplot <- function(df_XYcol
                      , suffix = NULL
-                     # , plotname = kpp(substitute(vec), suffix, trim = T)
+                     , plotname = sppp(substitute(df_XYcol), suffix)
                      , outlier.shape = NULL
                      , title = F
                      , stat.test = T
@@ -315,7 +315,7 @@ qboxplot <- function(df_XYcol
                      , logY = F #, logX = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                      , w = 7, h = w, ...) {
-  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
@@ -373,7 +373,7 @@ qboxplot <- function(df_XYcol
 
 qviolin <- function(df_XYcol
                     , suffix = NULL
-                    # , plotname = kpp(substitute(vec), suffix, trim = T)
+                    , plotname = sppp(substitute(df_XYcol), suffix)
                     # , outlier.shape = NULL
                     , title = F
                     , stat.test = T
@@ -385,7 +385,7 @@ qviolin <- function(df_XYcol
                     , logY = F #, logX = F
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
                     , w = 7, h = w, ...) {
-  plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
@@ -437,7 +437,7 @@ qviolin <- function(df_XYcol
 
 qscatter <- function(df_XYcol
                      , suffix = NULL
-                     , plotname = kpp(substitute(vec), suffix, trim = T)
+                     , plotname = sppp(substitute(df_XYcol), suffix)
                      # , title = F
                      , col = c(NULL , 3)[1]
                      , palette_use = 'jco'
@@ -589,22 +589,19 @@ qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) {
 }
 
 # _________________________________________________________________________________________________
-#' @title qqqParsePlotname
-#' @description Parse Plotname from variable name.
-#' @param string string
-#' @param suffix_tag suffix_tag
-#' @export
-#'
-#' @examples qqqParsePlotname()
-
-qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
-  nm <- make.names(as.character(substitute(string)))
-  if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
-  print(11)
-  print(nm)
-
-  return(nm)
-}
+# #' @title qqqParsePlotname
+# #' @description Parse Plotname from variable name.
+# #' @param string string
+# #' @param suffix_tag suffix_tag
+# #' @export
+# #'
+# #' @examples qqqParsePlotname()
+#
+# qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
+#   nm <- make.names(as.character(substitute(string)))
+#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
+#   return(nm)
+# }
 
 
 # _________________________________________________________________________________________________
@@ -627,14 +624,17 @@ qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot
 #'
 #' @examples # q32vA4_grid_plot()
 
-q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
+q32vA4_grid_plot <- function(plot_list
+                             , suffix = NULL
+                             , plotname = sppp(substitute(plot_list), suffix)
+                             , plot =F
                              , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
                              , h = hA4 * scale, w = wA4 * scale, scale = 1
                              , ...) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
   stopifnot(length(plot_list)<7)
 
-  if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
+  # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname = kpp(plotname, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...  )
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
@@ -661,7 +661,10 @@ q32vA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
 #'
 #' @examples # qA4_grid_plot()
 
-qA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
+qA4_grid_plot <- function(plot_list
+                          , suffix = NULL
+                          , plotname = sppp(substitute(plot_list), suffix)
+                          , plot =F
                           , nrow = 3, ncol = 2
                           , extension = c('pdf', 'png')[2]
                           , h = hA4 * scale, w = wA4 * scale
@@ -671,7 +674,7 @@ qA4_grid_plot <- function(plot_list, plotname = F, suffix = NULL, plot =F
   iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
   stopifnot(length(plot_list)<7)
 
-  if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
+  # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname = kpp(plotname, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  )
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)

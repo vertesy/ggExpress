@@ -7,6 +7,7 @@
 qboxplot(
   df_XYcol,
   suffix = NULL,
+  plotname = sppp(substitute(df_XYcol), suffix),
   outlier.shape = NULL,
   title = F,
   stat.test = T,

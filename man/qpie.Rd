@@ -11,7 +11,7 @@ qpie(
   save = TRUE,
   mdlink = FALSE,
   suffix = NULL,
-  plotname = kpp(substitute(vec), suffix, trim = T),
+  plotname = sppp(substitute(vec), suffix),
   LegendSide = T,
   LegendTitle = as.character(substitute(vec)),
   NoLegend = F,

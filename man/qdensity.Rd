@@ -10,7 +10,7 @@ qdensity(
   xlab = F,
   plot = TRUE,
   suffix = NULL,
-  plotname = kpp(substitute(vec), suffix, trim = T),
+  plotname = sppp(substitute(vec), suffix),
   save = TRUE,
   mdlink = FALSE,
   logX = F,

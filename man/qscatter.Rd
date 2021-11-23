@@ -7,7 +7,7 @@
 qscatter(
   df_XYcol,
   suffix = NULL,
-  plotname = kpp(substitute(vec), suffix, trim = T),
+  plotname = sppp(substitute(df_XYcol), suffix),
   col = c(NULL, 3)[1],
   palette_use = "jco",
   ext = "png",

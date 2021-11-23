@@ -12,7 +12,7 @@ qhistogram(
   save = TRUE,
   mdlink = FALSE,
   suffix = NULL,
-  plotname = kpp(substitute(vec), suffix, trim = T),
+  plotname = sppp(substitute(vec), suffix),
   logX = F,
   logY = F,
   vline = F,
