@@ -243,13 +243,15 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , max.names = 50
                  , w = 5, h = w, ...) {
 
+  print(plotname)
+  if (is_null(names(vec))) {names(vec) <- as.character(1:length(vec))}
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  print(df)
   nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > 100)
 
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
-  print(df)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
 
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
@@ -260,11 +262,13 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
   # p <- if (NoLegend) p + NoLegend() else p
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  fname = Stringendo::kpp(plotname, suffix, "pie",  ext)
+  fname = Stringendo::kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
+
+
 
 
 
