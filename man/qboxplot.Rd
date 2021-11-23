@@ -13,6 +13,7 @@ qboxplot(
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = NULL,
+  palette_use = "jco",
   ext = "png",
   also.pdf = T,
   logY = F,
@@ -42,6 +43,8 @@ qboxplot(
 \item{stat.label.y.npc}{stat label y position}
 
 \item{stat.label.x}{stat label x position}
+
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{ext}{File extension (.pdf / .png).}
 

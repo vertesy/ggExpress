@@ -9,7 +9,7 @@ qbarplot(
   ext = "pdf",
   plot = TRUE,
   suffix = NULL,
-  plotname = qqqParsePlotname(vec, suffix),
+  plotname = kpp(substitute(vec), suffix, trim = T),
   save = TRUE,
   mdlink = FALSE,
   hline = F,

@@ -7,8 +7,9 @@
 qscatter(
   df_XYcol,
   suffix = NULL,
-  plotname = qqqParsePlotname(df_XYcol, suffix),
+  plotname = kpp(substitute(vec), suffix, trim = T),
   col = c(NULL, 3)[1],
+  palette_use = "jco",
   ext = "png",
   also.pdf = T,
   logX = F,
@@ -31,6 +32,8 @@ qscatter(
 \item{plotname}{The name of the file and title of the plot.}
 
 \item{col}{Color of the plot.}
+
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{ext}{File extension (.pdf / .png).}
 

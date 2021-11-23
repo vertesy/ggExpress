@@ -12,6 +12,7 @@ qviolin(
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = 0.5,
+  palette_use = "jco",
   ext = "png",
   also.pdf = T,
   logY = F,
@@ -39,6 +40,8 @@ qviolin(
 \item{stat.label.y.npc}{stat label y position}
 
 \item{stat.label.x}{stat label x position}
+
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{ext}{File extension (.pdf / .png).}
 

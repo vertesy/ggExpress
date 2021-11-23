@@ -10,11 +10,12 @@ qdensity(
   xlab = F,
   plot = TRUE,
   suffix = NULL,
-  plotname = qqqParsePlotname(vec, suffix),
+  plotname = kpp(substitute(vec), suffix, trim = T),
   save = TRUE,
   mdlink = FALSE,
   logX = F,
   logY = F,
+  palette_use = "jco",
   max.names = 50,
   w = 5,
   h = w,
@@ -41,6 +42,8 @@ qdensity(
 \item{logX}{Make X axis log10-scale.}
 
 \item{logY}{Make Y axis log10-scale.}
+
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

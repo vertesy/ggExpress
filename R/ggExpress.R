@@ -38,7 +38,7 @@
 
 qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = FALSE
                        , suffix = NULL
-                       , plotname = qqqParsePlotname(vec, suffix)
+                       , plotname = kpp(substitute(vec), suffix, trim = T)
                        , logX = F, logY = F
                        , vline = F, filtercol = 0
                        , add = "median"
@@ -100,7 +100,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , suffix = NULL
-                     , plotname = qqqParsePlotname(vec, suffix)
+                     , plotname = kpp(substitute(vec), suffix, trim = T)
                      , save = TRUE, mdlink = FALSE
                      , logX = F, logY = F
                      , palette_use = 'jco'
@@ -157,7 +157,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
-                     , plotname = qqqParsePlotname(vec, suffix)
+                     , plotname = kpp(substitute(vec), suffix, trim = T)
                      # , title = F
                      , save = TRUE, mdlink = FALSE
                      , hline = F, filtercol = 1
@@ -234,7 +234,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , suffix = NULL
-                 , plotname = qqqParsePlotname(vec, suffix)
+                 , plotname = kpp(substitute(vec), suffix, trim = T)
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
@@ -303,7 +303,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 
 qboxplot <- function(df_XYcol
                      , suffix = NULL
-                     # , plotname = qqqParsePlotname(df_XYcol, suffix)
+                     # , plotname = kpp(substitute(vec), suffix, trim = T)
                      , outlier.shape = NULL
                      , title = F
                      , stat.test = T
@@ -373,7 +373,7 @@ qboxplot <- function(df_XYcol
 
 qviolin <- function(df_XYcol
                     , suffix = NULL
-                    # , plotname = qqqParsePlotname(df_XYcol, suffix)
+                    # , plotname = kpp(substitute(vec), suffix, trim = T)
                     # , outlier.shape = NULL
                     , title = F
                     , stat.test = T
@@ -437,7 +437,7 @@ qviolin <- function(df_XYcol
 
 qscatter <- function(df_XYcol
                      , suffix = NULL
-                     , plotname = qqqParsePlotname(df_XYcol, suffix)
+                     , plotname = kpp(substitute(vec), suffix, trim = T)
                      # , title = F
                      , col = c(NULL , 3)[1]
                      , palette_use = 'jco'

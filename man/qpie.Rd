@@ -11,14 +11,14 @@ qpie(
   save = TRUE,
   mdlink = FALSE,
   suffix = NULL,
-  plotname = qqqParsePlotname(vec, suffix),
+  plotname = kpp(substitute(vec), suffix, trim = T),
   LegendSide = T,
   LegendTitle = as.character(substitute(vec)),
   NoLegend = F,
   pcdigits = 2,
   NamedSlices = F,
   custom.order = F,
-  color.palette = "jco",
+  palette_use = "jco",
   max.names = 50,
   w = 5,
   h = w,
@@ -52,7 +52,7 @@ qpie(
 
 \item{custom.order}{custom.order}
 
-\item{color.palette}{color.palette}
+\item{palette_use}{GGpubr Color palette to use.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
