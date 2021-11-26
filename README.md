@@ -32,6 +32,14 @@ Install directly from **GitHub** via **devtools** with one R command:
 ```R
 # install.packages("devtools"); # If you don't have it.
 require("devtools")
+
+# Install dependencies
+devtools::install_github(repo = "vertesy/Stringendo", upgrade = F)
+devtools::install_github(repo = "vertesy/ReadWriter", upgrade = F)
+devtools::install_github(repo = "vertesy/CodeAndRoll2", upgrade = F)
+devtools::install_github(repo = "vertesy/MarkdownHelpers", upgrade = F)
+
+# Install MarkdownHelpers
 devtools::install_github(repo = "vertesy/ggExpress")
 ```
 
@@ -57,14 +65,18 @@ source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.aux
 
 ## Usage
 
-
 ```r
-require(ggpubr)
-require(cowplot)
-require(MarkdownReports) # https://github.com/vertesy/MarkdownReportsDev
+require('ggpubr')
+require('cowplot')
+require('Stringendo')
+require('ReadWriter')
+require('CodeAndRoll2')
+require('MarkdownHelpers')
 
-source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.functions.R")
+require('ggExpress')
 
+
+# Test ------------------
 
 weight <- rnorm(1000); 
 qhistogram(weight, vline = 3)
