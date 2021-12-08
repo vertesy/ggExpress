@@ -19,7 +19,8 @@ qpie(
   NamedSlices = F,
   custom.order = F,
   palette_use = "jco",
-  max.names = 50,
+  max.names = 30,
+  max.categories = 100,
   w = 5,
   h = w,
   ...

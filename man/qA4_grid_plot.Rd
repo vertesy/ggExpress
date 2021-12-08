@@ -7,15 +7,16 @@
 qA4_grid_plot(
   plot_list,
   suffix = NULL,
-  plotname = sppp(substitute(plot_list), suffix),
-  plot = F,
   nrow = 3,
   ncol = 2,
+  plotname = sppp(substitute(plot_list), nrow, "by", ncol, suffix),
+  plot = F,
   extension = c("pdf", "png")[2],
   h = hA4 * scale,
   w = wA4 * scale,
   scale = 1,
   labels = LETTERS[1:length(plot_list)],
+  max.list.length = 16,
   ...
 )
 }
@@ -24,11 +25,11 @@ qA4_grid_plot(
 
 \item{suffix}{A suffix added to the filename, Default: NULL}
 
-\item{plotname}{Plot name, Default: F}
-
 \item{nrow}{number of rows for panels on the page, Default: 2}
 
 \item{ncol}{number of columns for panels on the page, Default: 2}
+
+\item{plotname}{Plot name, Default: F}
 
 \item{extension}{file extension}
 

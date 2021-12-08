@@ -240,16 +240,38 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , custom.order = F
                  # , custom.margin = F
                  , palette_use = 'jco'
-                 , max.names = 50
+                 , max.names = 30
+                 , max.categories = 100
                  , w = 5, h = w, ...) {
 
+  print(plotname)
+
+  if (length(vec) > max.categories) {
+    iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
+    sv <- sort(vec, decreasing = T)
+    vec.new <- sv[1:(max.categories - 1)]
+    idx.remaining <- max.categories:length(vec)
+    sum.of.remaining <- sum(sv[idx.remaining])
+    fr.sum <- percentage_formatter(sum.of.remaining / sum(vec))
+    iprint("The remaining", length(idx.remaining), "values make up", fr.sum,"of the data.")
+
+    vec.new[max.categories] <- sum.of.remaining
+    names(vec.new)[max.categories] <- p0('Sum of rest', length(idx.remaining))
+    vec <- vec.new
+
+  }
+
+  if (is_null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
+
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > 100)
+  print(df)
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
+
+  print(nrCategories.DFcol1)
 
   pcX <- df$"value" / sum(df$"value")
-  labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
+  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
-  print(df)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
 
   p <- ggpubr::ggpie(data = df, x = "value", label = labs
@@ -260,11 +282,14 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
   # p <- if (NoLegend) p + NoLegend() else p
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  fname = Stringendo::kpp(plotname, suffix, "pie",  ext)
+  fname = Stringendo::kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
+
+
+
 
 
 
@@ -663,16 +688,18 @@ q32vA4_grid_plot <- function(plot_list
 
 qA4_grid_plot <- function(plot_list
                           , suffix = NULL
-                          , plotname = sppp(substitute(plot_list), suffix)
-                          , plot =F
                           , nrow = 3, ncol = 2
+                          , plotname = sppp(substitute(plot_list), nrow, 'by', ncol, suffix)
+                          , plot = F
                           , extension = c('pdf', 'png')[2]
                           , h = hA4 * scale, w = wA4 * scale
                           , scale = 1
                           , labels = LETTERS[1:length(plot_list)]
+                          , max.list.length = 16
                           , ...) { # Save 4 umaps on an A4 page.
   iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
-  stopifnot(length(plot_list)<7)
+  stopifnot(length(plot_list) < max.list.length)
+
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname = kpp(plotname, extension)
@@ -680,6 +707,7 @@ qA4_grid_plot <- function(plot_list
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
+
 
 
 

@@ -18,7 +18,8 @@ require('Stringendo')
 
 
 # Setup ------------------------
-PackageName = 	"ggExpress"
+PackageName = "ggExpress"
+package.version = "0.3.0"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
@@ -27,6 +28,7 @@ Package_FnP = 	kollapse(RepositoryDir, "R/", fname)
 
 BackupDir = "~/GitHub/Packages/ggExpress/Development/"
 dir.create(BackupDir)
+
 
 # devtools::use_package("vioplot")
 DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate and export plots in R"
@@ -40,7 +42,7 @@ DESCRIPTION <- list("Title" = "ggExpress is the fastest way to create, annotate 
     4. Describe your figures & findings in the same report in a clear and nicely formatted way, parsed from your variables into english sentences.
     5. Share your report, by exporting your report to .pdf, .html or .docx, or via Github or a personal website."
     , "License" = "GPL-3 + file LICENSE"
-    , "Version" = "0.2.9"
+    , "Version" = package.version
     , "Packaged" =  Sys.time()
     , "Repository" =  "CRAN"
     , "Depends" =  "Stringendo, MarkdownHelpers, ggplot2, ggpubr"
@@ -79,7 +81,6 @@ setwd(RepositoryDir)
 getwd()
 document()
 
-
 # Install your package ------------------------------------------------
 # # setwd(RepositoryDir)
 install(RepositoryDir, upgrade = F)
@@ -91,6 +92,13 @@ install(RepositoryDir, upgrade = F)
 # cat("\014")
 # devtools::run_examples()
 
+
+{
+  "update cff version"
+  citpath <- paste0(RepositoryDir, 'CITATION.cff')
+  xfun::gsub_file(file = citpath, perl = T
+                  , "^version: v.+", paste0("version: v", package.version))
+}
 
 # Test if you can install from github ------------------------------------------------
 # devtools::install_github(repo = "vertesy/ggExpress")
