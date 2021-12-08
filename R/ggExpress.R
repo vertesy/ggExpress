@@ -240,17 +240,36 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , custom.order = F
                  # , custom.margin = F
                  , palette_use = 'jco'
-                 , max.names = 50
+                 , max.names = 30
+                 , max.categories = 100
                  , w = 5, h = w, ...) {
 
   print(plotname)
-  if (is_null(names(vec))) {names(vec) <- as.character(1:length(vec))}
+
+  if (length(vec) > max.categories) {
+    iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
+    sv <- sort(vec, decreasing = T)
+    vec.new <- sv[1:(max.categories - 1)]
+    idx.remaining <- max.categories:length(vec)
+    sum.of.remaining <- sum(sv[idx.remaining])
+    fr.sum <- percentage_formatter(sum.of.remaining / sum(vec))
+    iprint("The remaining", length(idx.remaining), "values make up", fr.sum,"of the data.")
+
+    vec.new[max.categories] <- sum.of.remaining
+    vec <- vec.new
+
+  }
+
+  if (is_null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
+
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
   print(df)
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > 100)
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
+
+  print(nrCategories.DFcol1)
 
   pcX <- df$"value" / sum(df$"value")
-  labs <- paste(100 * signif (pcX, pcdigits), "%", sep = "")
+  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
 
@@ -267,6 +286,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
+
 
 
 
