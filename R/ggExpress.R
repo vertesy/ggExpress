@@ -256,6 +256,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
     iprint("The remaining", length(idx.remaining), "values make up", fr.sum,"of the data.")
 
     vec.new[max.categories] <- sum.of.remaining
+    names(vec.new)[max.categories] <- p0('Sum of rest', length(idx.remaining))
     vec <- vec.new
 
   }
