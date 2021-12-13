@@ -144,6 +144,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param xlab X-axis label.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
+#' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
 #' @param w width of the plot.
@@ -163,8 +164,9 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , hline = F, filtercol = 1
                      , palette_use = 'jco', col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
-                     , logY = F
+                     , logY = FALSE
                      , label = NULL
+                     , hide.legend = TRUE
                      , max.names = 50
                      , limitsize = FALSE
                      , w = qqqAxisLength(vec), h = 5, ...) {
@@ -189,12 +191,11 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                          , color = 'colour', fill = 'colour'
                          , label = label
                          , palette = palette_use, ...
-  ) + ggpubr::grids(axis = 'y') +
-    ggplot2::theme(
-      legend.position = "none",
-      axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)
-    )
+  ) + ggpubr::grids(axis = 'y')
 
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+    , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
