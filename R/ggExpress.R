@@ -42,7 +42,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , logX = F, logY = F
                        , vline = F, filtercol = 0
                        , add = "median"
-                       , palette_use = 'jco', col = as.character(1:3)[1]
+                       , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                       , col = as.character(1:3)[1]
                        , max.names = 50
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -103,7 +104,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , plotname = sppp(substitute(vec), suffix)
                      , save = TRUE, mdlink = FALSE
                      , logX = F, logY = F
-                     , palette_use = 'jco'
+                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , max.names = 50
                      , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -162,7 +163,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      # , title = F
                      , save = TRUE, mdlink = FALSE
                      , hline = F, filtercol = 1
-                     , palette_use = 'jco', col = as.character(1:3)[1]
+                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                     , col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , logY = FALSE
                      , label = NULL
@@ -240,7 +242,7 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , pcdigits = 2, NamedSlices =F
                  , custom.order = F
                  # , custom.margin = F
-                 , palette_use = 'jco'
+                 , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                  , max.names = 30
                  , max.categories = 100
                  , w = 5, h = w, ...) {
@@ -336,7 +338,7 @@ qboxplot <- function(df_XYcol
                      # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                      , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
                      # , fill = c(NULL , 3)[1]
-                     , palette_use = 'jco'
+                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
@@ -406,7 +408,7 @@ qviolin <- function(df_XYcol
                     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     # , fill = c(NULL , 3)[1]
-                    , palette_use = 'jco'
+                    , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
@@ -466,7 +468,7 @@ qscatter <- function(df_XYcol
                      , plotname = sppp(substitute(df_XYcol), suffix)
                      # , title = F
                      , col = c(NULL , 3)[1]
-                     , palette_use = 'jco'
+                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
