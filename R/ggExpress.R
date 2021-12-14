@@ -253,8 +253,8 @@ qpie <- function(vec = Network.Size
                  , w = 5, h = w, ...) {
 
   print(plotname)
-
-  if (length(vec) > max.categories) {
+  l.orig <- length(vec)
+  if (l.orig > max.categories) {
     iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
     sv <- sort(vec, decreasing = T)
     vec.new <- sv[1:(max.categories - 1)]
@@ -298,7 +298,7 @@ qpie <- function(vec = Network.Size
                       , color = "white"
                       , title = plotname
                       , palette = 'jco'
-                      , caption = paste('Total elem:', length(vec), 'Elem. shown:', (max.categories-1), 'max.names:', max.names)
+                      , caption = p0('Total elem:', l.orig, '| Elem. shown:', (max.categories-1), '| max.names:', max.names)
                       # , ...
   ))
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
