@@ -92,7 +92,6 @@ install(RepositoryDir, upgrade = F)
 # cat("\014")
 # devtools::run_examples()
 
-
 {
   "update cff version"
   citpath <- paste0(RepositoryDir, 'CITATION.cff')

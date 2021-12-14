@@ -246,7 +246,7 @@ qpie <- function(vec = Network.Size
                  , custom.order = F
                  # , custom.margin = F
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                 , max.categories = 20
+                 , max.categories = 100
                  , max.names = 5
                  , decr.order = T
                  , both_pc_and_value = T
@@ -273,7 +273,7 @@ qpie <- function(vec = Network.Size
   if (is.null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
 
   df <- qqqCovert.named.vec2tbl.v2(namedVec = vec, thr = max.names)
-  if (length(vec) > max.names) df[['names']][length(df$'names')] <- name.of.last
+  if (l.orig > max.categories) df[['names']][length(df$'names')] <- name.of.last
 
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
@@ -299,7 +299,7 @@ qpie <- function(vec = Network.Size
                       , fill = "names"
                       , color = "white"
                       , title = plotname
-                      , palette = 'jco'
+                      , palette = palette_use
                       , caption = p0('Total elements:', l.orig, '; shown:', (max.categories-1)
                                      , ' | max.names:', max.names)
                       # , ...
@@ -311,9 +311,9 @@ qpie <- function(vec = Network.Size
   fname = Stringendo::kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
+  # print(112121)
   if (plot) p
 }
-
 
 
 # _________________________________________________________________________________________________

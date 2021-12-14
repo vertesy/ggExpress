@@ -20,7 +20,7 @@ qpie(
   custom.order = F,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  max.categories = 20,
+  max.categories = 100,
   max.names = 5,
   decr.order = T,
   both_pc_and_value = T,
