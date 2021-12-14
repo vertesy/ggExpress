@@ -14,12 +14,14 @@ qbarplot(
   mdlink = FALSE,
   hline = F,
   filtercol = 1,
-  palette_use = "jco",
+  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
+    "uchicago")[4],
   col = as.character(1:3)[1],
   xlab.angle = 90,
   xlab = F,
-  logY = F,
+  logY = FALSE,
   label = NULL,
+  hide.legend = TRUE,
   max.names = 50,
   limitsize = FALSE,
   w = qqqAxisLength(vec),
@@ -57,6 +59,8 @@ qbarplot(
 \item{logY}{Make Y axis log10-scale.}
 
 \item{label}{label}
+
+\item{hide.legend}{hide legend}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

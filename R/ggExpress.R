@@ -264,12 +264,12 @@ qpie <- function(vec = Network.Size
     iprint("The remaining", length(idx.remaining), "values make up", fr.sum,"of the data.")
 
     vec.new[max.categories] <- sum.of.remaining
-    name.of.last <- p0('Sum of rem', length(idx.remaining))
+    name.of.last <- paste('Sum of rem.', length(idx.remaining))
     names(vec.new)[max.categories] <- name.of.last
     vec <- vec.new
   }
 
-  if (is_null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
+  if (is.null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
 
   df <- qqqCovert.named.vec2tbl.v2(namedVec = vec, thr = max.names)
   if (length(vec) > max.names) df[['names']][length(df$'names')] <- name.of.last
@@ -297,7 +297,7 @@ qpie <- function(vec = Network.Size
                       , color = "white"
                       , title = plotname
                       , palette = 'jco'
-                      , caption = paste('max.categories:', max.categories, 'max.names:', max.names)
+                      , caption = paste('Total elem:', length(vec), 'Elem. shown:', (max.categories-1), 'max.names:', max.names)
                       # , ...
   ))
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
@@ -597,6 +597,7 @@ qqqAxisLength <- function(vec = 1:20, minLength=6) {
 #'
 #' @examples qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
 
+
 qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -605,7 +606,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
   an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
 
-  idx.elements.above.thr <- thr:length(namedVec)
+  idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
   if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
   if (length(unique(names(namedVec))) > thr) print("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
@@ -614,6 +615,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
   df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
   df
 }
+
 
 
 

@@ -5,7 +5,7 @@
 \title{Pie chart}
 \usage{
 qpie(
-  vec,
+  vec = Network.Size,
   ext = "pdf",
   plot = TRUE,
   save = TRUE,
@@ -18,9 +18,12 @@ qpie(
   pcdigits = 2,
   NamedSlices = F,
   custom.order = F,
-  palette_use = "jco",
-  max.names = 30,
-  max.categories = 100,
+  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
+    "uchicago")[4],
+  max.categories = 20,
+  max.names = 5,
+  decr.order = T,
+  both_pc_and_value = T,
   w = 5,
   h = w,
   ...
@@ -57,11 +60,15 @@ qpie(
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
+\item{both_pc_and_value}{Report both percentage AND number.}
+
 \item{w}{width of the plot.}
 
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+
+\item{ordered}{Slices in the order of df. By default would ordered alphabetically in the plot.}
 }
 \description{
 Pie chart
