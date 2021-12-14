@@ -237,7 +237,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
-qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
+qpie <- function(vec = Network.Size
+                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , suffix = NULL
                  , plotname = sppp(substitute(vec), suffix)
                  , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
@@ -245,8 +246,10 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , custom.order = F
                  # , custom.margin = F
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                 , max.categories = 100
-                 , max.names = max.categories
+                 , max.categories = 20
+                 , max.names = 5
+                 , decr.order = T
+                 , both_pc_and_value = T
                  , w = 5, h = w, ...) {
 
   print(plotname)
@@ -261,32 +264,42 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
     iprint("The remaining", length(idx.remaining), "values make up", fr.sum,"of the data.")
 
     vec.new[max.categories] <- sum.of.remaining
-    names(vec.new)[max.categories] <- p0('Sum of rest', length(idx.remaining))
+    name.of.last <- p0('Sum of rem', length(idx.remaining))
+    names(vec.new)[max.categories] <- name.of.last
     vec <- vec.new
-
   }
 
   if (is_null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
 
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
-  print(df)
-
-  if (ordered) df$'value' <- factor(df$'value', levels = df$'value') # Slices in the order of df.
-  if (both_pc_and_value) df$'name' <- paste(df$'name', paste(round(df$'value' * 100, 2), "%", sep = ""), sep = "\n")
-
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
-
-  print(nrCategories.DFcol1)
+  df <- qqqCovert.named.vec2tbl.v2(namedVec = vec, thr = max.names)
+  if (length(vec) > max.names) df[['names']][length(df$'names')] <- name.of.last
 
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+
+  if (both_pc_and_value) labs <- paste(df$'names', labs, sep = "\n")
+
+
+  if (decr.order) df[['names']] <- factor(df$'names', levels = rev(make.unique(df$'names')))
+
+  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
+  print(nrCategories.DFcol1)
+
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
 
-  p <- ggpubr::ggpie(data = df, x = "value", label = labs
-                     , fill = "names", color = "white"
-                     , title = plotname
-                     , palette = palette_use, ...)
+  (p <- ggpubr::ggpie(data = df
+                      , x = "value"
+                      , label = 'names'
+                      # , label = labs
+                      # , fill = labs
+                      , fill = "names"
+                      , color = "white"
+                      , title = plotname
+                      , palette = 'jco'
+                      , caption = paste('max.categories:', max.categories, 'max.names:', max.names)
+                      # , ...
+  ))
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
   # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
   # p <- if (NoLegend) p + NoLegend() else p
@@ -296,8 +309,6 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
-
-
 
 
 
