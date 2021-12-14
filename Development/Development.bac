@@ -277,7 +277,8 @@ qpie <- function(vec = Network.Size
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
 
-  if (both_pc_and_value) labs <- paste(df$'names', labs, sep = "\n")
+  idx.named <- which(!df$'names' == "")
+  if (both_pc_and_value) df$'names'[idx.named] <- paste(df$'names'[idx.named], labs[idx.named], sep = "\n")
 
 
   if (decr.order) df[['names']] <- factor(df$'names', levels = rev(make.unique(df$'names')))
