@@ -241,15 +241,16 @@ qpie <- function(vec = Network.Size
                  , ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , suffix = NULL
                  , plotname = sppp(substitute(vec), suffix)
-                 , LegendSide = T, LegendTitle = as.character(substitute(vec)), NoLegend = F
-                 , pcdigits = 2, NamedSlices =F
-                 , custom.order = F
-                 # , custom.margin = F
+                 , LegendSide = TRUE
+                 , LegendTitle = as.character(substitute(vec)), NoLegend = F
+                 , pcdigits = 2, NamedSlices = FALSE
+                 , custom.order = FALSE
+                 , extended.canvas = TRUE
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                  , max.categories = 100
                  , max.names = 5
-                 , decr.order = T
-                 , both_pc_and_value = T
+                 , decr.order = TRUE
+                 , both_pc_and_value = TRUE
                  , w = 5, h = w, ...) {
 
   print(plotname)
@@ -305,7 +306,8 @@ qpie <- function(vec = Network.Size
                       # , ...
   ))
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
-  # if (custom.margin) p <- p + theme(plot.margin = unit(custom.margin, "cm"))
+  if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
+
   # p <- if (NoLegend) p + NoLegend() else p
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
   fname = Stringendo::kpp(plotname, "pie",  ext)
