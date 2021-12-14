@@ -225,6 +225,8 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param NoLegend NoLegend
 #' @param pcdigits pcdigits
 #' @param NamedSlices NamedSlices
+#' @param ordered Slices in the order of df. By default would ordered alphabetically in the plot.
+#' @param both_pc_and_value Report both percentage AND number.
 #' @param custom.order custom.order
 #' @param palette_use GGpubr Color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
@@ -243,8 +245,8 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
                  , custom.order = F
                  # , custom.margin = F
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                 , max.names = 30
                  , max.categories = 100
+                 , max.names = max.categories
                  , w = 5, h = w, ...) {
 
   print(plotname)
@@ -268,6 +270,10 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
 
   df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
   print(df)
+
+  if (ordered) df$'value' <- factor(df$'value', levels = df$'value') # Slices in the order of df.
+  if (both_pc_and_value) df$'name' <- paste(df$'name', paste(round(df$'value' * 100, 2), "%", sep = ""), sep = "\n")
+
   nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
 
   print(nrCategories.DFcol1)
@@ -290,7 +296,6 @@ qpie <- function(vec, ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
-
 
 
 
@@ -588,7 +593,9 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
   if (nr.uniq.names > thr & verbose)  print("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
   an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
-  if (strip.too.many.names & an.issue.w.names) names(namedVec) <- rep("x", length(namedVec))
+
+  idx.elements.above.thr <- thr:length(namedVec)
+  if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
   if (length(unique(names(namedVec))) > thr) print("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
   df <- tibble::as_tibble(cbind("value" = namedVec))
