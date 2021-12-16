@@ -179,13 +179,15 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
   # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
-  df[["colour"]] <- if (hline & filtercol != 0) {
-    if (filtercol == 1 ) (df$"value" > hline) else if (filtercol == -1 ) (df$"value" < hline)
-  } else if (length(col) == length(vec)) {
-    as.character(col)
-  } else {
-    as.character(rep(col, length(vec))[1:length(vec)])
-  }
+
+  df[["colour"]] <-
+    if (length(col) == length(vec)) {
+      as.character(col)
+    } else if (hline & filtercol != 0) {
+      if (filtercol == 1 ) (df$"value" > hline) else if (filtercol == -1 ) (df$"value" < hline)
+    } else {
+      as.character(rep(col, length(vec))[1:length(vec)])
+    }
   print(df)
 
   p <- ggpubr::ggbarplot(data = df, x = "names", y = "value"
