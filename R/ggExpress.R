@@ -249,8 +249,9 @@ qpie <- function(vec = Network.Size
                  , custom.order = FALSE
                  , extended.canvas = TRUE
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                 , custom.margin = T
                  , max.categories = 100
-                 , max.names = 5
+                 , max.names = 10
                  , decr.order = TRUE
                  , both_pc_and_value = TRUE
                  , w = 5, h = w, ...) {
@@ -275,7 +276,7 @@ qpie <- function(vec = Network.Size
 
   if (is.null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
 
-  df <- qqqCovert.named.vec2tbl.v2(namedVec = vec, thr = max.names)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[['names']][length(df$'names')] <- name.of.last
 
   pcX <- df$"value" / sum(df$"value")
