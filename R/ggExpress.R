@@ -1,8 +1,8 @@
 # ____________________________________________________________________
 # ggExpress is the fastest way to create, annotate and export plots in R.  ----
 # ____________________________________________________________________
-# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.functions.R"), silent = T)
-# try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.functions.R"), silent = T)
+# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = T)
+# try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = T)
 
 # ______________________________________________________________________________________________----
 # Main plotting functions  ----
@@ -36,7 +36,7 @@
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
 
-qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = FALSE
+qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                        , suffix = NULL
                        , plotname = sppp(substitute(vec), suffix)
                        , logX = F, logY = F
@@ -102,7 +102,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , suffix = NULL
                      , plotname = sppp(substitute(vec), suffix)
-                     , save = TRUE, mdlink = FALSE
+                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , logX = F, logY = F
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , max.names = 50
@@ -161,7 +161,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
                      , plotname = sppp(substitute(vec), suffix)
                      # , title = F
-                     , save = TRUE, mdlink = FALSE
+                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , hline = F, filtercol = 1
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , col = as.character(1:3)[1]
@@ -175,7 +175,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, strip.too.many.names = F)
   # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
@@ -240,7 +240,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
 qpie <- function(vec = Network.Size
-                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = FALSE
+                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                  , suffix = NULL
                  , plotname = sppp(substitute(vec), suffix)
                  , LegendSide = TRUE
@@ -366,7 +366,7 @@ qboxplot <- function(df_XYcol
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
-                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
+                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
@@ -436,7 +436,7 @@ qviolin <- function(df_XYcol
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
-                    , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
+                    , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
@@ -496,7 +496,7 @@ qscatter <- function(df_XYcol
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
-                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = FALSE
+                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
@@ -617,7 +617,8 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
   idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
   if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
-  if (length(unique(names(namedVec))) > thr) print("Vector has", thr, "+ names. Can mess up auto-color legends.")
+
+  if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
   df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
