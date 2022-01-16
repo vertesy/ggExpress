@@ -23,7 +23,7 @@ qboxplot(
   vline = F,
   plot = TRUE,
   save = TRUE,
-  mdlink = FALSE,
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   w = 7,
   h = w,
   ...

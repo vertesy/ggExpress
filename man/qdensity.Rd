@@ -12,7 +12,7 @@ qdensity(
   suffix = NULL,
   plotname = sppp(substitute(vec), suffix),
   save = TRUE,
-  mdlink = FALSE,
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   logX = F,
   logY = F,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
