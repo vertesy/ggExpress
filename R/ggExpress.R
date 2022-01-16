@@ -175,7 +175,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, strip.too.many.names = F)
+  df <- qqqCovert.named.vec2tbl(namedVec = vec, strip.too.many.names =F)
   # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
@@ -197,6 +197,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                          , palette = palette_use, ...
   ) + ggpubr::grids(axis = 'y')
 
+  if (length(vec) > max.names) p <- p + ggplot2::guides(x = 'none')
   if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
     , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
   }
@@ -611,7 +612,7 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
   # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))
-  if (nr.uniq.names > thr & verbose)  print("Vector has", thr, "+ names. Can mess up auto-color legends.")
+  if (nr.uniq.names > thr & verbose)  iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
   an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
 
