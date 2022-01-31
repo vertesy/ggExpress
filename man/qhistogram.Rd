@@ -21,6 +21,7 @@ qhistogram(
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   col = as.character(1:3)[1],
+  hide.legend = TRUE,
   max.names = 50,
   w = 5,
   h = w,
@@ -55,6 +56,8 @@ qhistogram(
 \item{palette_use}{GGpubr Color palette to use.}
 
 \item{col}{Color of the plot.}
+
+\item{hide.legend}{hide legend}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

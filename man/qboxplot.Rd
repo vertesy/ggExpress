@@ -16,6 +16,7 @@ qboxplot(
   stat.label.x = NULL,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
+  hide.legend = FALSE,
   ext = "png",
   also.pdf = T,
   logY = F,
@@ -47,6 +48,8 @@ qboxplot(
 \item{stat.label.x}{stat label x position}
 
 \item{palette_use}{GGpubr Color palette to use.}
+
+\item{hide.legend}{hide legend}
 
 \item{ext}{File extension (.pdf / .png).}
 

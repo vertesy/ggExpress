@@ -27,6 +27,7 @@
 #' @param col Color of the plot.
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
+#' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
@@ -44,6 +45,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , add = "median"
                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                        , col = as.character(1:3)[1]
+                       , hide.legend = TRUE
                        , max.names = 50
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -68,6 +70,11 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
+
+
   fname = Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -90,6 +97,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
 #' @param palette_use GGpubr Color palette to use.
+#' @param hide.legend hide legend
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
@@ -105,6 +113,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , logX = F, logY = F
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                     , hide.legend = TRUE
                      , max.names = 50
                      , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
@@ -119,6 +128,11 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
+
+
   fname = Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY),  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -341,6 +355,7 @@ qpie <- function(vec = Network.Size
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param hide.legend hide legend
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -365,6 +380,7 @@ qboxplot <- function(df_XYcol
                      , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
                      # , fill = c(NULL , 3)[1]
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                     , hide.legend = FALSE
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -384,8 +400,9 @@ qboxplot <- function(df_XYcol
   # if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-
-
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
 
   fname = Stringendo::kpp(plotname, suffix, "boxplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -411,6 +428,7 @@ qboxplot <- function(df_XYcol
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param hide.legend hide legend
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -435,6 +453,7 @@ qviolin <- function(df_XYcol
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     # , fill = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                    , hide.legend = FALSE
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -455,8 +474,9 @@ qviolin <- function(df_XYcol
   # if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-
-
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
 
   fname = Stringendo::kpp(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -480,6 +500,7 @@ qviolin <- function(df_XYcol
 #' @param vline Draw a vertical line on the plot.
 #' @param plot Display the plot.
 #' @param palette_use GGpubr Color palette to use.
+#' @param hide.legend hide legend
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
@@ -495,6 +516,7 @@ qscatter <- function(df_XYcol
                      # , title = F
                      , col = c(NULL , 3)[1]
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                     , hide.legend = FALSE
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -512,6 +534,10 @@ qscatter <- function(df_XYcol
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
+                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
+  }
+
   fname = Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(fname)

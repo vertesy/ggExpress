@@ -15,6 +15,7 @@ qviolin(
   stat.label.x = 0.5,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
+  hide.legend = FALSE,
   ext = "png",
   also.pdf = T,
   logY = F,
@@ -44,6 +45,8 @@ qviolin(
 \item{stat.label.x}{stat label x position}
 
 \item{palette_use}{GGpubr Color palette to use.}
+
+\item{hide.legend}{hide legend}
 
 \item{ext}{File extension (.pdf / .png).}
 
