@@ -68,13 +68,13 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                            , color = 'colour', fill = 'colour'
                            , palette = palette_use, ...
   ) +
-    if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
+  if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
 
   fname = Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
@@ -129,13 +129,12 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                          , color = "names", fill = "names"
                          , palette = palette_use, ...
   ) +
-    if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
+  if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
-
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   fname = Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY),  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
@@ -213,12 +212,11 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                          , color = 'colour', fill = 'colour'
                          , label = label
                          , palette = palette_use, ...
-  ) + ggpubr::grids(axis = 'y')
+  ) + ggpubr::grids(axis = 'y') +
+  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = 'none')
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-    , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -400,15 +398,15 @@ qboxplot <- function(df_XYcol
                          , palette = palette_use
                          , outlier.shape = outlier.shape
                          , title = plotname, ...) +
-    ggpubr::grids(axis = 'y')
+    ggpubr::grids(axis = 'y') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   # if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   fname = Stringendo::kpp(plotname, suffix, "boxplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -462,9 +460,10 @@ qviolin <- function(df_XYcol
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
                     , ext = "png", also.pdf = T
-                    , logY = F #, logX = F
+                    , logY = FALSE #, logX = F
                     , xlab.angle = 90
-                    , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                    , hline = FALSE
+                    , vline = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
@@ -476,15 +475,15 @@ qviolin <- function(df_XYcol
                         # , outlier.shape = outlier.shape
                         , palette = palette_use
                         , ...) +
-    ggpubr::grids(axis = 'y')
+    ggpubr::grids(axis = 'y') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
-  # if (logX) p <- p + ggplot2::scale_x_log10()
+
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   fname = Stringendo::kpp(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -538,15 +537,15 @@ qscatter <- function(df_XYcol
                          , palette = palette_use
                          , color = col
                          , title = plotname, ...) +
-    ggpubr::grids(axis = 'xy')
+    ggpubr::grids(axis = 'xy') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (hide.legend) { p <- p + ggplot2::theme(legend.position = "none"
-                                             , axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1) )
-  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   fname = Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
