@@ -744,7 +744,7 @@ q32vA4_grid_plot <- function(plot_list
 #' @title  qA4_grid_plot
 #' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
-#' @param plotname Plot name, Default: F
+#' @param plotname Plot name, Default: Autonaming
 #' @param suffix A suffix added to the filename, Default: NULL
 #' @param scale Scaling factor of the canvas, Default: 1
 #' @param nrow number of rows for panels on the page, Default: 2
@@ -771,9 +771,8 @@ qA4_grid_plot <- function(plot_list
   iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
   stopifnot(length(plot_list) < max.list.length)
 
-
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname = kpp(plotname, extension)
+  fname = Stringendo::kpp(plotname, suffix, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  )
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)

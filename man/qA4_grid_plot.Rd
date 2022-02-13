@@ -29,7 +29,7 @@ qA4_grid_plot(
 
 \item{ncol}{number of columns for panels on the page, Default: 2}
 
-\item{plotname}{Plot name, Default: F}
+\item{plotname}{Plot name, Default: Autonaming}
 
 \item{extension}{file extension}
 
