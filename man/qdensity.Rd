@@ -48,6 +48,8 @@ qdensity(
 
 \item{palette_use}{GGpubr Color palette to use.}
 
+\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+
 \item{hide.legend}{hide legend}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}

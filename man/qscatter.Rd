@@ -48,7 +48,7 @@ qscatter(
 
 \item{logY}{Make Y axis log10-scale.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree.}
+\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot.}
 

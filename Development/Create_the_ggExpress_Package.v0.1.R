@@ -19,7 +19,7 @@ require('Stringendo')
 
 # Setup ------------------------
 PackageName = "ggExpress"
-package.version = "0.3.8"
+package.version = "0.3.9"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")

@@ -52,7 +52,7 @@ qbarplot(
 
 \item{col}{Color of the plot.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree.}
+\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{xlab}{X-axis label.}
 

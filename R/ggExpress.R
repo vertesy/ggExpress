@@ -597,7 +597,9 @@ qqSave <- function(ggobj, w =4, h = w
   print(paste0(getwd(),"/", fname))
 
   if (also.pdf) cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h, ...)
-  cowplot::save_plot(plot = ggobj, filename = fname, base_width = w, base_height = h, ...)
+  cowplot::save_plot(plot = ggobj, filename = fname
+                     , title = ww.ttl_field(title, def = "ggExpress")
+                     , base_width = w, base_height = h, ...)
 }
 
 
