@@ -19,6 +19,7 @@ qviolin(
   ext = "png",
   also.pdf = T,
   logY = F,
+  xlab.angle = 90,
   hline = F,
   vline = F,
   plot = TRUE,
@@ -53,6 +54,8 @@ qviolin(
 \item{also.pdf}{also.pdf}
 
 \item{logY}{Make Y axis log10-scale.}
+
+\item{xlab.angle}{Rotate X-axis labels by N degree.}
 
 \item{hline}{Draw a horizontal line on the plot.}
 

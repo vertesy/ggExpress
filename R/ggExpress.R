@@ -27,6 +27,7 @@
 #' @param col Color of the plot.
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
@@ -45,6 +46,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , add = "median"
                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                        , col = as.character(1:3)[1]
+                       , xlab.angle = 90
                        , hide.legend = TRUE
                        , max.names = 50
                        , w = 5, h = w, ...) {
@@ -96,6 +98,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
 #' @param hide.legend hide legend
 #' @param logY Make Y axis log10-scale.
@@ -113,6 +116,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , logX = F, logY = F
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                     , xlab.angle = 90
                      , hide.legend = TRUE
                      , max.names = 50
                      , w = 5, h = w, ...) {
@@ -155,7 +159,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr Color palette to use.
 #' @param col Color of the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param xlab X-axis label.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
@@ -355,6 +359,7 @@ qpie <- function(vec = Network.Size
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param hide.legend hide legend
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
@@ -383,6 +388,7 @@ qboxplot <- function(df_XYcol
                      , hide.legend = FALSE
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
+                     , xlab.angle = 90
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
@@ -428,6 +434,7 @@ qboxplot <- function(df_XYcol
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
 #' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param hide.legend hide legend
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
@@ -456,6 +463,7 @@ qviolin <- function(df_XYcol
                     , hide.legend = FALSE
                     , ext = "png", also.pdf = T
                     , logY = F #, logX = F
+                    , xlab.angle = 90
                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
@@ -499,6 +507,7 @@ qviolin <- function(df_XYcol
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
 #' @param hide.legend hide legend
 #' @param save Save the plot into a file.
@@ -519,6 +528,7 @@ qscatter <- function(df_XYcol
                      , hide.legend = FALSE
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
+                     , xlab.angle = 90
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title

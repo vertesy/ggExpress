@@ -17,6 +17,7 @@ qdensity(
   logY = F,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
+  xlab.angle = 90,
   hide.legend = TRUE,
   max.names = 50,
   w = 5,
