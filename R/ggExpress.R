@@ -554,6 +554,53 @@ qscatter <- function(df_XYcol
 }
 
 
+# _________________________________________________________________________________________________
+#' @title Venn Diagram
+#' Using the  ggVennDiagram package.
+#' @param list The variable to plot.
+#' @param ext File extension (.pdf / .png).
+#' @param xlab X-axis label.
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param suffix A suffix added to the filename. NULL by default.
+#' @param plotname The name of the file and title of the plot.
+#' @param w width of the plot.
+#' @param hide.legend hide legend
+#' @param h height of the plot.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @export
+#'
+#' @examples weight <- rnorm(1000); qhistogram(list = weight); qhistogram(list = weight, vline = 2, filtercol = -1)
+
+
+qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                  , suffix = NULL
+                  , plotname = sppp(substitute(list), suffix)
+                  , subtitle = paste (length(unique(unlist(list))), 'elements in total')
+                  , logX = F, logY = F
+                  # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                  # , col = as.character(1:3)[1]
+                  # , xlab.angle = 90
+                  , hide.legend = F
+                  , w = 5, h = w
+                  , ...) {
+
+  p <- ggVennDiagram::ggVennDiagram(list, ...) +
+    ggplot2::ggtitle(label = plotname, subtitle = subtitle)
+
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
+
+  fname = Stringendo::kpp(plotname, suffix, "venn", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
+  if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
+}
+
+
+
+
+
 
 # ______________________________________________________________________________________________----
 # Auxiliary functions ----
