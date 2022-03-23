@@ -5,9 +5,9 @@
 \title{qboxplot plot}
 \usage{
 qboxplot(
-  df_XYcol,
+  df_XYcol_or_list,
   suffix = NULL,
-  plotname = sppp(substitute(df_XYcol), suffix),
+  plotname = sppp(substitute(df_XYcol_or_list), suffix),
   outlier.shape = NULL,
   title = F,
   stat.test = T,
@@ -32,7 +32,7 @@ qboxplot(
 )
 }
 \arguments{
-\item{df_XYcol}{Data, as 2 column data frame, where col.1 is X axis.}
+\item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 

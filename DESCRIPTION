@@ -1,7 +1,7 @@
 Package: ggExpress
 Title: ggExpress is the fastest way to create, annotate and export plots
     in R
-Version: 0.4.3
+Version: 0.4.5
 Authors@R: 
     person("Abel", "Vertesy", , "a.vertesy@imba.oeaw.ac.at", role = c("aut", "cre"))
 Author: Abel Vertesy <abel.vertesy@imba.oeaw.ac.at> [aut, cre]
@@ -38,6 +38,6 @@ Imports:
     stats,
     tidyverse
 Encoding: UTF-8
-Packaged: 2022-03-23 12:06:48
+Packaged: 2022-03-23 13:29:54
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

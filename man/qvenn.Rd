@@ -18,7 +18,7 @@ qvenn(
   logY = F,
   hide.legend = F,
   w = 5,
-  h = w,
+  h = 0.75 * w,
   ...
 )
 }
@@ -52,5 +52,5 @@ Venn Diagram
 Using the  ggVennDiagram package.
 }
 \examples{
-weight <- rnorm(1000); qhistogram(list = weight); qhistogram(list = weight, vline = 2, filtercol = -1)
+LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
 }

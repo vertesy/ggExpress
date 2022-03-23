@@ -51,7 +51,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , max.names = 50
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   df[["colour"]] <- if (vline & filtercol != 0) {
     if (filtercol == 1 ) (df$"value" > vline) else if (filtercol == -1 ) (df$"value" < vline)
@@ -121,7 +121,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , max.names = 50
                      , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   p <- ggpubr::ggdensity(data = df, x = "value" # , y = "..count.."
                          , title = plotname, xlab = xlab
@@ -192,7 +192,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
 
   if (isFALSE(xlab)) xlab = plotname
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, strip.too.many.names =F)
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names =F)
   # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
@@ -293,7 +293,7 @@ qpie <- function(vec = Network.Size
 
   if (is.null(names(vec))) { names(vec) <- as.character(1:length(vec)) }
 
-  df <- qqqCovert.named.vec2tbl(namedVec = vec, thr = max.names)
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[['names']][length(df$'names')] <- name.of.last
 
   pcX <- df$"value" / sum(df$"value")
@@ -337,11 +337,10 @@ qpie <- function(vec = Network.Size
   if (plot) p
 }
 
-
 # _________________________________________________________________________________________________
 #' @title qboxplot plot
 #'
-#' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
 #' @param col Color of the plot.
@@ -373,9 +372,9 @@ qpie <- function(vec = Network.Size
 # @param plotname The name of the file and title of the plot.
 
 
-qboxplot <- function(df_XYcol
+qboxplot <- function(df_XYcol_or_list
                      , suffix = NULL
-                     , plotname = sppp(substitute(df_XYcol), suffix)
+                     , plotname = sppp(substitute(df_XYcol_or_list), suffix)
                      , outlier.shape = NULL
                      , title = F
                      , stat.test = T
@@ -389,7 +388,9 @@ qboxplot <- function(df_XYcol
                      , xlab.angle = 90
                      , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
+  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
@@ -418,7 +419,7 @@ qboxplot <- function(df_XYcol
 # _________________________________________________________________________________________________
 #' @title qviolin plot
 #'
-#' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
 #' @param col Color of the plot.
@@ -448,9 +449,9 @@ qboxplot <- function(df_XYcol
 # @param plotname The name of the file and title of the plot.
 
 
-qviolin <- function(df_XYcol
+qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
-                    , plotname = sppp(substitute(df_XYcol), suffix)
+                    , plotname = sppp(substitute(df_XYcol_or_list), suffix)
                     # , outlier.shape = NULL
                     , title = F
                     , stat.test = T
@@ -465,7 +466,9 @@ qviolin <- function(df_XYcol
                     , hline = FALSE
                     , vline = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                     , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
+  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
+  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
 
@@ -490,6 +493,7 @@ qviolin <- function(df_XYcol
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
+
 
 
 # _________________________________________________________________________________________________
@@ -571,7 +575,7 @@ qscatter <- function(df_XYcol
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @export
 #'
-#' @examples weight <- rnorm(1000); qhistogram(list = weight); qhistogram(list = weight, vline = 2, filtercol = -1)
+#' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
 
 qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                   , suffix = NULL
@@ -648,107 +652,6 @@ qqSave <- function(ggobj, w =4, h = w
 }
 
 
-
-# _________________________________________________________________________________________________
-#' @title Insert Markdown image link to .md report
-#'
-#' @param file_name file_name
-#' @export
-#'
-#' @examples qMarkdownImageLink(file_name = "myplot.pdf")
-#' @importFrom MarkdownHelpers llogit
-
-qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
-  llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
-}
-
-
-
-
-# _________________________________________________________________________________________________
-#' @title Define Axis Length
-#'
-#' @param vec The variable to plot.
-#' @param minLength minLength
-#' @export
-#'
-#' @examples qqqAxisLength()
-
-qqqAxisLength <- function(vec = 1:20, minLength=6) {
-  max(round(length(vec)*0.2), minLength)
-}
-
-
-# _________________________________________________________________________________________________
-#' @title qqqCovert.named.vec2tbl
-#' @description Covert a named vector to a table.
-#' @param namedVec namedVec
-#' @param verbose verbose
-#' @param strip.too.many.names strip.too.many.names
-#' @param thr thr
-#' @export
-#'
-#' @examples qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
-
-
-qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-
-  # Check naming issues
-  nr.uniq.names <- length(unique(names(namedVec)))
-  if (nr.uniq.names > thr & verbose)  iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
-  if (nr.uniq.names < 1 & verbose) print("Vector has no names")
-  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
-
-  idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
-  if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
-
-  if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
-
-  df <- tibble::as_tibble(cbind("value" = namedVec))
-  nm <- names(namedVec)
-  df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
-  df
-}
-
-
-
-
-
-# _________________________________________________________________________________________________
-#' @title qqqCovert.tbl2vec
-#' @description Covert a table to a named vector.
-#' @param tibble.input tibble.input
-#' @param name.column name.column
-#' @param value.column value.column
-#' @export
-#'
-#' @examples a=1:5; x= tibble::tibble(a, a * 2); qqqCovert.tbl2vec(x)
-
-qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-  vec <- tibble.input[[value.column]]
-  names(vec) <- tibble.input[[name.column]]
-  vec
-}
-
-# _________________________________________________________________________________________________
-# #' @title qqqParsePlotname
-# #' @description Parse Plotname from variable name.
-# #' @param string string
-# #' @param suffix_tag suffix_tag
-# #' @export
-# #'
-# #' @examples qqqParsePlotname()
-#
-# qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
-#   nm <- make.names(as.character(substitute(string)))
-#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
-#   return(nm)
-# }
-
-
-# _________________________________________________________________________________________________
-# _________________________________________________________________________________________________
-# _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 #' @title  q32vA4_grid_plot
 #' @description Plot up to 6 panels (3-by-2) on vertically standing A4 page.
@@ -828,6 +731,121 @@ qA4_grid_plot <- function(plot_list
 
 
 # _________________________________________________________________________________________________
+#' @title Insert Markdown image link to .md report
+#'
+#' @param file_name file_name
+#' @export
+#'
+#' @examples qMarkdownImageLink(file_name = "myplot.pdf")
+#' @importFrom MarkdownHelpers llogit
+
+qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
+  llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
+}
+
+
+
+
+# _________________________________________________________________________________________________
+#' @title Define Axis Length
+#'
+#' @param vec The variable to plot.
+#' @param minLength minLength
+#' @export
+#'
+#' @examples qqqAxisLength()
+
+qqqAxisLength <- function(vec = 1:20, minLength=6) {
+  max(round(length(vec)*0.2), minLength)
+}
+
+
+# _________________________________________________________________________________________________
+#' @title qqqNamed.Vec.2.Tbl
+#' @description Covert a named vector to a table.
+#' @param namedVec namedVec
+#' @param verbose verbose
+#' @param strip.too.many.names strip.too.many.names
+#' @param thr thr
+#' @export
+#'
+#' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A"=2, "B"=29) )
+
+
+qqqNamed.Vec.2.Tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+
+  # Check naming issues
+  nr.uniq.names <- length(unique(names(namedVec)))
+  if (nr.uniq.names > thr & verbose)  iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
+  if (nr.uniq.names < 1 & verbose) print("Vector has no names")
+  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1 )
+
+  idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
+  if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
+
+  if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
+
+  df <- tibble::as_tibble(cbind("value" = namedVec))
+  nm <- names(namedVec)
+  df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
+  df
+}
+
+
+
+
+
+# _________________________________________________________________________________________________
+#' @title qqqTbl.2.Vec
+#' @description Covert a table to a named vector.
+#' @param tibble.input tibble.input
+#' @param name.column name.column
+#' @param value.column value.column
+#' @export
+#'
+#' @examples a=1:5; x= tibble::tibble(a, a * 2); qqqTbl.2.Vec(x)
+
+qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+  vec <- tibble.input[[value.column]]
+  names(vec) <- tibble.input[[name.column]]
+  vec
+}
+
+# _________________________________________________________________________________________________
+# #' @title qqqParsePlotname
+# #' @description Parse Plotname from variable name.
+# #' @param string string
+# #' @param suffix_tag suffix_tag
+# #' @export
+# #'
+# #' @examples qqqParsePlotname()
+#
+# qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
+#   nm <- make.names(as.character(substitute(string)))
+#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
+#   return(nm)
+# }
+
+
+# _________________________________________________________________________________________________
+# _________________________________________________________________________________________________
+# _________________________________________________________________________________________________
+
+# _________________________________________________________________________________________________
+#' Convert a list to a tow-column data frame to plot boxplots and violin plots
+#'
+#' @param ls A list with all elements named
+#' @export
+#'
+#' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qqqList.2.DF.ggplot(LetterSets)
+
+qqqList.2.DF.ggplot <- function(ls = LetterSets) {
+  stopifnot(is.list(ls))
+  stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
+  stack(ls)[, 2:1]
+}
+
+
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 
