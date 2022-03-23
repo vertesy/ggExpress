@@ -573,7 +573,6 @@ qscatter <- function(df_XYcol
 #'
 #' @examples weight <- rnorm(1000); qhistogram(list = weight); qhistogram(list = weight, vline = 2, filtercol = -1)
 
-
 qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                   , suffix = NULL
                   , plotname = sppp(substitute(list), suffix)
@@ -583,11 +582,12 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
                   # , col = as.character(1:3)[1]
                   # , xlab.angle = 90
                   , hide.legend = F
-                  , w = 5, h = w
+                  , w = 5, h = 0.75 * w
                   , ...) {
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
-    ggplot2::ggtitle(label = plotname, subtitle = subtitle)
+    ggplot2::ggtitle(label = paste(' ', plotname), subtitle = paste(' ', subtitle, '\n') ) +
+    theme(plot.background = element_rect(fill = 'white', colour = 'white'))
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -596,7 +596,6 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
-
 
 
 
