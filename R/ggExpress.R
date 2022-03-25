@@ -600,7 +600,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  fname = Stringendo::kpp(plotname, suffix, "venn", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  fname = Stringendo::kpp(plotname, suffix, "venn", ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
