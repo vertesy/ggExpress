@@ -14,8 +14,8 @@ qvenn(
   suffix = NULL,
   plotname = sppp(substitute(list), suffix),
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
-  logX = F,
-  logY = F,
+  col.min = "white",
+  col.max = "red",
   hide.legend = F,
   w = 5,
   h = 0.75 * w,
@@ -36,6 +36,12 @@ qvenn(
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
 \item{plotname}{The name of the file and title of the plot.}
+
+\item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
+
+\item{col.min}{Color scale minimum, default: white}
+
+\item{col.max}{Color scale maximum, default: red}
 
 \item{hide.legend}{hide legend}
 

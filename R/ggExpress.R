@@ -569,6 +569,9 @@ qscatter <- function(df_XYcol
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The name of the file and title of the plot.
+#' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
+#' @param col.min Color scale minimum, default: white
+#' @param col.max Color scale maximum, default: red
 #' @param w width of the plot.
 #' @param hide.legend hide legend
 #' @param h height of the plot.
@@ -581,15 +584,17 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
                   , suffix = NULL
                   , plotname = sppp(substitute(list), suffix)
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
-                  , logX = F, logY = F
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                   # , col = as.character(1:3)[1]
                   # , xlab.angle = 90
+                  , col.min = "white"
+                  , col.max = "red"
                   , hide.legend = F
                   , w = 5, h = 0.75 * w
                   , ...) {
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
+    scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::ggtitle(label = paste(' ', plotname), subtitle = paste(' ', subtitle, '\n') ) +
     theme(plot.background = element_rect(fill = 'white', colour = 'white'))
 
@@ -600,6 +605,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
 }
+
 
 
 
