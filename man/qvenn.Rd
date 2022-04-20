@@ -17,7 +17,7 @@ qvenn(
   col.min = "white",
   col.max = "red",
   hide.legend = F,
-  w = 5,
+  w = 8,
   h = 0.75 * w,
   ...
 )

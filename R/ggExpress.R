@@ -193,7 +193,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names =F)
-  # nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 >100)
+  # nrCategories.DFcol1 <- length(unique(df[,1])); MarkdownHelpers::stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
@@ -305,7 +305,7 @@ qpie <- function(vec = Network.Size
 
   if (decr.order) df[['names']] <- factor(df$'names', levels = rev(make.unique(df$'names')))
 
-  nrCategories.DFcol1 <- length(unique(df[,1])); stopif( nrCategories.DFcol1 > max.categories)
+  nrCategories.DFcol1 <- length(unique(df[,1])); MarkdownHelpers::stopif( nrCategories.DFcol1 > max.categories)
   print(nrCategories.DFcol1)
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
@@ -392,7 +392,7 @@ qboxplot <- function(df_XYcol_or_list
   if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
 
   vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
 
   p <- ggpubr::ggboxplot(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                          # , fill = fill
@@ -470,7 +470,7 @@ qviolin <- function(df_XYcol_or_list
   if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
 
   vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); stopif(nrCategories.DFcol1>  100)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
 
   p <- ggpubr::ggviolin(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                         , title = plotname
@@ -590,7 +590,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
                   , col.min = "white"
                   , col.max = "red"
                   , hide.legend = F
-                  , w = 5, h = 0.75 * w
+                  , w = 8, h = 0.75 * w
                   , ...) {
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
@@ -847,7 +847,7 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   stopifnot(is.list(ls))
-  stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
+  MarkdownHelpers::stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
   stack(ls)[, 2:1]
 }
 
