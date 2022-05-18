@@ -386,7 +386,8 @@ qboxplot <- function(df_XYcol_or_list
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
                      , xlab.angle = 90
-                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                     , hline = F, vline = F
+                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
@@ -463,8 +464,8 @@ qviolin <- function(df_XYcol_or_list
                     , ext = "png", also.pdf = T
                     , logY = FALSE #, logX = F
                     , xlab.angle = 90
-                    , hline = FALSE
-                    , vline = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                    , hline = FALSE, vline = FALSE
+                    , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
@@ -497,6 +498,87 @@ qviolin <- function(df_XYcol_or_list
 
 
 # _________________________________________________________________________________________________
+#' @title qstripchart plot
+#'
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
+#' @param suffix A suffix added to the filename. NULL by default.
+#' @param title The name of the file and title of the plot.
+#' @param col Color of the plot.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf also.pdf
+#' @param logY Make Y axis log10-scale.
+#' @param hline Draw a horizontal line on the plot.
+#' @param vline Draw a vertical line on the plot.
+#' @param stat.test Do a statistical test?
+#' @param stat.method stat method. NULL for default
+#' @param stat.label.y.npc stat label y position
+#' @param stat.label.x stat label x position
+#' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param hide.legend hide legend
+#' @param palette_use GGpubr Color palette to use.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param w width of the plot.
+#' @param h height of the plot.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @import ggpubr
+#' @export
+#' @examples data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qstripchart(ToothLen.by.Dose)
+
+
+qstripchart <- function(df_XYcol_or_list
+                        , add = c("violin", "mean_sd")
+                        , suffix = NULL
+                        , plotname = sppp(substitute(df_XYcol_or_list), suffix)
+                        # , outlier.shape = NULL
+                        , title = F
+                        , size.point = .2
+                        , stat.test = T
+                        # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+                        , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75
+                        # , fill = c(NULL , 3)[1]
+                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                        , hide.legend = FALSE
+                        , ext = "png", also.pdf = T
+                        , logY = FALSE #, logX = F
+                        , xlab.angle = 90
+                        , hline = FALSE, vline = FALSE
+                        , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                        , w = 7, h = w, ...) {
+  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+
+  vars <- colnames(df_XYcol)
+  nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
+
+  p <- ggpubr::ggstripchart(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
+                            , title = plotname
+                            , add = add
+                            , size = size.point
+                            , palette = palette_use
+                            , ...) +
+    ggpubr::grids(axis = 'y') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
+
+  fix <- sppp("stripchart", sppp(add))
+  fname = Stringendo::kpp(plotname, fix, suffix, "plot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
+}
+
+
+
+
+# _________________________________________________________________________________________________
 #' @title Scatter plot
 #'
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
@@ -507,8 +589,9 @@ qviolin <- function(df_XYcol_or_list
 #' @param also.pdf also.pdf
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
-#' @param hline Draw a horizontal line on the plot.
-#' @param vline Draw a vertical line on the plot.
+#' @param hline Draw a horizontal line on the plot, yintercept or FALSE
+#' @param vline Draw a vertical line on the plot, xintercept or FALSE.
+#' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
 #' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
@@ -532,7 +615,8 @@ qscatter <- function(df_XYcol
                      , ext = "png", also.pdf = T
                      , logX = F, logY = F
                      , xlab.angle = 90
-                     , hline = F, vline = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                     , hline = F, vline = F
+                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
   vars <- colnames(df_XYcol)
@@ -546,6 +630,7 @@ qscatter <- function(df_XYcol
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (abline) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
