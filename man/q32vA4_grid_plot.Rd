@@ -25,6 +25,8 @@ q32vA4_grid_plot(
 
 \item{plotname}{Plot name, Default: F}
 
+\item{plot}{Show the plot? Default: F}
+
 \item{nrow}{number of rows for panels on the page, Default: 2}
 
 \item{ncol}{number of columns for panels on the page, Default: 2}

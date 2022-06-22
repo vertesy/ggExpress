@@ -39,7 +39,11 @@ qstripchart(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
+\item{plotname}{Name of the plot}
+
 \item{title}{The name of the file and title of the plot.}
+
+\item{size.point}{Size of points}
 
 \item{stat.test}{Do a statistical test?}
 
@@ -76,8 +80,6 @@ qstripchart(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{col}{Color of the plot.}
 }
 \description{
 qstripchart plot

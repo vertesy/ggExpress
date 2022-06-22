@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qboxplot}
 \alias{qboxplot}
-\title{qboxplot plot}
+\title{Boxplot}
 \usage{
 qboxplot(
   df_XYcol_or_list,
@@ -75,11 +75,9 @@ qboxplot(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{col}{Color of the plot.}
 }
 \description{
-qboxplot plot
+Boxplot
 }
 \examples{
 data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qboxplot(ToothLen.by.Dose)

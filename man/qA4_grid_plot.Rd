@@ -31,6 +31,8 @@ qA4_grid_plot(
 
 \item{plotname}{Plot name, Default: Autonaming}
 
+\item{plot}{Show the plot? Default: F}
+
 \item{extension}{file extension}
 
 \item{h}{height of the plot, Default: wA4 * scale}
@@ -38,6 +40,10 @@ qA4_grid_plot(
 \item{w}{width of the plot, Default: hA4 * scale}
 
 \item{scale}{Scaling factor of the canvas, Default: 1}
+
+\item{labels}{Panel labels, Default: LETTERS}
+
+\item{max.list.length}{Max number of panels (per page). Default: 16}
 
 \item{...}{Pass any other parameter to the internally called functions (most of them should work).}
 }

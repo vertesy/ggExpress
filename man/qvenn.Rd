@@ -50,8 +50,6 @@ qvenn(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{xlab}{X-axis label.}
 }
 \description{
 Venn Diagram

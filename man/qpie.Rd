@@ -58,9 +58,17 @@ qpie(
 
 \item{custom.order}{custom.order}
 
+\item{extended.canvas}{Make an extended canvas, default: T}
+
 \item{palette_use}{GGpubr Color palette to use.}
 
+\item{custom.margin}{custom plot margin, default: T}
+
+\item{max.categories}{Maximum number of categories to be shown as a seprate slice}
+
 \item{max.names}{The maximum number of names still to be shown on the axis.}
+
+\item{decr.order}{Slices in the order of df. By default would ordered alphabetically in the plot.}
 
 \item{both_pc_and_value}{Report both percentage AND number.}
 
@@ -69,8 +77,6 @@ qpie(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{ordered}{Slices in the order of df. By default would ordered alphabetically in the plot.}
 }
 \description{
 Pie chart

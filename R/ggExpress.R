@@ -17,6 +17,7 @@
 #' @param ext File extension (.pdf / .png).
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
+#' @param add Add plot annotation lines (see ggpubr). Default: 'median'.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param suffix A suffix added to the filename. NULL by default.
@@ -244,7 +245,10 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param NoLegend NoLegend
 #' @param pcdigits pcdigits
 #' @param NamedSlices NamedSlices
-#' @param ordered Slices in the order of df. By default would ordered alphabetically in the plot.
+#' @param extended.canvas Make an extended canvas, default: T
+#' @param custom.margin custom plot margin, default: T
+#' @param max.categories Maximum number of categories to be shown as a seprate slice
+#' @param decr.order Slices in the order of df. By default would ordered alphabetically in the plot.
 #' @param both_pc_and_value Report both percentage AND number.
 #' @param custom.order custom.order
 #' @param palette_use GGpubr Color palette to use.
@@ -321,7 +325,7 @@ qpie <- function(vec = Network.Size
                       , color = "white"
                       , title = plotname
                       , palette = palette_use
-                      , caption = p0('Total elements:', l.orig, '; shown:', (max.categories-1)
+                      , caption = paste0('Total elements:', l.orig, '; shown:', (max.categories-1)
                                      , ' | max.names:', max.names)
                       # , ...
   ))
@@ -338,12 +342,11 @@ qpie <- function(vec = Network.Size
 }
 
 # _________________________________________________________________________________________________
-#' @title qboxplot plot
+#' @title Boxplot
 #'
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
-#' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -423,7 +426,8 @@ qboxplot <- function(df_XYcol_or_list
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
-#' @param col Color of the plot.
+# #' @param col Color of the plot.
+#' @param plotname Name of the plot
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -504,7 +508,9 @@ qviolin <- function(df_XYcol_or_list
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
-#' @param col Color of the plot.
+#' @param plot Display the plot.
+#' @param plotname Name of the plot
+# #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -514,7 +520,7 @@ qviolin <- function(df_XYcol_or_list
 #' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc stat label y position
 #' @param stat.label.x stat label x position
-#' @param plot Display the plot.
+#' @param size.point Size of points
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param hide.legend hide legend
 #' @param palette_use GGpubr Color palette to use.
@@ -591,7 +597,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
-#' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
+# #' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
 #' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
@@ -648,7 +654,6 @@ qscatter <- function(df_XYcol
 #' Using the  ggVennDiagram package.
 #' @param list The variable to plot.
 #' @param ext File extension (.pdf / .png).
-#' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -747,6 +752,7 @@ qqSave <- function(ggobj, w =4, h = w
 #' @title  q32vA4_grid_plot
 #' @description Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
+#' @param plot Show the plot? Default: F
 #' @param plotname Plot name, Default: F
 #' @param suffix A suffix added to the filename, Default: NULL
 #' @param scale Scaling factor of the canvas, Default: 1
@@ -784,6 +790,9 @@ q32vA4_grid_plot <- function(plot_list
 #' @title  qA4_grid_plot
 #' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
+#' @param plot Show the plot? Default: F
+#' @param labels Panel labels, Default: LETTERS
+#' @param max.list.length Max number of panels (per page). Default: 16
 #' @param plotname Plot name, Default: Autonaming
 #' @param suffix A suffix added to the filename, Default: NULL
 #' @param scale Scaling factor of the canvas, Default: 1
