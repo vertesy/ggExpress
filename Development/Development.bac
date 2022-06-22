@@ -813,7 +813,8 @@ qA4_grid_plot <- function(plot_list
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname = Stringendo::kpp(plotname, suffix, extension)
-  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  )
+  p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  ) +
+    theme(plot.background=element_rect(fill="white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
