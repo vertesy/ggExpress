@@ -1,6 +1,7 @@
 # ____________________________________________________________________
 # ggExpress is the fastest way to create, annotate and export plots in R.  ----
 # ____________________________________________________________________
+# devtools::load_all("~/GitHub/Packages/ggExpress")
 # try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = T)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = T)
 
@@ -392,8 +393,8 @@ qboxplot <- function(df_XYcol_or_list
                      , hline = F, vline = F
                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
-  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
@@ -472,7 +473,7 @@ qviolin <- function(df_XYcol_or_list
                     # , fill = c(NULL , 3)[1]
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
-  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
@@ -553,7 +554,7 @@ qstripchart <- function(df_XYcol_or_list
                         , hline = FALSE, vline = FALSE
                         , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                         , w = 7, h = w, ...) {
-  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
