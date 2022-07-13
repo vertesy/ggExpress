@@ -19,6 +19,7 @@ qscatter(
   xlab.angle = 90,
   hline = F,
   vline = F,
+  abline = F,
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
@@ -53,6 +54,8 @@ qscatter(
 \item{hline}{Draw a horizontal line on the plot, yintercept or FALSE}
 
 \item{vline}{Draw a vertical line on the plot, xintercept or FALSE.}
+
+\item{abline}{Draw a sloped line on the plot. Set to FALSE, or intercept = abline\link{1}, slope = abline\link{2}.}
 
 \item{plot}{Display the plot.}
 

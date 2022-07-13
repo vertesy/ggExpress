@@ -598,7 +598,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
-# #' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
+#' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
 #' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
@@ -613,28 +613,30 @@ qstripchart <- function(df_XYcol_or_list
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
 
 qscatter <- function(df_XYcol
-                     , suffix = NULL
-                     , plotname = sppp(substitute(df_XYcol), suffix)
-                     # , title = F
-                     , col = c(NULL , 3)[1]
-                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                     , hide.legend = FALSE
-                     , ext = "png", also.pdf = T
-                     , logX = F, logY = F
-                     , xlab.angle = 90
-                     , hline = F, vline = F
-                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
-                     , w = 7, h = w, ...) {
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol))), suffix) else title
-  vars <- colnames(df_XYcol)
+                      , suffix = NULL
+                      , plotname = sppp(substitute(df_XYcol), suffix)
+                      # , title = F
+                      , col = c(NULL , 3)[1]
+                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                      , hide.legend = FALSE
+                      , ext = "png", also.pdf = T
+                      , logX = F, logY = F
+                      , xlab.angle = 90
+                      , hline = F, vline = F
+                      , abline = F
+                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                      , w = 7, h = w, ...) {
+  stopifnot(ncol(df_XYcol) >= 2)
+  if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
 
+  vars <- colnames(df_XYcol)
+  cat('Variable (column) names:', vars,'\n')
   p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2]
                          , palette = palette_use
                          , color = col
                          , title = plotname, ...) +
     ggpubr::grids(axis = 'xy') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (abline) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
@@ -643,11 +645,14 @@ qscatter <- function(df_XYcol
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
+
   fname = Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  if (plot) p
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(fname)
-  if (plot) p
+  p
 }
+
 
 
 # _________________________________________________________________________________________________
