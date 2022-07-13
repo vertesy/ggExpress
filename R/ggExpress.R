@@ -393,7 +393,7 @@ qboxplot <- function(df_XYcol_or_list
                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
-  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
@@ -457,12 +457,9 @@ qboxplot <- function(df_XYcol_or_list
 qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
                     , plotname = sppp(substitute(df_XYcol_or_list), suffix)
-                    # , outlier.shape = NULL
                     , title = F
                     , stat.test = T
-                    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
-                    # , fill = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
                     , ext = "png", also.pdf = T
@@ -470,9 +467,12 @@ qviolin <- function(df_XYcol_or_list
                     , xlab.angle = 90
                     , hline = FALSE, vline = FALSE
                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                    # , outlier.shape = NULL
+                    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+                    # , fill = c(NULL , 3)[1]
                     , w = 7, h = w, ...) {
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
-  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
@@ -553,7 +553,7 @@ qstripchart <- function(df_XYcol_or_list
                         , hline = FALSE, vline = FALSE
                         , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                         , w = 7, h = w, ...) {
-  if (is.list(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
+  if (CodeAndRoll2::is.list2(df_XYcol_or_list))    df_XYcol <- qqqList.2.DF.ggplot(df_XYcol_or_list)
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
@@ -930,21 +930,21 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
-# _________________________________________________________________________________________________
 
 # _________________________________________________________________________________________________
 #' Convert a list to a tow-column data frame to plot boxplots and violin plots
 #'
 #' @param ls A list with all elements named
 #' @export
-#'
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qqqList.2.DF.ggplot(LetterSets)
 
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
-  stopifnot(is.list(ls))
+  stopifnot(CodeAndRoll2::is.list2(ls))
   MarkdownHelpers::stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
   stack(ls)[, 2:1]
 }
+
+
 
 
 # _________________________________________________________________________________________________

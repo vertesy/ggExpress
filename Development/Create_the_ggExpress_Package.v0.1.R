@@ -1,6 +1,5 @@
 ######################################################################################################
-# Create_the_ggExpress_Package.v0.1.R
-# 31 10 2021
+# Create_the_ggExpress_Package.R
 ######################################################################################################
 # source("/Users/abel.vertesy/GitHub/Packages/ggExpress/Development/Create_the_ggExpress_Package.v0.1.R")
 rm(list = ls(all.names = TRUE));
@@ -19,7 +18,7 @@ require('Stringendo')
 
 # Setup ------------------------
 PackageName = "ggExpress"
-package.version = "0.5.0"
+package.version = "0.5.1"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
