@@ -20,6 +20,7 @@ qscatter(
   hline = F,
   vline = F,
   abline = F,
+  add_contour_plot = F,
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
@@ -56,6 +57,8 @@ qscatter(
 \item{vline}{Draw a vertical line on the plot, xintercept or FALSE.}
 
 \item{abline}{Draw a sloped line on the plot. Set to FALSE, or intercept = abline\link{1}, slope = abline\link{2}.}
+
+\item{add_contour_plot}{Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution}
 
 \item{plot}{Display the plot.}
 

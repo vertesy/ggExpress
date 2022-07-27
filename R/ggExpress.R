@@ -599,6 +599,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
 #' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
+#' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
 #' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
@@ -622,8 +623,8 @@ qscatter <- function(df_XYcol
                       , ext = "png", also.pdf = T
                       , logX = F, logY = F
                       , xlab.angle = 90
-                      , hline = F, vline = F
-                      , abline = F
+                      , hline = F, vline = F, abline = F
+                      , add_contour_plot = F
                       , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                       , w = 7, h = w, ...) {
   stopifnot(ncol(df_XYcol) >= 2)
@@ -637,9 +638,13 @@ qscatter <- function(df_XYcol
                          , title = plotname, ...) +
     ggpubr::grids(axis = 'xy') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (abline) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
+  if (add_contour_plot) p <- p + geom_density_2d()
+
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
