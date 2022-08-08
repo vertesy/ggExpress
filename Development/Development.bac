@@ -725,7 +725,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param page page
-#' @param title title
+#' @param title title field for pdf file (saved into file metadata)
 #' @param fname fname
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -752,9 +752,12 @@ qqSave <- function(ggobj, w =4, h = w
   }
   print(paste0(getwd(),"/", fname))
 
-  if (also.pdf) cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h, ...)
-  cowplot::save_plot(plot = ggobj, filename = fname
+  if (also.pdf) {
+    cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h
                      , title = ww.ttl_field(title, creator = "ggExpress")
+                       , ...)
+  }
+  cowplot::save_plot(plot = ggobj, filename = fname
                      , base_width = w, base_height = h, ...)
 }
 
@@ -867,8 +870,8 @@ qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
 #'
 #' @examples qqqAxisLength()
 
-qqqAxisLength <- function(vec = 1:20, minLength=6) {
-  max(round(length(vec)*0.2), minLength)
+qqqAxisLength <- function(vec = 1:20, minLength=6, factor = 0.4) {
+  max(round(length(vec) * factor), minLength)
 }
 
 

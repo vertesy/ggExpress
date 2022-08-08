@@ -4,7 +4,7 @@
 \alias{qqqAxisLength}
 \title{Define Axis Length}
 \usage{
-qqqAxisLength(vec = 1:20, minLength = 6)
+qqqAxisLength(vec = 1:20, minLength = 6, factor = 0.4)
 }
 \arguments{
 \item{vec}{The variable to plot.}

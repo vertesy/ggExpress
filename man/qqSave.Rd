@@ -30,7 +30,7 @@ qqSave(
 
 \item{page}{page}
 
-\item{title}{title}
+\item{title}{title field for pdf file (saved into file metadata)}
 
 \item{fname}{fname}
 
