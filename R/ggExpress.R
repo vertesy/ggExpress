@@ -642,7 +642,7 @@ qscatter <- function(df_XYcol
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (abline) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
+  if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
   if (add_contour_plot) p <- p + geom_density_2d()
 
 
