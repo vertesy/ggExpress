@@ -10,7 +10,7 @@ qdensity(
   xlab = F,
   plot = TRUE,
   suffix = NULL,
-  plotname = sppp(substitute(vec), suffix),
+  plotname = FixPlotName(substitute(vec), suffix),
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   logX = F,

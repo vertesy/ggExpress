@@ -7,7 +7,7 @@
 qviolin(
   df_XYcol_or_list,
   suffix = NULL,
-  plotname = sppp(substitute(df_XYcol_or_list), suffix),
+  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
   title = F,
   stat.test = T,
   stat.method = NULL,

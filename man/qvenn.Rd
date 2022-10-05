@@ -12,7 +12,7 @@ qvenn(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   suffix = NULL,
-  plotname = sppp(substitute(list), suffix),
+  plotname = FixPlotName(substitute(list), suffix),
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
   col.min = "white",
   col.max = "red",

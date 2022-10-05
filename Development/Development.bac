@@ -42,7 +42,7 @@
 
 qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                        , suffix = NULL
-                       , plotname = sppp(substitute(vec), suffix)
+                       , plotname = FixPlotName(substitute(vec), suffix)
                        , logX = F, logY = F
                        , vline = F, filtercol = 0
                        , add = "median"
@@ -114,7 +114,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
 qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
                      , suffix = NULL
-                     , plotname = sppp(substitute(vec), suffix)
+                     , plotname = FixPlotName(substitute(vec), suffix)
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , logX = F, logY = F
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -178,7 +178,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
-                     , plotname = sppp(substitute(vec), suffix)
+                     , plotname = FixPlotName(substitute(vec), suffix)
                      # , title = F
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                      , hline = F, filtercol = 1
@@ -264,9 +264,9 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 qpie <- function(vec = Network.Size
                  , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                  , suffix = NULL
-                 , plotname = sppp(substitute(vec), suffix)
+                 , plotname = FixPlotName(substitute(vec), suffix)
                  , LegendSide = TRUE
-                 , LegendTitle = as.character(substitute(vec)), NoLegend = F
+                 , LegendTitle = FixPlotName(vec), NoLegend = F
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
                  , extended.canvas = TRUE
@@ -378,7 +378,7 @@ qpie <- function(vec = Network.Size
 
 qboxplot <- function(df_XYcol_or_list
                      , suffix = NULL
-                     , plotname = sppp(substitute(df_XYcol_or_list), suffix)
+                     , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
                      , outlier.shape = NULL
                      , title = F
                      , stat.test = T
@@ -457,7 +457,7 @@ qboxplot <- function(df_XYcol_or_list
 
 qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
-                    , plotname = sppp(substitute(df_XYcol_or_list), suffix)
+                    , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
                     , title = F
                     , stat.test = T
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
@@ -538,7 +538,7 @@ qviolin <- function(df_XYcol_or_list
 qstripchart <- function(df_XYcol_or_list
                         , add = c("violin", "mean_sd")
                         , suffix = NULL
-                        , plotname = sppp(substitute(df_XYcol_or_list), suffix)
+                        , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
                         # , outlier.shape = NULL
                         , title = F
                         , size.point = .2
@@ -615,7 +615,7 @@ qstripchart <- function(df_XYcol_or_list
 
 qscatter <- function(df_XYcol
                       , suffix = NULL
-                      , plotname = sppp(substitute(df_XYcol), suffix)
+                      , plotname = FixPlotName(substitute(df_XYcol), suffix)
                       # , title = F
                       , col = c(NULL , 3)[1]
                       , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -683,7 +683,7 @@ qscatter <- function(df_XYcol
 
 qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                   , suffix = NULL
-                  , plotname = sppp(substitute(list), suffix)
+                  , plotname = FixPlotName(substitute(list), suffix)
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                   # , col = as.character(1:3)[1]
@@ -782,7 +782,7 @@ qqSave <- function(ggobj, w =4, h = w
 
 q32vA4_grid_plot <- function(plot_list
                              , suffix = NULL
-                             , plotname = sppp(substitute(plot_list), suffix)
+                             , plotname = FixPlotName(substitute(plot_list), suffix)
                              , plot =F
                              , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
                              , h = hA4 * scale, w = wA4 * scale, scale = 1
@@ -823,7 +823,7 @@ q32vA4_grid_plot <- function(plot_list
 qA4_grid_plot <- function(plot_list
                           , suffix = NULL
                           , nrow = 3, ncol = 2
-                          , plotname = sppp(substitute(plot_list), nrow, 'by', ncol, suffix)
+                          , plotname = FixPlotName(substitute(plot_list), nrow, 'by', ncol, suffix)
                           , plot = F
                           , extension = c('pdf', 'png')[2]
                           , h = hA4 * scale, w = wA4 * scale
