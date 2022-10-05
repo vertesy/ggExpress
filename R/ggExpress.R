@@ -275,7 +275,7 @@ qpie <- function(vec = Network.Size
                  , max.categories = 100
                  , max.names = 10
                  , decr.order = TRUE
-                 , both_pc_and_value = TRUE
+                 , both_pc_and_value = FALSE
                  , w = 5, h = w, ...) {
 
   print(plotname)
@@ -305,8 +305,9 @@ qpie <- function(vec = Network.Size
   labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
 
   idx.named <- which(!df$'names' == "")
-  if (both_pc_and_value) df$'names'[idx.named] <- paste(df$'names'[idx.named], labs[idx.named], sep = "\n")
+  df$'names'[idx.named] <- paste(df$'names'[idx.named], labs[idx.named], sep = "\n")
 
+  if (both_pc_and_value) df$'names'[idx.named] <- paste(df$'names'[idx.named], df$'value'[idx.named], sep = "\n")
 
   if (decr.order) df[['names']] <- factor(df$'names', levels = rev(make.unique(df$'names')))
 
