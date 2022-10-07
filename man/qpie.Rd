@@ -13,7 +13,7 @@ qpie(
   suffix = NULL,
   plotname = FixPlotName(substitute(vec), suffix),
   LegendSide = TRUE,
-  LegendTitle = FixPlotName(vec),
+  LegendTitle = FixPlotName(substitute(vec)),
   NoLegend = F,
   pcdigits = 2,
   NamedSlices = FALSE,

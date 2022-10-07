@@ -266,7 +266,7 @@ qpie <- function(vec = Network.Size
                  , suffix = NULL
                  , plotname = FixPlotName(substitute(vec), suffix)
                  , LegendSide = TRUE
-                 , LegendTitle = FixPlotName(vec), NoLegend = F
+                 , LegendTitle = FixPlotName(substitute(vec)), NoLegend = F
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
                  , extended.canvas = TRUE
