@@ -628,6 +628,7 @@ qscatter <- function(df_XYcol
                       , add_contour_plot = F
                       , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
                       , w = 7, h = w, ...) {
+  print(plotname)
   stopifnot(ncol(df_XYcol) >= 2)
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
 
