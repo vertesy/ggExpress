@@ -7,7 +7,7 @@
 qboxplot(
   df_XYcol_or_list,
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
+  plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
   outlier.shape = NULL,
   title = F,
   stat.test = T,

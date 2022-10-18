@@ -11,7 +11,7 @@ qpie(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   suffix = NULL,
-  plotname = FixPlotName(substitute(vec), suffix),
+  plotname = FixPlotName(kpp(substitute(vec), suffix)),
   LegendSide = TRUE,
   LegendTitle = FixPlotName(substitute(vec)),
   NoLegend = F,

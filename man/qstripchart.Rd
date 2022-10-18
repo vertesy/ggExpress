@@ -8,7 +8,7 @@ qstripchart(
   df_XYcol_or_list,
   add = c("violin", "mean_sd"),
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
+  plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
   title = F,
   size.point = 0.2,
   stat.test = T,

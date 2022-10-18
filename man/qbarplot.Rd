@@ -9,7 +9,7 @@ qbarplot(
   ext = "pdf",
   plot = TRUE,
   suffix = NULL,
-  plotname = FixPlotName(substitute(vec), suffix),
+  plotname = FixPlotName(kpp(substitute(vec), suffix)),
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = F),
   hline = F,

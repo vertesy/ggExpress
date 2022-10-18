@@ -7,7 +7,7 @@
 qscatter(
   df_XYcol,
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol), suffix),
+  plotname = FixPlotName(kpp(substitute(df_XYcol), suffix)),
   col = c(NULL, 3)[1],
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
