@@ -44,6 +44,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , suffix = NULL
                        , plotname = FixPlotName(kpp(substitute(vec), suffix))
                        , logX = F, logY = F
+                       , annotation_logticks_X = logX, annotation_logticks_Y = logY
                        , vline = F, filtercol = 0
                        , add = "median"
                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -51,7 +52,6 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , xlab.angle = 90
                        , hide.legend = TRUE
                        , max.names = 50
-                       , annotation_logticks_Y = logY
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -76,6 +76,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)

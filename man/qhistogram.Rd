@@ -15,6 +15,8 @@ qhistogram(
   plotname = FixPlotName(kpp(substitute(vec), suffix)),
   logX = F,
   logY = F,
+  annotation_logticks_X = logX,
+  annotation_logticks_Y = logY,
   vline = F,
   filtercol = 0,
   add = "median",
@@ -24,7 +26,6 @@ qhistogram(
   xlab.angle = 90,
   hide.legend = TRUE,
   max.names = 50,
-  annotation_logticks_Y = logY,
   w = 5,
   h = w,
   ...
