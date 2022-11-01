@@ -16,6 +16,8 @@ qscatter(
   also.pdf = T,
   logX = F,
   logY = F,
+  annotation_logticks_Y = logY,
+  annotation_logticks_X = logX,
   xlab.angle = 90,
   hline = F,
   vline = F,

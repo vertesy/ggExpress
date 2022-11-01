@@ -21,6 +21,7 @@ qstripchart(
   ext = "png",
   also.pdf = T,
   logY = FALSE,
+  annotation_logticks_Y = logY,
   xlab.angle = 90,
   hline = FALSE,
   vline = FALSE,

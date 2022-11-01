@@ -51,6 +51,7 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
                        , xlab.angle = 90
                        , hide.legend = TRUE
                        , max.names = 50
+                       , annotation_logticks_Y = logY
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -74,7 +75,9 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
   if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
   if (logX) p <- p + ggplot2::scale_x_log10()
+  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -186,6 +189,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , col = as.character(1:3)[1]
                      , xlab.angle = 90, xlab = F
                      , logY = FALSE
+                     , annotation_logticks_Y = logY
                      , label = NULL
                      , hide.legend = TRUE
                      , max.names = 50
@@ -222,6 +226,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   fname <- Stringendo::kpp(plotname, suffix, "bar", Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(fname)
@@ -276,7 +281,7 @@ qpie <- function(vec = Network.Size
                  , max.names = 10
                  , decr.order = TRUE
                  , both_pc_and_value = FALSE
-                 , w = 5, h = w, ...) {
+                 , w = 7, h = 5, ...) {
 
   print(plotname)
   l.orig <- length(vec)
@@ -390,6 +395,7 @@ qboxplot <- function(df_XYcol_or_list
                      , hide.legend = FALSE
                      , ext = "png", also.pdf = T
                      , logY = F #, logX = F
+                     , annotation_logticks_Y = logY
                      , xlab.angle = 90
                      , hline = F, vline = F
                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -410,8 +416,10 @@ qboxplot <- function(df_XYcol_or_list
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
-  # if (logX) p <- p + ggplot2::scale_x_log10()
+
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -466,6 +474,7 @@ qviolin <- function(df_XYcol_or_list
                     , hide.legend = FALSE
                     , ext = "png", also.pdf = T
                     , logY = FALSE #, logX = F
+                    , annotation_logticks_Y = logY
                     , xlab.angle = 90
                     , hline = FALSE, vline = FALSE
                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -492,6 +501,8 @@ qviolin <- function(df_XYcol_or_list
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -551,6 +562,7 @@ qstripchart <- function(df_XYcol_or_list
                         , hide.legend = FALSE
                         , ext = "png", also.pdf = T
                         , logY = FALSE #, logX = F
+                        , annotation_logticks_Y = logY
                         , xlab.angle = 90
                         , hline = FALSE, vline = FALSE
                         , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
@@ -573,6 +585,8 @@ qstripchart <- function(df_XYcol_or_list
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -623,6 +637,8 @@ qscatter <- function(df_XYcol
                       , hide.legend = FALSE
                       , ext = "png", also.pdf = T
                       , logX = F, logY = F
+                      , annotation_logticks_Y = logY
+                      , annotation_logticks_X = logX
                       , xlab.angle = 90
                       , hline = F, vline = F, abline = F
                       , add_contour_plot = F
@@ -649,7 +665,11 @@ qscatter <- function(df_XYcol
 
 
   if (logX) p <- p + ggplot2::scale_x_log10()
+  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
 

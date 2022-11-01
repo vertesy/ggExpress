@@ -20,6 +20,7 @@ qboxplot(
   ext = "png",
   also.pdf = T,
   logY = F,
+  annotation_logticks_Y = logY,
   xlab.angle = 90,
   hline = F,
   vline = F,

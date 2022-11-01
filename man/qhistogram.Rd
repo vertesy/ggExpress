@@ -24,6 +24,7 @@ qhistogram(
   xlab.angle = 90,
   hide.legend = TRUE,
   max.names = 50,
+  annotation_logticks_Y = logY,
   w = 5,
   h = w,
   ...

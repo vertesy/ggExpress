@@ -20,6 +20,7 @@ qbarplot(
   xlab.angle = 90,
   xlab = F,
   logY = FALSE,
+  annotation_logticks_Y = logY,
   label = NULL,
   hide.legend = TRUE,
   max.names = 50,

@@ -26,8 +26,8 @@ qpie(
   max.names = 10,
   decr.order = TRUE,
   both_pc_and_value = FALSE,
-  w = 5,
-  h = w,
+  w = 7,
+  h = 5,
   ...
 )
 }
