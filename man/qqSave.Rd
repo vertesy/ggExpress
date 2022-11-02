@@ -11,8 +11,8 @@ qqSave(
   ext = c("png", "pdf")[1],
   also.pdf = FALSE,
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
-  title = F,
-  fname = F,
+  title = FALSE,
+  fname = FALSE,
   suffix = NULL,
   ...
 )

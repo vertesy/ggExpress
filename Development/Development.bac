@@ -2,8 +2,8 @@
 # ggExpress is the fastest way to create, annotate and export plots in R.  ----
 # ____________________________________________________________________
 # devtools::load_all("~/GitHub/Packages/ggExpress")
-# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = T)
-# try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = T)
+# try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = TRUE)
+# try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = TRUE)
 
 # ______________________________________________________________________________________________----
 # Main plotting functions  ----
@@ -34,24 +34,29 @@
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param annotation_logticks_X
+#' @param annotation_logticks_Y
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
 
-qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+qhistogram <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(kpp(substitute(vec), suffix))
-                       , logX = F, logY = F
+                       , logX = FALSE, logY = FALSE
                        , annotation_logticks_X = logX, annotation_logticks_Y = logY
-                       , vline = F, filtercol = 0
+                       , vline = FALSE, filtercol = 0
                        , add = "median"
                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                        , col = as.character(1:3)[1]
                        , xlab.angle = 90
                        , hide.legend = TRUE
                        , max.names = 50
+                       , grid = 'y'
                        , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -79,6 +84,8 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
@@ -111,20 +118,23 @@ qhistogram <- function(vec, ext = "pdf", xlab = F, plot = TRUE, save = TRUE, mdl
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @export
 #'
 #' @examples weight <- rnorm(1000); qdensity(weight)
 
-qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
+qdensity <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
-                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
-                     , logX = F, logY = F
+                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                     , logX = FALSE, logY = FALSE
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , xlab.angle = 90
                      , hide.legend = TRUE
                      , max.names = 50
+                     , grid = F
                      , w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -137,6 +147,7 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
   ) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
   if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -173,7 +184,10 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 #' @param limitsize limitsize
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param annotation_logticks_Y
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @export
 #'
 #' @examples weight3 <- runif (12);
@@ -183,18 +197,19 @@ qdensity <- function(vec, ext = "pdf", xlab = F, plot = TRUE
 qbarplot <- function(vec, ext = "pdf", plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
-                     # , title = F
-                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
-                     , hline = F, filtercol = 1
+                     # , title = FALSE
+                     , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                     , hline = FALSE, filtercol = 1
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , col = as.character(1:3)[1]
-                     , xlab.angle = 90, xlab = F
+                     , xlab.angle = 45, xlab = ""
                      , logY = FALSE
                      , annotation_logticks_Y = logY
                      , label = NULL
                      , hide.legend = TRUE
                      , max.names = 50
                      , limitsize = FALSE
+                     , grid = 'y'
                      , w = qqqAxisLength(vec), h = 5, ...) {
 
 
@@ -221,6 +236,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
                          , palette = palette_use, ...
   ) + ggpubr::grids(axis = 'y') +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = 'none')
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
@@ -263,21 +279,22 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param w width of the plot.
 #' @param h height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @export
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
 qpie <- function(vec = Network.Size
-                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(kpp(substitute(vec), suffix))
                  , LegendSide = TRUE
-                 , LegendTitle = FixPlotName(substitute(vec)), NoLegend = F
+                 , LegendTitle = FixPlotName(substitute(vec)), NoLegend = FALSE
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
                  , extended.canvas = TRUE
                  , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                 , custom.margin = T
+                 , custom.margin = TRUE
                  , max.categories = 100
                  , max.names = 10
                  , decr.order = TRUE
@@ -289,7 +306,7 @@ qpie <- function(vec = Network.Size
   sum.orig <- sum(vec)
   if (l.orig > max.categories) {
     iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
-    sv <- sort(vec, decreasing = T)
+    sv <- sort(vec, decreasing = TRUE)
     vec.new <- sv[1:(max.categories - 1)]
     idx.remaining <- max.categories:length(vec)
     sum.of.remaining <- sum(sv[idx.remaining])
@@ -374,32 +391,33 @@ qpie <- function(vec = Network.Size
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param plotname
+#' @param annotation_logticks_Y
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @import ggpubr
 #' @export
 #' @examples data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qboxplot(ToothLen.by.Dose)
-
-# @param logX Make X axis log10-scale.
-# @param plotname The name of the file and title of the plot.
-
 
 qboxplot <- function(df_XYcol_or_list
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
                      , outlier.shape = NULL
-                     , title = F
-                     , stat.test = T
+                     , title = FALSE
+                     , stat.test = TRUE
                      # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                      , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
                      # , fill = c(NULL , 3)[1]
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , hide.legend = FALSE
-                     , ext = "png", also.pdf = T
-                     , logY = F #, logX = F
+                     , ext = "png", also.pdf = TRUE
+                     , logY = FALSE #, logX = FALSE
                      , annotation_logticks_Y = logY
                      , xlab.angle = 90
-                     , hline = F, vline = F
-                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                     , hline = FALSE, vline = FALSE
+                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                     , grid = 'y'
                      , w = 7, h = w, ...) {
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
@@ -415,6 +433,7 @@ qboxplot <- function(df_XYcol_or_list
     ggpubr::grids(axis = 'y') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
@@ -437,7 +456,6 @@ qboxplot <- function(df_XYcol_or_list
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
-# #' @param col Color of the plot.
 #' @param plotname Name of the plot
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
@@ -456,29 +474,30 @@ qboxplot <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param annotation_logticks_Y
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @import ggpubr
 #' @export
 #' @examples data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qviolin(ToothLen.by.Dose)
-
-# @param logX Make X axis log10-scale.
-# @param plotname The name of the file and title of the plot.
 
 
 qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
                     , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
-                    , title = F
-                    , stat.test = T
+                    , title = FALSE
+                    , stat.test = TRUE
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
-                    , ext = "png", also.pdf = T
-                    , logY = FALSE #, logX = F
+                    , ext = "png", also.pdf = TRUE
+                    , logY = FALSE #, logX = FALSE
                     , annotation_logticks_Y = logY
                     , xlab.angle = 90
                     , hline = FALSE, vline = FALSE
-                    , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                    , grid = FALSE
+                    , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                     # , outlier.shape = NULL
                     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                     # , fill = c(NULL , 3)[1]
@@ -498,6 +517,7 @@ qviolin <- function(df_XYcol_or_list
     ggpubr::grids(axis = 'y') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
@@ -524,7 +544,6 @@ qviolin <- function(df_XYcol_or_list
 #' @param title The name of the file and title of the plot.
 #' @param plot Display the plot.
 #' @param plotname Name of the plot
-# #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -542,7 +561,10 @@ qviolin <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param annotation_logticks_Y
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @import ggpubr
 #' @export
 #' @examples data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qstripchart(ToothLen.by.Dose)
@@ -553,20 +575,21 @@ qstripchart <- function(df_XYcol_or_list
                         , suffix = NULL
                         , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
                         # , outlier.shape = NULL
-                        , title = F
+                        , title = FALSE
                         , size.point = .2
-                        , stat.test = T
+                        , stat.test = TRUE
                         # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                         , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75
                         # , fill = c(NULL , 3)[1]
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                         , hide.legend = FALSE
-                        , ext = "png", also.pdf = T
-                        , logY = FALSE #, logX = F
+                        , ext = "png", also.pdf = TRUE
+                        , logY = FALSE #, logX = FALSE
                         , annotation_logticks_Y = logY
                         , xlab.angle = 90
                         , hline = FALSE, vline = FALSE
-                        , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+                        , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                        , grid = 'y'
                         , w = 7, h = w, ...) {
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
@@ -582,6 +605,7 @@ qstripchart <- function(df_XYcol_or_list
     ggpubr::grids(axis = 'y') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
 
@@ -624,7 +648,11 @@ qstripchart <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
+#' @param annotation_logticks_Y
+#' @param annotation_logticks_X
+#' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @import ggpubr
 #' @export
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
@@ -632,19 +660,20 @@ qstripchart <- function(df_XYcol_or_list
 qscatter <- function(df_XYcol
                       , suffix = NULL
                       , plotname = FixPlotName(kpp(substitute(df_XYcol), suffix))
-                      # , title = F
+                      # , title = FALSE
                       , col = c(NULL , 3)[1]
                       , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                       , hide.legend = FALSE
-                      , ext = "png", also.pdf = T
-                      , logX = F, logY = F
+                      , ext = "png", also.pdf = TRUE
+                      , logX = FALSE, logY = FALSE
                       , annotation_logticks_Y = logY
                       , annotation_logticks_X = logX
                       , xlab.angle = 90
-                      , hline = F, vline = F, abline = F
-                      , add_contour_plot = F
-                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
-                      , w = 7, h = w, ...) {
+                      , hline = FALSE, vline = FALSE, abline = FALSE
+                      , add_contour_plot = FALSE
+                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                     , grid = 'xy'
+                     , w = 7, h = w, ...) {
   print(plotname)
   stopifnot(ncol(df_XYcol) >= 2)
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
@@ -659,6 +688,7 @@ qscatter <- function(df_XYcol
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
 
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
@@ -686,6 +716,7 @@ qscatter <- function(df_XYcol
 # _________________________________________________________________________________________________
 #' @title Venn Diagram
 #' Using the  ggVennDiagram package.
+#'
 #' @param list The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
@@ -700,11 +731,12 @@ qscatter <- function(df_XYcol
 #' @param hide.legend hide legend
 #' @param h height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @export
 #'
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
 
-qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = F)
+qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(kpp(substitute(list), suffix))
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
@@ -713,7 +745,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
                   # , xlab.angle = 90
                   , col.min = "white"
                   , col.max = "red"
-                  , hide.legend = F
+                  , hide.legend = FALSE
                   , w = 8, h = 0.75 * w
                   , ...) {
 
@@ -760,7 +792,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
 qqSave <- function(ggobj, w =4, h = w
                    , ext =c("png", "pdf")[1], also.pdf = FALSE
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
-                   , title = F, fname = F, suffix = NULL, ...) {
+                   , title = FALSE, fname = FALSE, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
   if (also.pdf) fname2 <- if (isFALSE(fname)) Stringendo::kpp(title, suffix, 'pdf') else Stringendo::kpp(fname, 'pdf')
   if (isFALSE(fname)) fname <- Stringendo::kpp(title, suffix, ext)
@@ -847,7 +879,7 @@ qA4_grid_plot <- function(plot_list
                           , suffix = NULL
                           , nrow = 3, ncol = 2
                           , plotname = FixPlotName(kpp(substitute(plot_list), nrow, 'by', ncol, suffix))
-                          , plot = F
+                          , plot = FALSE
                           , extension = c('pdf', 'png')[2]
                           , h = hA4 * scale, w = wA4 * scale
                           , scale = 1
@@ -910,7 +942,7 @@ qqqAxisLength <- function(vec = 1:20, minLength=6, factor = 0.4) {
 #' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A"=2, "B"=29) )
 
 
-qqqNamed.Vec.2.Tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqNamed.Vec.2.Tbl <- function(namedVec=1:14, verbose = FALSE, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))

@@ -10,7 +10,7 @@ qA4_grid_plot(
   nrow = 3,
   ncol = 2,
   plotname = FixPlotName(kpp(substitute(plot_list), nrow, "by", ncol, suffix)),
-  plot = F,
+  plot = FALSE,
   extension = c("pdf", "png")[2],
   h = hA4 * scale,
   w = wA4 * scale,

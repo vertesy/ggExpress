@@ -6,7 +6,7 @@
 \usage{
 qqqNamed.Vec.2.Tbl(
   namedVec = 1:14,
-  verbose = F,
+  verbose = FALSE,
   strip.too.many.names = TRUE,
   thr = 50
 )

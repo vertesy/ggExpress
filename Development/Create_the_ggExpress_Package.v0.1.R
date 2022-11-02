@@ -18,7 +18,7 @@ require('Stringendo')
 
 # Setup ------------------------
 PackageName = "ggExpress"
-package.version = "0.6.1"
+package.version = "0.6.2"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
@@ -89,7 +89,7 @@ document()
 }
 
 # Install your package ------------------------------------------------
-# # setwd(RepositoryDir)
+# setwd(RepositoryDir)
 install(RepositoryDir, upgrade = F)
 
 # require("ggExpress")
