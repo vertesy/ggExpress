@@ -244,7 +244,7 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-  fname <- Stringendo::kpp(plotname, suffix, "bar", Stringendo::flag.nameiftrue(logY), ext)
+  fname <- Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -279,10 +279,12 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @param w width of the plot.
 #' @param h height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param label Slice labels. Set to NULL to remove slice names.
 #'
 #' @export
 #'
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
+
 
 qpie <- function(vec = Network.Size
                  , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
@@ -299,6 +301,7 @@ qpie <- function(vec = Network.Size
                  , max.names = 10
                  , decr.order = TRUE
                  , both_pc_and_value = FALSE
+                 , labels = 'names' # Set to NULL to remove slice names.
                  , w = 7, h = 5, ...) {
 
   print(plotname)
@@ -330,6 +333,7 @@ qpie <- function(vec = Network.Size
   idx.named <- which(!df$'names' == "")
   df$'names'[idx.named] <- paste(df$'names'[idx.named], labs[idx.named], sep = "\n")
 
+  # print('- -')
   if (both_pc_and_value) df$'names'[idx.named] <- paste(df$'names'[idx.named], df$'value'[idx.named], sep = "\n")
 
   if (decr.order) df[['names']] <- factor(df$'names', levels = rev(make.unique(df$'names')))
@@ -339,30 +343,29 @@ qpie <- function(vec = Network.Size
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
+  # print('- - -')
 
   (p <- ggpubr::ggpie(data = df
                       , x = "value"
-                      , label = 'names'
+                      , label = labels
                       , subtitle = paste('Sum:', sum.orig)
-                      # , label = labs
-                      # , fill = labs
                       , fill = "names"
                       , color = "white"
                       , title = plotname
                       , palette = palette_use
                       , caption = paste0('Total elements:', l.orig, '; shown:', (max.categories-1)
-                                     , ' | max.names:', max.names)
+                                         , ' | max.names:', max.names)
                       # , ...
-  ))
-  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right", legend.title = LegendTitle)
+  )) + theme(legend.title = LegendTitle)
+  # print('- - - -')
+  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
 
-  # p <- if (NoLegend) p + NoLegend() else p
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  fname = Stringendo::kpp(plotname, "pie",  ext)
+  fname <- Stringendo::kpp(plotname, "pie",  ext)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
-  # print(112121)
+
   if (plot) p
 }
 

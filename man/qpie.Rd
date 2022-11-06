@@ -26,6 +26,7 @@ qpie(
   max.names = 10,
   decr.order = TRUE,
   both_pc_and_value = FALSE,
+  labels = "names",
   w = 7,
   h = 5,
   ...
@@ -77,6 +78,8 @@ qpie(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+
+\item{label}{Slice labels. Set to NULL to remove slice names.}
 }
 \description{
 Pie chart
