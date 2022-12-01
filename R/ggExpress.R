@@ -779,7 +779,7 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
 # _________________________________________________________________________________________________
 #' @title Quick-Save ggplot objects
 #'
-#' @param ggobj ggobj
+#' @param ggobj Plot as ggplot object.
 #' @param w width of the plot.
 #' @param h height of the plot.
 #' @param ext File extension (.pdf / .png).
