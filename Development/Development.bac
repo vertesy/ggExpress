@@ -643,6 +643,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
 #' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
+#' @param correlation_r2 Add a correlation value to the plot
 #' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
@@ -661,22 +662,23 @@ qstripchart <- function(df_XYcol_or_list
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
 
 qscatter <- function(df_XYcol
-                      , suffix = NULL
-                      , plotname = FixPlotName(kpp(substitute(df_XYcol), suffix))
-                      # , title = FALSE
-                      , col = c(NULL , 3)[1]
-                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-                      , hide.legend = FALSE
-                      , ext = "png", also.pdf = TRUE
-                      , logX = FALSE, logY = FALSE
-                      , annotation_logticks_Y = logY
-                      , annotation_logticks_X = logX
-                      , xlab.angle = 90
-                      , hline = FALSE, vline = FALSE, abline = FALSE
-                      , add_contour_plot = FALSE
-                      , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
-                     , grid = 'xy'
-                     , w = 7, h = w, ...) {
+                    , suffix = NULL
+                    , plotname = FixPlotName(kpp(substitute(df_XYcol), suffix))
+                    # , title = FALSE
+                    , col = c(NULL , 3)[1]
+                    , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                    , hide.legend = FALSE
+                    , ext = "png", also.pdf = TRUE
+                    , logX = FALSE, logY = FALSE
+                    , annotation_logticks_Y = logY
+                    , annotation_logticks_X = logX
+                    , xlab.angle = 90
+                    , hline = FALSE, vline = FALSE, abline = FALSE
+                    , add_contour_plot = FALSE
+                    , correlation_r2 = FALSE # add as  c("pearson", "spearman")
+                    , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                    , grid = 'xy'
+                    , w = 7, h = w, ...) {
   print(plotname)
   stopifnot(ncol(df_XYcol) >= 2)
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
@@ -696,7 +698,7 @@ qscatter <- function(df_XYcol
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
   if (add_contour_plot) p <- p + geom_density_2d()
-
+  if (correlation_r2 %in% c("pearson", "spearman") ) p <- p + stat_cor(method = correlation_r2)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
