@@ -17,7 +17,7 @@ qboxplot(
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   hide.legend = FALSE,
-  ext = "png",
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = TRUE,
   logY = FALSE,
   annotation_logticks_Y = logY,

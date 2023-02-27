@@ -5,8 +5,8 @@
 \title{Pie chart}
 \usage{
 qpie(
-  vec = Network.Size,
-  ext = "pdf",
+  vec = MyVec,
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),

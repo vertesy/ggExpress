@@ -6,7 +6,7 @@
 \usage{
 qbarplot(
   vec,
-  ext = "pdf",
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   plot = TRUE,
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(vec), suffix)),

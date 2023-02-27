@@ -8,7 +8,7 @@ qqSave(
   ggobj,
   w = 4,
   h = w,
-  ext = c("png", "pdf")[1],
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
@@ -18,7 +18,7 @@ qqSave(
 )
 }
 \arguments{
-\item{ggobj}{ggobj}
+\item{ggobj}{Plot as ggplot object.}
 
 \item{w}{width of the plot.}
 

@@ -6,7 +6,7 @@
 \usage{
 qdensity(
   vec,
-  ext = "pdf",
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   xlab = FALSE,
   plot = TRUE,
   suffix = NULL,

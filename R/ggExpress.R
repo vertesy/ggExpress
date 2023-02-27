@@ -44,7 +44,9 @@
 #' @examples weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
 
 
-qhistogram <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+qhistogram <- function(vec
+                       , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                       , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(kpp(substitute(vec), suffix))
                        , logX = FALSE, logY = FALSE
@@ -125,7 +127,9 @@ qhistogram <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE, save = TRUE,
 #'
 #' @examples weight <- rnorm(1000); qdensity(weight)
 
-qdensity <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE
+qdensity <- function(vec
+                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                     , xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
@@ -194,7 +198,9 @@ qdensity <- function(vec, ext = "pdf", xlab = FALSE, plot = TRUE
 #' qbarplot(weight3, filtercol = -1, hline = .5);
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 
-qbarplot <- function(vec, ext = "pdf", plot = TRUE
+qbarplot <- function(vec
+                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                     , plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
                      # , title = FALSE
@@ -286,8 +292,9 @@ qbarplot <- function(vec, ext = "pdf", plot = TRUE
 #' @examples xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
 
 
-qpie <- function(vec = Network.Size
-                 , ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+qpie <- function(vec = MyVec
+                 , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                 , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(kpp(substitute(vec), suffix))
                  , LegendSide = TRUE
@@ -414,7 +421,8 @@ qboxplot <- function(df_XYcol_or_list
                      # , fill = c(NULL , 3)[1]
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , hide.legend = FALSE
-                     , ext = "png", also.pdf = TRUE
+                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
+                     , also.pdf = TRUE
                      , logY = FALSE #, logX = FALSE
                      , annotation_logticks_Y = logY
                      , xlab.angle = 90
@@ -494,7 +502,8 @@ qviolin <- function(df_XYcol_or_list
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
-                    , ext = "png", also.pdf = TRUE
+                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
+                    , also.pdf = TRUE
                     , logY = FALSE #, logX = FALSE
                     , annotation_logticks_Y = logY
                     , xlab.angle = 90
@@ -505,6 +514,9 @@ qviolin <- function(df_XYcol_or_list
                     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                     # , fill = c(NULL , 3)[1]
                     , w = 7, h = w, ...) {
+
+  stopifnot(is.numeric(xlab.angle))
+
   # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
@@ -586,7 +598,8 @@ qstripchart <- function(df_XYcol_or_list
                         # , fill = c(NULL , 3)[1]
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                         , hide.legend = FALSE
-                        , ext = "png", also.pdf = TRUE
+                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
+                        , also.pdf = TRUE
                         , logY = FALSE #, logX = FALSE
                         , annotation_logticks_Y = logY
                         , xlab.angle = 90
@@ -668,7 +681,8 @@ qscatter <- function(df_XYcol
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
-                    , ext = "png", also.pdf = TRUE
+                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
+                    , also.pdf = TRUE
                     , logX = FALSE, logY = FALSE
                     , annotation_logticks_Y = logY
                     , annotation_logticks_X = logX
@@ -741,7 +755,9 @@ qscatter <- function(df_XYcol
 #'
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
 
-qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+qvenn <- function(list
+                  , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(kpp(substitute(list), suffix))
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
@@ -795,7 +811,8 @@ qvenn <- function(list, ext = "pdf", plot = TRUE, save = TRUE, mdlink = Markdown
 #' @importFrom cowplot save_plot
 
 qqSave <- function(ggobj, w =4, h = w
-                   , ext =c("png", "pdf")[1], also.pdf = FALSE
+                   , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
+                   , also.pdf = FALSE
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = FALSE, fname = FALSE, suffix = NULL, ...) {
   if (isFALSE(title)) title <- as.character(substitute(ggobj))

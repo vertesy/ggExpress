@@ -7,7 +7,7 @@ Using the  ggVennDiagram package.}
 \usage{
 qvenn(
   list,
-  ext = "pdf",
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
