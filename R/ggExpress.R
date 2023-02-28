@@ -257,6 +257,90 @@ qbarplot <- function(vec
 }
 
 
+#' @title Barplot for tibbles or dataframes
+#'
+#' @param df The variable to plot.
+#' @param x Colname to split along X axis. Def colnames(df)[1]
+#' @param y Colname to count along y axis. Def colnames(df)[3]
+#' @param fill Color (split) by along Y.
+#' @param color Color (split) by along Y.
+#' @param ext File extension (.pdf / .png).
+#' @param plot Display the plot.
+#' @param suffix A suffix added to the filename. NULL by default.
+#' @param plotname The name of the file and title of the plot.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param hline Draw a horizontal line on the plot.
+#' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr Color palette to use.
+#' @param col Color of the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param xlab X-axis label.
+#' @param logY Make Y axis log10-scale.
+#' @param label label
+#' @param hide.legend hide legend
+#' @param max.names The maximum number of names still to be shown on the axis.
+#' @param limitsize limitsize
+#' @param w width of the plot.
+#' @param h height of the plot.
+#' @param annotation_logticks_Y
+#' @param grid
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
+#' @export
+#'
+#' @examples my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),Column_2 = c("X", "Y", "Y", "Z", "X", "Z")); freq_table <- my_tibble %>% count(Column_1, Column_2)); qbarplot.df(freq_table)
+
+
+qbarplot.df <- function(df
+                        , x = colnames(df)[1]
+                        , y = colnames(df)[2]
+                        , fill = colnames(df)[3]
+                        , label = NULL
+                        , color = 1
+                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                        , plot = TRUE
+                        , suffix = NULL
+                        , plotname = FixPlotName(kpp(substitute(df), suffix))
+                        # , title = FALSE
+                        , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                        , hline = FALSE, filtercol = 1
+                        , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
+                        , col = as.character(1:3)[1]
+                        , xlab.angle = 45, xlab = ""
+                        , logY = FALSE
+                        , annotation_logticks_Y = logY
+                        , hide.legend = TRUE
+                        , max.names = 50
+                        , limitsize = FALSE
+                        , grid = 'y'
+                        , w = qqqAxisLength(df), h = 5, ...) {
+
+
+  if (isFALSE(xlab)) xlab = plotname
+
+
+  p <- ggpubr::ggbarplot(data = df, x = x, y = y
+                         , color = color
+                         , fill = fill
+                         , title = plotname, xlab = xlab
+                         , label = label
+                         , palette = palette_use, ...
+  ) + ggpubr::grids(axis = 'y') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+
+  if (length(df) > max.names) p <- p + ggplot2::guides(x = 'none')
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
+
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  fname <- Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
+  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
+  if (mdlink & save) qMarkdownImageLink(fname)
+  if (plot) p
+}
 
 
 # _________________________________________________________________________________________________
