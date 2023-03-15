@@ -587,10 +587,10 @@ qviolin <- function(df_XYcol_or_list
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
-                    , also.pdf = TRUE
+                    , also.pdf = FALSE
                     , logY = FALSE #, logX = FALSE
                     , annotation_logticks_Y = logY
-                    , xlab.angle = 90
+                    , xlab.angle = 45
                     , hline = FALSE, vline = FALSE
                     , grid = FALSE
                     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
