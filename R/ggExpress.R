@@ -93,6 +93,7 @@ qhistogram <- function(vec
 
 
   fname = Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  fname = Stringendo::FixPlotName(fname)
   if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(fname)
   if (plot) p
@@ -190,6 +191,7 @@ qdensity <- function(vec
 #' @param h height of the plot.
 #' @param annotation_logticks_Y
 #' @param grid
+#' @param ylim ylimit values
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @export
@@ -210,6 +212,7 @@ qbarplot <- function(vec
                      , col = as.character(1:3)[1]
                      , xlab.angle = 45, xlab = ""
                      , logY = FALSE
+                     , ylim = c(0, 1.1 * max(vec, na.rm = TRUE))
                      , annotation_logticks_Y = logY
                      , label = NULL
                      , hide.legend = TRUE
@@ -239,6 +242,7 @@ qbarplot <- function(vec
                          , title = plotname, xlab = xlab
                          , color = 'colour', fill = 'colour'
                          , label = label
+                         , ylim = ylim
                          , palette = palette_use, ...
   ) + ggpubr::grids(axis = 'y') +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))

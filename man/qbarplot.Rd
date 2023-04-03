@@ -20,6 +20,7 @@ qbarplot(
   xlab.angle = 45,
   xlab = "",
   logY = FALSE,
+  ylim = c(0, 1.1 * max(vec, na.rm = TRUE)),
   annotation_logticks_Y = logY,
   label = NULL,
   hide.legend = TRUE,
@@ -59,6 +60,8 @@ qbarplot(
 \item{xlab}{X-axis label.}
 
 \item{logY}{Make Y axis log10-scale.}
+
+\item{ylim}{ylimit values}
 
 \item{label}{label}
 
