@@ -212,7 +212,7 @@ qbarplot <- function(vec
                      , col = as.character(1:3)[1]
                      , xlab.angle = 45, xlab = ""
                      , logY = FALSE
-                     , ylim = c(0, 1.1 * max(vec, na.rm = TRUE))
+                     , ylim = c(0, 1.1 * as.numeric(max(vec, na.rm = TRUE)))
                      , annotation_logticks_Y = logY
                      , label = NULL
                      , hide.legend = TRUE
@@ -221,7 +221,7 @@ qbarplot <- function(vec
                      , grid = 'y'
                      , w = qqqAxisLength(vec), h = 5, ...) {
 
-
+  stopifnot(is.numeric(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names =F)
   # nrCategories.DFcol1 <- length(unique(df[,1])); MarkdownHelpers::stopif( nrCategories.DFcol1 >100)

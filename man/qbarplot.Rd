@@ -20,7 +20,7 @@ qbarplot(
   xlab.angle = 45,
   xlab = "",
   logY = FALSE,
-  ylim = c(0, 1.1 * max(vec, na.rm = TRUE)),
+  ylim = c(0, 1.1 * as.numeric(max(vec, na.rm = TRUE))),
   annotation_logticks_Y = logY,
   label = NULL,
   hide.legend = TRUE,
