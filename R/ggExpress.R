@@ -1092,22 +1092,6 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 }
 
 # _________________________________________________________________________________________________
-# #' @title qqqParsePlotname
-# #' @description Parse Plotname from variable name.
-# #' @param string string
-# #' @param suffix_tag suffix_tag
-# #' @export
-# #'
-# #' @examples qqqParsePlotname()
-#
-# qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
-#   nm <- make.names(as.character(substitute(string)))
-#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
-#   return(nm)
-# }
-
-
-# _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 
 # _________________________________________________________________________________________________
@@ -1129,4 +1113,20 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
 
+
+
+# _________________________________________________________________________________________________
+# #' @title qqqParsePlotname
+# #' @description Parse Plotname from variable name.
+# #' @param string string
+# #' @param suffix_tag suffix_tag
+# #' @export
+# #'
+# #' @examples qqqParsePlotname()
+#
+# qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
+#   nm <- make.names(as.character(substitute(string)))
+#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
+#   return(nm)
+# }
 
