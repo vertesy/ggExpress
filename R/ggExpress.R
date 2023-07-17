@@ -22,7 +22,8 @@
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param vline Draw a vertical line on the plot.
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr Color palette to use.
@@ -49,6 +50,7 @@ qhistogram <- function(vec
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                       , filename = FALSE
                        , logX = FALSE, logY = FALSE
                        , annotation_logticks_X = logX, annotation_logticks_Y = logY
                        , vline = FALSE, filtercol = 0
@@ -91,11 +93,11 @@ qhistogram <- function(vec
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
+  file_name <- if (!isFALSE(filename)) filename else Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  file_name <- Stringendo::FixPlotName(file_name)
 
-  fname = Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
-  fname = Stringendo::FixPlotName(fname)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -110,7 +112,8 @@ qhistogram <- function(vec
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
@@ -133,6 +136,7 @@ qdensity <- function(vec
                      , xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                     , filename = FALSE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , logX = FALSE, logY = FALSE
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -158,9 +162,12 @@ qdensity <- function(vec
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  fname = Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY),  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX)
+                    , Stringendo::flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -173,7 +180,8 @@ qdensity <- function(vec
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
@@ -205,7 +213,7 @@ qbarplot <- function(vec
                      , plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(vec), suffix))
-                     # , title = FALSE
+                     , filename = FALSE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , hline = FALSE, filtercol = 1
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -224,7 +232,6 @@ qbarplot <- function(vec
   stopifnot(is.numeric(vec))
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names =F)
-  # nrCategories.DFcol1 <- length(unique(df[,1])); MarkdownHelpers::stopif( nrCategories.DFcol1 >100)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
@@ -254,9 +261,11 @@ qbarplot <- function(vec
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-  fname <- Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -271,7 +280,8 @@ qbarplot <- function(vec
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
@@ -306,7 +316,7 @@ qbarplot.df <- function(df
                         , plot = TRUE
                         , suffix = NULL
                         , plotname = FixPlotName(kpp(substitute(df), suffix))
-                        # , title = FALSE
+                        , filename = FALSE
                         , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                         , hline = FALSE, filtercol = 1
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -340,9 +350,11 @@ qbarplot.df <- function(df
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-  fname <- Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, limitsize = limitsize)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
+    }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -356,7 +368,8 @@ qbarplot.df <- function(df
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param LegendSide LegendSide
 #' @param LegendTitle LegendTitle
 #' @param NoLegend NoLegend
@@ -385,6 +398,7 @@ qpie <- function(vec = MyVec
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                 , filename = FALSE
                  , LegendSide = TRUE
                  , LegendTitle = FixPlotName(substitute(vec)), NoLegend = FALSE
                  , pcdigits = 2, NamedSlices = FALSE
@@ -457,9 +471,11 @@ qpie <- function(vec = MyVec
   if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
 
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  fname <- Stringendo::kpp(plotname, "pie",  ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+     Stringendo::kpp(plotname, "pie",  ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (mdlink & save) qMarkdownImageLink(file_name)
 
   if (plot) p
 }
@@ -469,7 +485,8 @@ qpie <- function(vec = MyVec
 #'
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param title The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -489,7 +506,6 @@ qpie <- function(vec = MyVec
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param plotname
 #' @param annotation_logticks_Y
 #' @param grid
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -501,8 +517,8 @@ qpie <- function(vec = MyVec
 qboxplot <- function(df_XYcol_or_list
                      , suffix = NULL
                      , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
+                     , filename = FALSE
                      , outlier.shape = NULL
-                     , title = FALSE
                      , stat.test = TRUE
                      # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
                      , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
@@ -542,9 +558,11 @@ qboxplot <- function(df_XYcol_or_list
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  fname = Stringendo::kpp(plotname, suffix, "boxplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, suffix, "boxplot", Stringendo::flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -556,6 +574,7 @@ qboxplot <- function(df_XYcol_or_list
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
 #' @param plotname Name of the plot
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -585,7 +604,7 @@ qboxplot <- function(df_XYcol_or_list
 qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
                     , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
-                    , title = FALSE
+                    , filename = FALSE
                     , stat.test = TRUE
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -630,9 +649,11 @@ qviolin <- function(df_XYcol_or_list
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  fname = Stringendo::kpp(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -644,9 +665,9 @@ qviolin <- function(df_XYcol_or_list
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param title The name of the file and title of the plot.
-#' @param plot Display the plot.
 #' @param plotname Name of the plot
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param plot Display the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
 #' @param logY Make Y axis log10-scale.
@@ -677,8 +698,8 @@ qstripchart <- function(df_XYcol_or_list
                         , add = c("violin", "mean_sd")
                         , suffix = NULL
                         , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
+                        , filename = FALSE
                         # , outlier.shape = NULL
-                        , title = FALSE
                         , size.point = .2
                         , stat.test = TRUE
                         # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
@@ -720,9 +741,11 @@ qstripchart <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   fix <- sppp("stripchart", sppp(add))
-  fname = Stringendo::kpp(plotname, fix, suffix, "plot", Stringendo::flag.nameiftrue(logY), ext) # , Stringendo::flag.nameiftrue(logX)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, fix, suffix, "plot", Stringendo::flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -735,6 +758,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The name of the file and title of the plot.
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
@@ -765,7 +789,7 @@ qstripchart <- function(df_XYcol_or_list
 qscatter <- function(df_XYcol
                     , suffix = NULL
                     , plotname = FixPlotName(kpp(substitute(df_XYcol), suffix))
-                    # , title = FALSE
+                    , filename = FALSE
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
@@ -810,11 +834,12 @@ qscatter <- function(df_XYcol
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-
-  fname = Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+  }
   if (plot) p
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   p
 }
 
@@ -822,16 +847,17 @@ qscatter <- function(df_XYcol
 
 # _________________________________________________________________________________________________
 #' @title Venn Diagram
-#' Using the  ggVennDiagram package.
 #'
+#' @description Draw Venn Diagram using the  ggVennDiagram package.
 #' @param list The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The name of the file and title of the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col.min Color scale minimum, default: white
 #' @param col.max Color scale maximum, default: red
 #' @param w width of the plot.
@@ -848,6 +874,7 @@ qvenn <- function(list
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(kpp(substitute(list), suffix))
+                  , filename = FALSE
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                   # , col = as.character(1:3)[1]
@@ -865,9 +892,11 @@ qvenn <- function(list
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  fname = Stringendo::kpp(plotname, suffix, "venn", ext)
-  if (save) qqSave(ggobj = p, title = plotname, fname = fname, ext = ext, w = w, h = h)
-  if (mdlink & save) qMarkdownImageLink(fname)
+  file_name <- if (!isFALSE(filename)) filename else {
+    Stringendo::kpp(plotname, suffix, "venn", ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
 
@@ -929,10 +958,11 @@ qqSave <- function(ggobj, w =4, h = w
 
 # _________________________________________________________________________________________________
 #' @title  q32vA4_grid_plot
+#'
 #' @description Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
 #' @param plot Show the plot? Default: F
-#' @param plotname Plot name, Default: F
+#' @param plotname Plot name, Default: Autonaming.
 #' @param suffix A suffix added to the filename, Default: NULL
 #' @param scale Scaling factor of the canvas, Default: 1
 #' @param nrow number of rows for panels on the page, Default: 2
@@ -967,12 +997,13 @@ q32vA4_grid_plot <- function(plot_list
 
 # _________________________________________________________________________________________________
 #' @title  qA4_grid_plot
+#'
 #' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
 #' @param plot Show the plot? Default: F
+#' @param plotname Plot name, Default: Autonaming
 #' @param labels Panel labels, Default: LETTERS
 #' @param max.list.length Max number of panels (per page). Default: 16
-#' @param plotname Plot name, Default: Autonaming
 #' @param suffix A suffix added to the filename, Default: NULL
 #' @param scale Scaling factor of the canvas, Default: 1
 #' @param nrow number of rows for panels on the page, Default: 2
@@ -1077,6 +1108,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec=1:14, verbose = FALSE, strip.too.many.na
 
 # _________________________________________________________________________________________________
 #' @title qqqTbl.2.Vec
+#'
 #' @description Covert a table to a named vector.
 #' @param tibble.input tibble.input
 #' @param name.column name.column

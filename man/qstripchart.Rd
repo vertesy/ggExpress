@@ -9,7 +9,7 @@ qstripchart(
   add = c("violin", "mean_sd"),
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
-  title = FALSE,
+  filename = FALSE,
   size.point = 0.2,
   stat.test = TRUE,
   stat.method = NULL,
@@ -43,7 +43,7 @@ qstripchart(
 
 \item{plotname}{Name of the plot}
 
-\item{title}{The name of the file and title of the plot.}
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{size.point}{Size of points}
 

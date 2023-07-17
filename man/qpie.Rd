@@ -12,6 +12,7 @@ qpie(
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  filename = FALSE,
   LegendSide = TRUE,
   LegendTitle = FixPlotName(substitute(vec)),
   NoLegend = FALSE,
@@ -45,7 +46,9 @@ qpie(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
-\item{plotname}{The name of the file and title of the plot.}
+\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{LegendSide}{LegendSide}
 

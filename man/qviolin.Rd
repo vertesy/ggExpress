@@ -8,7 +8,7 @@ qviolin(
   df_XYcol_or_list,
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
-  title = FALSE,
+  filename = FALSE,
   stat.test = TRUE,
   stat.method = NULL,
   stat.label.y.npc = "top",
@@ -39,7 +39,7 @@ qviolin(
 
 \item{plotname}{Name of the plot}
 
-\item{title}{The name of the file and title of the plot.}
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{stat.test}{Do a statistical test?}
 
@@ -76,6 +76,8 @@ qviolin(
 \item{h}{height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+
+\item{title}{The name of the file and title of the plot.}
 }
 \description{
 qviolin plot

@@ -8,8 +8,8 @@ qboxplot(
   df_XYcol_or_list,
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
+  filename = FALSE,
   outlier.shape = NULL,
-  title = FALSE,
   stat.test = TRUE,
   stat.method = NULL,
   stat.label.y.npc = "top",
@@ -38,9 +38,11 @@ qboxplot(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
-\item{outlier.shape}{outlier shape. NA to hide.}
+\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
-\item{title}{The name of the file and title of the plot.}
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+
+\item{outlier.shape}{outlier shape. NA to hide.}
 
 \item{stat.test}{Do a statistical test?}
 

@@ -2,8 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qvenn}
 \alias{qvenn}
-\title{Venn Diagram
-Using the  ggVennDiagram package.}
+\title{Venn Diagram}
 \usage{
 qvenn(
   list,
@@ -13,6 +12,7 @@ qvenn(
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(list), suffix)),
+  filename = FALSE,
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
   col.min = "white",
   col.max = "red",
@@ -35,7 +35,9 @@ qvenn(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
-\item{plotname}{The name of the file and title of the plot.}
+\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
 
@@ -52,8 +54,7 @@ qvenn(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Venn Diagram
-Using the  ggVennDiagram package.
+Draw Venn Diagram using the  ggVennDiagram package.
 }
 \examples{
 LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)

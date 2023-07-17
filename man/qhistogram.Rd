@@ -13,6 +13,7 @@ qhistogram(
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  filename = FALSE,
   logX = FALSE,
   logY = FALSE,
   annotation_logticks_X = logX,
@@ -47,7 +48,9 @@ qhistogram(
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
-\item{plotname}{The name of the file and title of the plot.}
+\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{logX}{Make X axis log10-scale.}
 

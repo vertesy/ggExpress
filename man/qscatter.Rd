@@ -8,6 +8,7 @@ qscatter(
   df_XYcol,
   suffix = NULL,
   plotname = FixPlotName(kpp(substitute(df_XYcol), suffix)),
+  filename = FALSE,
   col = c(NULL, 3)[1],
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
@@ -39,6 +40,8 @@ qscatter(
 \item{suffix}{A suffix added to the filename. NULL by default.}
 
 \item{plotname}{The name of the file and title of the plot.}
+
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{col}{Color of the plot.}
 

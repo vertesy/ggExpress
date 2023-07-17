@@ -23,7 +23,7 @@ q32vA4_grid_plot(
 
 \item{suffix}{A suffix added to the filename, Default: NULL}
 
-\item{plotname}{Plot name, Default: F}
+\item{plotname}{Plot name, Default: Autonaming.}
 
 \item{plot}{Show the plot? Default: F}
 
