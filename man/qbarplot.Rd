@@ -66,6 +66,8 @@ qbarplot(
 
 \item{ylim}{ylimit values}
 
+\item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
+
 \item{label}{label}
 
 \item{hide.legend}{hide legend}
@@ -73,6 +75,8 @@ qbarplot(
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
 \item{limitsize}{limitsize}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{w}{width of the plot.}
 

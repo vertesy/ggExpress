@@ -59,11 +59,15 @@ qviolin(
 
 \item{logY}{Make Y axis log10-scale.}
 
+\item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
+
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot.}
 
 \item{vline}{Draw a vertical line on the plot.}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{plot}{Display the plot.}
 

@@ -58,6 +58,8 @@ qdensity(
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
 \item{w}{width of the plot.}
 
 \item{h}{height of the plot.}

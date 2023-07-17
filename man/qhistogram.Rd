@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qhistogram}
 \alias{qhistogram}
-\title{Histogram}
+\title{Quick Histogram Plotting}
 \usage{
 qhistogram(
   vec,
@@ -34,53 +34,67 @@ qhistogram(
 )
 }
 \arguments{
-\item{vec}{The variable to plot.}
+\item{vec}{A numeric vector for which the histogram is to be plotted.}
 
-\item{ext}{File extension (.pdf / .png).}
+\item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.}
 
-\item{xlab}{X-axis label.}
+\item{xlab}{Label for the X-axis. By default, it uses the plot name.}
 
-\item{plot}{Display the plot.}
+\item{plot}{Logical indicating whether to display the plot. Default is TRUE.}
 
-\item{save}{Save the plot into a file.}
+\item{save}{Logical indicating whether to save the plot into a file. Default is TRUE.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{mdlink}{Logical indicating whether to insert .pdf and .png image links in the markdown report, set by "path_of_report". Default is FALSE.}
 
-\item{suffix}{A suffix added to the filename. NULL by default.}
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+\item{plotname}{Title of the plot and the name of the file (unless specified in \code{filename}). Default is parsed from \code{vec}.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Optional filename for the saved plot. Default is parsed from \code{plotname}.}
 
-\item{logX}{Make X axis log10-scale.}
+\item{logX}{Logical indicating whether to make X axis on log10 scale. Default is FALSE.}
 
-\item{logY}{Make Y axis log10-scale.}
+\item{logY}{Logical indicating whether to make Y axis on log10 scale. Default is FALSE.}
 
-\item{vline}{Draw a vertical line on the plot.}
+\item{annotation_logticks_X}{Logical indicating whether to add annotation logticks on X-axis. Default follows the value of \code{logX}.}
 
-\item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
+\item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{add}{Add plot annotation lines (see ggpubr). Default: 'median'.}
+\item{vline}{Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{filtercol}{Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).}
 
-\item{col}{Color of the plot.}
+\item{add}{Character defining the type of plot annotations to add. Default is 'median'.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{palette_use}{Color palette to use from GGpubr. Default is 'jco'.}
 
-\item{hide.legend}{hide legend}
+\item{col}{Color of the plot. Default is '1'.}
 
-\item{max.names}{The maximum number of names still to be shown on the axis.}
+\item{xlab.angle}{Angle to rotate X-axis labels. Default is 90 degrees.}
 
-\item{w}{width of the plot.}
+\item{hide.legend}{Logical indicating whether to hide the legend. Default is TRUE.}
 
-\item{h}{height of the plot.}
+\item{max.names}{Maximum number of names to show on the axis. Default is 50.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{w}{Width of the plot. Default is 5.}
+
+\item{h}{Height of the plot. Default is the same as width.}
+
+\item{...}{Additional parameters for the corresponding plotting function.}
+}
+\value{
+It returns a ggplot object if \code{plot} is TRUE.
 }
 \description{
-Histogram
+This function generates a histogram and saves the plot for a given vector and offers several customizations.
 }
 \examples{
-weight <- rnorm(1000); qhistogram(vec = weight); qhistogram(vec = weight, vline = 2, filtercol = -1)
+\dontrun{
+weight <- rnorm(1000);
+qhistogram(vec = weight);
+qhistogram(vec = weight, vline = 2, filtercol = -1)
+}
+
 }

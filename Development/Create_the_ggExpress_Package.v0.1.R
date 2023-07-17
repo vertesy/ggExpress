@@ -18,7 +18,7 @@ require('Stringendo')
 
 # Setup ------------------------
 PackageName = "ggExpress"
-package.version = "0.6.9"
+package.version = "0.7.0"
 setwd("~/GitHub/Packages/")
 
 RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
@@ -79,6 +79,7 @@ file.copy(from = Package_FnP, to = BackupOldFile, overwrite = TRUE)
 setwd(RepositoryDir)
 getwd()
 document()
+warnings()
 
 {
   "update cff version"

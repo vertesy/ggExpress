@@ -128,7 +128,7 @@ qhistogram <- function(vec
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param grid
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @export
@@ -201,8 +201,8 @@ qdensity <- function(vec
 #' @param limitsize limitsize
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ylim ylimit values
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
@@ -301,8 +301,8 @@ qbarplot <- function(vec
 #' @param limitsize limitsize
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @export
@@ -510,8 +510,8 @@ qpie <- function(vec = MyVec
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @import ggpubr
@@ -596,8 +596,8 @@ qboxplot <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @import ggpubr
@@ -689,8 +689,8 @@ qviolin <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @import ggpubr
@@ -781,9 +781,9 @@ qstripchart <- function(df_XYcol_or_list
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w width of the plot.
 #' @param h height of the plot.
-#' @param annotation_logticks_Y
-#' @param annotation_logticks_X
-#' @param grid
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @import ggpubr

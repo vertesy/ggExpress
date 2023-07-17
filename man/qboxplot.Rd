@@ -62,6 +62,8 @@ qboxplot(
 
 \item{logY}{Make Y axis log10-scale.}
 
+\item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
+
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot.}
@@ -73,6 +75,8 @@ qboxplot(
 \item{save}{Save the plot into a file.}
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{w}{width of the plot.}
 
