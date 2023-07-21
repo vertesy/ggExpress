@@ -97,8 +97,10 @@ qhistogram <- function(vec
   if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  file_name <- if (!isFALSE(filename)) filename else Stringendo::kpp(plotname, suffix, "hist", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
-  file_name <- Stringendo::FixPlotName(file_name)
+  file_name <- if (!isFALSE(filename)) filename else {
+    kpp(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+  }
+  file_name <- FixPlotName(file_name)
 
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -166,10 +168,9 @@ qdensity <- function(vec
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, suffix, "dens", Stringendo::flag.nameiftrue(logX)
-                    , Stringendo::flag.nameiftrue(logY), ext)
-  }
+  file_name <- if (!isFALSE(filename)) { filename } else {
+    kpp(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
@@ -266,7 +267,7 @@ qbarplot <- function(vec
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -356,7 +357,7 @@ qbarplot.df <- function(df
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, "bar", Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
     }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -477,7 +478,7 @@ qpie <- function(vec = MyVec
 
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
   file_name <- if (!isFALSE(filename)) filename else {
-     Stringendo::kpp(plotname, "pie",  ext)
+     kpp(plotname, suffix, "pie",  ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -564,7 +565,7 @@ qboxplot <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, suffix, "boxplot", Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -629,7 +630,7 @@ qviolin <- function(df_XYcol_or_list
 
   stopifnot(is.numeric(xlab.angle))
 
-  # plotname <- if (isFALSE(title)) Stringendo::kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
+  # plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
@@ -655,7 +656,7 @@ qviolin <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -747,7 +748,7 @@ qstripchart <- function(df_XYcol_or_list
 
   fix <- sppp("stripchart", sppp(add))
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, fix, suffix, "plot", Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -840,7 +841,7 @@ qscatter <- function(df_XYcol
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, suffix, "scatter", Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), ext)
+    kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   }
   if (plot) p
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -898,7 +899,7 @@ qvenn <- function(list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    Stringendo::kpp(plotname, suffix, "venn", ext)
+    kpp(plotname, suffix, "venn", ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -936,10 +937,12 @@ qqSave <- function(ggobj, w =4, h = w
                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                    , also.pdf = FALSE
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
-                   , title = FALSE, fname = FALSE, suffix = NULL, ...) {
+                   , title = FALSE, fname = FALSE
+                   , suffix = NULL, ...) {
+
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) Stringendo::kpp(title, suffix, 'pdf') else Stringendo::kpp(fname, 'pdf')
-  if (isFALSE(fname)) fname <- Stringendo::kpp(title, suffix, ext)
+  if (also.pdf) fname2 <- if (isFALSE(fname)) kpp(title, suffix, 'pdf') else kpp(fname, 'pdf')
+  if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
 
   if (!isFALSE(page)) {
     wA4 <- 8.27
@@ -1036,7 +1039,7 @@ qA4_grid_plot <- function(plot_list
   stopifnot(length(plot_list) < max.list.length)
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname = Stringendo::kpp(plotname, suffix, extension)
+  fname = kpp(plotname, suffix, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  ) +
     theme(plot.background=element_rect(fill="white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
@@ -1163,7 +1166,7 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #
 # qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
 #   nm <- make.names(as.character(substitute(string)))
-#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- Stringendo::kpp(nm, suffix_tag)
+#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
 #   return(nm)
 # }
 
