@@ -97,5 +97,8 @@ qbarplot.df(
 Barplot for tibbles or dataframes
 }
 \examples{
-my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),Column_2 = c("X", "Y", "Y", "Z", "X", "Z")); freq_table <- my_tibble \%>\% count(Column_1, Column_2)); qbarplot.df(freq_table)
+my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),
+Column_2 = c("X", "Y", "Y", "Z", "X", "Z"));
+freq_table <- my_tibble \%>\% count(Column_1, Column_2)); qbarplot.df(freq_table)
+
 }
