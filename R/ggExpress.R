@@ -305,10 +305,11 @@ qbarplot <- function(vec
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
-#' @export
+#' @examples my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),
+#' Column_2 = c("X", "Y", "Y", "Z", "X", "Z"));
+#' freq_table <- my_tibble %>% count(Column_1, Column_2)); qbarplot.df(freq_table)
 #'
-#' @examples my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),Column_2 = c("X", "Y", "Y", "Z", "X", "Z")); freq_table <- my_tibble %>% count(Column_1, Column_2)); qbarplot.df(freq_table)
-
+#' @export qbarplot.df
 
 qbarplot.df <- function(df
                         , x = colnames(df)[1]
