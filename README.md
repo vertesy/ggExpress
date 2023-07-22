@@ -4,25 +4,6 @@ This package is work in progress.
 
 <img width="706" alt="image" src="https://user-images.githubusercontent.com/5101911/99193282-4c06b980-2778-11eb-8c74-37293a8a245c.png">
 
-## List of functions
-
-- #### `qhistogram()`
-
-- #### `qdensity()`
-
-- #### `qbarplot()`
-
-- #### `qpie()`
-
-- #### `qboxplot()`
-
-- #### `qviolin()`
-
-- #### `qscatter()`
-
-
-
-
 <br><br>
 
 ## Installation
@@ -56,8 +37,6 @@ Alternatively, you simply source it from the web.
 source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.functions.R")
 source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.auxiliary.functions.R")
 ```
-
-
 
 ### Troubleshooting
 
@@ -102,4 +81,78 @@ qscatter(dfx, suffix = "2D.gaussian")
 ![weight3.bar](README.assets/weight3.bar.png)
 ![xvec.pie](README.assets/xvec.pie.png)
 ![dfx.2D.gaussian.scatter](README.assets/dfx.2D.gaussian.scatter.png)
+
+
+
+## List of Functions
+
+Updated: 2023/07/22 11:39
+
+- #### 1 `qhistogram()`
+
+  This function generates a histogram and saves the plot for a given vector and offers several customizations.
+
+- #### 2 `qdensity()`
+
+  Draw and save a density plot.
+
+- #### 3 `qbarplot()`
+
+  Draw and save a barplot.
+
+- #### 4 `qbarplot.df()`
+
+  Draw and save a barplot for tibbles or dataframes
+
+- #### 5 `qpie()`
+
+  Draw and save a pie chart
+
+- #### 6 `qboxplot()`
+
+  Draw and save a boxplot
+
+- #### 7 `qviolin()`
+
+  Draw and save a violin plot
+
+- #### 8 `qstripchart()`
+
+  Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
+
+- #### 9 `qscatter()`
+
+  Draw and save a 2D-scatter plot.
+
+- #### 10 `qvenn()`
+
+  Draw and save a Venn Diagram using the `ggVennDiagram` package.
+
+- #### 11 `qqSave()`
+
+  Quick-Save ggplot objects
+
+- #### 12 `q32vA4_grid_plot()`
+
+  Plot up to 6 panels (3-by-2) on vertically standing A4 page.
+
+- #### 13 `qA4_grid_plot()`
+
+  Plot up to 6 panels (3-by-1) on vertically standing A4 page.
+
+- #### 14 `qMarkdownImageLink()`
+
+  Insert Markdown image link to .md report
+
+- #### 15 `qqqAxisLength()`
+
+  Define Axis Length
+
+- #### 16 `qqqNamed.Vec.2.Tbl()`
+
+  Covert a named vector to a table.
+
+- #### 17 `qqqTbl.2.Vec()`
+
+  Covert a table to a named vector.
 
