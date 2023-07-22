@@ -111,8 +111,9 @@ qhistogram <- function(vec
 
 
 # _________________________________________________________________________________________________
-#' @title Density plot
+#' @title qdensity
 #'
+#' @description Draw and save a density plot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param xlab X-axis label.
@@ -179,8 +180,9 @@ qdensity <- function(vec
 
 
 # _________________________________________________________________________________________________
-#' @title Barplot
+#' @title qbarplot
 #'
+#' @description Draw and save a barplot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
@@ -275,8 +277,9 @@ qbarplot <- function(vec
 }
 
 
-#' @title Barplot for tibbles or dataframes
+#' @title qbarplot.df - Barplot for tibbles or dataframes
 #'
+#' @description Draw and save a barplot for tibbles or dataframes
 #' @param df The variable to plot.
 #' @param x Colname to split along X axis. Def colnames(df)[1]
 #' @param y Colname to count along y axis. Def colnames(df)[3]
@@ -366,8 +369,9 @@ qbarplot.df <- function(df
 
 
 # _________________________________________________________________________________________________
-#' @title Pie chart
+#' @title qpie
 #'
+#' @description Draw and save a pie chart
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
@@ -487,8 +491,9 @@ qpie <- function(vec = MyVec
 }
 
 # _________________________________________________________________________________________________
-#' @title Boxplot
+#' @title qboxplot
 #'
+#' @description Draw and save a boxplot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -574,8 +579,9 @@ qboxplot <- function(df_XYcol_or_list
 
 
 # _________________________________________________________________________________________________
-#' @title qviolin plot
+#' @title qviolin
 #'
+#' @description Draw and save a violin plot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param title The name of the file and title of the plot.
@@ -666,8 +672,9 @@ qviolin <- function(df_XYcol_or_list
 
 
 # _________________________________________________________________________________________________
-#' @title qstripchart plot
+#' @title qstripchart
 #'
+#' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param suffix A suffix added to the filename. NULL by default.
@@ -759,8 +766,9 @@ qstripchart <- function(df_XYcol_or_list
 
 
 # _________________________________________________________________________________________________
-#' @title Scatter plot
+#' @title qscatter
 #'
+#' @description Draw and save a 2D-scatter plot.
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The name of the file and title of the plot.
@@ -852,9 +860,9 @@ qscatter <- function(df_XYcol
 
 
 # _________________________________________________________________________________________________
-#' @title Venn Diagram
+#' @title qvenn - Venn Diagram
 #'
-#' @description Draw Venn Diagram using the  ggVennDiagram package.
+#' @description Draw and save a Venn Diagram using the `ggVennDiagram` package.
 #' @param list The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
@@ -916,8 +924,9 @@ qvenn <- function(list
 # ____________________________________________________________________
 
 # _________________________________________________________________________________________________
-#' @title Quick-Save ggplot objects
+#' @title qqSave
 #'
+#' @description Quick-Save ggplot objects
 #' @param ggobj Plot as ggplot object.
 #' @param w width of the plot.
 #' @param h height of the plot.
@@ -1050,8 +1059,9 @@ qA4_grid_plot <- function(plot_list
 
 
 # _________________________________________________________________________________________________
-#' @title Insert Markdown image link to .md report
+#' @title qMarkdownImageLink
 #'
+#' @description Insert Markdown image link to .md report
 #' @param file_name file_name
 #' @export
 #'
@@ -1066,8 +1076,9 @@ qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
 
 
 # _________________________________________________________________________________________________
-#' @title Define Axis Length
+#' @title qqqAxisLength
 #'
+#' @description Define Axis Length
 #' @param vec The variable to plot.
 #' @param minLength minLength
 #' @export
@@ -1081,6 +1092,7 @@ qqqAxisLength <- function(vec = 1:20, minLength=6, factor = 0.4) {
 
 # _________________________________________________________________________________________________
 #' @title qqqNamed.Vec.2.Tbl
+#'
 #' @description Covert a named vector to a table.
 #' @param namedVec namedVec
 #' @param verbose verbose
@@ -1135,8 +1147,9 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 # _________________________________________________________________________________________________
 
 # _________________________________________________________________________________________________
-#' Convert a list to a tow-column data frame to plot boxplots and violin plots
+#' @title qqqList.2.DF.ggplot
 #'
+#' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
 #' @export
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qqqList.2.DF.ggplot(LetterSets)
