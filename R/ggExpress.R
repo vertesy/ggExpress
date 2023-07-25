@@ -53,7 +53,7 @@ qhistogram <- function(vec
                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
-                       , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                       , plotname = FixPlotName((substitute(vec), suffix))
                        , filename = FALSE
                        , logX = FALSE, logY = FALSE
                        , annotation_logticks_X = logX, annotation_logticks_Y = logY
@@ -98,7 +98,7 @@ qhistogram <- function(vec
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext))
   }
   file_name <- FixPlotName(file_name)
 
@@ -142,7 +142,7 @@ qdensity <- function(vec
                      , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                      , xlab = FALSE, plot = TRUE
                      , suffix = NULL
-                     , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                     , plotname = FixPlotName((substitute(vec), suffix))
                      , filename = FALSE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , logX = FALSE, logY = FALSE
@@ -170,7 +170,7 @@ qdensity <- function(vec
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!isFALSE(filename)) { filename } else {
-    kpp(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext))
     }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -219,7 +219,7 @@ qbarplot <- function(vec
                      , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                      , plot = TRUE
                      , suffix = NULL
-                     , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                     , plotname = FixPlotName((substitute(vec), suffix))
                      , filename = FALSE
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , hline = FALSE, filtercol = 1
@@ -269,7 +269,7 @@ qbarplot <- function(vec
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "bar", flag.nameiftrue(logY), ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -324,7 +324,7 @@ qbarplot.df <- function(df
                         , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                         , plot = TRUE
                         , suffix = NULL
-                        , plotname = FixPlotName(kpp(substitute(df), suffix))
+                        , plotname = FixPlotName((substitute(df), suffix))
                         , filename = FALSE
                         , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                         , hline = FALSE, filtercol = 1
@@ -360,7 +360,7 @@ qbarplot.df <- function(df
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "bar", flag.nameiftrue(logY), ext))
     }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -407,7 +407,7 @@ qpie <- function(vec = MyVec
                  , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
-                 , plotname = FixPlotName(kpp(substitute(vec), suffix))
+                 , plotname = FixPlotName((substitute(vec), suffix))
                  , filename = FALSE
                  , LegendSide = TRUE
                  , LegendTitle = FixPlotName(substitute(vec)), NoLegend = FALSE
@@ -482,7 +482,7 @@ qpie <- function(vec = MyVec
 
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
   file_name <- if (!isFALSE(filename)) filename else {
-     kpp(plotname, suffix, "pie",  ext)
+    FixPlotName((plotname, suffix, "pie",  ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -527,7 +527,7 @@ qpie <- function(vec = MyVec
 
 qboxplot <- function(df_XYcol_or_list
                      , suffix = NULL
-                     , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
+                     , plotname = FixPlotName((substitute(df_XYcol_or_list), suffix))
                      , filename = FALSE
                      , outlier.shape = NULL
                      , stat.test = TRUE
@@ -570,7 +570,7 @@ qboxplot <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "boxplot", flag.nameiftrue(logY), ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -615,7 +615,7 @@ qboxplot <- function(df_XYcol_or_list
 
 qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
-                    , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
+                    , plotname = FixPlotName((substitute(df_XYcol_or_list), suffix))
                     , filename = FALSE
                     , stat.test = TRUE
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
@@ -662,7 +662,7 @@ qviolin <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "violinplot", flag.nameiftrue(logY), ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -710,7 +710,7 @@ qviolin <- function(df_XYcol_or_list
 qstripchart <- function(df_XYcol_or_list
                         , add = c("violin", "mean_sd")
                         , suffix = NULL
-                        , plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix))
+                        , plotname = FixPlotName((substitute(df_XYcol_or_list), suffix))
                         , filename = FALSE
                         # , outlier.shape = NULL
                         , size.point = .2
@@ -755,7 +755,7 @@ qstripchart <- function(df_XYcol_or_list
 
   fix <- sppp("stripchart", sppp(add))
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -802,7 +802,7 @@ qstripchart <- function(df_XYcol_or_list
 
 qscatter <- function(df_XYcol
                     , suffix = NULL
-                    , plotname = FixPlotName(kpp(substitute(df_XYcol), suffix))
+                    , plotname = FixPlotName((substitute(df_XYcol), suffix))
                     , filename = FALSE
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -849,7 +849,7 @@ qscatter <- function(df_XYcol
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName((plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext))
   }
   if (plot) p
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -887,7 +887,7 @@ qvenn <- function(list
                   , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
-                  , plotname = FixPlotName(kpp(substitute(list), suffix))
+                  , plotname = FixPlotName((substitute(list), suffix))
                   , filename = FALSE
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -907,7 +907,7 @@ qvenn <- function(list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
-    kpp(plotname, suffix, "venn", ext)
+    sppp((plotname, suffix, "venn", ext))
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -994,7 +994,7 @@ qqSave <- function(ggobj, w =4, h = w
 
 q32vA4_grid_plot <- function(plot_list
                              , suffix = NULL
-                             , plotname = FixPlotName(kpp(substitute(plot_list), suffix))
+                             , plotname = FixPlotName((substitute(plot_list), suffix))
                              , plot =F
                              , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
                              , h = hA4 * scale, w = wA4 * scale, scale = 1
@@ -1036,7 +1036,7 @@ q32vA4_grid_plot <- function(plot_list
 qA4_grid_plot <- function(plot_list
                           , suffix = NULL
                           , nrow = 3, ncol = 2
-                          , plotname = FixPlotName(kpp(substitute(plot_list), nrow, 'by', ncol, suffix))
+                          , plotname = FixPlotName((substitute(plot_list), nrow, 'by', ncol, suffix))
                           , plot = FALSE
                           , extension = c('pdf', 'png')[2]
                           , h = hA4 * scale, w = wA4 * scale
