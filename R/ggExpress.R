@@ -636,7 +636,7 @@ qviolin <- function(df_XYcol_or_list
 
   stopifnot(is.numeric(xlab.angle))
 
-  # plotname <- if (isFALSE(title)) kpp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
+  # plotname <- if (isFALSE(title)) sppp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
@@ -950,8 +950,8 @@ qqSave <- function(ggobj, w =4, h = w
                    , suffix = NULL, ...) {
 
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) kpp(title, suffix, 'pdf') else kpp(fname, 'pdf')
-  if (isFALSE(fname)) fname <- kpp(title, suffix, ext)
+  if (also.pdf) fname2 <- if (isFALSE(fname)) sppp(title, suffix, 'pdf') else sppp(fname, 'pdf')
+  if (isFALSE(fname)) fname <- sppp(title, suffix, ext)
 
   if (!isFALSE(page)) {
     wA4 <- 8.27
@@ -1003,7 +1003,7 @@ q32vA4_grid_plot <- function(plot_list
   stopifnot(length(plot_list)<7)
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname = kpp(plotname, extension)
+  fname = sppp(plotname, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...  )
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
@@ -1048,7 +1048,7 @@ qA4_grid_plot <- function(plot_list
   stopifnot(length(plot_list) < max.list.length)
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname = kpp(plotname, suffix, extension)
+  fname = sppp(plotname, suffix, extension)
   p1 = cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...  ) +
     theme(plot.background=element_rect(fill="white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
@@ -1179,7 +1179,7 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #
 # qqqParsePlotname <- function(string = "sadsad", suffix_tag= NULL) { # parse plot name from variable name and suffix
 #   nm <- make.names(as.character(substitute(string)))
-#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- kpp(nm, suffix_tag)
+#   if (!is.null(suffix_tag) & !isFALSE(suffix_tag)) nm <- sppp(nm, suffix_tag)
 #   return(nm)
 # }
 
