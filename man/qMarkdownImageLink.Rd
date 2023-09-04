@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qMarkdownImageLink}
 \alias{qMarkdownImageLink}
-\title{Insert Markdown image link to .md report}
+\title{qMarkdownImageLink}
 \usage{
 qMarkdownImageLink(file_name = "myplot.pdf")
 }

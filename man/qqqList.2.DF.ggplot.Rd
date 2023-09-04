@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qqqList.2.DF.ggplot}
 \alias{qqqList.2.DF.ggplot}
-\title{Convert a list to a tow-column data frame to plot boxplots and violin plots}
+\title{qqqList.2.DF.ggplot}
 \usage{
 qqqList.2.DF.ggplot(ls = LetterSets)
 }

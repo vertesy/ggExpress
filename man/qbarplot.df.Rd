@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qbarplot.df}
 \alias{qbarplot.df}
-\title{Barplot for tibbles or dataframes}
+\title{qbarplot.df - Barplot for tibbles or dataframes}
 \usage{
 qbarplot.df(
   df,
@@ -14,7 +14,7 @@ qbarplot.df(
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   plot = TRUE,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(df), suffix)),
+  plotname = FixPlotName(substitute(df), suffix),
   filename = FALSE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -94,7 +94,7 @@ qbarplot.df(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Barplot for tibbles or dataframes
+Draw and save a barplot for tibbles or dataframes
 }
 \examples{
 my_tibble <- tibble(Column_1 = c("A", "A", "A", "B", "C", "C"),

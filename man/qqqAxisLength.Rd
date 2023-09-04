@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qqqAxisLength}
 \alias{qqqAxisLength}
-\title{Define Axis Length}
+\title{qqqAxisLength}
 \usage{
 qqqAxisLength(vec = 1:20, minLength = 6, factor = 0.4)
 }

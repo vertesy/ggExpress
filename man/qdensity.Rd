@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qdensity}
 \alias{qdensity}
-\title{Density plot}
+\title{qdensity}
 \usage{
 qdensity(
   vec,
@@ -10,7 +10,7 @@ qdensity(
   xlab = FALSE,
   plot = TRUE,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  plotname = FixPlotName(substitute(vec), suffix),
   filename = FALSE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -67,7 +67,7 @@ qdensity(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Density plot
+Draw and save a density plot.
 }
 \examples{
 weight <- rnorm(1000); qdensity(weight)

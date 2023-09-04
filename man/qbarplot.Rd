@@ -2,14 +2,14 @@
 % Please edit documentation in R/ggExpress.R
 \name{qbarplot}
 \alias{qbarplot}
-\title{Barplot}
+\title{qbarplot}
 \usage{
 qbarplot(
   vec,
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
   plot = TRUE,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  plotname = FixPlotName(substitute(vec), suffix),
   filename = FALSE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -85,7 +85,7 @@ qbarplot(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Barplot
+Draw and save a barplot.
 }
 \examples{
 weight3 <- runif (12);

@@ -2,13 +2,13 @@
 % Please edit documentation in R/ggExpress.R
 \name{qstripchart}
 \alias{qstripchart}
-\title{qstripchart plot}
+\title{qstripchart}
 \usage{
 qstripchart(
   df_XYcol_or_list,
   add = c("violin", "mean_sd"),
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
+  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
   filename = FALSE,
   size.point = 0.2,
   stat.test = TRUE,
@@ -88,7 +88,7 @@ qstripchart(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-qstripchart plot
+Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 }
 \examples{
 data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qstripchart(ToothLen.by.Dose)

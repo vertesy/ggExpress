@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qqSave}
 \alias{qqSave}
-\title{Quick-Save ggplot objects}
+\title{qqSave}
 \usage{
 qqSave(
   ggobj,

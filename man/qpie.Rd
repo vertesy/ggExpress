@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qpie}
 \alias{qpie}
-\title{Pie chart}
+\title{qpie}
 \usage{
 qpie(
   vec = MyVec,
@@ -11,7 +11,7 @@ qpie(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  plotname = FixPlotName(substitute(vec), suffix),
   filename = FALSE,
   LegendSide = TRUE,
   LegendTitle = FixPlotName(substitute(vec)),
@@ -85,7 +85,7 @@ qpie(
 \item{label}{Slice labels. Set to NULL to remove slice names.}
 }
 \description{
-Pie chart
+Draw and save a pie chart
 }
 \examples{
 xvec <- c("A"=12, "B"=29); qpie(vec = xvec)

@@ -2,12 +2,12 @@
 % Please edit documentation in R/ggExpress.R
 \name{qviolin}
 \alias{qviolin}
-\title{qviolin plot}
+\title{qviolin}
 \usage{
 qviolin(
   df_XYcol_or_list,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
+  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
   filename = FALSE,
   stat.test = TRUE,
   stat.method = NULL,
@@ -84,7 +84,7 @@ qviolin(
 \item{title}{The name of the file and title of the plot.}
 }
 \description{
-qviolin plot
+Draw and save a violin plot
 }
 \examples{
 data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qviolin(ToothLen.by.Dose)

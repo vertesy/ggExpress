@@ -2,12 +2,12 @@
 % Please edit documentation in R/ggExpress.R
 \name{qscatter}
 \alias{qscatter}
-\title{Scatter plot}
+\title{qscatter}
 \usage{
 qscatter(
   df_XYcol,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(df_XYcol), suffix)),
+  plotname = FixPlotName(substitute(df_XYcol), suffix),
   filename = FALSE,
   col = c(NULL, 3)[1],
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
@@ -88,7 +88,7 @@ qscatter(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Scatter plot
+Draw and save a 2D-scatter plot.
 }
 \examples{
 dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")

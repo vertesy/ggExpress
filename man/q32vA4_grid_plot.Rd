@@ -7,7 +7,7 @@
 q32vA4_grid_plot(
   plot_list,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(plot_list), suffix)),
+  plotname = FixPlotName(substitute(plot_list), suffix),
   plot = F,
   nrow = 3,
   ncol = 2,

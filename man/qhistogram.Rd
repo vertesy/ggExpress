@@ -12,7 +12,7 @@ qhistogram(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(vec), suffix)),
+  plotname = FixPlotName(substitute(vec), suffix),
   filename = FALSE,
   logX = FALSE,
   logY = FALSE,

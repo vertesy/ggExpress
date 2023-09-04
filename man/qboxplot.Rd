@@ -2,12 +2,12 @@
 % Please edit documentation in R/ggExpress.R
 \name{qboxplot}
 \alias{qboxplot}
-\title{Boxplot}
+\title{qboxplot}
 \usage{
 qboxplot(
   df_XYcol_or_list,
   suffix = NULL,
-  plotname = FixPlotName(kpp(substitute(df_XYcol_or_list), suffix)),
+  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
   filename = FALSE,
   outlier.shape = NULL,
   stat.test = TRUE,
@@ -85,7 +85,7 @@ qboxplot(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Boxplot
+Draw and save a boxplot
 }
 \examples{
 data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qboxplot(ToothLen.by.Dose)
