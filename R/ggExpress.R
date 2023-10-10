@@ -932,6 +932,7 @@ qvenn <- function(list
 #' @param h height of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf also.pdf
+#' @param bgcol Plot background color
 #' @param page page
 #' @param title title field for pdf file (saved into file metadata)
 #' @param fname fname
@@ -945,6 +946,7 @@ qvenn <- function(list
 qqSave <- function(ggobj, w =4, h = w
                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                    , also.pdf = FALSE
+                   , bgcol = 'white'
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = FALSE, fname = FALSE
                    , suffix = NULL, ...) {
@@ -962,6 +964,9 @@ qqSave <- function(ggobj, w =4, h = w
     if ( page == "A5l" ) { w = hA4/2; h = wA4/2 }
   }
   print(paste0(getwd(),"/", fname))
+
+  # Set the plot background to white
+  ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
 
   if (also.pdf) {
     cowplot::save_plot(plot = ggobj, filename = fname2, base_width = w, base_height = h
