@@ -834,8 +834,8 @@ qscatter <- function(df_XYcol
 
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline) # sum is needed to deal with multiple lines (multiple values in if statement).
+  if (sum(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
   if (add_contour_plot) p <- p + geom_density_2d()
   if (correlation_r2 %in% c("pearson", "spearman") ) p <- p + stat_cor(method = correlation_r2)
