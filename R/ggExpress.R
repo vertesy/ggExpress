@@ -51,8 +51,8 @@
 #'
 #' @export
 qhistogram <- function(vec
-                       , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                        , also.pdf = FALSE
+                       , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(substitute(vec), suffix)
@@ -142,8 +142,8 @@ qhistogram <- function(vec
 #' @examples weight <- rnorm(1000); qdensity(weight)
 
 qdensity <- function(vec
-                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                      , also.pdf = FALSE
+                     , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                      , xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(substitute(vec), suffix)
@@ -221,8 +221,8 @@ qdensity <- function(vec
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 
 qbarplot <- function(vec
-                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                      , also.pdf = FALSE
+                     , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                      , plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(substitute(vec), suffix)
@@ -328,8 +328,8 @@ qbarplot.df <- function(df
                         , fill = colnames(df)[3]
                         , label = NULL
                         , color = 1
-                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                         , also.pdf = FALSE
+                        , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                         , plot = TRUE
                         , suffix = NULL
                         , plotname = FixPlotName(substitute(df), suffix)
@@ -413,8 +413,8 @@ qbarplot.df <- function(df
 
 
 qpie <- function(vec = MyVec
-                 , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                  , also.pdf = FALSE
+                 , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(substitute(vec), suffix)
@@ -546,8 +546,8 @@ qboxplot <- function(df_XYcol_or_list
                      # , fill = c(NULL , 3)[1]
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , hide.legend = FALSE
-                     , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                      , also.pdf = TRUE
+                     , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                      , logY = FALSE #, logX = FALSE
                      , annotation_logticks_Y = logY
                      , xlab.angle = 90
@@ -631,8 +631,8 @@ qviolin <- function(df_XYcol_or_list
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
-                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                     , also.pdf = FALSE
+                    , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                     , logY = FALSE #, logX = FALSE
                     , annotation_logticks_Y = logY
                     , xlab.angle = 45
@@ -730,8 +730,8 @@ qstripchart <- function(df_XYcol_or_list
                         # , fill = c(NULL , 3)[1]
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                         , hide.legend = FALSE
-                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                         , also.pdf = TRUE
+                        , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                         , logY = FALSE #, logX = FALSE
                         , annotation_logticks_Y = logY
                         , xlab.angle = 90
@@ -817,8 +817,8 @@ qscatter <- function(df_XYcol
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
-                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                     , also.pdf = TRUE
+                    , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                     , logX = FALSE, logY = FALSE
                     , annotation_logticks_Y = logY
                     , annotation_logticks_X = logX
@@ -895,8 +895,8 @@ qscatter <- function(df_XYcol
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
 
 qvenn <- function(list
-                  , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
                   , also.pdf = FALSE
+                  , ext = MarkdownHelpers::ww.set.file.extension(def = 'png')
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(substitute(list), suffix)
