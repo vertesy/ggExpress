@@ -17,6 +17,7 @@
 #' @description This function generates a histogram and saves the plot for a given vector and offers several customizations.
 #' @param vec A numeric vector for which the histogram is to be plotted.
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param xlab Label for the X-axis. By default, it uses the plot name.
 #' @param plot Logical indicating whether to display the plot. Default is TRUE.
 #' @param add Character defining the type of plot annotations to add. Default is 'median'.
@@ -51,6 +52,7 @@
 #' @export
 qhistogram <- function(vec
                        , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                       , also.pdf = FALSE
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(substitute(vec), suffix)
@@ -102,7 +104,7 @@ qhistogram <- function(vec
   }
   file_name <- FixPlotName(file_name)
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -116,6 +118,7 @@ qhistogram <- function(vec
 #' @description Draw and save a density plot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
@@ -140,6 +143,7 @@ qhistogram <- function(vec
 
 qdensity <- function(vec
                      , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                     , also.pdf = FALSE
                      , xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(substitute(vec), suffix)
@@ -172,7 +176,7 @@ qdensity <- function(vec
   file_name <- if (!isFALSE(filename)) { filename } else {
     FixPlotName(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
     }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -185,6 +189,7 @@ qdensity <- function(vec
 #' @description Draw and save a barplot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -217,6 +222,7 @@ qdensity <- function(vec
 
 qbarplot <- function(vec
                      , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                     , also.pdf = FALSE
                      , plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(substitute(vec), suffix)
@@ -271,7 +277,7 @@ qbarplot <- function(vec
   file_name <- if (!isFALSE(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -286,6 +292,7 @@ qbarplot <- function(vec
 #' @param fill Color (split) by along Y.
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
 #' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -322,6 +329,7 @@ qbarplot.df <- function(df
                         , label = NULL
                         , color = 1
                         , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                        , also.pdf = FALSE
                         , plot = TRUE
                         , suffix = NULL
                         , plotname = FixPlotName(substitute(df), suffix)
@@ -362,7 +370,7 @@ qbarplot.df <- function(df
   file_name <- if (!isFALSE(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
     }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -374,6 +382,7 @@ qbarplot.df <- function(df
 #' @description Draw and save a pie chart
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -405,6 +414,7 @@ qbarplot.df <- function(df
 
 qpie <- function(vec = MyVec
                  , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                 , also.pdf = FALSE
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(substitute(vec), suffix)
@@ -484,7 +494,7 @@ qpie <- function(vec = MyVec
   file_name <- if (!isFALSE(filename)) filename else {
     FixPlotName(plotname, suffix, "pie",  ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
 
   if (plot) p
@@ -499,7 +509,7 @@ qpie <- function(vec = MyVec
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -588,7 +598,7 @@ qboxplot <- function(df_XYcol_or_list
 #' @param plotname Name of the plot
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -682,7 +692,7 @@ qviolin <- function(df_XYcol_or_list
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param plot Display the plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -775,7 +785,7 @@ qstripchart <- function(df_XYcol_or_list
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
@@ -865,6 +875,7 @@ qscatter <- function(df_XYcol
 #' @description Draw and save a Venn Diagram using the `ggVennDiagram` package.
 #' @param list The variable to plot.
 #' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -885,6 +896,7 @@ qscatter <- function(df_XYcol
 
 qvenn <- function(list
                   , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'pdf')
+                  , also.pdf = FALSE
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(substitute(list), suffix)
@@ -909,7 +921,7 @@ qvenn <- function(list
   file_name <- if (!isFALSE(filename)) filename else {
     sppp(plotname, suffix, "venn", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -931,7 +943,7 @@ qvenn <- function(list
 #' @param w width of the plot.
 #' @param h height of the plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf also.pdf
+#' @param also.pdf Save plot in both png and pdf formats
 #' @param bgcol Plot background color
 #' @param page page
 #' @param title title field for pdf file (saved into file metadata)
