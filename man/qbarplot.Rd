@@ -6,7 +6,8 @@
 \usage{
 qbarplot(
   vec,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
+  also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
   plot = TRUE,
   suffix = NULL,
   plotname = FixPlotName(substitute(vec), suffix),
@@ -35,6 +36,8 @@ qbarplot(
 }
 \arguments{
 \item{vec}{The variable to plot.}
+
+\item{also.pdf}{Save plot in both png and pdf formats}
 
 \item{ext}{File extension (.pdf / .png).}
 

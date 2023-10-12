@@ -11,7 +11,8 @@ qbarplot.df(
   fill = colnames(df)[3],
   label = NULL,
   color = 1,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
+  also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
   plot = TRUE,
   suffix = NULL,
   plotname = FixPlotName(substitute(df), suffix),
@@ -48,6 +49,8 @@ qbarplot.df(
 \item{label}{label}
 
 \item{color}{Color (split) by along Y.}
+
+\item{also.pdf}{Save plot in both png and pdf formats}
 
 \item{ext}{File extension (.pdf / .png).}
 

@@ -16,8 +16,8 @@ qviolin(
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   hide.legend = FALSE,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 45,
@@ -53,9 +53,9 @@ qviolin(
 
 \item{hide.legend}{hide legend}
 
-\item{ext}{File extension (.pdf / .png).}
+\item{also.pdf}{Save plot in both png and pdf formats}
 
-\item{also.pdf}{also.pdf}
+\item{ext}{File extension (.pdf / .png).}
 
 \item{logY}{Make Y axis log10-scale.}
 

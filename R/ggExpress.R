@@ -10,7 +10,6 @@
 # ____________________________________________________________________
 
 
-
 # _________________________________________________________________________________________________
 #' @title Quick Histogram Plotting
 #'
@@ -1086,7 +1085,7 @@ qA4_grid_plot <- function(plot_list
 #' @importFrom MarkdownHelpers llogit
 
 qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
-  llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
+  MarkdownHelpers::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
 }
 
 

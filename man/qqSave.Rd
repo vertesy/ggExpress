@@ -10,6 +10,7 @@ qqSave(
   h = w,
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
+  bgcol = "white",
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
   fname = FALSE,
@@ -26,7 +27,9 @@ qqSave(
 
 \item{ext}{File extension (.pdf / .png).}
 
-\item{also.pdf}{also.pdf}
+\item{also.pdf}{Save plot in both png and pdf formats}
+
+\item{bgcol}{Plot background color}
 
 \item{page}{page}
 

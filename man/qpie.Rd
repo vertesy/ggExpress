@@ -6,7 +6,8 @@
 \usage{
 qpie(
   vec = MyVec,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
+  also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -35,6 +36,8 @@ qpie(
 }
 \arguments{
 \item{vec}{The variable to plot.}
+
+\item{also.pdf}{Save plot in both png and pdf formats}
 
 \item{ext}{File extension (.pdf / .png).}
 

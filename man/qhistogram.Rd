@@ -6,7 +6,8 @@
 \usage{
 qhistogram(
   vec,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "pdf"),
+  also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
   xlab = FALSE,
   plot = TRUE,
   save = TRUE,
@@ -35,6 +36,8 @@ qhistogram(
 }
 \arguments{
 \item{vec}{A numeric vector for which the histogram is to be plotted.}
+
+\item{also.pdf}{Save plot in both png and pdf formats}
 
 \item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.}
 
