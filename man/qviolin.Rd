@@ -17,7 +17,7 @@ qviolin(
     "uchicago")[4],
   hide.legend = FALSE,
   also.pdf = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 45,

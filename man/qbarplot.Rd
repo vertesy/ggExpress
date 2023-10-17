@@ -7,7 +7,7 @@
 qbarplot(
   vec,
   also.pdf = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
+  ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
   plot = TRUE,
   suffix = NULL,
   plotname = FixPlotName(substitute(vec), suffix),

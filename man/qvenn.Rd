@@ -7,7 +7,7 @@
 qvenn(
   list,
   also.pdf = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),

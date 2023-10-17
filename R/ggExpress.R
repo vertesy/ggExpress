@@ -51,7 +51,7 @@
 #' @export
 qhistogram <- function(vec
                        , also.pdf = FALSE
-                       , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                       , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
                        , plotname = FixPlotName(substitute(vec), suffix)
@@ -142,7 +142,7 @@ qhistogram <- function(vec
 
 qdensity <- function(vec
                      , also.pdf = FALSE
-                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                      , xlab = FALSE, plot = TRUE
                      , suffix = NULL
                      , plotname = FixPlotName(substitute(vec), suffix)
@@ -413,7 +413,7 @@ qbarplot.df <- function(df
 
 qpie <- function(vec = MyVec
                  , also.pdf = FALSE
-                 , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                 , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
                  , plotname = FixPlotName(substitute(vec), suffix)
@@ -546,7 +546,7 @@ qboxplot <- function(df_XYcol_or_list
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                      , hide.legend = FALSE
                      , also.pdf = TRUE
-                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                      , logY = FALSE #, logX = FALSE
                      , annotation_logticks_Y = logY
                      , xlab.angle = 90
@@ -631,7 +631,7 @@ qviolin <- function(df_XYcol_or_list
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
                     , also.pdf = FALSE
-                    , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                    , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                     , logY = FALSE #, logX = FALSE
                     , annotation_logticks_Y = logY
                     , xlab.angle = 45
@@ -725,12 +725,12 @@ qstripchart <- function(df_XYcol_or_list
                         , size.point = .2
                         , stat.test = TRUE
                         # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-                        , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75
+                        , stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75
                         # , fill = c(NULL , 3)[1]
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                         , hide.legend = FALSE
                         , also.pdf = TRUE
-                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
                         , logY = FALSE #, logX = FALSE
                         , annotation_logticks_Y = logY
                         , xlab.angle = 90
@@ -817,7 +817,7 @@ qscatter <- function(df_XYcol
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
                     , also.pdf = TRUE
-                    , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                    , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                     , logX = FALSE, logY = FALSE
                     , annotation_logticks_Y = logY
                     , annotation_logticks_X = logX
@@ -895,7 +895,7 @@ qscatter <- function(df_XYcol
 
 qvenn <- function(list
                   , also.pdf = FALSE
-                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png')
+                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
                   , plotname = FixPlotName(substitute(list), suffix)

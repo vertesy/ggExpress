@@ -7,7 +7,7 @@
 qdensity(
   vec,
   also.pdf = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(def = "png"),
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   xlab = FALSE,
   plot = TRUE,
   suffix = NULL,
