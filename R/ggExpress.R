@@ -70,7 +70,7 @@ qhistogram <- function(vec
   if (isFALSE(xlab)) xlab = plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
-  df[["colour"]] <- if (vline & filtercol != 0) {
+  df[["colour"]] <- if (!isFALSE(vline) & filtercol != 0) {
     if (filtercol == 1 ) (df$"value" > vline) else if (filtercol == -1 ) (df$"value" < vline)
   } else if (length(col) == length(vec)) {
     as.character(col)
@@ -95,7 +95,7 @@ qhistogram <- function(vec
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   file_name <- if (!isFALSE(filename)) filename else {
@@ -513,7 +513,6 @@ qpie <- function(vec = MyVec
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param outlier.shape outlier shape. NA to hide.
-#' @param vline Draw a vertical line on the plot.
 #' @param stat.test Do a statistical test?
 #' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc stat label y position
@@ -570,7 +569,7 @@ qboxplot <- function(df_XYcol_or_list
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
@@ -662,7 +661,7 @@ qviolin <- function(df_XYcol_or_list
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
@@ -754,7 +753,7 @@ qstripchart <- function(df_XYcol_or_list
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (vline) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
