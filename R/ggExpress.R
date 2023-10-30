@@ -54,7 +54,7 @@ qhistogram <- function(vec
                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                        , suffix = NULL
-                       , plotname = FixPlotName(substitute(vec), suffix)
+                       , plotname = FixPlotName(substitute(vec))
                        , filename = FALSE
                        , logX = FALSE, logY = FALSE
                        , annotation_logticks_X = logX, annotation_logticks_Y = logY
@@ -416,10 +416,11 @@ qpie <- function(vec = MyVec
                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                  , suffix = NULL
-                 , plotname = FixPlotName(substitute(vec), suffix)
+                 , plotname = FixPlotName(substitute(vec))
                  , filename = FALSE
                  , LegendSide = TRUE
-                 , LegendTitle = FixPlotName(substitute(vec)), NoLegend = FALSE
+                 , LegendTitle = plotname
+                 , NoLegend = FALSE
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
                  , extended.canvas = TRUE
@@ -897,7 +898,7 @@ qvenn <- function(list
                   , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , suffix = NULL
-                  , plotname = FixPlotName(substitute(list), suffix)
+                  , plotname = FixPlotName(substitute(list))
                   , filename = FALSE
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
