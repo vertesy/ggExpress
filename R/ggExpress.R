@@ -811,7 +811,7 @@ qstripchart <- function(df_XYcol_or_list
 
 qscatter <- function(df_XYcol
                     , suffix = NULL
-                    , plotname = FixPlotName(substitute(df_XYcol), suffix)
+                    , plotname = FixPlotName(substitute(df_XYcol))
                     , filename = FALSE
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -837,7 +837,7 @@ qscatter <- function(df_XYcol
   p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2]
                          , palette = palette_use
                          , color = col
-                         , title = plotname, ...) +
+                         , title = FixPlotName(plotname, suffix), ...) +
     ggpubr::grids(axis = 'xy') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
