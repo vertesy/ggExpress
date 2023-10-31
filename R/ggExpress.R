@@ -626,7 +626,7 @@ qviolin <- function(df_XYcol_or_list
                     , suffix = NULL
                     , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
                     , filename = FALSE
-                    , stat.test = TRUE
+                    , stat.test = FALSE
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
