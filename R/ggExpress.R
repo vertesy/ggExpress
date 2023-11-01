@@ -22,8 +22,10 @@
 #' @param add Character defining the type of plot annotations to add. Default is 'median'.
 #' @param save Logical indicating whether to save the plot into a file. Default is TRUE.
 #' @param mdlink Logical indicating whether to insert .pdf and .png image links in the markdown report, set by "path_of_report". Default is FALSE.
-#' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param plotname Title of the plot and the name of the file (unless specified in `filename`). Default is parsed from `vec`.
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Optional filename for the saved plot. Default is parsed from `plotname`.
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
@@ -123,8 +125,10 @@ qhistogram <- function(vec
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -134,8 +138,8 @@ qhistogram <- function(vec
 #' @param hide.legend hide legend
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
@@ -197,8 +201,10 @@ qdensity <- function(vec
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -213,8 +219,8 @@ qdensity <- function(vec
 #' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ylim ylimit values
@@ -305,10 +311,12 @@ qbarplot <- function(vec
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
-#' @param plot Display the plot.
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
@@ -322,8 +330,8 @@ qbarplot <- function(vec
 #' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -342,12 +350,12 @@ qbarplot.df <- function(df
                         , color = 1
                         , also.pdf = FALSE
                         , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
-                        , plot = TRUE
                         , plotname = FixPlotName(substitute(df))
                         , subtitle = NULL
                         , suffix = NULL
                         , caption = suffix
                         , filename = NULL
+                        , plot = TRUE
                         , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                         , hline = FALSE, filtercol = 1
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -402,8 +410,10 @@ qbarplot.df <- function(df
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param LegendSide LegendSide
 #' @param LegendTitle LegendTitle
@@ -418,8 +428,8 @@ qbarplot.df <- function(df
 #' @param custom.order custom.order
 #' @param palette_use GGpubr Color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #' @param label Slice labels. Set to NULL to remove slice names.
 #'
@@ -531,8 +541,9 @@ qpie <- function(vec = MyVec
 #'
 #' @description Draw and save a boxplot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
@@ -550,8 +561,8 @@ qpie <- function(vec = MyVec
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -623,9 +634,10 @@ qboxplot <- function(df_XYcol_or_list
 #'
 #' @description Draw and save a violin plot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param suffix A suffix added to the filename. NULL by default.
-#' @param title The name of the file and title of the plot.
 #' @param plotname Name of the plot
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
@@ -642,8 +654,8 @@ qboxplot <- function(df_XYcol_or_list
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -720,11 +732,13 @@ qviolin <- function(df_XYcol_or_list
 #'
 #' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname Name of the plot
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param plot Display the plot.
+#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param logY Make Y axis log10-scale.
@@ -740,8 +754,8 @@ qviolin <- function(df_XYcol_or_list
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -752,12 +766,13 @@ qviolin <- function(df_XYcol_or_list
 
 
 qstripchart <- function(df_XYcol_or_list
-                        , add = c("violin", "mean_sd")
                         , plotname = FixPlotName(substitute(df_XYcol_or_list))
                         , subtitle = NULL
                         , suffix = NULL
                         , caption = suffix
                         , filename = NULL
+                        , plot = TRUE
+                        , add = c("violin", "mean_sd")
                         # , outlier.shape = NULL
                         , size.point = .2
                         , stat.test = TRUE
@@ -772,9 +787,8 @@ qstripchart <- function(df_XYcol_or_list
                         , annotation_logticks_Y = logY
                         , xlab.angle = 90
                         , hline = FALSE, vline = FALSE
-                        , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
-                        , grid = 'y'
-                        , w = 7, h = w, ...) {
+                        , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
+                        , grid = 'y', w = 7, h = w, ...) {
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
 
   vars <- colnames(df_XYcol)
@@ -818,8 +832,10 @@ qstripchart <- function(df_XYcol_or_list
 #'
 #' @description Draw and save a 2D-scatter plot.
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
-#' @param suffix A suffix added to the filename. NULL by default.
 #' @param plotname The name of the file and title of the plot.
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
@@ -837,8 +853,8 @@ qstripchart <- function(df_XYcol_or_list
 #' @param hide.legend hide legend
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -916,20 +932,21 @@ qscatter <- function(df_XYcol
 #'
 #' @description Draw and save a Venn Diagram using the `ggVennDiagram` package.
 #' @param list The variable to plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param suffix A suffix added to the filename. NULL by default.
-#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
-#' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col.min Color scale minimum, default: white
 #' @param col.max Color scale maximum, default: red
-#' @param w width of the plot.
+#' @param w Width of the plot.
 #' @param hide.legend hide legend
-#' @param h height of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @export
@@ -938,13 +955,13 @@ qscatter <- function(df_XYcol
 
 qvenn <- function(list
                   , also.pdf = FALSE
-                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
-                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   , plotname = FixPlotName(substitute(list))
                   , suffix = NULL
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
                   , caption = suffix
                   , filename = NULL
+                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
+                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                   # , col = as.character(1:3)[1]
                   # , xlab.angle = 90
@@ -985,8 +1002,8 @@ qvenn <- function(list
 #'
 #' @description Quick-Save ggplot objects
 #' @param ggobj Plot as ggplot object.
-#' @param w width of the plot.
-#' @param h height of the plot.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param bgcol Plot background color
@@ -1119,7 +1136,6 @@ qA4_grid_plot <- function(plot_list
 
 
 
-
 # _________________________________________________________________________________________________
 #' @title qMarkdownImageLink
 #'
@@ -1133,7 +1149,6 @@ qA4_grid_plot <- function(plot_list
 qMarkdownImageLink <- function(file_name = 'myplot.pdf') {
   MarkdownHelpers::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ''))
 }
-
 
 
 
