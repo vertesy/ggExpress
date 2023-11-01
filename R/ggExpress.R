@@ -53,9 +53,11 @@ qhistogram <- function(vec
                        , also.pdf = FALSE
                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                        , xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
-                       , suffix = NULL
                        , plotname = FixPlotName(substitute(vec))
-                       , filename = FALSE
+                       , subtitle = NULL
+                       , suffix = NULL
+                       , caption = suffix
+                       , filename = NULL
                        , logX = FALSE, logY = FALSE
                        , annotation_logticks_X = logX, annotation_logticks_Y = logY
                        , vline = FALSE, filtercol = 0
@@ -82,11 +84,13 @@ qhistogram <- function(vec
                            , title = plotname, xlab = xlab
                            , add = add
                            # , color = "names", fill = "names"
+                           , subtitle = subtitle
+                           , caption = caption
                            , color = 'colour', fill = 'colour'
                            , palette = palette_use, ...
   ) +
-  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
-  if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
+    if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
@@ -98,7 +102,7 @@ qhistogram <- function(vec
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   }
   file_name <- FixPlotName(file_name)
@@ -107,7 +111,6 @@ qhistogram <- function(vec
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
-
 
 
 
@@ -144,9 +147,11 @@ qdensity <- function(vec
                      , also.pdf = FALSE
                      , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                      , xlab = FALSE, plot = TRUE
+                     , plotname = FixPlotName(substitute(vec))
+                     , subtitle = NULL
                      , suffix = NULL
-                     , plotname = FixPlotName(substitute(vec), suffix)
-                     , filename = FALSE
+                     , caption = suffix
+                     , filename = NULL
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , logX = FALSE, logY = FALSE
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -162,6 +167,8 @@ qdensity <- function(vec
                          , title = plotname, xlab = xlab
                          , add = "median", rug = TRUE
                          , color = "names", fill = "names"
+                         , subtitle = subtitle
+                         , caption = caption
                          , palette = palette_use, ...
   ) +
   ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
@@ -172,7 +179,7 @@ qdensity <- function(vec
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  file_name <- if (!isFALSE(filename)) { filename } else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
     }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -223,9 +230,11 @@ qbarplot <- function(vec
                      , also.pdf = FALSE
                      , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
                      , plot = TRUE
+                     , plotname = FixPlotName(substitute(vec))
+                     , subtitle = NULL
                      , suffix = NULL
-                     , plotname = FixPlotName(substitute(vec), suffix)
-                     , filename = FALSE
+                     , caption = suffix
+                     , filename = NULL
                      , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                      , hline = FALSE, filtercol = 1
                      , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -259,12 +268,16 @@ qbarplot <- function(vec
 
   p <- ggpubr::ggbarplot(data = df, x = "names", y = "value"
                          , title = plotname, xlab = xlab
+                         , subtitle = subtitle
+                         , caption = caption
                          , color = 'colour', fill = 'colour'
                          , label = label
                          , ylim = ylim
-                         , palette = palette_use, ...
-  ) + ggpubr::grids(axis = 'y') +
-  ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+                         , palette = palette_use
+                         , ...) +
+    ggpubr::grids(axis = 'y') +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = 'none')
@@ -273,7 +286,7 @@ qbarplot <- function(vec
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
@@ -330,9 +343,11 @@ qbarplot.df <- function(df
                         , also.pdf = FALSE
                         , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
                         , plot = TRUE
+                        , plotname = FixPlotName(substitute(df))
+                        , subtitle = NULL
                         , suffix = NULL
-                        , plotname = FixPlotName(substitute(df), suffix)
-                        , filename = FALSE
+                        , caption = suffix
+                        , filename = NULL
                         , save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
                         , hline = FALSE, filtercol = 1
                         , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -346,18 +361,20 @@ qbarplot.df <- function(df
                         , grid = 'y'
                         , w = qqqAxisLength(df), h = 5, ...) {
 
-
   if (isFALSE(xlab)) xlab = plotname
-
 
   p <- ggpubr::ggbarplot(data = df, x = x, y = y
                          , color = color
                          , fill = fill
                          , title = plotname, xlab = xlab
+                         , subtitle = subtitle
+                         , caption = caption
                          , label = label
-                         , palette = palette_use, ...
-  ) + ggpubr::grids(axis = 'y') +
+                         , palette = palette_use
+                         , ...) +
+    ggpubr::grids(axis = 'y') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
 
   if (length(df) > max.names) p <- p + ggplot2::guides(x = 'none')
@@ -366,7 +383,7 @@ qbarplot.df <- function(df
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
     }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
@@ -415,14 +432,14 @@ qpie <- function(vec = MyVec
                  , also.pdf = FALSE
                  , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                  , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
-                 , suffix = NULL
                  , plotname = FixPlotName(substitute(vec))
-                 , filename = FALSE
+                 , filename = NULL
+                 , subtitle = NULL
+                 , suffix = NULL
+                 , caption = suffix
+                 , NoLegend = FALSE
                  , LegendSide = TRUE
                  , LegendTitle = plotname
-                 , subtitle = NULL
-                 , caption = NULL
-                 , NoLegend = FALSE
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
                  , extended.canvas = TRUE
@@ -439,14 +456,14 @@ qpie <- function(vec = MyVec
   l.orig <- length(vec)
   sum.orig <- sum(vec)
 
-  # Plot annotation ---------------------------------------------
+  # Plot annotation ________________________________________________
   st <- paste('Sum:', sum.orig)
   subtitle <- if (is.null(subtitle)) st else paste0(subtitle, '\n', st)
 
   ct <- paste0('Total elements:', l.orig, '; shown:', (max.categories-1), ' | max.names:', max.names)
   caption <- if (is.null(caption)) ct else paste0(caption, '\n', ct)
 
-  # ---------------------------------------------
+  # ________________________________________________
   if (l.orig > max.categories) {
     iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
     sv <- sort(vec, decreasing = TRUE)
@@ -483,7 +500,6 @@ qpie <- function(vec = MyVec
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != F) df$'names' <- factor(df$'names', levels = custom.order)
-  # print('- - -')
 
   (p <- ggpubr::ggpie(data = df
                       , x = "value"
@@ -496,12 +512,12 @@ qpie <- function(vec = MyVec
                       , palette = palette_use
                       # , ...
   )) + theme(legend.title = LegendTitle)
-  # print('- - - -')
+
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
 
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "pie",  ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -545,9 +561,11 @@ qpie <- function(vec = MyVec
 #' @examples data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qboxplot(ToothLen.by.Dose)
 
 qboxplot <- function(df_XYcol_or_list
+                     , plotname = FixPlotName(substitute(df_XYcol_or_list))
+                     , subtitle = NULL
                      , suffix = NULL
-                     , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
-                     , filename = FALSE
+                     , caption = suffix
+                     , filename = NULL
                      , outlier.shape = NULL
                      , stat.test = TRUE
                      # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
@@ -571,10 +589,13 @@ qboxplot <- function(df_XYcol_or_list
   nrCategories.DFcol1 <- length(unique(df_XYcol[,1])); MarkdownHelpers::stopif(nrCategories.DFcol1>  100)
 
   p <- ggpubr::ggboxplot(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
+                         , title = plotname
+                         , subtitle = subtitle
+                         , caption = caption
                          # , fill = fill
                          , palette = palette_use
                          , outlier.shape = outlier.shape
-                         , title = plotname, ...) +
+                         , ...) +
     ggpubr::grids(axis = 'y') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
@@ -588,7 +609,7 @@ qboxplot <- function(df_XYcol_or_list
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -633,9 +654,11 @@ qboxplot <- function(df_XYcol_or_list
 
 
 qviolin <- function(df_XYcol_or_list
+                    , plotname = FixPlotName(substitute(df_XYcol_or_list))
+                    , subtitle = NULL
                     , suffix = NULL
-                    , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
-                    , filename = FALSE
+                    , caption = suffix
+                    , filename = NULL
                     , stat.test = FALSE
                     , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
@@ -663,6 +686,8 @@ qviolin <- function(df_XYcol_or_list
 
   p <- ggpubr::ggviolin(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                         , title = plotname
+                        , subtitle = subtitle
+                        , caption = caption
                         # , fill = fill
                         # , outlier.shape = outlier.shape
                         , palette = palette_use
@@ -680,7 +705,7 @@ qviolin <- function(df_XYcol_or_list
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -728,9 +753,11 @@ qviolin <- function(df_XYcol_or_list
 
 qstripchart <- function(df_XYcol_or_list
                         , add = c("violin", "mean_sd")
+                        , plotname = FixPlotName(substitute(df_XYcol_or_list))
+                        , subtitle = NULL
                         , suffix = NULL
-                        , plotname = FixPlotName(substitute(df_XYcol_or_list), suffix)
-                        , filename = FALSE
+                        , caption = suffix
+                        , filename = NULL
                         # , outlier.shape = NULL
                         , size.point = .2
                         , stat.test = TRUE
@@ -755,6 +782,8 @@ qstripchart <- function(df_XYcol_or_list
 
   p <- ggpubr::ggstripchart(data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1]
                             , title = plotname
+                            , subtitle = subtitle
+                            , caption = caption
                             , add = add
                             , size = size.point
                             , palette = palette_use
@@ -773,7 +802,7 @@ qstripchart <- function(df_XYcol_or_list
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
   fix <- sppp("stripchart", sppp(add))
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -820,9 +849,11 @@ qstripchart <- function(df_XYcol_or_list
 #' @examples dfx <- as.data.frame(cbind("AA"=rnorm(500), "BB"=rnorm(500))); qscatter(dfx, suffix = "2D.gaussian")
 
 qscatter <- function(df_XYcol
-                    , suffix = NULL
                     , plotname = FixPlotName(substitute(df_XYcol))
-                    , filename = FALSE
+                    , subtitle = NULL
+                    , suffix = NULL
+                    , caption = suffix
+                    , filename = NULL
                     , col = c(NULL , 3)[1]
                     , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                     , hide.legend = FALSE
@@ -845,12 +876,14 @@ qscatter <- function(df_XYcol
   vars <- colnames(df_XYcol)
   cat('Variable (column) names:', vars,'\n')
   p <- ggpubr::ggscatter(data = df_XYcol, x = vars[1], y = vars[2]
+                         , title = FixPlotName(plotname, suffix)
+                         , subtitle = subtitle
+                         , caption = caption
                          , palette = palette_use
                          , color = col
-                         , title = FixPlotName(plotname, suffix), ...) +
+                         , ...) +
     ggpubr::grids(axis = 'xy') +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
   if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline) # sum is needed to deal with multiple lines (multiple values in if statement).
@@ -867,7 +900,7 @@ qscatter <- function(df_XYcol
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
   }
   if (plot) p
@@ -907,10 +940,11 @@ qvenn <- function(list
                   , also.pdf = FALSE
                   , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                   , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified('b.mdlink', def = FALSE)
-                  , suffix = NULL
                   , plotname = FixPlotName(substitute(list))
-                  , filename = FALSE
+                  , suffix = NULL
                   , subtitle = paste (length(unique(unlist(list))), 'elements in total')
+                  , caption = suffix
+                  , filename = NULL
                   # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
                   # , col = as.character(1:3)[1]
                   # , xlab.angle = 90
@@ -922,12 +956,14 @@ qvenn <- function(list
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
     scale_fill_gradient(low = col.min, high = col.max) +
-    ggplot2::ggtitle(label = paste(' ', plotname), subtitle = paste(' ', subtitle, '\n') ) +
+    ggplot2::ggtitle(label = paste(' ', plotname)
+                     , subtitle = paste(' ', subtitle, '\n')
+                     , caption = caption) +
     theme(plot.background = element_rect(fill = 'white', colour = 'white'))
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none" )
 
-  file_name <- if (!isFALSE(filename)) filename else {
+  file_name <- if (!is.null(filename)) filename else {
     sppp(plotname, suffix, "venn", ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
