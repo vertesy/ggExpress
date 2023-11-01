@@ -34,13 +34,13 @@
 #' @param xlab.angle Angle to rotate X-axis labels. Default is 90 degrees.
 #' @param hide.legend Logical indicating whether to hide the legend. Default is TRUE.
 #' @param max.names Maximum number of names to show on the axis. Default is 50.
-#' @param w Width of the plot. Default is 5.
-#' @param h Height of the plot. Default is the same as width.
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param logX Logical indicating whether to make X axis on log10 scale. Default is FALSE.
 #' @param logY Logical indicating whether to make Y axis on log10 scale. Default is FALSE.
+#' @param w Width of the plot. Default is 5.
+#' @param h Height of the plot. Default is the same as width.
 #' @param ... Additional parameters for the corresponding plotting function.
 #' @return It returns a ggplot object if `plot` is TRUE.
 #' @examples
@@ -944,8 +944,8 @@ qscatter <- function(df_XYcol
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param col.min Color scale minimum, default: white
 #' @param col.max Color scale maximum, default: red
-#' @param w Width of the plot.
 #' @param hide.legend hide legend
+#' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
@@ -1002,8 +1002,6 @@ qvenn <- function(list
 #'
 #' @description Quick-Save ggplot objects
 #' @param ggobj Plot as ggplot object.
-#' @param w Width of the plot.
-#' @param h Height of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats
 #' @param bgcol Plot background color
@@ -1011,18 +1009,21 @@ qvenn <- function(list
 #' @param title title field for pdf file (saved into file metadata)
 #' @param fname fname
 #' @param suffix A suffix added to the filename. NULL by default.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #' @export
 #'
 #' @examples xplot <- ggplot2::qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
 #' @importFrom cowplot save_plot
 
-qqSave <- function(ggobj, w =4, h = w
+qqSave <- function(ggobj
                    , ext = MarkdownHelpers::unless.specified('b.def.ext', def = 'png')
                    , also.pdf = FALSE
                    , bgcol = 'white'
                    , page = c(F, "A4p", "A4l", "A5p", "A5l")[1]
                    , title = FALSE, fname = FALSE
+                   , w = 4, h = w
                    , suffix = NULL, ...) {
 
   if (isFALSE(title)) title <- as.character(substitute(ggobj))
@@ -1058,13 +1059,13 @@ qqSave <- function(ggobj, w =4, h = w
 #' @description Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
 #' @param plot Show the plot? Default: F
-#' @param plotname Plot name, Default: Autonaming.
-#' @param suffix A suffix added to the filename, Default: NULL
-#' @param scale Scaling factor of the canvas, Default: 1
-#' @param nrow number of rows for panels on the page, Default: 2
-#' @param ncol number of columns for panels on the page, Default: 2
-#' @param h height of the plot, Default: wA4 * scale
-#' @param w width of the plot, Default: hA4 * scale
+#' @param plotname Plot name. Default: Autonaming.
+#' @param suffix A suffix added to the filename. Default: NULL
+#' @param nrow number of rows for panels on the page. Default: 2
+#' @param ncol number of columns for panels on the page. Default: 2
+#' @param scale Scaling factor of the canvas. Default: 1
+#' @param h Height of the plot. Default: wA4 * scale
+#' @param w Width of the plot. Default: hA4 * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
 #' @export
@@ -1076,7 +1077,8 @@ q32vA4_grid_plot <- function(plot_list
                              , plotname = FixPlotName(substitute(plot_list), suffix)
                              , plot =F
                              , nrow = 3, ncol = 2, extension = c('pdf', 'png')[2]
-                             , h = hA4 * scale, w = wA4 * scale, scale = 1
+                             , scale = 1
+                             , h = hA4 * scale, w = wA4 * scale
                              , ...) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
   stopifnot(length(plot_list)<7)
@@ -1090,38 +1092,37 @@ q32vA4_grid_plot <- function(plot_list
 
 
 
-
 # _________________________________________________________________________________________________
 #' @title  qA4_grid_plot
 #'
 #' @description Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 #' @param plot_list A list of ggplot objects, each of which is one panel.
+#' @param plotname Plot name. Default: Autonaming
+#' @param suffix A suffix added to the filename. Default: NULL
+#' @param nrow number of rows for panels on the page. Default: 2
+#' @param ncol number of columns for panels on the page. Default: 2
 #' @param plot Show the plot? Default: F
-#' @param plotname Plot name, Default: Autonaming
-#' @param labels Panel labels, Default: LETTERS
+#' @param labels Panel labels. Default: LETTERS
 #' @param max.list.length Max number of panels (per page). Default: 16
-#' @param suffix A suffix added to the filename, Default: NULL
-#' @param scale Scaling factor of the canvas, Default: 1
-#' @param nrow number of rows for panels on the page, Default: 2
-#' @param ncol number of columns for panels on the page, Default: 2
-#' @param h height of the plot, Default: wA4 * scale
-#' @param w width of the plot, Default: hA4 * scale
-#' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
+#' @param scale Scaling factor of the canvas. Default: 1
+#' @param h Height of the plot. Default: wA4 * scale
+#' @param w Width of the plot. Default: hA4 * scale
+#' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @export
 #'
 #' @examples # qA4_grid_plot()
 
 qA4_grid_plot <- function(plot_list
+                          , plotname = FixPlotName(substitute(plot_list), nrow, 'by', ncol, suffix)
                           , suffix = NULL
                           , nrow = 3, ncol = 2
-                          , plotname = FixPlotName(substitute(plot_list), nrow, 'by', ncol, suffix)
                           , plot = FALSE
-                          , extension = c('pdf', 'png')[2]
-                          , h = hA4 * scale, w = wA4 * scale
-                          , scale = 1
                           , labels = LETTERS[1:length(plot_list)]
                           , max.list.length = 16
+                          , extension = c('pdf', 'png')[2]
+                          , scale = 1
+                          , h = hA4 * scale, w = wA4 * scale
                           , ...) { # Save 4 umaps on an A4 page.
   iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
   stopifnot(length(plot_list) < max.list.length)
