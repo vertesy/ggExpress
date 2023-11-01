@@ -420,6 +420,8 @@ qpie <- function(vec = MyVec
                  , filename = FALSE
                  , LegendSide = TRUE
                  , LegendTitle = plotname
+                 , subtitle = NULL
+                 , caption = NULL
                  , NoLegend = FALSE
                  , pcdigits = 2, NamedSlices = FALSE
                  , custom.order = FALSE
@@ -436,6 +438,15 @@ qpie <- function(vec = MyVec
   print(plotname)
   l.orig <- length(vec)
   sum.orig <- sum(vec)
+
+  # Plot annotation ---------------------------------------------
+  st <- paste('Sum:', sum.orig)
+  subtitle <- if (is.null(subtitle)) st else paste0(subtitle, '\n', st)
+
+  ct <- paste0('Total elements:', l.orig, '; shown:', (max.categories-1), ' | max.names:', max.names)
+  caption <- if (is.null(caption)) ct else paste0(caption, '\n', ct)
+
+  # ---------------------------------------------
   if (l.orig > max.categories) {
     iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
     sv <- sort(vec, decreasing = TRUE)
@@ -477,13 +488,12 @@ qpie <- function(vec = MyVec
   (p <- ggpubr::ggpie(data = df
                       , x = "value"
                       , label = labels
-                      , subtitle = paste('Sum:', sum.orig)
+                      , subtitle = subtitle
+                      , caption = caption
                       , fill = "names"
                       , color = "white"
                       , title = plotname
                       , palette = palette_use
-                      , caption = paste0('Total elements:', l.orig, '; shown:', (max.categories-1)
-                                         , ' | max.names:', max.names)
                       # , ...
   )) + theme(legend.title = LegendTitle)
   # print('- - - -')
