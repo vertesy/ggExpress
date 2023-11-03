@@ -12,32 +12,32 @@ q32vA4_grid_plot(
   nrow = 3,
   ncol = 2,
   extension = c("pdf", "png")[2],
+  scale = 1,
   h = hA4 * scale,
   w = wA4 * scale,
-  scale = 1,
   ...
 )
 }
 \arguments{
 \item{plot_list}{A list of ggplot objects, each of which is one panel.}
 
-\item{suffix}{A suffix added to the filename, Default: NULL}
+\item{suffix}{A suffix added to the filename. Default: NULL}
 
-\item{plotname}{Plot name, Default: Autonaming.}
+\item{plotname}{Plot name. Default: Autonaming.}
 
 \item{plot}{Show the plot? Default: F}
 
-\item{nrow}{number of rows for panels on the page, Default: 2}
+\item{nrow}{number of rows for panels on the page. Default: 2}
 
-\item{ncol}{number of columns for panels on the page, Default: 2}
+\item{ncol}{number of columns for panels on the page. Default: 2}
 
 \item{extension}{file extension}
 
-\item{h}{height of the plot, Default: wA4 * scale}
+\item{scale}{Scaling factor of the canvas. Default: 1}
 
-\item{w}{width of the plot, Default: hA4 * scale}
+\item{h}{Height of the plot. Default: wA4 * scale}
 
-\item{scale}{Scaling factor of the canvas, Default: 1}
+\item{w}{Width of the plot. Default: hA4 * scale}
 
 \item{...}{Pass any other parameter to the internally called functions (most of them should work).}
 }

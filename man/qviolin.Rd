@@ -6,10 +6,12 @@
 \usage{
 qviolin(
   df_XYcol_or_list,
+  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  subtitle = NULL,
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
-  filename = FALSE,
-  stat.test = TRUE,
+  caption = suffix,
+  filename = NULL,
+  stat.test = FALSE,
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = 0.5,
@@ -35,9 +37,13 @@ qviolin(
 \arguments{
 \item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
 
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
 \item{plotname}{Name of the plot}
+
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
@@ -75,13 +81,11 @@ qviolin(
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{title}{The name of the file and title of the plot.}
 }
 \description{
 Draw and save a violin plot

@@ -1,9 +1,10 @@
 # ____________________________________________________________________
 # ggExpress is the fastest way to create, annotate and export plots in R.  ----
 # ____________________________________________________________________
-# devtools::load_all("~/GitHub/Packages/ggExpress")
+# devtools::load_all("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 # try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = TRUE)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = TRUE)
+# source('~/.pack.R')
 
 # ______________________________________________________________________________________________----
 # Main plotting functions  ----
@@ -234,10 +235,10 @@ qdensity <- function(vec
 
 qbarplot <- function(vec
                      , also.pdf = FALSE
-                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
+                     , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                      , plot = TRUE
                      , plotname = FixPlotName(substitute(vec))
-                     , subtitle = NULL
+                     , subtitle = paste("Median:", iround(median(vec)))
                      , suffix = NULL
                      , caption = suffix
                      , filename = NULL
@@ -295,7 +296,8 @@ qbarplot <- function(vec
   file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext
+                   , w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -349,9 +351,9 @@ qbarplot.df <- function(df
                         , label = NULL
                         , color = 1
                         , also.pdf = FALSE
-                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'pdf', also_pdf = also.pdf)
+                        , ext = MarkdownHelpers::ww.set.file.extension(default = 'png', also_pdf = also.pdf)
                         , plotname = FixPlotName(substitute(df))
-                        , subtitle = NULL
+                        , subtitle = paste("Median:", iround(median(vec)))
                         , suffix = NULL
                         , caption = suffix
                         , filename = NULL
@@ -394,7 +396,8 @@ qbarplot.df <- function(df
   file_name <- if (!is.null(filename)) filename else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
     }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext
+                   , w = w, h = h, limitsize = limitsize, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -973,7 +976,7 @@ qvenn <- function(list
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
     scale_fill_gradient(low = col.min, high = col.max) +
-    ggplot2::ggtitle(label = paste(' ', plotname)
+    ggplot2::labs(title = paste(' ', plotname)
                      , subtitle = paste(' ', subtitle, '\n')
                      , caption = caption) +
     theme(plot.background = element_rect(fill = 'white', colour = 'white'))

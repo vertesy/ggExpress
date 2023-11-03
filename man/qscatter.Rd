@@ -6,9 +6,11 @@
 \usage{
 qscatter(
   df_XYcol,
+  plotname = FixPlotName(substitute(df_XYcol)),
+  subtitle = NULL,
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol), suffix),
-  filename = FALSE,
+  caption = suffix,
+  filename = NULL,
   col = c(NULL, 3)[1],
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
@@ -37,9 +39,13 @@ qscatter(
 \arguments{
 \item{df_XYcol}{Data, as 2 column data frame, where col.1 is X axis.}
 
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
 \item{plotname}{The name of the file and title of the plot.}
+
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
@@ -81,9 +87,9 @@ qscatter(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }

@@ -7,14 +7,15 @@
 qvenn(
   list,
   also.pdf = FALSE,
+  plotname = FixPlotName(substitute(list)),
+  suffix = NULL,
+  subtitle = paste(length(unique(unlist(list))), "elements in total"),
+  caption = suffix,
+  filename = NULL,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  suffix = NULL,
-  plotname = FixPlotName(substitute(list), suffix),
-  filename = FALSE,
-  subtitle = paste(length(unique(unlist(list))), "elements in total"),
   col.min = "white",
   col.max = "red",
   hide.legend = FALSE,
@@ -28,6 +29,16 @@ qvenn(
 
 \item{also.pdf}{Save plot in both png and pdf formats}
 
+\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+
+\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+
 \item{ext}{File extension (.pdf / .png).}
 
 \item{plot}{Display the plot.}
@@ -36,23 +47,15 @@ qvenn(
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
-\item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
-
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
-
-\item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
-
 \item{col.min}{Color scale minimum, default: white}
 
 \item{col.max}{Color scale maximum, default: red}
 
 \item{hide.legend}{hide legend}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }

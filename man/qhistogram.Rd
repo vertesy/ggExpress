@@ -12,9 +12,11 @@ qhistogram(
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = NULL,
   suffix = NULL,
-  plotname = FixPlotName(substitute(vec), suffix),
-  filename = FALSE,
+  caption = suffix,
+  filename = NULL,
   logX = FALSE,
   logY = FALSE,
   annotation_logticks_X = logX,
@@ -49,9 +51,13 @@ qhistogram(
 
 \item{mdlink}{Logical indicating whether to insert .pdf and .png image links in the markdown report, set by "path_of_report". Default is FALSE.}
 
+\item{plotname}{Title of the plot and the name of the file (unless specified in \code{filename}). Default is parsed from \code{vec}.}
+
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{plotname}{Title of the plot and the name of the file (unless specified in \code{filename}). Default is parsed from \code{vec}.}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
 \item{filename}{Optional filename for the saved plot. Default is parsed from \code{plotname}.}
 

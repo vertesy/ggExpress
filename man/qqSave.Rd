@@ -6,24 +6,20 @@
 \usage{
 qqSave(
   ggobj,
-  w = 4,
-  h = w,
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
   bgcol = "white",
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
   fname = FALSE,
+  w = 4,
+  h = w,
   suffix = NULL,
   ...
 )
 }
 \arguments{
 \item{ggobj}{Plot as ggplot object.}
-
-\item{w}{width of the plot.}
-
-\item{h}{height of the plot.}
 
 \item{ext}{File extension (.pdf / .png).}
 
@@ -36,6 +32,10 @@ qqSave(
 \item{title}{title field for pdf file (saved into file metadata)}
 
 \item{fname}{fname}
+
+\item{w}{Width of the plot.}
+
+\item{h}{Height of the plot.}
 
 \item{suffix}{A suffix added to the filename. NULL by default.}
 

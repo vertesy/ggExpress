@@ -6,44 +6,44 @@
 \usage{
 qA4_grid_plot(
   plot_list,
+  plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
   suffix = NULL,
   nrow = 3,
   ncol = 2,
-  plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
   plot = FALSE,
-  extension = c("pdf", "png")[2],
-  h = hA4 * scale,
-  w = wA4 * scale,
-  scale = 1,
   labels = LETTERS[1:length(plot_list)],
   max.list.length = 16,
+  extension = c("pdf", "png")[2],
+  scale = 1,
+  h = hA4 * scale,
+  w = wA4 * scale,
   ...
 )
 }
 \arguments{
 \item{plot_list}{A list of ggplot objects, each of which is one panel.}
 
-\item{suffix}{A suffix added to the filename, Default: NULL}
+\item{plotname}{Plot name. Default: Autonaming}
 
-\item{nrow}{number of rows for panels on the page, Default: 2}
+\item{suffix}{A suffix added to the filename. Default: NULL}
 
-\item{ncol}{number of columns for panels on the page, Default: 2}
+\item{nrow}{number of rows for panels on the page. Default: 2}
 
-\item{plotname}{Plot name, Default: Autonaming}
+\item{ncol}{number of columns for panels on the page. Default: 2}
 
 \item{plot}{Show the plot? Default: F}
 
-\item{extension}{file extension}
-
-\item{h}{height of the plot, Default: wA4 * scale}
-
-\item{w}{width of the plot, Default: hA4 * scale}
-
-\item{scale}{Scaling factor of the canvas, Default: 1}
-
-\item{labels}{Panel labels, Default: LETTERS}
+\item{labels}{Panel labels. Default: LETTERS}
 
 \item{max.list.length}{Max number of panels (per page). Default: 16}
+
+\item{extension}{file extension}
+
+\item{scale}{Scaling factor of the canvas. Default: 1}
+
+\item{h}{Height of the plot. Default: wA4 * scale}
+
+\item{w}{Width of the plot. Default: hA4 * scale}
 
 \item{...}{Pass any other parameter to the internally called functions (most of them should work).}
 }

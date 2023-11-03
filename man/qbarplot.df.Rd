@@ -12,11 +12,13 @@ qbarplot.df(
   label = NULL,
   color = 1,
   also.pdf = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
-  plot = TRUE,
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  plotname = FixPlotName(substitute(df)),
+  subtitle = paste("Median:", iround(median(vec))),
   suffix = NULL,
-  plotname = FixPlotName(substitute(df), suffix),
-  filename = FALSE,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   hline = FALSE,
@@ -54,13 +56,17 @@ qbarplot.df(
 
 \item{ext}{File extension (.pdf / .png).}
 
-\item{plot}{Display the plot.}
-
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+
+\item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
 
@@ -90,9 +96,9 @@ qbarplot.df(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }

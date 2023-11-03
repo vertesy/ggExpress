@@ -6,10 +6,13 @@
 \usage{
 qstripchart(
   df_XYcol_or_list,
-  add = c("violin", "mean_sd"),
+  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  subtitle = NULL,
   suffix = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list), suffix),
-  filename = FALSE,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  add = c("violin", "mean_sd"),
   size.point = 0.2,
   stat.test = TRUE,
   stat.method = NULL,
@@ -25,7 +28,6 @@ qstripchart(
   xlab.angle = 90,
   hline = FALSE,
   vline = FALSE,
-  plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   grid = "y",
@@ -37,13 +39,19 @@ qstripchart(
 \arguments{
 \item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
 
-\item{add}{Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".}
-
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
 \item{plotname}{Name of the plot}
 
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+
+\item{plot}{Display the plot.}
+
+\item{add}{Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".}
 
 \item{size.point}{Size of points}
 
@@ -73,17 +81,15 @@ qstripchart(
 
 \item{vline}{Draw a vertical line on the plot.}
 
-\item{plot}{Display the plot.}
-
 \item{save}{Save the plot into a file.}
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }

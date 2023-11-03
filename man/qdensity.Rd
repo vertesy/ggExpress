@@ -10,9 +10,11 @@ qdensity(
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   xlab = FALSE,
   plot = TRUE,
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = NULL,
   suffix = NULL,
-  plotname = FixPlotName(substitute(vec), suffix),
-  filename = FALSE,
+  caption = suffix,
+  filename = NULL,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   logX = FALSE,
@@ -39,9 +41,13 @@ qdensity(
 
 \item{plot}{Display the plot.}
 
-\item{suffix}{A suffix added to the filename. NULL by default.}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the filename. Default is NULL.}
+
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
@@ -63,9 +69,9 @@ qdensity(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{w}{width of the plot.}
+\item{w}{Width of the plot.}
 
-\item{h}{height of the plot.}
+\item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
