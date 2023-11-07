@@ -2,7 +2,7 @@
 Development of the ggExpress package for quick ggpubr based plotting ala 'Type less, Plot more'.
 This package is work in progress.
 
-<img width="706" alt="image" src="https://user-images.githubusercontent.com/5101911/99193282-4c06b980-2778-11eb-8c74-37293a8a245c.png">
+![image](https://github.com/vertesy/CON/assets/5101911/fb840023-9685-433b-af58-6003edd36830)
 
 <br><br>
 
