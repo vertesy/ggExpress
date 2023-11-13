@@ -7,25 +7,24 @@ try(dev.off(), silent = TRUE)
 
 # Functions ------------------------
 # install_version("devtools", version = "2.0.2", repos = "http://cran.at.r-project.org") # install.packages("devtools")
-require("devtools")
-require("roxygen2")
-require("stringr")
+# require("devtools")
+# require("roxygen2")
+# require("stringr")
 
-# devtools::install_github(repo = "vertesy/CodeAndRoll2")
-require('CodeAndRoll2')
-require('Stringendo')
-
+# # devtools::install_github(repo = "vertesy/CodeAndRoll2")
+# require('CodeAndRoll2')
+# require('Stringendo')
 
 # Setup ------------------------
-PackageName = "ggExpress"
-package.version = "0.7.4"
+package.name <- "ggExpress"
+package.version <- "0.7.4"
 setwd("~/GitHub/Packages/")
 
-RepositoryDir = kollapse("~/GitHub/Packages/", PackageName, "/")
-fname = 	kollapse(PackageName, ".R")
-Package_FnP = 	kollapse(RepositoryDir, "R/", fname)
+RepositoryDir <- paste0("~/GitHub/Packages/", PackageName, "/")
+fname <-	paste0(PackageName, ".R")
+Package_FnP <-	paste0(RepositoryDir, "R/", fname)
 
-BackupDir = "~/GitHub/Packages/ggExpress/Development/"
+BackupDir <- "~/GitHub/Packages/ggExpress/Development/"
 dir.create(BackupDir)
 
 
@@ -67,8 +66,8 @@ if ( !dir.exists(RepositoryDir) ) { create(path = RepositoryDir, description = D
 # RoxygenReady(Package_FnP)
 
 # replace output files ------------------------------------------------
-BackupOldFile = 	kollapse(BackupDir, "Development", ".bac", print = FALSE)
-AnnotatedFile = 	kollapse(BackupDir, "Development", ".annot.R", print = FALSE)
+BackupOldFile <-	paste0(BackupDir, "Development", ".bac", print = FALSE)
+AnnotatedFile <-	paste0(BackupDir, "Development", ".annot.R", print = FALSE)
 file.copy(from = Package_FnP, to = BackupOldFile, overwrite = TRUE)
 # file.copy(from = AnnotatedFile, to = Package_FnP, overwrite = TRUE)
 
@@ -78,7 +77,7 @@ file.copy(from = Package_FnP, to = BackupOldFile, overwrite = TRUE)
 # Compile a package ------------------------------------------------
 setwd(RepositoryDir)
 getwd()
-document()
+devtools::devtools::document()
 warnings()
 
 {
@@ -90,7 +89,7 @@ warnings()
 
 # Install your package ------------------------------------------------
 # setwd(RepositoryDir)
-install(RepositoryDir, upgrade = F)
+devtools::install(RepositoryDir, upgrade = F)
 
 # require("ggExpress")
 # # remove.packages("ggExpress")
