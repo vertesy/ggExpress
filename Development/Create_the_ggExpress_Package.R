@@ -20,8 +20,8 @@ package.name <- "ggExpress"
 package.version <- "0.7.4"
 setwd("~/GitHub/Packages/")
 
-RepositoryDir <- paste0("~/GitHub/Packages/", PackageName, "/")
-fname <-	paste0(PackageName, ".R")
+RepositoryDir <- paste0("~/GitHub/Packages/", package.name, "/")
+fname <-	paste0(package.name, ".R")
 Package_FnP <-	paste0(RepositoryDir, "R/", fname)
 
 BackupDir <- "~/GitHub/Packages/ggExpress/Development/"
@@ -55,7 +55,7 @@ if ( !dir.exists(RepositoryDir) ) { create(path = RepositoryDir, description = D
 } else {
     getwd()
     try(file.remove(c("DESCRIPTION","NAMESPACE", "ggExpress.Rproj")))
-    create_package(path = RepositoryDir, fields = DESCRIPTION, open = F)
+    usethis::create_package(path = RepositoryDir, fields = DESCRIPTION, open = F)
 }
 
 
@@ -66,8 +66,8 @@ if ( !dir.exists(RepositoryDir) ) { create(path = RepositoryDir, description = D
 # RoxygenReady(Package_FnP)
 
 # replace output files ------------------------------------------------
-BackupOldFile <-	paste0(BackupDir, "Development", ".bac", print = FALSE)
-AnnotatedFile <-	paste0(BackupDir, "Development", ".annot.R", print = FALSE)
+BackupOldFile <-	(paste0(BackupDir, "Development", ".bac"))
+AnnotatedFile <-	(paste0(BackupDir, "Development", ".annot.R"))
 file.copy(from = Package_FnP, to = BackupOldFile, overwrite = TRUE)
 # file.copy(from = AnnotatedFile, to = Package_FnP, overwrite = TRUE)
 
@@ -77,7 +77,7 @@ file.copy(from = Package_FnP, to = BackupOldFile, overwrite = TRUE)
 # Compile a package ------------------------------------------------
 setwd(RepositoryDir)
 getwd()
-devtools::devtools::document()
+devtools::document()
 warnings()
 
 {
