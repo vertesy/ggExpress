@@ -84,75 +84,77 @@ qscatter(dfx, suffix = "2D.gaussian")
 
 
 
-## List of Functions
+## List of Functions (17) 
 
-Updated: 2023/07/22 11:39
+Updated: 2023/11/24 16:40
 
 - #### 1 `qhistogram()`
 
-  This function generates a histogram and saves the plot for a given vector and offers several customizations.
+  Quick Histogram Plotting. This function generates a histogram and saves the plot for a given vector and offers several customizations.
 
 - #### 2 `qdensity()`
 
-  Draw and save a density plot.
+  qdensity. Draw and save a density plot.
 
 - #### 3 `qbarplot()`
 
-  Draw and save a barplot.
+  qbarplot. Draw and save a barplot.
 
 - #### 4 `qbarplot.df()`
 
-  Draw and save a barplot for tibbles or dataframes
+  qbarplot.df - Barplot for tibbles or dataframes. Draw and save a barplot for tibbles or dataframes
 
 - #### 5 `qpie()`
 
-  Draw and save a pie chart
+  qpie. Draw and save a pie chart
 
 - #### 6 `qboxplot()`
 
-  Draw and save a boxplot
+  qboxplot. Draw and save a boxplot
 
 - #### 7 `qviolin()`
 
-  Draw and save a violin plot
+  qviolin. Draw and save a violin plot
 
 - #### 8 `qstripchart()`
 
-  Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
+  qstripchart. Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 
 - #### 9 `qscatter()`
 
-  Draw and save a 2D-scatter plot.
+  qscatter. Draw and save a 2D-scatter plot.
 
 - #### 10 `qvenn()`
 
-  Draw and save a Venn Diagram using the `ggVennDiagram` package.
+  qvenn - Venn Diagram. Draw and save a Venn Diagram using the `ggVennDiagram` package.
 
 - #### 11 `qqSave()`
 
-  Quick-Save ggplot objects
+  qqSave. Quick-Save ggplot objects
 
 - #### 12 `q32vA4_grid_plot()`
 
-  Plot up to 6 panels (3-by-2) on vertically standing A4 page.
+  q32vA4_grid_plot. Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 
 - #### 13 `qA4_grid_plot()`
 
-  Plot up to 6 panels (3-by-1) on vertically standing A4 page.
+  qA4_grid_plot. Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 
 - #### 14 `qMarkdownImageLink()`
 
-  Insert Markdown image link to .md report
+  qMarkdownImageLink. Insert Markdown image link to .md report
 
 - #### 15 `qqqAxisLength()`
 
-  Define Axis Length
+  qqqAxisLength. Define Axis Length
 
 - #### 16 `qqqNamed.Vec.2.Tbl()`
 
-  Covert a named vector to a table.
+  qqqNamed.Vec.2.Tbl. Covert a named vector to a table.
 
 - #### 17 `qqqTbl.2.Vec()`
 
-  Covert a table to a named vector.
+  qqqTbl.2.Vec. Covert a table to a named vector.
+
+
 
