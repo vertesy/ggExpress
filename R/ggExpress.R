@@ -601,7 +601,7 @@ qpie <- function(
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
-#' @import ggpubr
+#' @importFrom CodeAndRoll2 is.list2
 #' @export
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
@@ -700,7 +700,7 @@ qboxplot <- function(
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
-#' @import ggpubr
+#' @importFrom CodeAndRoll2 is.list2
 #' @export
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
@@ -805,11 +805,12 @@ qviolin <- function(
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
-#' @import ggpubr
-#' @export
+#' @importFrom CodeAndRoll2 is.list2
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
 #' qstripchart(ToothLen.by.Dose)
+#'
+#' @export
 qstripchart <- function(
     df_XYcol_or_list,
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
@@ -910,11 +911,10 @@ qstripchart <- function(
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#'
-#' @import ggpubr
-#' @export
 #' @examples dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
 #' qscatter(dfx, suffix = "2D.gaussian")
+#'
+#' @export
 qscatter <- function(
     df_XYcol,
     plotname = FixPlotName(substitute(df_XYcol)),
@@ -1005,10 +1005,11 @@ qscatter <- function(
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
-#' @export
-#'
+#' @importFrom ggVennDiagram ggVennDiagram
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
 #' qvenn(LetterSets)
+#'
+#' @export
 qvenn <- function(
     list,
     also.pdf = FALSE,
@@ -1146,9 +1147,10 @@ qqSave <- function(
 #' @param w Width of the plot. Default: hA4 * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
-#' @export
+#' @importFrom cowplot plot_grid save_plot
 #'
 #' @examples # q32vA4_grid_plot()
+#' @export
 q32vA4_grid_plot <- function(
     plot_list,
     suffix = NULL,
@@ -1187,9 +1189,11 @@ q32vA4_grid_plot <- function(
 #' @param h Height of the plot. Default: wA4 * scale
 #' @param w Width of the plot. Default: hA4 * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
-#' @export
 #'
+#' @importFrom cowplot plot_grid save_plot
 #' @examples # qA4_grid_plot()
+#'
+#' @export
 qA4_grid_plot <- function(
     plot_list,
     plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
@@ -1253,9 +1257,11 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 #' @param verbose verbose
 #' @param strip.too.many.names strip.too.many.names
 #' @param thr thr
-#' @export
 #'
+#' @importFrom tibble tibble as_tibble
 #' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
+#'
+#' @export
 qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -1305,9 +1311,10 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 #'
 #' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
-#' @export
+#' @importFrom CodeAndRoll2 is.list2
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
 #' qqqList.2.DF.ggplot(LetterSets)
+#' @export
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   stopifnot(CodeAndRoll2::is.list2(ls))
   MarkdownHelpers::stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")

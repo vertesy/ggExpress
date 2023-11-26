@@ -25,4 +25,5 @@ Covert a named vector to a table.
 }
 \examples{
 qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
+
 }
