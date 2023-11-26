@@ -1,7 +1,7 @@
 ######################################################################
 # Test.ggpubr.R
 ######################################################################
-# source('/Users/abel.vertesy/GitHub/Packages/Seurat.pipeline/elements/Test.ggpubr.R')
+# source('~/GitHub/Packages/Seurat.pipeline/elements/Test.ggpubr.R')
 # try(dev.off(), silent = T)
 require(MarkdownReportsDev)
 require(ggpubr)
