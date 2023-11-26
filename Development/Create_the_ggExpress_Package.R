@@ -12,7 +12,7 @@ devtools::load_all("~/GitHub/Packages/PackageTools/")
 RepositoryDir <- "~/GitHub/Packages/ggExpress/"
 
 "TAKE A LOOK AT"
-"~/GitHub/Packages/ggExpress/Development/config.R"
+source("~/GitHub/Packages/ggExpress/Development/config.R")
 
 PackageTools::document_and_create_package(RepositoryDir, config_file = 'config.R')
 'git add commit push to remote'
@@ -46,21 +46,22 @@ PackageTools::extract_package_dependencies(RepositoryDir)
 # Visualize function dependencies within the package------------------------------------------------
 {
   warning("works only on the installed version of the package!")
-  pkgnet_result <- pkgnet::CreatePackageReport(package.name)
+  pkgnet_result <- pkgnet::CreatePackageReport(DESCRIPTION$'package.name')
   fun_graph     <- pkgnet_result$FunctionReporter$pkg_graph$'igraph'
-
   PackageTools::convert_igraph_to_mermaid(graph = fun_graph, openMermaid = T, copy_to_clipboard = T)
 }
 
 
 # Try to find and add missing @importFrom statements------------------------------------------------
 if (F) {
-  # Add @importFrom statements
-  (FNP <- package.FnP)
-  (FNP <-  "~/GitHub/Packages/PackageTools/R/DependencyTools.R")
-  PackageTools::add_importFrom_statements(FNP, exclude_packages = "")
-}
+  FNP <- list.files(file.path(RepositoryDir, "R"), full.names = T)
+  (excluded.packages <- unlist(strsplit(DESCRIPTION$'depends', split = ", ")))
 
+  devtools::load_all("~/GitHub/Packages/PackageTools/")
+  PackageTools::add_importFrom_statements(FNP, exclude_packages = excluded.packages)
+  # OLD: exclude_packages = c('Stringendo', 'MarkdownHelpers', 'ggplot2', 'ggpubr')
+}
+DESCRIPTION$depends
 
 
 
