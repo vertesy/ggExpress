@@ -97,7 +97,7 @@ qbarplot(
 Draw and save a barplot.
 }
 \examples{
-weight3 <- runif (12);
-qbarplot(weight3, filtercol = -1, hline = .5);
+weight3 <- runif(12)
+qbarplot(weight3, filtercol = -1, hline = .5)
 qbarplot(weight3, filtercol = 1, hline = .5)
 }

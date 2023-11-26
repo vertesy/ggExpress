@@ -101,8 +101,8 @@ This function generates a histogram and saves the plot for a given vector and of
 }
 \examples{
 \dontrun{
-weight <- rnorm(1000);
-qhistogram(vec = weight);
+weight <- rnorm(1000)
+qhistogram(vec = weight)
 qhistogram(vec = weight, vline = 2, filtercol = -1)
 }
 

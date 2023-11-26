@@ -63,5 +63,6 @@ qvenn(
 Draw and save a Venn Diagram using the \code{ggVennDiagram} package.
 }
 \examples{
-LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qvenn(LetterSets)
+LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
+qvenn(LetterSets)
 }

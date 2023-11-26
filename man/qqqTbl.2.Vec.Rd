@@ -17,5 +17,7 @@ qqqTbl.2.Vec(tibble.input, name.column = 1, value.column = 2)
 Covert a table to a named vector.
 }
 \examples{
-a=1:5; x= tibble::tibble(a, a * 2); qqqTbl.2.Vec(x)
+a <- 1:5
+x <- tibble::tibble(a, a * 2)
+qqqTbl.2.Vec(x)
 }

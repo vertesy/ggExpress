@@ -92,5 +92,7 @@ qboxplot(
 Draw and save a boxplot
 }
 \examples{
-data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qboxplot(ToothLen.by.Dose)
+data("ToothGrowth")
+ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+qboxplot(ToothLen.by.Dose)
 }

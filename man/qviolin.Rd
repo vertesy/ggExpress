@@ -91,5 +91,7 @@ qviolin(
 Draw and save a violin plot
 }
 \examples{
-data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qviolin(ToothLen.by.Dose)
+data("ToothGrowth")
+ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+qviolin(ToothLen.by.Dose)
 }

@@ -13,5 +13,6 @@ qqqList.2.DF.ggplot(ls = LetterSets)
 Convert a list to a tow-column data frame to plot boxplots and violin plots
 }
 \examples{
-LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12]); qqqList.2.DF.ggplot(LetterSets)
+LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
+qqqList.2.DF.ggplot(LetterSets)
 }

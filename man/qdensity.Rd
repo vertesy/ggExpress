@@ -79,5 +79,6 @@ qdensity(
 Draw and save a density plot.
 }
 \examples{
-weight <- rnorm(1000); qdensity(weight)
+weight <- rnorm(1000)
+qdensity(weight)
 }

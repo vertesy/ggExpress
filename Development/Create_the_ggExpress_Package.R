@@ -6,6 +6,7 @@
 
 # Functions ------------------------
 require(PackageTools)
+devtools::load_all("~/GitHub/Packages/PackageTools/")
 
 # Setup ------------------------
 RepositoryDir <- "~/GitHub/Packages/ggExpress/"

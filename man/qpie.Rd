@@ -97,5 +97,6 @@ qpie(
 Draw and save a pie chart
 }
 \examples{
-xvec <- c("A"=12, "B"=29); qpie(vec = xvec)
+xvec <- c("A" = 12, "B" = 29)
+qpie(vec = xvec)
 }

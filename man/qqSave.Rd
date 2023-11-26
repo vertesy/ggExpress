@@ -45,5 +45,7 @@ qqSave(
 Quick-Save ggplot objects
 }
 \examples{
-xplot <- ggplot2::qplot(12); qqSave(ggobj = xplot); qqSave(ggobj = xplot, ext = "pdf")
+xplot <- ggplot2::qplot(12)
+qqSave(ggobj = xplot)
+qqSave(ggobj = xplot, ext = "pdf")
 }

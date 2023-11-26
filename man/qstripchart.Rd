@@ -97,5 +97,7 @@ qstripchart(
 Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 }
 \examples{
-data("ToothGrowth"); ToothLen.by.Dose <- ToothGrowth[ ,c('dose', 'len')]; qstripchart(ToothLen.by.Dose)
+data("ToothGrowth")
+ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+qstripchart(ToothLen.by.Dose)
 }
