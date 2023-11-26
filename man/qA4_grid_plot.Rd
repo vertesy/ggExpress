@@ -52,4 +52,5 @@ Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 }
 \examples{
 # qA4_grid_plot()
+
 }

@@ -99,4 +99,5 @@ Draw and save a 2D-scatter plot.
 \examples{
 dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
 qscatter(dfx, suffix = "2D.gaussian")
+
 }

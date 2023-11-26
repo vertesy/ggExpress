@@ -100,4 +100,5 @@ Generates a stripchart and saves the plot for a given 2-column dataframe and off
 data("ToothGrowth")
 ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
 qstripchart(ToothLen.by.Dose)
+
 }

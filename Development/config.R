@@ -1,7 +1,7 @@
 # Configuration for the Package
 DESCRIPTION <- list(
-  package.name = "PackageTools",
-  version = "0.8.0",
+  package.name = "ggExpress",
+  version = "0.9.0",
   title = "ggExpress is the fastest way to create, annotate and export plots in R",
   description = "ggExpress is a set of R functions that allows you to generate precise figures easily,
     and create clean markdown reports about what you just discovered with your analysis script. It is ggplot-based smaller brother of vertesy/MarkdownReports. It helps you to:
