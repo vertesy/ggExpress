@@ -15,7 +15,7 @@ DESCRIPTION <- list(
   author.email = "av@imba.oeaw.ac.at",
   license = "GPL-3 + file LICENSE",
   depends = "Stringendo, MarkdownHelpers, ggplot2, ggpubr",
-  imports = "cowplot, tibble, RColorBrewer, MarkdownReports, CodeAndRoll2",
+  imports = "cowplot, tibble, RColorBrewer, MarkdownReports, CodeAndRoll2, ggVennDiagram",
   github.user = "vertesy"
 )
 

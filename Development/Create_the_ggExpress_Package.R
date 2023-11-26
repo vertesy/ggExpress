@@ -25,7 +25,8 @@ devtools::install_local(RepositoryDir, upgrade = F)
 # devtools::
 
 # Test if you can install from github ------------------------------------------------
-pak::pkg_install("vertesy/PackageTools")
+remote.path <- file.path(DESCRIPTION$'github.user', DESCRIPTION$'package.name')
+pak::pkg_install(remote.path)
 # unload(PackageTools)
 # require("PackageTools")
 # # remove.packages("PackageTools")
@@ -61,7 +62,7 @@ if (F) {
   PackageTools::add_importFrom_statements(FNP, exclude_packages = excluded.packages)
   # OLD: exclude_packages = c('Stringendo', 'MarkdownHelpers', 'ggplot2', 'ggpubr')
 }
-DESCRIPTION$depends
+
 
 
 
