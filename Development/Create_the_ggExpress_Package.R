@@ -66,4 +66,7 @@ if (F) {
 
 
 
+# Generate the list of functions ------------------------------------------------
+PackageTools::parse_roxygen(FNP)
+
 
