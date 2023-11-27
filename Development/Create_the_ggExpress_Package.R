@@ -9,39 +9,41 @@ require(PackageTools)
 devtools::load_all("~/GitHub/Packages/PackageTools/")
 
 # Setup ------------------------
-RepositoryDir <- "~/GitHub/Packages/ggExpress/"
+repository.dir <- "~/GitHub/Packages/ggExpress/"
+config.path <- file.path(repository.dir, "Development/config.R")
 
 "TAKE A LOOK AT"
-source("~/GitHub/Packages/ggExpress/Development/config.R")
+file.edit(config.path)
+source(config.path)
 
-PackageTools::document_and_create_package(RepositoryDir, config_file = 'config.R')
+PackageTools::document_and_create_package(repository.dir, config_file = 'config.R')
 'git add commit push to remote'
 
 # Install your package ------------------------------------------------
 "disable rprofile by"
 rprofile()
+devtools::install_local(repository.dir, upgrade = F)
 
-devtools::install_local(RepositoryDir, upgrade = F)
-# devtools::
 
 # Test if you can install from github ------------------------------------------------
 remote.path <- file.path(DESCRIPTION$'github.user', DESCRIPTION$'package.name')
 pak::pkg_install(remote.path)
-# unload(PackageTools)
-# require("PackageTools")
-# # remove.packages("PackageTools")
+# unload(DESCRIPTION$'package.name')
+# require(DESCRIPTION$'package.name')
+# # remove.packages(DESCRIPTION$'package.name')
+
 
 # CMD CHECK ------------------------------------------------
-checkres <- devtools::check(RepositoryDir, cran = FALSE)
+checkres <- devtools::check(repository.dir, cran = FALSE)
 
 
 
 # Automated Codebase linting to tidyverse style ------------------------------------------------
-styler::style_pkg(RepositoryDir)
+styler::style_pkg(repository.dir)
 
 
 # Extract package dependencies ------------------------------------------------
-PackageTools::extract_package_dependencies(RepositoryDir)
+PackageTools::extract_package_dependencies(repository.dir)
 
 
 # Visualize function dependencies within the package------------------------------------------------
@@ -54,19 +56,27 @@ PackageTools::extract_package_dependencies(RepositoryDir)
 
 
 # Try to find and add missing @importFrom statements------------------------------------------------
+devtools::load_all("~/GitHub/Packages/PackageTools/")
 if (F) {
-  FNP <- list.files(file.path(RepositoryDir, "R"), full.names = T)
   (excluded.packages <- unlist(strsplit(DESCRIPTION$'depends', split = ", ")))
-
-  devtools::load_all("~/GitHub/Packages/PackageTools/")
-  PackageTools::add_importFrom_statements(FNP, exclude_packages = excluded.packages)
-  # OLD: exclude_packages = c('Stringendo', 'MarkdownHelpers', 'ggplot2', 'ggpubr')
+  (ls.scripts.full.path <- list.files(file.path(repository.dir, "R"), full.names = T))
+  for (scriptX in ls.scripts.full.path) {
+    PackageTools::add_importFrom_statements(scriptX, exclude_packages = excluded.packages)
+  }
 }
 
 
-
-
 # Generate the list of functions ------------------------------------------------
-PackageTools::parse_roxygen(FNP)
+for (scriptX in ls.scripts.full.path) {
+  PackageTools::list_of_funs_to_markdown(scriptX)
+}
+
+PackageTools::copy_github_badge("active") # Add badge to readme via clipboard
+
+
+# Replaces T with TRUE and F with FALSE ------------------------------------------------
+for (scriptX in ls.scripts.full.path) {
+  PackageTools::replace_tf_with_true_false(scriptX)
+}
 
 
