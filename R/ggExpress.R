@@ -372,7 +372,7 @@ qbarplot.df <- function(
     also.pdf = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
-    subtitle = paste("Median:", iround(median(vec))),
+    subtitle = paste("Median:", iround(median(as.numeric(df[,y])))),
     suffix = NULL,
     caption = suffix,
     filename = NULL,
@@ -389,14 +389,16 @@ qbarplot.df <- function(
     limitsize = FALSE,
     grid = "y",
     w = qqqAxisLength(df), h = 5, ...) {
+  
   if (isFALSE(xlab)) xlab <- plotname
 
+  # browser()
   p <- ggpubr::ggbarplot(
     data = df, x = x, y = y,
     color = color,
     fill = fill,
-    title = plotname, xlab = xlab,
     subtitle = subtitle,
+    title = plotname, xlab = xlab,
     caption = caption,
     label = label,
     palette = palette_use,
