@@ -538,7 +538,7 @@ qpie <- function(
   if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
 
   nrCategories.DFcol1 <- length(unique(df[, 1]))
-  CodeAndRoll2::stopif(nrCategories.DFcol1 > max.categories)
+  stopif(nrCategories.DFcol1 > max.categories)
   print(nrCategories.DFcol1)
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
@@ -635,7 +635,7 @@ qboxplot <- function(
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  CodeAndRoll2::stopif(nrCategories.DFcol1 > 100)
+  stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggboxplot(
     data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
@@ -737,7 +737,7 @@ qviolin <- function(
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  CodeAndRoll2::stopif(nrCategories.DFcol1 > 100)
+  stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggviolin(
     data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
@@ -842,7 +842,7 @@ qstripchart <- function(
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  CodeAndRoll2::stopif(nrCategories.DFcol1 > 100)
+  stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggstripchart(
     data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
@@ -1319,7 +1319,7 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 #' @export
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   stopifnot(CodeAndRoll2::is.list2(ls))
-  CodeAndRoll2::stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
+  stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
   stack(ls)[, 2:1]
 }
 
