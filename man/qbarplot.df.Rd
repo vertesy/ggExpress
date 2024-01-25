@@ -14,7 +14,7 @@ qbarplot.df(
   also.pdf = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plotname = FixPlotName(substitute(df)),
-  subtitle = paste("Median:", iround(median(vec))),
+  subtitle = paste("Median:", iround(median(as.numeric(df[, y])))),
   suffix = NULL,
   caption = suffix,
   filename = NULL,
