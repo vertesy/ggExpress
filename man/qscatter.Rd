@@ -6,6 +6,8 @@
 \usage{
 qscatter(
   df_XYcol,
+  x = 1,
+  y = 2,
   plotname = FixPlotName(substitute(df_XYcol)),
   subtitle = NULL,
   suffix = NULL,

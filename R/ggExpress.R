@@ -389,7 +389,7 @@ qbarplot.df <- function(
     limitsize = FALSE,
     grid = "y",
     w = qqqAxisLength(df), h = 5, ...) {
-  
+
   if (isFALSE(xlab)) xlab <- plotname
 
   # browser()
@@ -610,6 +610,7 @@ qpie <- function(
 #' qboxplot(ToothLen.by.Dose)
 qboxplot <- function(
     df_XYcol_or_list,
+    x = 1, y = 2, col = 1,
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
@@ -631,14 +632,25 @@ qboxplot <- function(
     plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
     w = 7, h = w, ...) {
+
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  if (length(col) > 1) {
+    # browser()
+    if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
+      stopifnot(length(col) == nrow(df_XYcol_or_list))
+      col2 <- rep(col, lapply(df_XYcol_or_list, length))
+    }
+
+    df_XYcol$'fill' <- col2
+    col <- 3
+  }
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
   stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggboxplot(
-    data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
+    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
     title = plotname,
     subtitle = subtitle,
     caption = caption
@@ -709,6 +721,7 @@ qboxplot <- function(
 #' qviolin(ToothLen.by.Dose)
 qviolin <- function(
     df_XYcol_or_list,
+    x = 1, y = 2, col = 1,
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
@@ -740,7 +753,7 @@ qviolin <- function(
   stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggviolin(
-    data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
+    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
     title = plotname,
     subtitle = subtitle,
     caption = caption
@@ -815,37 +828,44 @@ qviolin <- function(
 #' @export
 qstripchart <- function(
     df_XYcol_or_list,
+    x = 1, y = 2, col = 1,
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
     plot = TRUE,
-    add = c("violin", "mean_sd")
-    # , outlier.shape = NULL
-    , size.point = .2,
-    stat.test = TRUE
+    add = c("violin", "mean_sd"),
+    # outlier.shape = NULL,
+    size.point = .2,
+    stat.test = TRUE,
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    , stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75
+    stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75,
     # , fill = c(NULL , 3)[1]
-    , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
-    logY = FALSE # , logX = FALSE
-    , annotation_logticks_Y = logY,
+    logY = FALSE, # , logX = FALSE
+    annotation_logticks_Y = logY,
     xlab.angle = 90,
     hline = FALSE, vline = FALSE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y", w = 7, h = w, ...) {
+
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  if (length(col) > 1) {
+    stopifnot(length(col) == nrow(df_XYcol))
+    df_XYcol$'color' <- col
+    col <- 'color'
+  }
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
   stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggstripchart(
-    data = df_XYcol, x = vars[1], y = vars[2], fill = vars[1],
+    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
     title = plotname,
     subtitle = subtitle,
     caption = caption,
@@ -919,6 +939,7 @@ qstripchart <- function(
 #' @export
 qscatter <- function(
     df_XYcol,
+    x = 1, y = 2,
     plotname = FixPlotName(substitute(df_XYcol)),
     subtitle = NULL,
     suffix = NULL,
@@ -944,9 +965,10 @@ qscatter <- function(
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
 
   vars <- colnames(df_XYcol)
-  cat("Variable (column) names:", vars, "\n")
+  cat("Variable (column) names 1-5:", head(vars), "...\n")
+
   p <- ggpubr::ggscatter(
-    data = df_XYcol, x = vars[1], y = vars[2],
+    data = df_XYcol, x = vars[x], y = vars[y],
     title = FixPlotName(plotname, suffix),
     subtitle = subtitle,
     caption = caption,
