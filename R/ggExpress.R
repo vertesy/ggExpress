@@ -357,7 +357,7 @@ qbarplot <- function(
 #'   Column_1 = c("A", "A", "A", "B", "C", "C"),
 #'   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 #' )
-#' freq_table <- my_tibble %>% count(Column_1, Column_2)
+#' freq_table <- my_tibble |> count(Column_1, Column_2)
 #' qbarplot.df(freq_table)
 #'
 #' @export qbarplot.df
@@ -376,6 +376,7 @@ qbarplot.df <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
+    scale = TRUE,
     plot = TRUE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     hline = FALSE, filtercol = 1,
@@ -389,12 +390,15 @@ qbarplot.df <- function(
     limitsize = FALSE,
     grid = "y",
     max.categ = 10,
+    top = NULL,
     w = qqqAxisLength(df), h = 5, ...) {
+
+  message(plotname)
 
   stopifnot(is.data.frame(df),
             ncol(df) > 2)
 
-  if (is.null(xlab)) xlab <- plotname
+  if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
 
   if (is.numeric(df[[fill]])) {
@@ -413,6 +417,7 @@ qbarplot.df <- function(
     caption = caption,
     label = label,
     palette = palette_use,
+    position = if(scale) position_fill() else position_stack(),
     ...
   ) +
     ggpubr::grids(axis = "y") +

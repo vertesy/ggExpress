@@ -18,6 +18,7 @@ qbarplot.df(
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  scale = TRUE,
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -35,6 +36,7 @@ qbarplot.df(
   limitsize = FALSE,
   grid = "y",
   max.categ = 10,
+  top = NULL,
   w = qqqAxisLength(df),
   h = 5,
   ...
@@ -111,7 +113,7 @@ my_tibble <- tibble(
   Column_1 = c("A", "A", "A", "B", "C", "C"),
   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 )
-freq_table <- my_tibble \%>\% count(Column_1, Column_2)
+freq_table <- my_tibble |> count(Column_1, Column_2)
 qbarplot.df(freq_table)
 
 }
