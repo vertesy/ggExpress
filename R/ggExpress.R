@@ -318,6 +318,8 @@ qbarplot <- function(
 }
 
 
+
+# _________________________________________________________________________________________________
 #' @title qbarplot.df - Barplot for tibbles or dataframes
 #'
 #' @description Draw and save a barplot for tibbles or dataframes
@@ -339,7 +341,6 @@ qbarplot <- function(
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr Color palette to use.
-#' @param col Color of the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param xlab X-axis label.
 #' @param logY Make Y axis log10-scale.
@@ -367,21 +368,19 @@ qbarplot.df <- function(
     x = colnames(df)[1],
     y = colnames(df)[2],
     fill = colnames(df)[3],
-    label = NULL,
     color = 1,
+    label = NULL,
     also.pdf = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
+    subtitle = NULL, suffix = NULL, caption = suffix,
     filename = NULL,
     scale = TRUE,
     plot = TRUE,
-    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     hline = FALSE, filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    col = as.character(1:3)[1],
     xlab.angle = 45, xlab = NULL,
     logY = FALSE,
     annotation_logticks_Y = logY,
@@ -391,10 +390,10 @@ qbarplot.df <- function(
     grid = "y",
     max.categ = 10,
     top = NULL,
-    w = qqqAxisLength(df), h = 5, ...) {
+    w = qqqAxisLength(df), h = 5,
+    ...) {
 
   message(plotname)
-
   stopifnot(is.data.frame(df),
             ncol(df) > 2)
 
