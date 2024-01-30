@@ -6,6 +6,9 @@
 \usage{
 qboxplot(
   df_XYcol_or_list,
+  x = 1,
+  y = 2,
+  col = 1,
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,

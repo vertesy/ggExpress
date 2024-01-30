@@ -372,7 +372,7 @@ qbarplot.df <- function(
     also.pdf = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
-    subtitle = paste("Median:", iround(median(as.numeric(df[,y])))),
+    subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
@@ -381,16 +381,27 @@ qbarplot.df <- function(
     hline = FALSE, filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     col = as.character(1:3)[1],
-    xlab.angle = 45, xlab = "",
+    xlab.angle = 45, xlab = NULL,
     logY = FALSE,
     annotation_logticks_Y = logY,
     hide.legend = TRUE,
     max.names = 50,
     limitsize = FALSE,
     grid = "y",
+    max.categ = 10,
     w = qqqAxisLength(df), h = 5, ...) {
 
-  if (isFALSE(xlab)) xlab <- plotname
+  stopifnot(is.data.frame(df),
+            ncol(df) > 2)
+
+  if (is.null(xlab)) xlab <- plotname
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
+
+  if (is.numeric(df[[fill]])) {
+    df[[fill]] <- as.factor(df[[fill]])
+    nr_categ <- length(unique(df[[fill]]))
+    stopifnot("3rd column has too many categories" = nr_categ < max.categ)
+  }
 
   # browser()
   p <- ggpubr::ggbarplot(
