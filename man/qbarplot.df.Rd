@@ -9,8 +9,8 @@ qbarplot.df(
   x = colnames(df)[1],
   y = colnames(df)[2],
   fill = colnames(df)[3],
-  label = NULL,
   color = 1,
+  label = NULL,
   also.pdf = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plotname = FixPlotName(substitute(df)),
@@ -26,7 +26,6 @@ qbarplot.df(
   filtercol = 1,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  col = as.character(1:3)[1],
   xlab.angle = 45,
   xlab = NULL,
   logY = FALSE,
@@ -51,9 +50,9 @@ qbarplot.df(
 
 \item{fill}{Color (split) by along Y.}
 
-\item{label}{label}
-
 \item{color}{Color (split) by along Y.}
+
+\item{label}{label}
 
 \item{also.pdf}{Save plot in both png and pdf formats}
 
@@ -80,8 +79,6 @@ qbarplot.df(
 \item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
 \item{palette_use}{GGpubr Color palette to use.}
-
-\item{col}{Color of the plot.}
 
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
