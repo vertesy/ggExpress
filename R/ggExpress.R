@@ -17,7 +17,7 @@
 #' @description This function generates a histogram and saves the plot for a given vector and offers several customizations.
 #' @param vec A numeric vector for which the histogram is to be plotted.
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param xlab Label for the X-axis. By default, it uses the plot name.
 #' @param plot Logical indicating whether to display the plot. Default is TRUE.
 #' @param add Character defining the type of plot annotations to add. Default is 'median'.
@@ -127,7 +127,7 @@ qhistogram <- function(
 #' @description Draw and save a density plot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -208,7 +208,7 @@ qdensity <- function(
 #' @description Draw and save a barplot.
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
@@ -329,7 +329,7 @@ qbarplot <- function(
 #' @param fill Color (split) by along Y.
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -452,7 +452,7 @@ qbarplot.df <- function(
 #' @description Draw and save a pie chart
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -597,7 +597,7 @@ qpie <- function(
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -709,7 +709,7 @@ qboxplot <- function(
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -815,7 +815,7 @@ qviolin <- function(
 #' @param plot Display the plot.
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -928,7 +928,7 @@ qstripchart <- function(
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
@@ -1033,7 +1033,7 @@ qscatter <- function(
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -1103,7 +1103,7 @@ qvenn <- function(
 #' @description Quick-Save ggplot objects
 #' @param ggobj Plot as ggplot object.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param bgcol Plot background color
 #' @param page page
 #' @param title title field for pdf file (saved into file metadata)
