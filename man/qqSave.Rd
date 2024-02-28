@@ -23,7 +23,7 @@ qqSave(
 
 \item{ext}{File extension (.pdf / .png).}
 
-\item{also.pdf}{Save plot in both png and pdf formats}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
 \item{bgcol}{Plot background color}
 

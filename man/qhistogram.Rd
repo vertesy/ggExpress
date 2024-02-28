@@ -39,7 +39,7 @@ qhistogram(
 \arguments{
 \item{vec}{A numeric vector for which the histogram is to be plotted.}
 
-\item{also.pdf}{Save plot in both png and pdf formats}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
 \item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.}
 

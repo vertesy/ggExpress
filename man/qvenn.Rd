@@ -27,7 +27,7 @@ qvenn(
 \arguments{
 \item{list}{The variable to plot.}
 
-\item{also.pdf}{Save plot in both png and pdf formats}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 

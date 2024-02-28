@@ -62,7 +62,7 @@ qviolin(
 
 \item{hide.legend}{hide legend}
 
-\item{also.pdf}{Save plot in both png and pdf formats}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
 \item{ext}{File extension (.pdf / .png).}
 
