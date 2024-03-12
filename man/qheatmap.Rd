@@ -6,16 +6,15 @@
 \usage{
 qheatmap(
   data_matrix,
-  also.pdf = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-  title = "Heatmap",
-  save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  plotname = "heatmap",
-  subtitle = "NULL",
-  caption = "mousse",
+  plotname = paste("Heatmap of", substitute(data_matrix)),
+  subtitle = NULL,
+  caption = NULL,
   suffix = NULL,
   filename = NULL,
+  also.pdf = FALSE,
+  save = TRUE,
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   color = colorRampPalette(c("#0073c2", "white", "#efc000"))(100),
   legendName = "Intensity",
   scale = "row",
@@ -35,17 +34,8 @@ qheatmap(
 \item{data_matrix}{The data matrix to be plotted; must be either a matrix or a data frame.
 Default: None (must be provided).}
 
-\item{also.pdf}{Logical; indicates whether to also save the plot as a PDF. Default: FALSE.}
-
 \item{ext}{The file extension for the saved plot image, adjusted based on \code{also.pdf}.
 Default: "png".}
-
-\item{title}{The main title for the heatmap. Default: "Heatmap".}
-
-\item{save}{Logical; indicates whether to save the plot to file. Default: TRUE.}
-
-\item{mdlink}{Logical; if TRUE and \code{save} is also TRUE, generates a markdown link for the saved
-plot image. Default: FALSE, using \code{MarkdownHelpers::unless.specified}.}
 
 \item{plotname}{The base name for the plot file. Default: "heatmap".}
 
@@ -57,6 +47,13 @@ plot image. Default: FALSE, using \code{MarkdownHelpers::unless.specified}.}
 
 \item{filename}{The specific filename to save the plot as; if NULL, a name is generated based on
 \code{plotname} and other parameters. Default: NULL.}
+
+\item{also.pdf}{Logical; indicates whether to also save the plot as a PDF. Default: FALSE.}
+
+\item{save}{Logical; indicates whether to save the plot to file. Default: TRUE.}
+
+\item{mdlink}{Logical; if TRUE and \code{save} is also TRUE, generates a markdown link for the saved
+plot image. Default: FALSE, using \code{MarkdownHelpers::unless.specified}.}
 
 \item{color}{The color palette for the heatmap values, using a blue-white-yellow gradient.
 Default: colorRampPalette(c( "#0073c2","white","#efc000"))(100).}
@@ -87,6 +84,8 @@ Default: "Global X Label".}
 Default: "Global Y Label".}
 
 \item{...}{Additional arguments passed to \code{ggheatmap}.}
+
+\item{title}{The main title for the heatmap. Default: "Heatmap".}
 }
 \value{
 A \code{ggplot} object representing the heatmap, conditionally modified based on the provided

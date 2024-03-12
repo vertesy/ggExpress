@@ -1148,16 +1148,15 @@ qvenn <- function(
 #' @export
 qheatmap <- function(
     data_matrix,
-    also.pdf = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    title = "Heatmap",
-    save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    plotname = "heatmap",
-    subtitle = "NULL",
-    caption = "mousse",
+    plotname = paste("Heatmap of", substitute(data_matrix)),
+    subtitle = NULL,
+    caption = NULL,
     suffix = NULL,
     filename = NULL,
+    also.pdf = FALSE,
+    save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     color = colorRampPalette(c( "#0073c2","white","#efc000"))(100),
     legendName = "Intensity",
     scale = "row",
@@ -1191,13 +1190,13 @@ qheatmap <- function(
     cluster_cols = cluster_cols,
     annotation_rows = annotation_rows,
     annotation_cols = annotation_cols,
-    annotation_color = annotation_color
-    # , ...
+    annotation_color = annotation_color,text_show_cols = "hhhhhhh"
+    , ...
   )
 
   # Add titles and captions
   if (!cluster_rows & !cluster_cols) {
-    p <- p + labs(title = title, subtitle = subtitle, caption = caption, x ="11")
+    p <- p + labs(title = plotname, subtitle = subtitle, caption = caption)
   } else {
     message("Plot labeling (title, subtitle, caption) are only possible when both cluster_rows and cluster_cols are both false.")
   }
