@@ -1092,132 +1092,132 @@ qvenn <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title Quick Heatmap Plot
-#'
-#' @description Generates a heatmap plot using the `ggheatmap` package with features such as automatic
-#' file saving and markdown link generation. This function simplifies the process of creating and
-#' customizing heatmaps, with support for clustering, annotations, and scaling.
-#'
-#' @param data_matrix The data matrix to be plotted; must be either a matrix or a data frame.
-#' Default: None (must be provided).
-#' @param also.pdf Logical; indicates whether to also save the plot as a PDF. Default: FALSE.
-#' @param ext The file extension for the saved plot image, adjusted based on `also.pdf`.
-#' Default: "png".
-#' @param title The main title for the heatmap. Default: "Heatmap".
-#' @param save Logical; indicates whether to save the plot to file. Default: TRUE.
-#' @param mdlink Logical; if TRUE and `save` is also TRUE, generates a markdown link for the saved
-#' plot image. Default: FALSE, using `MarkdownHelpers::unless.specified`.
-#' @param plotname The base name for the plot file. Default: "heatmap".
-#' @param subtitle The subtitle for the heatmap. Default: "NULL" (indicating no subtitle).
-#' @param caption The caption for the heatmap. Default: "mousse".
-#' @param suffix An optional suffix to append to the plot filename. Default: NULL.
-#' @param filename The specific filename to save the plot as; if NULL, a name is generated based on
-#' `plotname` and other parameters. Default: NULL.
-#' @param color The color palette for the heatmap values, using a blue-white-yellow gradient.
-#' Default: colorRampPalette(c( "#0073c2","white","#efc000"))(100).
-#' @param legendName The title of the heatmap legend. Default: "Intensity".
-#' @param scale Character; indicates how to scale the data ("none", "row", or "column").
-#' Default: "row".
-#' @param cluster_rows Logical; indicates whether to cluster rows. Default: FALSE.
-#' @param cluster_cols Logical; indicates whether to cluster columns. Default: FALSE.
-#' @param annotation_rows Data frame with row annotations. Default: NULL.
-#' @param annotation_cols Data frame with column annotations. Default: NULL.
-#' @param annotation_color List of colors for the annotations. Default: NULL.
-#' @param w Width of the saved plot image, in inches. Default: 10.
-#' @param h Height of the saved plot image, in inches. Default: 8.
-#' @param xlab The global label for the x-axis; this might not display due to limitations.
-#' Default: "Global X Label".
-#' @param ylab The global label for the y-axis; this might not display due to limitations.
-#' Default: "Global Y Label".
-#' @param ... Additional arguments passed to `ggheatmap`.
-#'
-#' @return A `ggplot` object representing the heatmap, conditionally modified based on the provided
-#' parameters.
-#'
-#' @examples
-#' \dontrun{
-#'   set.seed(123)
-#'   data_matrix <- matrix(rnorm(100), ncol = 10)
-#'   qheatmap(data_matrix, title = "My Heatmap", save = FALSE)
-#' }
-#'
-#' @importFrom ggheatmap ggheatmap
-#' @importFrom Stringendo FixPlotName
-#' @importFrom MarkdownHelpers ww.set.file.extension
-#' @importFrom MarkdownHelpers unless.specified
-#' @export
-qheatmap <- function(
-    data_matrix,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plotname = paste("Heatmap of", substitute(data_matrix)),
-    subtitle = NULL,
-    caption = NULL,
-    suffix = NULL,
-    filename = NULL,
-    also.pdf = FALSE,
-    save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    color = colorRampPalette(c( "#0073c2","white","#efc000"))(100),
-    legendName = "Intensity",
-    scale = "row",
-    cluster_rows = F,
-    cluster_cols = F,
-    annotation_rows = NULL,
-    annotation_cols = NULL,
-    annotation_color = NULL,
-    w = 10,
-    h = 8,
-    xlab = "Global X Label",
-    ylab = "Global Y Label",
-    ...
-) {
-  # Ensure the data input is correct
-  stopifnot(
-    "Data input should be a matrix or a data frame" = is.matrix(data_matrix) || is.data.frame(data_matrix)
-  )
-
-  if (is.data.frame(data_matrix)) {
-    data_matrix <- as.matrix(data_matrix)
-  }
-
-  # Create the heatmap
-  p <- ggheatmap::ggheatmap(
-    data = data_matrix,
-    color = color,
-    legendName = legendName,
-    scale = scale,
-    cluster_rows = cluster_rows,
-    cluster_cols = cluster_cols,
-    annotation_rows = annotation_rows,
-    annotation_cols = annotation_cols,
-    annotation_color = annotation_color,text_show_cols = "hhhhhhh"
-    , ...
-  )
-
-  # Add titles and captions
-  if (!cluster_rows & !cluster_cols) {
-    p <- p + labs(title = plotname, subtitle = subtitle, caption = caption)
-  } else {
-    message("Plot labeling (title, subtitle, caption) are only possible when both cluster_rows and cluster_cols are both false.")
-  }
-
-  # Handle file saving
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    Stringendo::FixPlotName(plotname, suffix, "heatmap", flag.nameiftrue(cluster_rows), flag.nameiftrue(cluster_cols), ext)
-  }
-
-  if (save) {
-    qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  }
-
-  if (mdlink & save) {
-    qMarkdownImageLink(file_name)
-  }
-  return(p)
-}
-
+# #' @title Quick Heatmap Plot
+# #'
+# #' @description Generates a heatmap plot using the `ggheatmap` package with features such as automatic
+# #' file saving and markdown link generation. This function simplifies the process of creating and
+# #' customizing heatmaps, with support for clustering, annotations, and scaling.
+# #'
+# #' @param data_matrix The data matrix to be plotted; must be either a matrix or a data frame.
+# #' Default: None (must be provided).
+# #' @param also.pdf Logical; indicates whether to also save the plot as a PDF. Default: FALSE.
+# #' @param ext The file extension for the saved plot image, adjusted based on `also.pdf`.
+# #' Default: "png".
+# #' @param title The main title for the heatmap. Default: "Heatmap".
+# #' @param save Logical; indicates whether to save the plot to file. Default: TRUE.
+# #' @param mdlink Logical; if TRUE and `save` is also TRUE, generates a markdown link for the saved
+# #' plot image. Default: FALSE, using `MarkdownHelpers::unless.specified`.
+# #' @param plotname The base name for the plot file. Default: "heatmap".
+# #' @param subtitle The subtitle for the heatmap. Default: "NULL" (indicating no subtitle).
+# #' @param caption The caption for the heatmap. Default: "mousse".
+# #' @param suffix An optional suffix to append to the plot filename. Default: NULL.
+# #' @param filename The specific filename to save the plot as; if NULL, a name is generated based on
+# #' `plotname` and other parameters. Default: NULL.
+# #' @param color The color palette for the heatmap values, using a blue-white-yellow gradient.
+# #' Default: colorRampPalette(c( "#0073c2","white","#efc000"))(100).
+# #' @param legendName The title of the heatmap legend. Default: "Intensity".
+# #' @param scale Character; indicates how to scale the data ("none", "row", or "column").
+# #' Default: "row".
+# #' @param cluster_rows Logical; indicates whether to cluster rows. Default: FALSE.
+# #' @param cluster_cols Logical; indicates whether to cluster columns. Default: FALSE.
+# #' @param annotation_rows Data frame with row annotations. Default: NULL.
+# #' @param annotation_cols Data frame with column annotations. Default: NULL.
+# #' @param annotation_color List of colors for the annotations. Default: NULL.
+# #' @param w Width of the saved plot image, in inches. Default: 10.
+# #' @param h Height of the saved plot image, in inches. Default: 8.
+# #' @param xlab The global label for the x-axis; this might not display due to limitations.
+# #' Default: "Global X Label".
+# #' @param ylab The global label for the y-axis; this might not display due to limitations.
+# #' Default: "Global Y Label".
+# #' @param ... Additional arguments passed to `ggheatmap`.
+# #'
+# #' @return A `ggplot` object representing the heatmap, conditionally modified based on the provided
+# #' parameters.
+# #'
+# #' @examples
+# #' \dontrun{
+# #'   set.seed(123)
+# #'   data_matrix <- matrix(rnorm(100), ncol = 10)
+# #'   qheatmap(data_matrix, title = "My Heatmap", save = FALSE)
+# #' }
+# #'
+# #' @importFrom ggheatmap ggheatmap
+# #' @importFrom Stringendo FixPlotName
+# #' @importFrom MarkdownHelpers ww.set.file.extension
+# #' @importFrom MarkdownHelpers unless.specified
+# #' @export
+# qheatmap <- function(
+#     data_matrix,
+#     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+#     plotname = paste("Heatmap of", substitute(data_matrix)),
+#     subtitle = NULL,
+#     caption = NULL,
+#     suffix = NULL,
+#     filename = NULL,
+#     also.pdf = FALSE,
+#     save = TRUE,
+#     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+#     color = colorRampPalette(c( "#0073c2","white","#efc000"))(100),
+#     legendName = "Intensity",
+#     scale = "row",
+#     cluster_rows = F,
+#     cluster_cols = F,
+#     annotation_rows = NULL,
+#     annotation_cols = NULL,
+#     annotation_color = NULL,
+#     w = 10,
+#     h = 8,
+#     xlab = "Global X Label",
+#     ylab = "Global Y Label",
+#     ...
+# ) {
+#   # Ensure the data input is correct
+#   stopifnot(
+#     "Data input should be a matrix or a data frame" = is.matrix(data_matrix) || is.data.frame(data_matrix)
+#   )
+#
+#   if (is.data.frame(data_matrix)) {
+#     data_matrix <- as.matrix(data_matrix)
+#   }
+#
+#   # Create the heatmap
+#   p <- ggheatmap::ggheatmap(
+#     data = data_matrix,
+#     color = color,
+#     legendName = legendName,
+#     scale = scale,
+#     cluster_rows = cluster_rows,
+#     cluster_cols = cluster_cols,
+#     annotation_rows = annotation_rows,
+#     annotation_cols = annotation_cols,
+#     annotation_color = annotation_color,text_show_cols = "hhhhhhh"
+#     , ...
+#   )
+#
+#   # Add titles and captions
+#   if (!cluster_rows & !cluster_cols) {
+#     p <- p + labs(title = plotname, subtitle = subtitle, caption = caption)
+#   } else {
+#     message("Plot labeling (title, subtitle, caption) are only possible when both cluster_rows and cluster_cols are both false.")
+#   }
+#
+#   # Handle file saving
+#   file_name <- if (!is.null(filename)) {
+#     filename
+#   } else {
+#     Stringendo::FixPlotName(plotname, suffix, "heatmap", flag.nameiftrue(cluster_rows), flag.nameiftrue(cluster_cols), ext)
+#   }
+#
+#   if (save) {
+#     qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+#   }
+#
+#   if (mdlink & save) {
+#     qMarkdownImageLink(file_name)
+#   }
+#   return(p)
+# }
+#
 
 # ______________________________________________________________________________________________----
 # Auxiliary functions ----
