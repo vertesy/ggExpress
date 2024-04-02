@@ -758,10 +758,12 @@ qviolin <- function(
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     # , fill = c(NULL , 3)[1]
     , w = 7, h = w, ...) {
-  stopifnot(is.numeric(xlab.angle))
+
+  # stopifnot(is.numeric(xlab.angle))
 
   # plotname <- if (isFALSE(title)) sppp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  message("nrow(df_XYcol): ", nrow(df_XYcol))
 
   vars <- colnames(df_XYcol)
   nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
@@ -1483,7 +1485,8 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   stopifnot(CodeAndRoll2::is.list2(ls))
   stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
-  stack(ls)[, 2:1]
+  # utils::stack(unlist(ls))[, 2:1]
+  utils::stack(ls)[, 2:1]
 }
 
 
