@@ -488,7 +488,8 @@ qpie <- function(
     vec = MyVec,
     also.pdf = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    plot = TRUE, save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     plotname = FixPlotName(substitute(vec)),
     filename = NULL,
     subtitle = NULL,
@@ -635,9 +636,9 @@ qboxplot <- function(
     outlier.shape = NULL,
     stat.test = TRUE
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL
+    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
     # , fill = c(NULL , 3)[1]
-    , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
@@ -669,9 +670,9 @@ qboxplot <- function(
     data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
     title = plotname,
     subtitle = subtitle,
-    caption = caption
+    caption = caption,
     # , fill = fill
-    , palette = palette_use,
+    palette = palette_use,
     outlier.shape = outlier.shape,
     ...
   ) +
