@@ -1375,8 +1375,8 @@ qA4_grid_plot <- function(
     scale = 1,
     h = hA4 * scale, w = wA4 * scale,
     ...) { # Save 4 umaps on an A4 page.
-  iprint("Plot panels on", nrow, "by", ncol, "vertical A4 page.")
   stopifnot(length(plot_list) < max.list.length)
+  message("Plot panels ", nrow, " rows by ", ncol, " cols, on an A4 page.")
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname <- sppp(plotname, suffix, extension)
