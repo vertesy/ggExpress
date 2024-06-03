@@ -281,6 +281,7 @@ qbarplot <- function(
     }
   print(df)
 
+
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,
@@ -291,6 +292,7 @@ qbarplot <- function(
     ylim = ylim,
     palette = palette_use,
     ...
+
   ) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
