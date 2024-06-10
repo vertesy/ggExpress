@@ -980,7 +980,9 @@ qscatter <- function(
     correlation_r2 = FALSE # add as  c("pearson", "spearman")
     , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "xy",
-    w = 7, h = w, ...) {
+    w = 7, h = w,
+    ...) {
+  #
   print(plotname)
   stopifnot(ncol(df_XYcol) >= 2)
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
@@ -1073,6 +1075,7 @@ qvenn <- function(
     hide.legend = FALSE,
     w = 8, h = 0.75 * w,
     ...) {
+  #
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
     scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
@@ -1084,12 +1087,17 @@ qvenn <- function(
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
+  s1 <- paste0(length(list), "s")
+  s2 <- kpp(s1, paste0(length(unique(unlist(list))), "el"))
+
   file_name <- if (!is.null(filename)) {
-    filename
+    kpp(filename, s2)
   } else {
-    sppp(plotname, suffix, "venn", ext)
+    sppp(plotname, suffix, s2, "venn", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name,
+                   ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
