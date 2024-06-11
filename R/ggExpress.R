@@ -1038,7 +1038,8 @@ qscatter <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param caption Optional text added to bottom right corner of the plot. Default = List element lengths parsed.
+#' @param caption2 Optional text added to bottom right corner of the plot. Default = NULL.
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -1049,7 +1050,7 @@ qscatter <- function(
 #' @param col.max Color scale maximum, default: red
 #' @param hide.legend hide legend
 #' @param w Width of the plot.
-#' @param h Height of the plot.
+#' @param h Height of the plot. Default: h = w * 0.75.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom ggVennDiagram ggVennDiagram
@@ -1063,19 +1064,21 @@ qvenn <- function(
     plotname = FixPlotName(substitute(list)),
     suffix = NULL,
     subtitle = paste(length(unique(unlist(list))), "elements in total"),
-    caption = suffix,
+    caption = parseParamStringWNames(sapply(list, length)),
+    caption2 = NULL,
     filename = NULL,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE)
+    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
     # , col = as.character(1:3)[1]
     # , xlab.angle = 90
-    , col.min = "white",
-    col.max = "red",
+    col.min = "white", col.max = "red",
     hide.legend = FALSE,
     w = 8, h = 0.75 * w,
     ...) {
   #
+  if(!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
+
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
     scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(

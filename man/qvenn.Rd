@@ -10,7 +10,8 @@ qvenn(
   plotname = FixPlotName(substitute(list)),
   suffix = NULL,
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
-  caption = suffix,
+  caption = parseParamStringWNames(sapply(list, length)),
+  caption2 = NULL,
   filename = NULL,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
@@ -35,7 +36,9 @@ qvenn(
 
 \item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = List element lengths parsed.}
+
+\item{caption2}{Optional text added to bottom right corner of the plot. Default = NULL.}
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
@@ -55,7 +58,7 @@ qvenn(
 
 \item{w}{Width of the plot.}
 
-\item{h}{Height of the plot.}
+\item{h}{Height of the plot. Default: h = w * 0.75.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
