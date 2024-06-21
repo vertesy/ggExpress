@@ -263,6 +263,7 @@ qbarplot <- function(
     max.names = 50,
     limitsize = FALSE,
     grid = "y",
+    ylab = NULL,
     w = qqqAxisLength(vec), h = 5,
     ...) {
   stopifnot(is.numeric(vec))
@@ -292,10 +293,11 @@ qbarplot <- function(
     ylim = ylim,
     palette = palette_use,
     ...
-
   ) +
+    ggplot2::labs(y = ylab) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
 
@@ -305,11 +307,13 @@ qbarplot <- function(
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
   file_name <- if (!is.null(filename)) {
     filename
   } else {
     FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
   }
+
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
@@ -644,8 +648,9 @@ qboxplot <- function(
     hide.legend = FALSE,
     also.pdf = TRUE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    logY = FALSE # , logX = FALSE
-    , annotation_logticks_Y = logY,
+    ylab = NULL, # xlab = NULL,
+    logY = FALSE, # , logX = FALSE
+    annotation_logticks_Y = logY,
     xlab.angle = 90,
     hline = FALSE, vline = FALSE,
     plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -678,6 +683,7 @@ qboxplot <- function(
     outlier.shape = outlier.shape,
     ...
   ) +
+    ggplot2::labs(y = ylab)  +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
@@ -855,6 +861,7 @@ qstripchart <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
+    ylab = NULL,
     plot = TRUE,
     add = c("violin", "mean_sd"),
     # outlier.shape = NULL,
@@ -872,7 +879,9 @@ qstripchart <- function(
     xlab.angle = 90,
     hline = FALSE, vline = FALSE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    grid = "y", w = 7, h = w, ...) {
+    grid = "y",
+    w = 7, h = w,
+    ...) {
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   if (length(col) > 1) {
@@ -895,6 +904,7 @@ qstripchart <- function(
     palette = palette_use,
     ...
   ) +
+    ggplot2::ylab(ylab) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
