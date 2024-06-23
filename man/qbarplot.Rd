@@ -31,6 +31,7 @@ qbarplot(
   max.names = 50,
   limitsize = FALSE,
   grid = "y",
+  ylab = NULL,
   w = qqqAxisLength(vec),
   h = 5,
   ...

@@ -987,9 +987,11 @@ qscatter <- function(
     xlab.angle = 90,
     hline = FALSE, vline = FALSE, abline = FALSE,
     add_contour_plot = FALSE,
-    correlation_r2 = FALSE # add as  c("pearson", "spearman")
-    , plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    correlation_r2 = FALSE, # add as  c("pearson", "spearman")
+    plot = TRUE, save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "xy",
+    # pt.size = NULL,
     w = 7, h = w,
     ...) {
   #
@@ -1000,6 +1002,7 @@ qscatter <- function(
   vars <- colnames(df_XYcol)
   cat("Variable (column) names 1-5:", head(vars), "...\n")
 
+  # browser()
   p <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
     title = FixPlotName(plotname, suffix),
@@ -1007,6 +1010,7 @@ qscatter <- function(
     caption = caption,
     palette = palette_use,
     color = col,
+    # size = pt.size,
     ...
   ) +
     ggpubr::grids(axis = "xy") +
@@ -1278,12 +1282,16 @@ qqSave <- function(
     also.pdf = FALSE,
     bgcol = "white",
     page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
-    title = FALSE, fname = FALSE,
+    title = FALSE,
+    fname = FALSE,
     w = 4, h = w,
-    suffix = NULL, ...) {
-  if (isFALSE(title)) title <- as.character(substitute(ggobj))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) sppp(title, suffix, "pdf") else sppp(fname, "pdf")
+    suffix = NULL,
+    ...) {
+  #
+  if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
   if (isFALSE(fname)) fname <- sppp(title, suffix, ext)
+  fname <- sppp(make.names(fname))
+  if (also.pdf) fname2 <- if (isFALSE(fname)) sppp(title, suffix, "pdf") else sppp(make.names(fname), "pdf")
 
   if (!isFALSE(page)) {
     wA4 <- 8.27

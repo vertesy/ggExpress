@@ -14,6 +14,7 @@ qstripchart(
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  ylab = NULL,
   plot = TRUE,
   add = c("violin", "mean_sd"),
   size.point = 0.2,
