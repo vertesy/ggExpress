@@ -254,7 +254,7 @@ qbarplot <- function(
     hline = FALSE, filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     col = as.character(1:3)[1],
-    xlab.angle = 45, xlab = "",
+    xlab = "", xlab.angle = 45,
     logY = FALSE,
     ylim = c(0, 1.1 * as.numeric(max(vec, na.rm = TRUE))),
     annotation_logticks_Y = logY,
