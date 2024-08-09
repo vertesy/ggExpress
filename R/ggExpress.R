@@ -942,6 +942,7 @@ qstripchart <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param label Point labels
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -977,6 +978,7 @@ qscatter <- function(
     caption = suffix,
     filename = NULL,
     col = c(NULL, 3)[1],
+    label = NULL, repel = TRUE,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE,
@@ -1010,6 +1012,7 @@ qscatter <- function(
     caption = caption,
     palette = palette_use,
     color = col,
+    label = label, repel = repel,
     # size = pt.size,
     ...
   ) +
