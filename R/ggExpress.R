@@ -413,7 +413,6 @@ qbarplot.df <- function(
     stopifnot("3rd column has too many categories" = nr_categ < max.categ)
   }
 
-  # browser()
   p <- ggpubr::ggbarplot(
     data = df, x = x, y = y,
     color = color,
@@ -659,7 +658,6 @@ qboxplot <- function(
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   if (length(col) > 1) {
-    # browser()
     if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
       stopifnot(length(col) == nrow(df_XYcol_or_list))
       col2 <- rep(col, lapply(df_XYcol_or_list, length))
@@ -884,10 +882,19 @@ qstripchart <- function(
     ...) {
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+
+  if (CodeAndRoll2::is.list2(df_XYcol_or_list))  {
+
+    if(length(col) == length(df_XYcol_or_list)) {
+      # Repeat color values for each vector in the list
+      col <- rep(col, sapply(df_XYcol_or_list, length))
+    }
+  }
+
   if (length(col) > 1) {
     stopifnot(length(col) == nrow(df_XYcol))
-    df_XYcol$'color' <- col
-    col <- 'color'
+    df_XYcol$'color' <- col # add color column
+    col <- which(colnames(df_XYcol) == 'color') # get index of color column
   }
 
   vars <- colnames(df_XYcol)
@@ -895,7 +902,8 @@ qstripchart <- function(
   stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggstripchart(
-    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
+    data = df_XYcol, x = vars[x], y = vars[y],
+    fill = vars[col],
     title = plotname,
     subtitle = subtitle,
     caption = caption,
@@ -1004,7 +1012,6 @@ qscatter <- function(
   vars <- colnames(df_XYcol)
   cat("Variable (column) names 1-5:", head(vars), "...\n")
 
-  # browser()
   p <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
     title = FixPlotName(plotname, suffix),
