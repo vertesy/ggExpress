@@ -911,9 +911,12 @@ qboxplot <- function(
     hline = FALSE, vline = FALSE,
     plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
+    max.categ = 100,
     w = 7, h = w, ...) {
 
+  # Define fill color
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   vars <- colnames(df_XYcol)
   if( !is.null(col)) {
@@ -922,8 +925,6 @@ qboxplot <- function(
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
 
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggboxplot(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
@@ -1025,16 +1026,15 @@ qviolin <- function(
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
+  .assertMaxCategories(df_XYcol, col = x, max.categ)
 
+  # Define fill color
   vars <- colnames(df_XYcol)
   if( !is.null(col)) {
     if( is.numeric(col) & col < length(vars) ) col <- col
     if( col %in% vars ) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
-
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopifnot(nrCategories.DFcol1 <= max.categ)
 
   p <- ggpubr::ggviolin(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
@@ -1137,20 +1137,20 @@ qstripchart <- function(
     hline = FALSE, vline = FALSE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
+    max.categ = 100,
     w = 7, h = w,
     ...) {
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  .assertMaxCategories(df_XYcol, col = x, max.categ)
 
+  # Define fill color
   vars <- colnames(df_XYcol)
   if( !is.null(col)) {
     if( is.numeric(col) & col < length(vars) ) col <- col
     if( col %in% vars ) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
-
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopif(nrCategories.DFcol1 > 100)
 
   p <- ggpubr::ggstripchart(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
@@ -1581,13 +1581,16 @@ qMarkdownImageLink <- function(file_name = "myplot.pdf") {
 
 
 
-# _________________________________________________________________________________________________
+# ______________________________________________________________________________________________----
+# Internal helper functions ----
+# ____________________________________________________________________
+
+
 #' @title qqqAxisLength
 #'
 #' @description Define Axis Length
 #' @param vec The variable to plot.
 #' @param minLength minLength
-#' @export
 #'
 #' @examples qqqAxisLength()
 qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
@@ -1607,7 +1610,6 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 #' @importFrom tibble tibble as_tibble
 #' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
 #'
-#' @export
 qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
@@ -1629,8 +1631,6 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 
 
 
-
-
 # _________________________________________________________________________________________________
 #' @title qqqTbl.2.Vec
 #'
@@ -1649,8 +1649,6 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
   vec
 }
 
-# _________________________________________________________________________________________________
-# _________________________________________________________________________________________________
 
 # _________________________________________________________________________________________________
 #' @title qqqList.2.DF.ggplot
@@ -1668,6 +1666,26 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   utils::stack(ls)[, 2:1]
 }
 
+# _________________________________________________________________________________________________
+#' @title Assert Maximum Categories in a DataFrame Column
+#'
+#' @description Checks if the number of unique categories in a column of a dataframe is within the allowed limit.
+#' @param df A data frame containing the column to be checked.
+#' @param col The column name or index in the data frame.
+#' @param max.categ The maximum allowed number of unique categories.
+#' @return Stops the function execution if the number of unique categories exceeds max.categ.
+#' @examples
+#' assertMaxCategories(df_XYcol, "x", 10)
+.assertMaxCategories <- function(df, col, max.categ) {
+  nrCategories <- length(unique(df[[col]]))
+
+  # Assert that the number of categories is less than or equal to max.categ
+  stopifnot(nrCategories <= max.categ)
+}
+
+
+
+# _________________________________________________________________________________________________
 
 
 
