@@ -325,6 +325,142 @@ qbarplot <- function(
 }
 
 
+# _________________________________________________________________________________________________
+#' @title qbarplot.stacked.from.wide.df - Barplot for tibbles or dataframes
+#'
+#' @description Draw and save a stacked barplot for each row of a dataframe.
+#' @param df The variable to plot.
+#' @param x Colname to split along X axis. Def colnames(df)[1]
+#' @param y Colname to count along y axis. Def colnames(df)[3]
+#' @param fill Color (split) by along Y.
+#' @param color Color (split) by along Y.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param hline Draw a horizontal line on the plot.
+#' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr Color palette to use.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param xlab X-axis label.
+#' @param logY Make Y axis log10-scale.
+#' @param label label
+#' @param hide.legend hide legend
+#' @param max.names The maximum number of names still to be shown on the axis.
+#' @param limitsize limitsize
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
+#' @examples
+#' # Example of wide-format data for stacked bar plot
+#' df.SingletSplit <- tibble::tibble(
+#'   doublet = c(0.027886224, 0.007699141, 0.003704390, 0.003205128),
+#'   singlet = c(0.9686280, 0.9872668, 0.9925912, 0.9119822),
+#'   unassigned = c(0.0034857780, 0.0050340539, 0.0037043897, 0.0848126233)
+#' )
+#' rownames(df.SingletSplit) <- c("sc06.692", "sc06.693", "sc08.325", "sc08.327")
+#'
+#' # Create the stacked bar plot using the new qbarplot.df2 function
+#' qbarplot.stacked.from.wide.df(df.SingletSplit)
+#'
+#' @export qbarplot.stacked.from.wide.df
+
+qbarplot.stacked.from.wide.df <- function(
+    df,
+    x = "Samples",
+    y = "Fraction",
+    z = "Category",
+    # fill = colnames(df)[3],
+    color = 1,
+    label = NULL,
+    also.pdf = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    plotname = FixPlotName(substitute(df)),
+    subtitle = NULL, suffix = NULL, caption = suffix,
+    filename = NULL,
+    scale = TRUE,
+    plot = TRUE,
+    save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    hline = FALSE, filtercol = 1,
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    xlab.angle = 45, xlab = x,
+    logY = FALSE,
+    annotation_logticks_Y = logY,
+    hide.legend = FALSE,
+    max.names = 50,
+    limitsize = FALSE,
+    grid = "y",
+    max.categ = 10,
+    top = NULL,
+    w = qqqAxisLength(df, factor = .7), h = 5,
+    ...) {
+
+  message(plotname)
+  stopifnot(is.data.frame(df),
+            ncol(df) > 2)
+
+  # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
+
+  # if (is.numeric(df[[fill]])) {
+  #   df[[fill]] <- as.factor(df[[fill]])
+  # }
+
+  df_long <- df |>
+    tibble::rownames_to_column(var = x) |>  # Convert row names to a column
+    tidyr::pivot_longer(cols = -!!sym(x),      # Convert wide to long format
+                        names_to = z, #"category"
+                        values_to = y # "Fraction"
+    )
+
+  p <- ggpubr::ggbarplot(
+    data = df_long, x = x, y = y,
+    color = color,
+    fill = z,   # Use the 'category' column created in long format
+    subtitle = subtitle,
+    title = plotname, xlab = xlab,
+    caption = caption,
+    label = label,
+    palette = palette_use,
+    position = if(scale) position_fill() else position_stack(),
+    ...
+  ) +
+    ggpubr::grids(axis = "y") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+
+  if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+  }
+  if (save) {
+    qqSave(
+      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf
+    )
+  }
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
 
 # _________________________________________________________________________________________________
 #' @title qbarplot.df - Barplot for tibbles or dataframes

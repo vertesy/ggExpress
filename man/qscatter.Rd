@@ -14,6 +14,8 @@ qscatter(
   caption = suffix,
   filename = NULL,
   col = c(NULL, 3)[1],
+  label = NULL,
+  repel = TRUE,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   hide.legend = FALSE,
@@ -52,6 +54,8 @@ qscatter(
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
 \item{col}{Color of the plot.}
+
+\item{label}{Point labels}
 
 \item{palette_use}{GGpubr Color palette to use.}
 
