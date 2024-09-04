@@ -8,7 +8,8 @@ qviolin(
   df_XYcol_or_list,
   x = 1,
   y = 2,
-  col = 1,
+  col = NULL,
+  fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
@@ -32,6 +33,7 @@ qviolin(
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  max.categ = 100,
   w = 7,
   h = w,
   ...

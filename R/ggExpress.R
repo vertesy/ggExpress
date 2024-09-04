@@ -7,11 +7,10 @@
 # source('~/.pack.R')
 
 # ______________________________________________________________________________________________----
-# Main plotting functions  ----
+# Simple plots  ----
 # ____________________________________________________________________
 
 
-# _________________________________________________________________________________________________
 #' @title Quick Histogram Plotting
 #'
 #' @description This function generates a histogram and saves the plot for a given vector and offers several customizations.
@@ -197,6 +196,149 @@ qdensity <- function(
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
+
+# _________________________________________________________________________________________________
+#' @title qpie
+#'
+#' @description Draw and save a pie chart
+#' @param vec The variable to plot.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param LegendSide LegendSide
+#' @param LegendTitle LegendTitle
+#' @param NoLegend NoLegend
+#' @param pcdigits pcdigits
+#' @param NamedSlices NamedSlices
+#' @param extended.canvas Make an extended canvas, default: T
+#' @param custom.margin custom plot margin, default: T
+#' @param max.categories Maximum number of categories to be shown as a seprate slice
+#' @param decr.order Slices in the order of df. By default would ordered alphabetically in the plot.
+#' @param both_pc_and_value Report both percentage AND number.
+#' @param custom.order custom.order
+#' @param palette_use GGpubr Color palette to use.
+#' @param max.names The maximum number of names still to be shown on the axis.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param label Slice labels. Set to NULL to remove slice names.
+#'
+#' @export
+#'
+#' @examples xvec <- c("A" = 12, "B" = 29)
+#' qpie(vec = xvec)
+qpie <- function(
+    vec = MyVec,
+    also.pdf = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    plot = TRUE, save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    plotname = FixPlotName(substitute(vec)),
+    filename = NULL,
+    subtitle = NULL,
+    suffix = NULL,
+    caption = suffix,
+    NoLegend = FALSE,
+    LegendSide = TRUE,
+    LegendTitle = plotname,
+    pcdigits = 2, NamedSlices = FALSE,
+    custom.order = FALSE,
+    extended.canvas = TRUE,
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    custom.margin = TRUE,
+    max.categories = 100,
+    max.names = 10,
+    decr.order = TRUE,
+    both_pc_and_value = FALSE,
+    labels = "names" # Set to NULL to remove slice names.
+    , w = 7, h = 5, ...) {
+  print(plotname)
+  l.orig <- length(vec)
+  sum.orig <- sum(vec)
+
+  # Plot annotation ________________________________________________
+  st <- paste("Sum:", sum.orig)
+  subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
+
+  ct <- paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names)
+  caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
+
+  # ________________________________________________
+  if (l.orig > max.categories) {
+    iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
+    sv <- sort(vec, decreasing = TRUE)
+    vec.new <- sv[1:(max.categories - 1)]
+    idx.remaining <- max.categories:length(vec)
+    sum.of.remaining <- sum(sv[idx.remaining])
+    fr.sum <- percentage_formatter(sum.of.remaining / sum(vec))
+    iprint("The remaining", length(idx.remaining), "values make up", fr.sum, "of the data.")
+
+    vec.new[max.categories] <- sum.of.remaining
+    name.of.last <- paste("Sum of rem.", length(idx.remaining))
+    names(vec.new)[max.categories] <- name.of.last
+    vec <- vec.new
+  }
+
+  if (is.null(names(vec))) {
+    names(vec) <- as.character(1:length(vec))
+  }
+
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
+  if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
+
+  pcX <- df$"value" / sum(df$"value")
+  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+
+  idx.named <- which(!df$"names" == "")
+  df$"names"[idx.named] <- paste(df$"names"[idx.named], labs[idx.named], sep = "\n")
+
+  # print('- -')
+  if (both_pc_and_value) df$"names"[idx.named] <- paste(df$"names"[idx.named], df$"value"[idx.named], sep = "\n")
+
+  if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
+
+  nrCategories.DFcol1 <- length(unique(df[, 1]))
+  stopif(nrCategories.DFcol1 > max.categories)
+  print(nrCategories.DFcol1)
+
+  if (NamedSlices) labs <- paste(df$names, "\n", labs)
+  if (custom.order != F) df$"names" <- factor(df$"names", levels = custom.order)
+
+  (p <- ggpubr::ggpie(
+    data = df,
+    x = "value",
+    label = labels,
+    subtitle = subtitle,
+    caption = caption,
+    fill = "names",
+    color = "white",
+    title = plotname,
+    palette = palette_use
+    # , ...
+  )) + theme(legend.title = LegendTitle)
+
+  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
+  if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
+
+  p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, "pie", ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
+
   if (plot) p
 }
 
@@ -589,494 +731,6 @@ qbarplot.df <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qpie
-#'
-#' @description Draw and save a pie chart
-#' @param vec The variable to plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param plot Display the plot.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
-#' @param subtitle Optional subtitle text added below the title. Default is NULL.
-#' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param LegendSide LegendSide
-#' @param LegendTitle LegendTitle
-#' @param NoLegend NoLegend
-#' @param pcdigits pcdigits
-#' @param NamedSlices NamedSlices
-#' @param extended.canvas Make an extended canvas, default: T
-#' @param custom.margin custom plot margin, default: T
-#' @param max.categories Maximum number of categories to be shown as a seprate slice
-#' @param decr.order Slices in the order of df. By default would ordered alphabetically in the plot.
-#' @param both_pc_and_value Report both percentage AND number.
-#' @param custom.order custom.order
-#' @param palette_use GGpubr Color palette to use.
-#' @param max.names The maximum number of names still to be shown on the axis.
-#' @param w Width of the plot.
-#' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#' @param label Slice labels. Set to NULL to remove slice names.
-#'
-#' @export
-#'
-#' @examples xvec <- c("A" = 12, "B" = 29)
-#' qpie(vec = xvec)
-qpie <- function(
-    vec = MyVec,
-    also.pdf = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE, save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    plotname = FixPlotName(substitute(vec)),
-    filename = NULL,
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    NoLegend = FALSE,
-    LegendSide = TRUE,
-    LegendTitle = plotname,
-    pcdigits = 2, NamedSlices = FALSE,
-    custom.order = FALSE,
-    extended.canvas = TRUE,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    custom.margin = TRUE,
-    max.categories = 100,
-    max.names = 10,
-    decr.order = TRUE,
-    both_pc_and_value = FALSE,
-    labels = "names" # Set to NULL to remove slice names.
-    , w = 7, h = 5, ...) {
-  print(plotname)
-  l.orig <- length(vec)
-  sum.orig <- sum(vec)
-
-  # Plot annotation ________________________________________________
-  st <- paste("Sum:", sum.orig)
-  subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
-
-  ct <- paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names)
-  caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
-
-  # ________________________________________________
-  if (l.orig > max.categories) {
-    iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
-    sv <- sort(vec, decreasing = TRUE)
-    vec.new <- sv[1:(max.categories - 1)]
-    idx.remaining <- max.categories:length(vec)
-    sum.of.remaining <- sum(sv[idx.remaining])
-    fr.sum <- percentage_formatter(sum.of.remaining / sum(vec))
-    iprint("The remaining", length(idx.remaining), "values make up", fr.sum, "of the data.")
-
-    vec.new[max.categories] <- sum.of.remaining
-    name.of.last <- paste("Sum of rem.", length(idx.remaining))
-    names(vec.new)[max.categories] <- name.of.last
-    vec <- vec.new
-  }
-
-  if (is.null(names(vec))) {
-    names(vec) <- as.character(1:length(vec))
-  }
-
-  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
-  if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
-
-  pcX <- df$"value" / sum(df$"value")
-  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
-
-  idx.named <- which(!df$"names" == "")
-  df$"names"[idx.named] <- paste(df$"names"[idx.named], labs[idx.named], sep = "\n")
-
-  # print('- -')
-  if (both_pc_and_value) df$"names"[idx.named] <- paste(df$"names"[idx.named], df$"value"[idx.named], sep = "\n")
-
-  if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
-
-  nrCategories.DFcol1 <- length(unique(df[, 1]))
-  stopif(nrCategories.DFcol1 > max.categories)
-  print(nrCategories.DFcol1)
-
-  if (NamedSlices) labs <- paste(df$names, "\n", labs)
-  if (custom.order != F) df$"names" <- factor(df$"names", levels = custom.order)
-
-  (p <- ggpubr::ggpie(
-    data = df,
-    x = "value",
-    label = labels,
-    subtitle = subtitle,
-    caption = caption,
-    fill = "names",
-    color = "white",
-    title = plotname,
-    palette = palette_use
-    # , ...
-  )) + theme(legend.title = LegendTitle)
-
-  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
-  if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
-
-  p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    FixPlotName(plotname, suffix, "pie", ext)
-  }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(file_name)
-
-  if (plot) p
-}
-
-# _________________________________________________________________________________________________
-#' @title qboxplot
-#'
-#' @description Draw and save a boxplot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
-#' @param subtitle Optional subtitle text added below the title. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param logY Make Y axis log10-scale.
-#' @param hline Draw a horizontal line on the plot.
-#' @param vline Draw a vertical line on the plot.
-#' @param outlier.shape outlier shape. NA to hide.
-#' @param stat.test Do a statistical test?
-#' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
-#' @param plot Display the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#'
-#' @importFrom CodeAndRoll2 is.list2
-#' @export
-#' @examples data("ToothGrowth")
-#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
-#' qboxplot(ToothLen.by.Dose)
-qboxplot <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2, col = 1,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-    outlier.shape = NULL,
-    stat.test = TRUE
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
-    # , fill = c(NULL , 3)[1]
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    hide.legend = FALSE,
-    also.pdf = TRUE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ylab = NULL, # xlab = NULL,
-    logY = FALSE, # , logX = FALSE
-    annotation_logticks_Y = logY,
-    xlab.angle = 90,
-    hline = FALSE, vline = FALSE,
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    grid = "y",
-    w = 7, h = w, ...) {
-
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
-  if (length(col) > 1) {
-    if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
-      stopifnot(length(col) == nrow(df_XYcol_or_list))
-      col2 <- rep(col, lapply(df_XYcol_or_list, length))
-    }
-
-    df_XYcol$'fill' <- col2
-    col <- 3
-  }
-
-  vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopif(nrCategories.DFcol1 > 100)
-
-  p <- ggpubr::ggboxplot(
-    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
-    title = plotname,
-    subtitle = subtitle,
-    caption = caption,
-    # , fill = fill
-    palette = palette_use,
-    outlier.shape = outlier.shape,
-    ...
-  ) +
-    ggplot2::labs(y = ylab)  +
-    ggpubr::grids(axis = "y") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    FixPlotName(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
-  }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
-}
-
-
-# _________________________________________________________________________________________________
-#' @title qviolin
-#'
-#' @description Draw and save a violin plot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param plotname Name of the plot
-#' @param subtitle Optional subtitle text added below the title. Default is NULL.
-#' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param logY Make Y axis log10-scale.
-#' @param hline Draw a horizontal line on the plot.
-#' @param vline Draw a vertical line on the plot.
-#' @param stat.test Do a statistical test?
-#' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
-#' @param plot Display the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#'
-#' @importFrom CodeAndRoll2 is.list2
-#' @export
-#' @examples data("ToothGrowth")
-#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
-#' qviolin(ToothLen.by.Dose)
-qviolin <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2, col = 1,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-    stat.test = FALSE,
-    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    hide.legend = FALSE,
-    also.pdf = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    logY = FALSE # , logX = FALSE
-    , annotation_logticks_Y = logY,
-    xlab.angle = 45,
-    hline = FALSE, vline = FALSE,
-    grid = FALSE,
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE)
-    # , outlier.shape = NULL
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    # , fill = c(NULL , 3)[1]
-    , w = 7, h = w, ...) {
-
-  # stopifnot(is.numeric(xlab.angle))
-
-  # plotname <- if (isFALSE(title)) sppp(make.names(as.character(substitute(df_XYcol_or_list))), suffix) else title
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
-  message("nrow(df_XYcol): ", nrow(df_XYcol))
-
-  vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopif(nrCategories.DFcol1 > 100)
-
-  p <- ggpubr::ggviolin(
-    data = df_XYcol, x = vars[x], y = vars[y], fill = vars[col],
-    title = plotname,
-    subtitle = subtitle,
-    caption = caption
-    # , fill = fill
-    # , outlier.shape = outlier.shape
-    , palette = palette_use,
-    ...
-  ) +
-    ggpubr::grids(axis = "y") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
-  }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
-}
-
-
-
-# _________________________________________________________________________________________________
-#' @title qstripchart
-#'
-#' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
-#' @param plotname Name of the plot
-#' @param subtitle Optional subtitle text added below the title. Default is NULL.
-#' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param plot Display the plot.
-#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param logY Make Y axis log10-scale.
-#' @param hline Draw a horizontal line on the plot.
-#' @param vline Draw a vertical line on the plot.
-#' @param stat.test Do a statistical test?
-#' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
-#' @param size.point Size of points
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#'
-#' @importFrom CodeAndRoll2 is.list2
-#' @examples data("ToothGrowth")
-#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
-#' qstripchart(ToothLen.by.Dose)
-#'
-#' @export
-qstripchart <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2, col = 1,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-    ylab = NULL,
-    plot = TRUE,
-    add = c("violin", "mean_sd"),
-    # outlier.shape = NULL,
-    size.point = .2,
-    stat.test = TRUE,
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75,
-    # , fill = c(NULL , 3)[1]
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    hide.legend = FALSE,
-    also.pdf = TRUE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
-    logY = FALSE, # , logX = FALSE
-    annotation_logticks_Y = logY,
-    xlab.angle = 90,
-    hline = FALSE, vline = FALSE,
-    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    grid = "y",
-    w = 7, h = w,
-    ...) {
-
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
-
-  if (CodeAndRoll2::is.list2(df_XYcol_or_list))  {
-
-    if(length(col) == length(df_XYcol_or_list)) {
-      # Repeat color values for each vector in the list
-      col <- rep(col, sapply(df_XYcol_or_list, length))
-    }
-  }
-
-  if (length(col) > 1) {
-    stopifnot(length(col) == nrow(df_XYcol))
-    df_XYcol$'color' <- col # add color column
-    col <- which(colnames(df_XYcol) == 'color') # get index of color column
-  }
-
-  vars <- colnames(df_XYcol)
-  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
-  stopif(nrCategories.DFcol1 > 100)
-
-  p <- ggpubr::ggstripchart(
-    data = df_XYcol, x = vars[x], y = vars[y],
-    fill = vars[col],
-    title = plotname,
-    subtitle = subtitle,
-    caption = caption,
-    add = add,
-    size = size.point,
-    palette = palette_use,
-    ...
-  ) +
-    ggplot2::ylab(ylab) +
-    ggpubr::grids(axis = "y") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
-
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-
-  fix <- sppp("stripchart", sppp(add))
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    FixPlotName(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
-  }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
-  if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
-}
-
-
-
-
-# _________________________________________________________________________________________________
 #' @title qscatter
 #'
 #' @description Draw and save a 2D-scatter plot.
@@ -1187,6 +841,352 @@ qscatter <- function(
   if (mdlink & save) qMarkdownImageLink(file_name)
   p
 }
+
+
+
+
+# ______________________________________________________________________________________________----
+# List-based distributio plots ----
+# ____________________________________________________________________
+
+
+
+#' @title qboxplot
+#'
+#' @description Draw and save a boxplot
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param logY Make Y axis log10-scale.
+#' @param hline Draw a horizontal line on the plot.
+#' @param vline Draw a vertical line on the plot.
+#' @param outlier.shape outlier shape. NA to hide.
+#' @param stat.test Do a statistical test?
+#' @param stat.method stat method. NULL for default
+#' @param stat.label.y.npc stat label y position
+#' @param stat.label.x stat label x position
+#' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param hide.legend hide legend
+#' @param palette_use GGpubr Color palette to use.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
+#' @importFrom CodeAndRoll2 is.list2
+#' @export
+#' @examples data("ToothGrowth")
+#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+#' qboxplot(ToothLen.by.Dose)
+qboxplot <- function(
+    df_XYcol_or_list,
+    x = 1, y = 2, col = NULL,
+    fill = "gold",
+    plotname = FixPlotName(substitute(df_XYcol_or_list)),
+    subtitle = NULL,
+    suffix = NULL,
+    caption = suffix,
+    filename = NULL,
+    outlier.shape = NULL,
+    stat.test = TRUE
+    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
+    # , fill = c(NULL , 3)[1]
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    hide.legend = FALSE,
+    also.pdf = TRUE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ylab = NULL, # xlab = NULL,
+    logY = FALSE, # , logX = FALSE
+    annotation_logticks_Y = logY,
+    xlab.angle = 90,
+    hline = FALSE, vline = FALSE,
+    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    grid = "y",
+    w = 7, h = w, ...) {
+
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+
+  vars <- colnames(df_XYcol)
+  if( !is.null(col)) {
+    if( is.numeric(col) & col < length(vars) ) col <- col
+    if( col %in% vars ) col <- vars[col]
+    fill <- col # if col (color as a column name) is provided, fill is set to col
+  }
+
+  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
+  stopif(nrCategories.DFcol1 > 100)
+
+  p <- ggpubr::ggboxplot(
+    data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
+    title = plotname,
+    subtitle = subtitle,
+    caption = caption,
+    # , fill = fill
+    palette = palette_use,
+    outlier.shape = outlier.shape,
+    ...
+  ) +
+    ggplot2::labs(y = ylab)  +
+    ggpubr::grids(axis = "y") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
+  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
+
+# _________________________________________________________________________________________________
+#' @title qviolin
+#'
+#' @description Draw and save a violin plot
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param plotname Name of the plot
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param logY Make Y axis log10-scale.
+#' @param hline Draw a horizontal line on the plot.
+#' @param vline Draw a vertical line on the plot.
+#' @param stat.test Do a statistical test?
+#' @param stat.method stat method. NULL for default
+#' @param stat.label.y.npc stat label y position
+#' @param stat.label.x stat label x position
+#' @param plot Display the plot.
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param hide.legend hide legend
+#' @param palette_use GGpubr Color palette to use.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
+#' @importFrom CodeAndRoll2 is.list2
+#' @export
+#' @examples data("ToothGrowth")
+#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+#' qviolin(ToothLen.by.Dose)
+qviolin <- function(
+    df_XYcol_or_list,
+    x = 1, y = 2, col = NULL,
+    fill = "gold",
+    plotname = FixPlotName(substitute(df_XYcol_or_list)),
+    subtitle = NULL,
+    suffix = NULL,
+    caption = suffix,
+    filename = NULL,
+    stat.test = FALSE,
+    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    hide.legend = FALSE,
+    also.pdf = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    logY = FALSE, # , logX = FALSE
+    annotation_logticks_Y = logY,
+    xlab.angle = 45,
+    hline = FALSE, vline = FALSE,
+    grid = FALSE,
+    plot = TRUE, save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    # , outlier.shape = NULL
+    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+    max.categ = 100,
+    w = 7, h = w, ...) {
+
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  message("nrow(df_XYcol): ", nrow(df_XYcol))
+
+  vars <- colnames(df_XYcol)
+  if( !is.null(col)) {
+    if( is.numeric(col) & col < length(vars) ) col <- col
+    if( col %in% vars ) col <- vars[col]
+    fill <- col # if col (color as a column name) is provided, fill is set to col
+  }
+
+  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
+  stopifnot(nrCategories.DFcol1 <= max.categ)
+
+  p <- ggpubr::ggviolin(
+    data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
+    title = plotname,
+    subtitle = subtitle,
+    caption = caption,
+    # , outlier.shape = outlier.shape
+    palette = palette_use,
+    ...
+  ) +
+    ggpubr::grids(axis = "y") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
+  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
+
+
+# _________________________________________________________________________________________________
+#' @title qstripchart
+#'
+#' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param plotname Name of the plot
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param plot Display the plot.
+#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param logY Make Y axis log10-scale.
+#' @param hline Draw a horizontal line on the plot.
+#' @param vline Draw a vertical line on the plot.
+#' @param stat.test Do a statistical test?
+#' @param stat.method stat method. NULL for default
+#' @param stat.label.y.npc stat label y position
+#' @param stat.label.x stat label x position
+#' @param size.point Size of points
+#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param hide.legend hide legend
+#' @param palette_use GGpubr Color palette to use.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
+#' @importFrom CodeAndRoll2 is.list2
+#' @examples data("ToothGrowth")
+#' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
+#' qstripchart(ToothLen.by.Dose)
+#'
+#' @export
+qstripchart <- function(
+    df_XYcol_or_list,
+    x = 1, y = 2, col = NULL,
+    fill = "gold",
+    plotname = FixPlotName(substitute(df_XYcol_or_list)),
+    subtitle = NULL,
+    suffix = NULL,
+    caption = suffix,
+    filename = NULL,
+    ylab = NULL,
+    plot = TRUE,
+    add = c("violin", "mean_sd"),
+    # outlier.shape = NULL,
+    size.point = .2,
+    stat.test = TRUE,
+    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+    stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75,
+    # , fill = c(NULL , 3)[1]
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    hide.legend = FALSE,
+    also.pdf = TRUE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
+    logY = FALSE, # , logX = FALSE
+    annotation_logticks_Y = logY,
+    xlab.angle = 90,
+    hline = FALSE, vline = FALSE,
+    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    grid = "y",
+    w = 7, h = w,
+    ...) {
+
+  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+
+  vars <- colnames(df_XYcol)
+  if( !is.null(col)) {
+    if( is.numeric(col) & col < length(vars) ) col <- col
+    if( col %in% vars ) col <- vars[col]
+    fill <- col # if col (color as a column name) is provided, fill is set to col
+  }
+
+  nrCategories.DFcol1 <- length(unique(df_XYcol[, 1]))
+  stopif(nrCategories.DFcol1 > 100)
+
+  p <- ggpubr::ggstripchart(
+    data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
+    title = plotname,
+    subtitle = subtitle,
+    caption = caption,
+    add = add,
+    size = size.point,
+    palette = palette_use,
+    ...
+  ) +
+    ggplot2::ylab(ylab) +
+    ggpubr::grids(axis = "y") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+
+  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+
+  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+
+  fix <- sppp("stripchart", sppp(add))
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
+  }
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
 
 
 
@@ -1400,7 +1400,7 @@ qvenn <- function(
 # Auxiliary functions ----
 # ____________________________________________________________________
 
-# _________________________________________________________________________________________________
+
 #' @title qqSave
 #'
 #' @description Quick-Save ggplot objects
