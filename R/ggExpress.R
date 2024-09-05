@@ -408,6 +408,7 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec), h = 5,
     ...) {
+
   stopifnot(is.numeric(vec))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = F)
