@@ -109,7 +109,7 @@ qhistogram <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "hist", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "hist", ext)
   }
   file_name <- FixPlotName(file_name)
 
@@ -192,7 +192,7 @@ qdensity <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "dens", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "dens", ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -454,7 +454,7 @@ qbarplot <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
   }
 
   if (save) {
@@ -592,7 +592,7 @@ qbarplot.stacked.from.wide.df <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
   }
   if (save) {
     qqSave(
@@ -718,7 +718,7 @@ qbarplot.df <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "bar", flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
   }
   if (save) {
     qqSave(
@@ -835,7 +835,7 @@ qscatter <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "scatter", flag.nameiftrue(logX), flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
   if (plot) p
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
@@ -954,7 +954,7 @@ qboxplot <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "boxplot", flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -1181,7 +1181,7 @@ qstripchart <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, fix, suffix, "plot", flag.nameiftrue(logY), ext)
+    FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
