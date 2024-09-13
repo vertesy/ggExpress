@@ -1127,16 +1127,13 @@ qstripchart <- function(
     ylab = NULL,
     plot = TRUE,
     add = c("violin", "mean_sd"),
-    # outlier.shape = NULL,
     size.point = .2,
     stat.test = TRUE,
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75,
-    # , fill = c(NULL , 3)[1]
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "pdf", also_pdf = also.pdf),
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 90,
