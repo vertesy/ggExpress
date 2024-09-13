@@ -228,10 +228,10 @@ qdensity <- function(
 #' @param custom.order custom.order
 #' @param palette_use GGpubr Color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
+#' @param label Slice labels. Set to NULL to remove slice names.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
-#' @param label Slice labels. Set to NULL to remove slice names.
 #'
 #' @export
 #'
@@ -260,8 +260,9 @@ qpie <- function(
     max.names = 10,
     decr.order = TRUE,
     both_pc_and_value = FALSE,
-    labels = "names" # Set to NULL to remove slice names.
-    , w = 7, h = 5, ...) {
+    labels = "names", # Set to NULL to remove slice names.
+    w = 7, h = 5,
+    ...) {
   print(plotname)
   l.orig <- length(vec)
   sum.orig <- sum(vec)
@@ -314,7 +315,7 @@ qpie <- function(
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != F) df$"names" <- factor(df$"names", levels = custom.order)
 
-  (p <- ggpubr::ggpie(
+  p <- ggpubr::ggpie(
     data = df,
     x = "value",
     label = labels,
@@ -325,17 +326,21 @@ qpie <- function(
     title = plotname,
     palette = palette_use
     # , ...
-  )) + theme(legend.title = LegendTitle)
+    ) +
+    guides(fill = guide_legend(LegendTitle))
+    # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
 
   p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
+
   file_name <- if (!is.null(filename)) {
     filename
   } else {
     FixPlotName(plotname, suffix, "pie", ext)
   }
+
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
   if (mdlink & save) qMarkdownImageLink(file_name)
 
