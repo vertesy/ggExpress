@@ -20,6 +20,7 @@ qvenn(
   col.min = "white",
   col.max = "red",
   hide.legend = FALSE,
+  x_exp = 0.2,
   w = 8,
   h = 0.75 * w,
   ...
@@ -55,6 +56,8 @@ qvenn(
 \item{col.max}{Color scale maximum, default: red}
 
 \item{hide.legend}{hide legend}
+
+\item{x_exp}{Expand axis to show long set labels. Default: 0.2.}
 
 \item{w}{Width of the plot.}
 

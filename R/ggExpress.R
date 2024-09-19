@@ -1212,6 +1212,7 @@ qstripchart <- function(
 #' @param col.min Color scale minimum, default: white
 #' @param col.max Color scale maximum, default: red
 #' @param hide.legend hide legend
+#' @param x_exp Expand axis to show long set labels. Default: 0.2.
 #' @param w Width of the plot.
 #' @param h Height of the plot. Default: h = w * 0.75.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -1237,18 +1238,20 @@ qvenn <- function(
     # , xlab.angle = 90
     col.min = "white", col.max = "red",
     hide.legend = FALSE,
+    x_exp = .2,
     w = 8, h = 0.75 * w,
     ...) {
   #
   if(!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
-  p <- ggVennDiagram::ggVennDiagram(list, ...) +
+  p <- ggVennDiagram::ggVennDiagram(list, ..., ) +
     scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
       title = paste(" ", plotname),
       subtitle = paste(" ", subtitle, "\n"),
       caption = caption
     ) +
+    scale_x_continuous(expand = expansion(mult = x_exp)) + # expand axis to show long set labels
     theme(plot.background = element_rect(fill = "white", colour = "white"))
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
