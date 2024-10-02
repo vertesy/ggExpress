@@ -407,7 +407,7 @@ qbarplot <- function(
     annotation_logticks_Y = logY,
     label = NULL,
     hide.legend = TRUE,
-    max.names = 50,
+    max.names = 100,
     limitsize = FALSE,
     grid = "y",
     ylab = NULL,
