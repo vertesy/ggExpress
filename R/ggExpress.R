@@ -17,6 +17,7 @@
 #' @param vec A numeric vector for which the histogram is to be plotted.
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param xlab Label for the X-axis. By default, it uses the plot name.
 #' @param plot Logical indicating whether to display the plot. Default is TRUE.
 #' @param add Character defining the type of plot annotations to add. Default is 'median'.
@@ -53,7 +54,7 @@
 #' @export
 qhistogram <- function(
     vec,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     plotname = FixPlotName(substitute(vec)),
@@ -113,7 +114,7 @@ qhistogram <- function(
   }
   file_name <- FixPlotName(file_name)
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -127,6 +128,7 @@ qhistogram <- function(
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -153,7 +155,7 @@ qhistogram <- function(
 #' qdensity(weight)
 qdensity <- function(
     vec,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     xlab = FALSE, plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
@@ -194,7 +196,7 @@ qdensity <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "dens", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -207,6 +209,7 @@ qdensity <- function(
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -239,7 +242,7 @@ qdensity <- function(
 #' qpie(vec = xvec)
 qpie <- function(
     vec = MyVec,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE, save = TRUE,
     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -341,7 +344,7 @@ qpie <- function(
     FixPlotName(plotname, suffix, "pie", ext)
   }
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
 
   if (plot) p
@@ -356,6 +359,7 @@ qpie <- function(
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
@@ -389,7 +393,7 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
@@ -465,8 +469,7 @@ qbarplot <- function(
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
-      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf
-    )
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj)
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
@@ -484,6 +487,7 @@ qbarplot <- function(
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -530,7 +534,7 @@ qbarplot.stacked.from.wide.df <- function(
     # fill = colnames(df)[3],
     color = 1,
     label = NULL,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
@@ -602,7 +606,7 @@ qbarplot.stacked.from.wide.df <- function(
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
-      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -621,6 +625,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -661,7 +666,7 @@ qbarplot.df <- function(
     fill = colnames(df)[3],
     color = 1,
     label = NULL,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
@@ -728,7 +733,7 @@ qbarplot.df <- function(
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
-      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -750,6 +755,7 @@ qbarplot.df <- function(
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
@@ -781,11 +787,12 @@ qscatter <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
+    also.pdf = TRUE,
+    save.obj = FALSE,
     col = c(NULL, 3)[1],
     label = NULL, repel = TRUE,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
-    also.pdf = TRUE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logX = FALSE, logY = FALSE,
     annotation_logticks_Y = logY,
@@ -843,7 +850,7 @@ qscatter <- function(
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
   if (plot) p
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   p
 }
@@ -867,6 +874,7 @@ qscatter <- function(
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -961,7 +969,7 @@ qboxplot <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -979,6 +987,7 @@ qboxplot <- function(
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -1016,7 +1025,7 @@ qviolin <- function(
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1069,7 +1078,7 @@ qviolin <- function(
   } else {
     FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1090,6 +1099,7 @@ qviolin <- function(
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -1185,7 +1195,7 @@ qstripchart <- function(
   } else {
     FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1206,6 +1216,7 @@ qstripchart <- function(
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -1224,7 +1235,7 @@ qstripchart <- function(
 #' @export
 qvenn <- function(
     list,
-    also.pdf = FALSE,
+    also.pdf = FALSE, save.obj = FALSE,
     plotname = FixPlotName(substitute(list)),
     suffix = NULL,
     subtitle = paste(length(unique(unlist(list))), "elements in total"),
@@ -1266,7 +1277,7 @@ qvenn <- function(
   }
 
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name,
-                   ext = ext, w = w, h = h, also.pdf = also.pdf)
+                   ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1337,7 +1348,7 @@ qvenn <- function(
 #     caption = NULL,
 #     suffix = NULL,
 #     filename = NULL,
-#     also.pdf = FALSE,
+#     also.pdf = FALSE, save.obj = FALSE,
 #     save = TRUE,
 #     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
 #     color = colorRampPalette(c( "#0073c2","white","#efc000"))(100),
@@ -1392,7 +1403,7 @@ qvenn <- function(
 #   }
 #
 #   if (save) {
-#     qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf)
+#     qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
 #   }
 #
 #   if (mdlink & save) {
@@ -1413,13 +1424,13 @@ qvenn <- function(
 #' @param ggobj Plot as ggplot object.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param bgcol Plot background color. Default: "white".
 #' @param page Set page size to a predefined value, eg. "A4".
 #' Default: `c(F, "A4p", "A4l", "A5p", "A5l")[1]`
 #' @param title title field for pdf file (saved into file metadata)
 #' @param fname Manual filename
 #' @param suffix A suffix added to the filename. Default: NULL.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -1429,21 +1440,23 @@ qvenn <- function(
 #' qqSave(ggobj = xplot, ext = "pdf")
 #' @importFrom cowplot save_plot
 #' @importFrom qs qsave
+#' @importFrom tictoc tic toc
 #'
 #' @export
 qqSave <- function(
     ggobj,
     ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
     also.pdf = FALSE,
+    save.obj = FALSE,
     bgcol = "white",
     page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
     title = FALSE,
     fname = FALSE,
     suffix = NULL,
-    save.obj = FALSE,
     w = 4, h = w,
     ...) {
   #
+  tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
   if (isFALSE(fname)) fname <- sppp(title, suffix, ext)
   fname <- sppp(make.names(fname))
@@ -1474,13 +1487,17 @@ qqSave <- function(
   # Set the plot background to white
   ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
 
+  # Save the plot
   if (also.pdf) {
     cowplot::save_plot(
       plot = ggobj, filename = fname2, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
-      ...
-    )
+      ... )
   }
+
+  cowplot::save_plot(
+    plot = ggobj, filename = fname,
+    base_width = w, base_height = h, ...)
 
   if(save.obj) {
     fnp.qs <- sppp(fnp, 'qs')
@@ -1489,10 +1506,7 @@ qqSave <- function(
     message(CMND)
   }
 
-  cowplot::save_plot(
-    plot = ggobj, filename = fname,
-    base_width = w, base_height = h, ...
-  )
+  tictoc::toc()
 }
 
 
