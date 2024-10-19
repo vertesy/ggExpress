@@ -12,9 +12,10 @@ qqSave(
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
   fname = FALSE,
+  suffix = NULL,
+  save.obj = FALSE,
   w = 4,
   h = w,
-  suffix = NULL,
   ...
 )
 }
@@ -23,21 +24,24 @@ qqSave(
 
 \item{ext}{File extension (.pdf / .png).}
 
-\item{also.pdf}{Save plot in both png and pdf formats.}
+\item{also.pdf}{Save plot in both png and pdf formats. Default: FALSE.}
 
-\item{bgcol}{Plot background color}
+\item{bgcol}{Plot background color. Default: "white".}
 
-\item{page}{page}
+\item{page}{Set page size to a predefined value, eg. "A4".
+Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
 
 \item{title}{title field for pdf file (saved into file metadata)}
 
-\item{fname}{fname}
+\item{fname}{Manual filename}
+
+\item{suffix}{A suffix added to the filename. Default: NULL.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
-
-\item{suffix}{A suffix added to the filename. NULL by default.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }

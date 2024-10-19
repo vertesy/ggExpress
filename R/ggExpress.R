@@ -1412,22 +1412,25 @@ qvenn <- function(
 #' @description Quick-Save ggplot objects
 #' @param ggobj Plot as ggplot object.
 #' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param bgcol Plot background color
-#' @param page page
+#' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
+#' @param bgcol Plot background color. Default: "white".
+#' @param page Set page size to a predefined value, eg. "A4".
+#' Default: `c(F, "A4p", "A4l", "A5p", "A5l")[1]`
 #' @param title title field for pdf file (saved into file metadata)
-#' @param fname fname
-#' @param suffix A suffix added to the filename. NULL by default.
+#' @param fname Manual filename
+#' @param suffix A suffix added to the filename. Default: NULL.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
-#' @export
 #'
 #' @examples xplot <- ggplot2::qplot(12)
 #' qqSave(ggobj = xplot)
 #' qqSave(ggobj = xplot, ext = "pdf")
 #' @importFrom cowplot save_plot
-
+#' @importFrom qs qsave
+#'
+#' @export
 qqSave <- function(
     ggobj,
     ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
@@ -1436,8 +1439,9 @@ qqSave <- function(
     page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
     title = FALSE,
     fname = FALSE,
-    w = 4, h = w,
     suffix = NULL,
+    save.obj = FALSE,
+    w = 4, h = w,
     ...) {
   #
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
@@ -1465,7 +1469,7 @@ qqSave <- function(
       h <- wA4 / 2
     }
   }
-  print(paste0(getwd(), "/", fname))
+  fnp <- paste0(getwd(), "/", fname); print(fnp)
 
   # Set the plot background to white
   ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
@@ -1477,6 +1481,14 @@ qqSave <- function(
       ...
     )
   }
+
+  if(save.obj) {
+    fnp.qs <- sppp(fnp, 'qs')
+    qs::qsave(ggobj, file = fnp.qs)
+    CMND <- paste0("ggplot_obj <- xread('", fnp.qs, "')")
+    message(CMND)
+  }
+
   cowplot::save_plot(
     plot = ggobj, filename = fname,
     base_width = w, base_height = h, ...
