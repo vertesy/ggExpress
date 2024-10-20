@@ -761,6 +761,9 @@ qbarplot.df <- function(
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
 #' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
+#' @param line.col Color of the lines (vline, hline, abline). Default: "darkgrey".
+#' @param line.width Width of the line (vline, hline, abline). Default: 0.5.
+#' @param line.type Type of the line (vline, hline, abline). Default: "dashed".
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
 #' @param correlation_r2 Add a correlation value to the plot
 #' @param plot Display the plot.
@@ -797,8 +800,10 @@ qscatter <- function(
     logX = FALSE, logY = FALSE,
     annotation_logticks_Y = logY,
     annotation_logticks_X = logX,
+    xlab = NULL, ylab = NULL,
     xlab.angle = 90,
     hline = FALSE, vline = FALSE, abline = FALSE,
+    line.col = "darkgrey", line.width = 0.5, line.type = "dashed",
     add_contour_plot = FALSE,
     correlation_r2 = FALSE, # add as  c("pearson", "spearman")
     plot = TRUE, save = TRUE,
@@ -809,20 +814,36 @@ qscatter <- function(
     ...) {
   #
   print(plotname)
-  stopifnot(ncol(df_XYcol) >= 2)
+  stopifnot(ncol(df_XYcol) >= 2
+            , is.numeric(x) | is.character(x)
+            , is.numeric(y) | is.character(y)
+            )
+
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
+
+  if(!is.numeric(x)) {
+    stopifnot(x %in% colnames(df_XYcol) )
+    x <- which(colnames(df_XYcol) == x)
+  }
+
+  if(!is.numeric(y)) {
+    stopifnot(y %in% colnames(df_XYcol) )
+    y <- which(colnames(df_XYcol) == y)
+  }
 
   vars <- colnames(df_XYcol)
   cat("Variable (column) names 1-5:", head(vars), "...\n")
+  # browser()
 
   p <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
+    color = col,
     title = FixPlotName(plotname, suffix),
     subtitle = subtitle,
     caption = caption,
     palette = palette_use,
-    color = col,
     label = label, repel = repel,
+    xlab = xlab, ylab = ylab,
     # size = pt.size,
     ...
   ) +
@@ -830,9 +851,9 @@ qscatter <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline) # sum is needed to deal with multiple lines (multiple values in if statement).
-  if (sum(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2])
+  if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type) # sum is needed to deal with multiple lines (multiple values in if statement).
+  if (sum(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
   if (add_contour_plot) p <- p + geom_density_2d()
   if (correlation_r2 %in% c("pearson", "spearman")) p <- p + stat_cor(method = correlation_r2)
 
