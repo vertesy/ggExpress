@@ -12,6 +12,7 @@ qbarplot.df(
   color = 1,
   label = NULL,
   also.pdf = FALSE,
+  save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plotname = FixPlotName(substitute(df)),
   subtitle = NULL,
@@ -55,6 +56,8 @@ qbarplot.df(
 \item{label}{label}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{ext}{File extension (.pdf / .png).}
 

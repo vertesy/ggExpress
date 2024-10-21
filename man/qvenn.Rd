@@ -7,6 +7,7 @@
 qvenn(
   list,
   also.pdf = FALSE,
+  save.obj = FALSE,
   plotname = FixPlotName(substitute(list)),
   suffix = NULL,
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
@@ -30,6 +31,8 @@ qvenn(
 \item{list}{The variable to plot.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 

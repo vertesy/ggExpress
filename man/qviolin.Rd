@@ -23,6 +23,7 @@ qviolin(
     "uchicago")[4],
   hide.legend = FALSE,
   also.pdf = FALSE,
+  save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   logY = FALSE,
   annotation_logticks_Y = logY,
@@ -65,6 +66,8 @@ qviolin(
 \item{hide.legend}{hide legend}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{ext}{File extension (.pdf / .png).}
 

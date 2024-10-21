@@ -98,6 +98,8 @@ qstripchart(
 \item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 }
 \description{
 Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.

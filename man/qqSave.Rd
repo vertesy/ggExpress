@@ -8,12 +8,12 @@ qqSave(
   ggobj,
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
+  save.obj = FALSE,
   bgcol = "white",
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
   fname = FALSE,
   suffix = NULL,
-  save.obj = FALSE,
   w = 4,
   h = w,
   ...
@@ -26,6 +26,8 @@ qqSave(
 
 \item{also.pdf}{Save plot in both png and pdf formats. Default: FALSE.}
 
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
 \item{bgcol}{Plot background color. Default: "white".}
 
 \item{page}{Set page size to a predefined value, eg. "A4".
@@ -36,8 +38,6 @@ Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
 \item{fname}{Manual filename}
 
 \item{suffix}{A suffix added to the filename. Default: NULL.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{w}{Width of the plot.}
 

@@ -7,6 +7,7 @@
 qpie(
   vec = MyVec,
   also.pdf = FALSE,
+  save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
   save = TRUE,
@@ -40,6 +41,8 @@ qpie(
 \item{vec}{The variable to plot.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{ext}{File extension (.pdf / .png).}
 

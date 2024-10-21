@@ -13,22 +13,28 @@ qscatter(
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  also.pdf = TRUE,
+  save.obj = FALSE,
   col = c(NULL, 3)[1],
   label = NULL,
   repel = TRUE,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   hide.legend = FALSE,
-  also.pdf = TRUE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   logX = FALSE,
   logY = FALSE,
   annotation_logticks_Y = logY,
   annotation_logticks_X = logX,
+  xlab = NULL,
+  ylab = NULL,
   xlab.angle = 90,
   hline = FALSE,
   vline = FALSE,
   abline = FALSE,
+  line.col = "darkgrey",
+  line.width = 0.5,
+  line.type = "dashed",
   add_contour_plot = FALSE,
   correlation_r2 = FALSE,
   plot = TRUE,
@@ -53,6 +59,10 @@ qscatter(
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
 \item{col}{Color of the plot.}
 
 \item{label}{Point labels}
@@ -60,8 +70,6 @@ qscatter(
 \item{palette_use}{GGpubr Color palette to use.}
 
 \item{hide.legend}{hide legend}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
 
 \item{ext}{File extension (.pdf / .png).}
 
@@ -80,6 +88,12 @@ qscatter(
 \item{vline}{Draw a vertical line on the plot, xintercept or FALSE.}
 
 \item{abline}{Draw a sloped line on the plot. Set to FALSE, or intercept = abline\link{1}, slope = abline\link{2}.}
+
+\item{line.col}{Color of the lines (vline, hline, abline). Default: "darkgrey".}
+
+\item{line.width}{Width of the line (vline, hline, abline). Default: 0.5.}
+
+\item{line.type}{Type of the line (vline, hline, abline). Default: "dashed".}
 
 \item{add_contour_plot}{Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution}
 

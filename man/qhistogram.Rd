@@ -7,6 +7,7 @@
 qhistogram(
   vec,
   also.pdf = FALSE,
+  save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   xlab = FALSE,
   plot = TRUE,
@@ -40,6 +41,8 @@ qhistogram(
 \item{vec}{A numeric vector for which the histogram is to be plotted.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.}
 
