@@ -97,6 +97,8 @@ qbarplot.stacked.from.wide.df(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
+\item{max.categ}{The maximum allowed number of unique categories.}
+
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}

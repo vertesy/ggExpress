@@ -34,7 +34,7 @@ qbarplot(
   limitsize = FALSE,
   grid = "y",
   ylab = NULL,
-  w = qqqAxisLength(vec),
+  w = qqqAxisLength(vec, factor = 0.25),
   h = 5,
   ...
 )

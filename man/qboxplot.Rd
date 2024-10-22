@@ -8,7 +8,6 @@ qboxplot(
   df_XYcol_or_list,
   x = 1,
   y = 2,
-  col = NULL,
   fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
@@ -24,6 +23,7 @@ qboxplot(
     "uchicago")[4],
   hide.legend = FALSE,
   also.pdf = TRUE,
+  save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   ylab = NULL,
   logY = FALSE,
@@ -36,8 +36,8 @@ qboxplot(
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   grid = "y",
   max.categ = 100,
-  w = 7,
-  h = w,
+  w = qqqAxisLength(df_XYcol_or_list),
+  h = 6,
   ...
 )
 }
@@ -68,6 +68,8 @@ qboxplot(
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
 \item{ext}{File extension (.pdf / .png).}
 
 \item{logY}{Make Y axis log10-scale.}
@@ -88,13 +90,13 @@ qboxplot(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
+\item{max.categ}{The maximum allowed number of unique categories.}
+
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 }
 \description{
 Draw and save a boxplot

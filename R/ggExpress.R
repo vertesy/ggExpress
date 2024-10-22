@@ -509,10 +509,11 @@ qbarplot <- function(
 #' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
-#' @param w Width of the plot.
-#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param max.categ The maximum allowed number of unique categories.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @examples
@@ -913,10 +914,11 @@ qscatter <- function(
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param max.categ The maximum allowed number of unique categories.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -926,7 +928,8 @@ qscatter <- function(
 #' qboxplot(ToothLen.by.Dose)
 qboxplot <- function(
     df_XYcol_or_list,
-    x = 1, y = 2, col = NULL,
+    x = 1, y = 2,
+    # col = NULL,
     fill = "gold",
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
@@ -934,10 +937,10 @@ qboxplot <- function(
     caption = suffix,
     filename = NULL,
     outlier.shape = NULL,
-    stat.test = TRUE
+    stat.test = TRUE,
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    , stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
-    # , fill = c(NULL , 3)[1]
+    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
+
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE, save.obj = FALSE,
@@ -950,26 +953,73 @@ qboxplot <- function(
     plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
     max.categ = 100,
-    w = 7, h = w, ...) {
+    # add = FALSE,
+    # position = if(add == "jitter") position_dodge(width=.7) else NULL,
+    # add.params = if(add == "jitter") list(shape = "supp"),
+    w = qqqAxisLength(df_XYcol_or_list), h = 6,
+    ...) {
+  #
+  # message("add.params: ", unlist(add.params), " add: ", add) #, " position: ", position
+  # message( " position: ", position, " add: ", add)
+
+
+  stopifnot(
+    is.data.frame(df_XYcol_or_list) | CodeAndRoll2::is.list2(df_XYcol_or_list),
+    is.numeric(x) | is.character(x), is.numeric(y) | is.character(y),
+    is.character(plotname),
+    is.character(filename) | is.null(filename), is.character(subtitle) | is.null(subtitle),
+    is.character(caption) | is.null(caption), is.character(ylab) | is.null(ylab),
+    is.character(suffix) | is.null(suffix), is.character(ext),
+    is.logical(logY), is.logical(hide.legend), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
+    is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
+    is.logical(hline), is.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
+    is.character(ext), is.character(palette_use), is.character(grid),
+    is.numeric(w), is.numeric(h), is.numeric(max.categ),
+    is.null(xlab.angle) | is.numeric(xlab.angle)
+  )
+
 
   # Define fill color
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
-  .assertMaxCategories(df_XYcol, col = x, max.categ)
-
-  vars <- colnames(df_XYcol); names(vars) <- vars
-  if( !is.null(col)) {
-    if( is.numeric(col) & col < length(vars) ) col <- col
-    if( col %in% vars ) col <- vars[col]
-    fill <- col # if col (color as a column name) is provided, fill is set to col
+  if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
+    lsX <- df_XYcol_or_list
+    df_XYcol <- qqqList.2.DF.ggplot(lsX)
+    if (length(fill)  == length(lsX)) {
+      fill <- rep(fill, sapply(lsX, length))
+    }
+  } else {
+    df_XYcol <- df_XYcol_or_list
+    stopifnot(fill %in% colnames(df_XYcol) | length(fill) == nrow(df_XYcol) |
+                is.character(fill) | is.null(fill))
   }
 
+  .assertMaxCategories(df_XYcol, col = x, max.categ)
+  vars <- colnames(df_XYcol); names(vars) <- vars
 
+  # if( !is.null(col)) {
+  #   if( is.numeric(col) & col < length(vars) ) col <- col
+  #   if( col %in% vars ) col <- vars[col]
+  #   fill <- col # if col (color as a column name) is provided, fill is set to col
+  # }
+
+  if(length(fill) > 1) {
+    stopifnot(length(fill) == nrow(df_XYcol) | length(fill) == 1)
+    if( length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
+  } else if(length(fill) == 1) {
+    fill <- rep(fill, nrow(df_XYcol))
+    palette_use <- fill
+  } else message("fill is NULL. Using default fill color.")
+
+  # browser()
+  df_XYcol$'condition' <- fill
+
+  # browser()
   p <- ggpubr::ggboxplot(
-    data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
+    data = df_XYcol, x = vars[x], y = vars[y],
+    fill = 'condition',
+    # size = 1,
     title = plotname,
     subtitle = subtitle,
     caption = caption,
-    # , fill = fill
     palette = palette_use,
     outlier.shape = outlier.shape,
     ...
@@ -1025,10 +1075,11 @@ qboxplot <- function(
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param max.categ The maximum allowed number of unique categories.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1061,7 +1112,8 @@ qviolin <- function(
     # , outlier.shape = NULL
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     max.categ = 100,
-    w = 7, h = w, ...) {
+    w = qqqAxisLength(df_XYcol_or_list), h = 6,
+    ...) {
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
@@ -1137,10 +1189,11 @@ qviolin <- function(
 #' @param palette_use GGpubr Color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param w Width of the plot.
-#' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param max.categ The maximum allowed number of unique categories.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1175,7 +1228,7 @@ qstripchart <- function(
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
     max.categ = 100,
-    w = 7, h = w,
+    w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
 
   message("Column 1 should be the X-, Column 2 the Y-axis.")

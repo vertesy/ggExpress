@@ -35,8 +35,8 @@ qviolin(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   max.categ = 100,
-  w = 7,
-  h = w,
+  w = qqqAxisLength(df_XYcol_or_list),
+  h = 6,
   ...
 )
 }
@@ -88,6 +88,8 @@ qviolin(
 \item{save}{Save the plot into a file.}
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+
+\item{max.categ}{The maximum allowed number of unique categories.}
 
 \item{w}{Width of the plot.}
 
