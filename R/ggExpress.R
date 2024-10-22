@@ -929,7 +929,7 @@ qscatter <- function(
 qboxplot <- function(
     df_XYcol_or_list,
     x = 1, y = 2,
-    # col = NULL,
+    col = NULL,
     fill = "gold",
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
@@ -953,7 +953,7 @@ qboxplot <- function(
     plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
     max.categ = 100,
-    # add = FALSE,
+    add = NULL,
     # position = if(add == "jitter") position_dodge(width=.7) else NULL,
     # add.params = if(add == "jitter") list(shape = "supp"),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
@@ -995,12 +995,8 @@ qboxplot <- function(
   .assertMaxCategories(df_XYcol, col = x, max.categ)
   vars <- colnames(df_XYcol); names(vars) <- vars
 
-  # if( !is.null(col)) {
-  #   if( is.numeric(col) & col < length(vars) ) col <- col
-  #   if( col %in% vars ) col <- vars[col]
-  #   fill <- col # if col (color as a column name) is provided, fill is set to col
-  # }
 
+  palette_use_bac <- palette_use
   if(length(fill) > 1) {
     stopifnot(length(fill) == nrow(df_XYcol) | length(fill) == 1)
     if( length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
@@ -1009,19 +1005,29 @@ qboxplot <- function(
     palette_use <- fill
   } else message("fill is NULL. Using default fill color.")
 
-  # browser()
   df_XYcol$'condition' <- fill
+  fill = "condition"
+
+
+  if( !is.null(col)) {
+    # browser()
+    if( is.numeric(col) & col < length(vars) ) col <- col
+    if( col %in% vars ) col <- vars[col]
+    fill <- col # if col (color as a column name) is provided, fill is set to col
+    palette_use <- palette_use_bac
+  }
 
   # browser()
   p <- ggpubr::ggboxplot(
     data = df_XYcol, x = vars[x], y = vars[y],
-    fill = 'condition',
+    fill = fill,
     # size = 1,
     title = plotname,
     subtitle = subtitle,
     caption = caption,
     palette = palette_use,
     outlier.shape = outlier.shape,
+    add = add,
     ...
   ) +
     ggplot2::labs(y = ylab)  +
