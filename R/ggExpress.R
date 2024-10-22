@@ -376,7 +376,8 @@ qpie <- function(
 #' @param xlab X-axis label.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
-#' @param hide.legend hide legend
+#' @param hide.legend Hide legend. Default: TRUE.
+#' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
 #' @param w Width of the plot.
@@ -411,11 +412,12 @@ qbarplot <- function(
     annotation_logticks_Y = logY,
     label = NULL,
     hide.legend = TRUE,
+    legend.title = NULL,
     max.names = 100,
     limitsize = FALSE,
     grid = "y",
     ylab = NULL,
-    w = qqqAxisLength(vec), h = 5,
+    w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
 
   stopifnot(is.numeric(vec))
@@ -455,6 +457,7 @@ qbarplot <- function(
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if(!is.null(legend.title)) p <- p + guides(fill = guide_legend(title = legend.title), color = "none")  # Hide the color legend
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -831,7 +834,7 @@ qscatter <- function(
     y <- which(colnames(df_XYcol) == y)
   }
 
-  vars <- colnames(df_XYcol)
+  vars <- colnames(df_XYcol); names(vars) <- vars
   cat("Variable (column) names 1-5:", head(vars), "...\n")
   # browser()
 
@@ -937,7 +940,7 @@ qboxplot <- function(
     # , fill = c(NULL , 3)[1]
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
-    also.pdf = TRUE,
+    also.pdf = TRUE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     ylab = NULL, # xlab = NULL,
     logY = FALSE, # , logX = FALSE
@@ -953,7 +956,7 @@ qboxplot <- function(
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
-  vars <- colnames(df_XYcol)
+  vars <- colnames(df_XYcol); names(vars) <- vars
   if( !is.null(col)) {
     if( is.numeric(col) & col < length(vars) ) col <- col
     if( col %in% vars ) col <- vars[col]
@@ -1065,7 +1068,7 @@ qviolin <- function(
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   # Define fill color
-  vars <- colnames(df_XYcol)
+  vars <- colnames(df_XYcol); names(vars) <- vars
   if( !is.null(col)) {
     if( is.numeric(col) & col < length(vars) ) col <- col
     if( col %in% vars ) col <- vars[col]
@@ -1163,7 +1166,7 @@ qstripchart <- function(
     stat.method = NULL, stat.label.y.npc = "png", stat.label.x = 0.75,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
-    also.pdf = TRUE,
+    also.pdf = TRUE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1175,16 +1178,29 @@ qstripchart <- function(
     w = 7, h = w,
     ...) {
 
+  message("Column 1 should be the X-, Column 2 the Y-axis.")
+  stopifnot(
+    CodeAndRoll2::is.list2(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
+    # , length(df_XYcol_or_list) > 2
+    , length(x) == 1, length(y) == 1
+    , is.numeric(x) | is.character(x)
+    , is.numeric(y) | is.character(y)
+    , is.null(col) | is.numeric(col) | is.character(col)
+    , is.null(fill) | is.numeric(fill) | is.character(fill)
+
+  )
+
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   # Define fill color
-  vars <- colnames(df_XYcol)
+  vars <- colnames(df_XYcol); names(vars) <- vars
   if( !is.null(col)) {
     if( is.numeric(col) & col < length(vars) ) col <- col
     if( col %in% vars ) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
+  # browser()
 
   p <- ggpubr::ggstripchart(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,

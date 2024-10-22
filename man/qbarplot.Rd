@@ -29,6 +29,7 @@ qbarplot(
   annotation_logticks_Y = logY,
   label = NULL,
   hide.legend = TRUE,
+  legend.title = NULL,
   max.names = 100,
   limitsize = FALSE,
   grid = "y",
@@ -83,7 +84,9 @@ qbarplot(
 
 \item{label}{label}
 
-\item{hide.legend}{hide legend}
+\item{hide.legend}{Hide legend. Default: TRUE.}
+
+\item{legend.title}{Custom legend title. Provide a string.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
