@@ -8,6 +8,7 @@ qboxplot(
   df_XYcol_or_list,
   x = 1,
   y = 2,
+  col = NULL,
   fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
@@ -36,6 +37,7 @@ qboxplot(
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   grid = "y",
   max.categ = 100,
+  add = NULL,
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...

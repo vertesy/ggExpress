@@ -1,10 +1,12 @@
 # ____________________________________________________________________
 # ggExpress is the fastest way to create, annotate and export plots in R.  ----
 # ____________________________________________________________________
-# devtools::load_all("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 # try(source("~/GitHub/Packages/ggExpress/R/ggExpress.R"), silent = TRUE)
 # try(source("https://raw.githubusercontent.com/vertesy/ggExpress/main/ggExpress.R"), silent = TRUE)
 # source('~/.pack.R')
+
+# devtools::load_all("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
+# devtools::check_man("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 
 # ______________________________________________________________________________________________----
 # Simple plots  ----
@@ -374,6 +376,7 @@ qpie <- function(
 #' @param col Color of the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param xlab X-axis label.
+#' @param ylab Y-axis label.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
 #' @param hide.legend Hide legend. Default: TRUE.
@@ -635,6 +638,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param scale Scale the Y axis to 100%.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -644,14 +648,15 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param xlab X-axis label.
 #' @param logY Make Y axis log10-scale.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param label label
 #' @param hide.legend hide legend
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize limitsize
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param max.categ Maximum number of categories to show on the plot. Default is 10.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @examples my_tibble <- tibble(
@@ -689,13 +694,13 @@ qbarplot.df <- function(
     limitsize = FALSE,
     grid = "y",
     max.categ = 10,
-    top = NULL,
     w = qqqAxisLength(df), h = 5,
     ...) {
 
   message(plotname)
-  stopifnot(is.data.frame(df),
-            ncol(df) > 2)
+  stopifnot(is.data.frame(df), ncol(df) > 2,
+            "Y axis must be numeric" = is.numeric(y)
+            )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
