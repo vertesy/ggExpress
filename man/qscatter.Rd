@@ -49,6 +49,10 @@ qscatter(
 \arguments{
 \item{df_XYcol}{Data, as 2 column data frame, where col.1 is X axis.}
 
+\item{x}{The index or name of the column to be plotted on the X axis. Default: \code{1}.}
+
+\item{y}{The index or name of the column to be plotted on the Y axis. Default: \code{2}.}
+
 \item{plotname}{The name of the file and title of the plot.}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -65,7 +69,9 @@ qscatter(
 
 \item{col}{Color of the plot.}
 
-\item{label}{Point labels}
+\item{label}{Point labels. Default: NULL.}
+
+\item{repel}{Repel labels from each other. Default: TRUE.}
 
 \item{palette_use}{GGpubr Color palette to use.}
 
@@ -81,13 +87,17 @@ qscatter(
 
 \item{annotation_logticks_X}{Logical indicating whether to add annotation logticks on X-axis. Default follows the value of \code{logX}.}
 
+\item{xlab}{X-axis label. Default: NULL.}
+
+\item{ylab}{Y-axis label. Default: NULL.}
+
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot, yintercept or FALSE}
 
 \item{vline}{Draw a vertical line on the plot, xintercept or FALSE.}
 
-\item{abline}{Draw a sloped line on the plot. Set to FALSE, or intercept = abline\link{1}, slope = abline\link{2}.}
+\item{abline}{Draw a sloped line on the plot. Set to FALSE, or \verb{intercept = abline[1], slope = abline[2]}.}
 
 \item{line.col}{Color of the lines (vline, hline, abline). Default: "darkgrey".}
 

@@ -36,7 +36,6 @@ qbarplot.stacked.from.wide.df(
   limitsize = FALSE,
   grid = "y",
   max.categ = 10,
-  top = NULL,
   w = qqqAxisLength(df, factor = 0.7),
   h = 5,
   ...
@@ -45,9 +44,11 @@ qbarplot.stacked.from.wide.df(
 \arguments{
 \item{df}{The variable to plot.}
 
-\item{x}{Colname to split along X axis. Def colnames(df)\link{1}}
+\item{x}{Colname to split along X axis. Default: "Samples".}
 
-\item{y}{Colname to count along y axis. Def colnames(df)\link{3}}
+\item{y}{Colname to count along y axis. Default: "Fraction".}
+
+\item{z}{Colname to split along Y axis. Default: "Category.}
 
 \item{color}{Color (split) by along Y.}
 
@@ -69,6 +70,8 @@ qbarplot.stacked.from.wide.df(
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
+\item{scale}{Scale the y axis. Default: TRUE.}
+
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
@@ -83,7 +86,7 @@ qbarplot.stacked.from.wide.df(
 
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
-\item{xlab}{X-axis label.}
+\item{xlab}{X-axis label. Default: \code{x}.}
 
 \item{logY}{Make Y axis log10-scale.}
 
@@ -104,8 +107,6 @@ qbarplot.stacked.from.wide.df(
 \item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{fill}{Color (split) by along Y.}
 }
 \description{
 Draw and save a stacked barplot for each row of a dataframe.

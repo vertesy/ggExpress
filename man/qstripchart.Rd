@@ -46,6 +46,14 @@ qstripchart(
 \arguments{
 \item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
 
+\item{x}{The index or name of the column to be plotted on the X axis. Default: \code{1}.}
+
+\item{y}{The index or name of the column to be plotted on the Y axis. Default: \code{2}.}
+
+\item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
+
+\item{fill}{Fill color of the plot. Default: \code{gold}.}
+
 \item{plotname}{Name of the plot}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -55,6 +63,8 @@ qstripchart(
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+
+\item{ylab}{Y-axis label. Default: NULL.z}
 
 \item{plot}{Display the plot.}
 

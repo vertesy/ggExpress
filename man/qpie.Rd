@@ -88,13 +88,13 @@ qpie(
 
 \item{both_pc_and_value}{Report both percentage AND number.}
 
+\item{labels}{Slice labels. Set to NULL to remove slice names.}
+
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
-
-\item{label}{Slice labels. Set to NULL to remove slice names.}
 }
 \description{
 Draw and save a pie chart

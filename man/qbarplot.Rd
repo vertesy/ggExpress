@@ -72,7 +72,7 @@ qbarplot(
 
 \item{col}{Color of the plot.}
 
-\item{xlab}{X-axis label.}
+\item{xlab}{X-axis label. Default: "".}
 
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
@@ -93,6 +93,8 @@ qbarplot(
 \item{limitsize}{limitsize}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{ylab}{Y-axis label. Default: NULL.}
 
 \item{w}{Width of the plot.}
 

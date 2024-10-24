@@ -46,9 +46,19 @@ qboxplot(
 \arguments{
 \item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
 
+\item{x}{The index or name of the column to be plotted on the X axis. Default: \code{1}.}
+
+\item{y}{The index or name of the column to be plotted on the Y axis. Default: \code{2}.}
+
+\item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
+
+\item{fill}{Fill color of the plot. Default: \code{gold}.}
+
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
+
+\item{suffix}{Optional suffix added to the plotname. Default is NULL.}
 
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
 
@@ -74,6 +84,8 @@ qboxplot(
 
 \item{ext}{File extension (.pdf / .png).}
 
+\item{ylab}{Y-axis label. Default: \code{NULL}.}
+
 \item{logY}{Make Y axis log10-scale.}
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
@@ -93,6 +105,8 @@ qboxplot(
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{max.categ}{The maximum allowed number of unique categories.}
+
+\item{add}{Add additional graphical elements to the plot. Default: NULL.}
 
 \item{w}{Width of the plot.}
 

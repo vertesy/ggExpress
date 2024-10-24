@@ -36,7 +36,6 @@ qbarplot.df(
   limitsize = FALSE,
   grid = "y",
   max.categ = 10,
-  top = NULL,
   w = qqqAxisLength(df),
   h = 5,
   ...
@@ -45,11 +44,11 @@ qbarplot.df(
 \arguments{
 \item{df}{The variable to plot.}
 
-\item{x}{Colname to split along X axis. Def colnames(df)\link{1}}
+\item{x}{Colname to split along X axis. Default: \code{colnames(df)[1]}.}
 
-\item{y}{Colname to count along y axis. Def colnames(df)\link{3}}
+\item{y}{Colname to count along y axis. Default: \code{colnames(df)[2]}.}
 
-\item{fill}{Color (split) by along Y.}
+\item{fill}{Color (split) by along Y. Default: \code{colnames(df)[3]}.}
 
 \item{color}{Color (split) by along Y.}
 
@@ -71,6 +70,8 @@ qbarplot.df(
 
 \item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
 
+\item{scale}{Scale the Y axis to 100\%.}
+
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
@@ -85,7 +86,7 @@ qbarplot.df(
 
 \item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
-\item{xlab}{X-axis label.}
+\item{xlab}{X-axis label. Default: NULL.}
 
 \item{logY}{Make Y axis log10-scale.}
 
@@ -98,6 +99,8 @@ qbarplot.df(
 \item{limitsize}{limitsize}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{max.categ}{Maximum number of categories to show on the plot. Default is 10.}
 
 \item{w}{Width of the plot.}
 

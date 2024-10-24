@@ -10,6 +10,8 @@ qqqAxisLength(vec = 1:20, minLength = 6, factor = 0.4)
 \item{vec}{The variable to plot.}
 
 \item{minLength}{minLength}
+
+\item{factor}{Length adjustment factor.}
 }
 \description{
 Define Axis Length

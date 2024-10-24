@@ -131,7 +131,6 @@ qhistogram <- function(
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param xlab X-axis label.
 #' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
@@ -141,6 +140,7 @@ qhistogram <- function(
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
+#' @param xlab X-axis label. Default: FALSE.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
 #' @param hide.legend hide legend
@@ -160,6 +160,7 @@ qdensity <- function(
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     xlab = FALSE, plot = TRUE,
+    xlab.angle = 90,
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
     suffix = NULL,
@@ -168,10 +169,9 @@ qdensity <- function(
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     logX = FALSE, logY = FALSE,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    xlab.angle = 90,
     hide.legend = TRUE,
     max.names = 50,
-    grid = F,
+    grid = FALSE,
     w = 5, h = w, ...) {
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -233,7 +233,7 @@ qdensity <- function(
 #' @param custom.order custom.order
 #' @param palette_use GGpubr Color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param label Slice labels. Set to NULL to remove slice names.
+#' @param labels Slice labels. Set to NULL to remove slice names.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -318,7 +318,7 @@ qpie <- function(
   print(nrCategories.DFcol1)
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
-  if (custom.order != F) df$"names" <- factor(df$"names", levels = custom.order)
+  if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
 
   p <- ggpubr::ggpie(
     data = df,
@@ -331,9 +331,9 @@ qpie <- function(
     title = plotname,
     palette = palette_use
     # , ...
-    ) +
+  ) +
     guides(fill = guide_legend(LegendTitle))
-    # theme(legend.title = LegendTitle)
+  # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
@@ -375,8 +375,8 @@ qpie <- function(
 #' @param palette_use GGpubr Color palette to use.
 #' @param col Color of the plot.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param xlab X-axis label.
-#' @param ylab Y-axis label.
+#' @param xlab X-axis label. Default: "".
+#' @param ylab Y-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
 #' @param hide.legend Hide legend. Default: TRUE.
@@ -422,10 +422,9 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
-
   stopifnot(is.numeric(vec))
   if (isFALSE(xlab)) xlab <- plotname
-  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = F)
+  df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
@@ -460,7 +459,7 @@ qbarplot <- function(
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-  if(!is.null(legend.title)) p <- p + guides(fill = guide_legend(title = legend.title), color = "none")  # Hide the color legend
+  if (!is.null(legend.title)) p <- p + guides(fill = guide_legend(title = legend.title), color = "none") # Hide the color legend
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -475,7 +474,8 @@ qbarplot <- function(
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
-      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj)
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
+    )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
@@ -487,10 +487,11 @@ qbarplot <- function(
 #'
 #' @description Draw and save a stacked barplot for each row of a dataframe.
 #' @param df The variable to plot.
-#' @param x Colname to split along X axis. Def colnames(df)[1]
-#' @param y Colname to count along y axis. Def colnames(df)[3]
-#' @param fill Color (split) by along Y.
+#' @param x Colname to split along X axis. Default: "Samples".
+#' @param y Colname to count along y axis. Default: "Fraction".
+#' @param z Colname to split along Y axis. Default: "Category.
 #' @param color Color (split) by along Y.
+# #' @param fill Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
@@ -499,6 +500,7 @@ qbarplot <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param scale Scale the y axis. Default: TRUE.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -506,7 +508,7 @@ qbarplot <- function(
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr Color palette to use.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param xlab X-axis label.
+#' @param xlab X-axis label. Default: `x`.
 #' @param logY Make Y axis log10-scale.
 #' @param label label
 #' @param hide.legend hide legend
@@ -515,6 +517,7 @@ qbarplot <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
+# #' @param top The number of top categories to keep. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -560,13 +563,14 @@ qbarplot.stacked.from.wide.df <- function(
     limitsize = FALSE,
     grid = "y",
     max.categ = 10,
-    top = NULL,
+    # top = NULL,
     w = qqqAxisLength(df, factor = .7), h = 5,
     ...) {
-
   message(plotname)
-  stopifnot(is.data.frame(df),
-            ncol(df) > 2)
+  stopifnot(
+    is.data.frame(df),
+    ncol(df) > 2
+  )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
@@ -576,22 +580,23 @@ qbarplot.stacked.from.wide.df <- function(
   # }
 
   df_long <- df |>
-    tibble::rownames_to_column(var = x) |>  # Convert row names to a column
-    tidyr::pivot_longer(cols = -!!sym(x),      # Convert wide to long format
-                        names_to = z, #"category"
-                        values_to = y # "Fraction"
+    tibble::rownames_to_column(var = x) |> # Convert row names to a column
+    tidyr::pivot_longer(
+      cols = -!!sym(x), # Convert wide to long format
+      names_to = z, # "category"
+      values_to = y # "Fraction"
     )
 
   p <- ggpubr::ggbarplot(
     data = df_long, x = x, y = y,
     color = color,
-    fill = z,   # Use the 'category' column created in long format
+    fill = z, # Use the 'category' column created in long format
     subtitle = subtitle,
     title = plotname, xlab = xlab,
     caption = caption,
     label = label,
     palette = palette_use,
-    position = if(scale) position_fill() else position_stack(),
+    position = if (scale) position_fill() else position_stack(),
     ...
   ) +
     ggpubr::grids(axis = "y") +
@@ -626,9 +631,9 @@ qbarplot.stacked.from.wide.df <- function(
 #'
 #' @description Draw and save a barplot for tibbles or dataframes
 #' @param df The variable to plot.
-#' @param x Colname to split along X axis. Def colnames(df)[1]
-#' @param y Colname to count along y axis. Def colnames(df)[3]
-#' @param fill Color (split) by along Y.
+#' @param x Colname to split along X axis. Default: `colnames(df)[1]`.
+#' @param y Colname to count along y axis. Default: `colnames(df)[2]`.
+#' @param fill Color (split) by along Y. Default: `colnames(df)[3]`.
 #' @param color Color (split) by along Y.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -646,7 +651,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr Color palette to use.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param xlab X-axis label.
+#' @param xlab X-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param label label
@@ -696,13 +701,12 @@ qbarplot.df <- function(
     max.categ = 10,
     w = qqqAxisLength(df), h = 5,
     ...) {
-
   message(plotname)
   stopifnot(is.data.frame(df), ncol(df) > 2,
-            "Y axis must be numeric" = is.numeric(y)
-            )
+    "Y axis must be numeric" = is.numeric(y)
+  )
 
-  if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
+  if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
 
   if (is.numeric(df[[fill]])) {
@@ -720,7 +724,7 @@ qbarplot.df <- function(
     caption = caption,
     label = label,
     palette = palette_use,
-    position = if(scale) position_fill() else position_stack(),
+    position = if (scale) position_fill() else position_stack(),
     ...
   ) +
     ggpubr::grids(axis = "y") +
@@ -754,13 +758,17 @@ qbarplot.df <- function(
 #' @title qscatter
 #'
 #' @description Draw and save a 2D-scatter plot.
+#'
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
+#' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
+#' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param plotname The name of the file and title of the plot.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param label Point labels
+#' @param label Point labels. Default: NULL.
+#' @param repel Repel labels from each other. Default: TRUE.
 #' @param col Color of the plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -769,13 +777,15 @@ qbarplot.df <- function(
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
-#' @param abline Draw a sloped line on the plot. Set to FALSE, or intercept = abline[1], slope = abline[2].
+#' @param abline Draw a sloped line on the plot. Set to FALSE, or `intercept = abline[1], slope = abline[2]`.
 #' @param line.col Color of the lines (vline, hline, abline). Default: "darkgrey".
 #' @param line.width Width of the line (vline, hline, abline). Default: 0.5.
 #' @param line.type Type of the line (vline, hline, abline). Default: "dashed".
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
 #' @param correlation_r2 Add a correlation value to the plot
 #' @param plot Display the plot.
+#' @param xlab X-axis label. Default: NULL.
+#' @param ylab Y-axis label. Default: NULL.
 #' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
 #' @param palette_use GGpubr Color palette to use.
 #' @param hide.legend hide legend
@@ -787,6 +797,7 @@ qbarplot.df <- function(
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#'
 #' @examples dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
 #' qscatter(dfx, suffix = "2D.gaussian")
 #'
@@ -823,24 +834,26 @@ qscatter <- function(
     ...) {
   #
   print(plotname)
-  stopifnot(ncol(df_XYcol) >= 2
-            , is.numeric(x) | is.character(x)
-            , is.numeric(y) | is.character(y)
-            )
+  stopifnot(
+    ncol(df_XYcol) >= 2,
+    is.numeric(x) | is.character(x),
+    is.numeric(y) | is.character(y)
+  )
 
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
 
-  if(!is.numeric(x)) {
-    stopifnot(x %in% colnames(df_XYcol) )
+  if (!is.numeric(x)) {
+    stopifnot(x %in% colnames(df_XYcol))
     x <- which(colnames(df_XYcol) == x)
   }
 
-  if(!is.numeric(y)) {
-    stopifnot(y %in% colnames(df_XYcol) )
+  if (!is.numeric(y)) {
+    stopifnot(y %in% colnames(df_XYcol))
     y <- which(colnames(df_XYcol) == y)
   }
 
-  vars <- colnames(df_XYcol); names(vars) <- vars
+  vars <- colnames(df_XYcol)
+  names(vars) <- vars
   cat("Variable (column) names 1-5:", head(vars), "...\n")
   # browser()
 
@@ -898,13 +911,19 @@ qscatter <- function(
 #'
 #' @description Draw and save a boxplot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
+#' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
+#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param fill Fill color of the plot. Default: `gold`.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the plotname. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param ylab Y-axis label. Default: `NULL`.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -922,6 +941,7 @@ qscatter <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
+#' @param add Add additional graphical elements to the plot. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
@@ -945,7 +965,6 @@ qboxplot <- function(
     stat.test = TRUE,
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
-
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE, save.obj = FALSE,
@@ -988,36 +1007,39 @@ qboxplot <- function(
   if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
     lsX <- df_XYcol_or_list
     df_XYcol <- qqqList.2.DF.ggplot(lsX)
-    if (length(fill)  == length(lsX)) {
+    if (length(fill) == length(lsX)) {
       fill <- rep(fill, sapply(lsX, length))
     }
   } else {
     df_XYcol <- df_XYcol_or_list
     stopifnot(fill %in% colnames(df_XYcol) | length(fill) == nrow(df_XYcol) |
-                is.character(fill) | is.null(fill))
+      is.character(fill) | is.null(fill))
   }
 
   .assertMaxCategories(df_XYcol, col = x, max.categ)
-  vars <- colnames(df_XYcol); names(vars) <- vars
+  vars <- colnames(df_XYcol)
+  names(vars) <- vars
 
 
   palette_use_bac <- palette_use
-  if(length(fill) > 1) {
+  if (length(fill) > 1) {
     stopifnot(length(fill) == nrow(df_XYcol) | length(fill) == 1)
-    if( length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
-  } else if(length(fill) == 1) {
+    if (length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
+  } else if (length(fill) == 1) {
     fill <- rep(fill, nrow(df_XYcol))
     palette_use <- fill
-  } else message("fill is NULL. Using default fill color.")
+  } else {
+    message("fill is NULL. Using default fill color.")
+  }
 
-  df_XYcol$'condition' <- fill
-  fill = "condition"
+  df_XYcol$"condition" <- fill
+  fill <- "condition"
 
 
-  if( !is.null(col)) {
+  if (!is.null(col)) {
     # browser()
-    if( is.numeric(col) & col < length(vars) ) col <- col
-    if( col %in% vars ) col <- vars[col]
+    if (is.numeric(col) & col < length(vars)) col <- col
+    if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
     palette_use <- palette_use_bac
   }
@@ -1035,7 +1057,7 @@ qboxplot <- function(
     add = add,
     ...
   ) +
-    ggplot2::labs(y = ylab)  +
+    ggplot2::labs(y = ylab) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
@@ -1065,6 +1087,10 @@ qboxplot <- function(
 #'
 #' @description Draw and save a violin plot
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
+#' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
+#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param fill Fill color of the plot. Default: `gold`.
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -1125,16 +1151,16 @@ qviolin <- function(
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
-
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   # Define fill color
-  vars <- colnames(df_XYcol); names(vars) <- vars
-  if( !is.null(col)) {
-    if( is.numeric(col) & col < length(vars) ) col <- col
-    if( col %in% vars ) col <- vars[col]
+  vars <- colnames(df_XYcol)
+  names(vars) <- vars
+  if (!is.null(col)) {
+    if (is.numeric(col) & col < length(vars)) col <- col
+    if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
 
@@ -1177,11 +1203,16 @@ qviolin <- function(
 #'
 #' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 #' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
+#' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
+#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param fill Fill color of the plot. Default: `gold`.
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
 #' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param ylab Y-axis label. Default: NULL.z
 #' @param plot Display the plot.
 #' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
 #' @param ext File extension (.pdf / .png).
@@ -1241,27 +1272,26 @@ qstripchart <- function(
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
-
   message("Column 1 should be the X-, Column 2 the Y-axis.")
   stopifnot(
     CodeAndRoll2::is.list2(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
     # , length(df_XYcol_or_list) > 2
-    , length(x) == 1, length(y) == 1
-    , is.numeric(x) | is.character(x)
-    , is.numeric(y) | is.character(y)
-    , is.null(col) | is.numeric(col) | is.character(col)
-    , is.null(fill) | is.numeric(fill) | is.character(fill)
-
+    , length(x) == 1, length(y) == 1,
+    is.numeric(x) | is.character(x),
+    is.numeric(y) | is.character(y),
+    is.null(col) | is.numeric(col) | is.character(col),
+    is.null(fill) | is.numeric(fill) | is.character(fill)
   )
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   # Define fill color
-  vars <- colnames(df_XYcol); names(vars) <- vars
-  if( !is.null(col)) {
-    if( is.numeric(col) & col < length(vars) ) col <- col
-    if( col %in% vars ) col <- vars[col]
+  vars <- colnames(df_XYcol)
+  names(vars) <- vars
+  if (!is.null(col)) {
+    if (is.numeric(col) & col < length(vars)) col <- col
+    if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
   # browser()
@@ -1354,7 +1384,7 @@ qvenn <- function(
     w = 8, h = 0.75 * w,
     ...) {
   #
-  if(!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
+  if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
   p <- ggVennDiagram::ggVennDiagram(list, ..., ) +
     scale_fill_gradient(low = col.min, high = col.max) +
@@ -1377,8 +1407,12 @@ qvenn <- function(
     sppp(plotname, suffix, s2, "venn", ext)
   }
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name,
-                   ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) {
+    qqSave(
+      ggobj = p, title = plotname, fname = file_name,
+      ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj
+    )
+  }
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1455,8 +1489,8 @@ qvenn <- function(
 #     color = colorRampPalette(c( "#0073c2","white","#efc000"))(100),
 #     legendName = "Intensity",
 #     scale = "row",
-#     cluster_rows = F,
-#     cluster_cols = F,
+#     cluster_rows = FALSE,
+#     cluster_cols = FALSE,
 #     annotation_rows = NULL,
 #     annotation_cols = NULL,
 #     annotation_color = NULL,
@@ -1583,7 +1617,8 @@ qqSave <- function(
       h <- wA4 / 2
     }
   }
-  fnp <- paste0(getwd(), "/", fname); print(fnp)
+  fnp <- paste0(getwd(), "/", fname)
+  print(fnp)
 
   # Set the plot background to white
   ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
@@ -1593,15 +1628,17 @@ qqSave <- function(
     cowplot::save_plot(
       plot = ggobj, filename = fname2, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
-      ... )
+      ...
+    )
   }
 
   cowplot::save_plot(
     plot = ggobj, filename = fname,
-    base_width = w, base_height = h, ...)
+    base_width = w, base_height = h, ...
+  )
 
-  if(save.obj) {
-    fnp.qs <- sppp(fnp, 'qs')
+  if (save.obj) {
+    fnp.qs <- sppp(fnp, "qs")
     qs::qsave(ggobj, file = fnp.qs)
     CMND <- paste0("ggplot_obj <- xread('", fnp.qs, "')")
     message(CMND)
@@ -1634,7 +1671,7 @@ q32vA4_grid_plot <- function(
     plot_list,
     suffix = NULL,
     plotname = FixPlotName(substitute(plot_list), suffix),
-    plot = F,
+    plot = FALSE,
     nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
     scale = 1,
     h = hA4 * scale, w = wA4 * scale,
@@ -1724,6 +1761,7 @@ qMarkdownImageLink <- function(file_name = "myplot.pdf") {
 #' @description Define Axis Length
 #' @param vec The variable to plot.
 #' @param minLength minLength
+#' @param factor Length adjustment factor.
 #'
 #' @examples qqqAxisLength()
 qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {

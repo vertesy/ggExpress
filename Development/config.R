@@ -1,7 +1,9 @@
 # Configuration for the Package
+# file.edit("~/GitHub/Packages/ggExpress/Development/config.R")
+
 DESCRIPTION <- list(
   package.name = "ggExpress",
-  version = "0.9.0",
+  version = "0.9.5",
   title = "ggExpress is the fastest way to create, annotate and export plots in R",
   description = "ggExpress is a set of R functions that allows you to generate precise figures easily,
     and create clean markdown reports about what you just discovered with your analysis script. It is ggplot-based smaller brother of vertesy/MarkdownReports. It helps you to:
@@ -12,7 +14,7 @@ DESCRIPTION <- list(
     5. Share your report, by exporting your report to .pdf, .html or .docx, or via Github or a personal website.",
 
   depends = "Stringendo, MarkdownHelpers, ggplot2, ggpubr",
-  imports = "cowplot, tibble, RColorBrewer, MarkdownReports, CodeAndRoll2, ggVennDiagram",
+  imports = "cowplot, tibble, tidyr, RColorBrewer, MarkdownReports, CodeAndRoll2, ggVennDiagram, qs, tictoc",
 
   author.given = "Abel",
   author.family = "Vertesy",

@@ -11,6 +11,7 @@ qdensity(
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   xlab = FALSE,
   plot = TRUE,
+  xlab.angle = 90,
   plotname = FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
@@ -22,10 +23,9 @@ qdensity(
   logY = FALSE,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  xlab.angle = 90,
   hide.legend = TRUE,
   max.names = 50,
-  grid = F,
+  grid = FALSE,
   w = 5,
   h = w,
   ...
@@ -40,9 +40,11 @@ qdensity(
 
 \item{ext}{File extension (.pdf / .png).}
 
-\item{xlab}{X-axis label.}
+\item{xlab}{X-axis label. Default: FALSE.}
 
 \item{plot}{Display the plot.}
+
+\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
@@ -63,8 +65,6 @@ qdensity(
 \item{logY}{Make Y axis log10-scale.}
 
 \item{palette_use}{GGpubr Color palette to use.}
-
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
 
 \item{hide.legend}{hide legend}
 

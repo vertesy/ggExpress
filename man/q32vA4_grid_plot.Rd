@@ -8,7 +8,7 @@ q32vA4_grid_plot(
   plot_list,
   suffix = NULL,
   plotname = FixPlotName(substitute(plot_list), suffix),
-  plot = F,
+  plot = FALSE,
   nrow = 3,
   ncol = 2,
   extension = c("pdf", "png")[2],
