@@ -84,77 +84,63 @@ qscatter(dfx, suffix = "2D.gaussian")
 
 
 
-## List of Functions (17) 
-
-Updated: 2023/11/24 16:40
+## List of Functions in ggExpress.R (19) 
+Updated: 2024/10/24 15:51
 
 - #### 1 `qhistogram()`
-
-  Quick Histogram Plotting. This function generates a histogram and saves the plot for a given vector and offers several customizations.
+Quick Histogram Plotting. This function generates a histogram and saves the plot for a given vector and offers several customizations.
 
 - #### 2 `qdensity()`
+qdensity. Draw and save a density plot.
 
-  qdensity. Draw and save a density plot.
+- #### 3 `qpie()`
+qpie. Draw and save a pie chart
 
-- #### 3 `qbarplot()`
+- #### 4 `qbarplot()`
+qbarplot. Draw and save a barplot.
 
-  qbarplot. Draw and save a barplot.
+- #### 5 `qbarplot.stacked.from.wide.df()`
+qbarplot.stacked.from.wide.df - Barplot for tibbles or dataframes. Draw and save a stacked barplot for each row of a dataframe.
 
-- #### 4 `qbarplot.df()`
+- #### 6 `qbarplot.df()`
+qbarplot.df - Barplot for tibbles or dataframes. Draw and save a barplot for tibbles or dataframes
 
-  qbarplot.df - Barplot for tibbles or dataframes. Draw and save a barplot for tibbles or dataframes
+- #### 7 `qscatter()`
+qscatter. Draw and save a 2D-scatter plot. 
 
-- #### 5 `qpie()`
+- #### 8 `qboxplot()`
+qboxplot. Draw and save a boxplot
 
-  qpie. Draw and save a pie chart
+- #### 9 `qviolin()`
+qviolin. Draw and save a violin plot
 
-- #### 6 `qboxplot()`
+- #### 10 `qstripchart()`
+qstripchart. Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 
-  qboxplot. Draw and save a boxplot
+- #### 11 `# qheatmap()`
+qvenn - Venn Diagram. Draw and save a Venn Diagram using the `ggVennDiagram` package.
 
-- #### 7 `qviolin()`
+- #### 12 `qqSave()`
+qqSave. Quick-Save ggplot objects
 
-  qviolin. Draw and save a violin plot
+- #### 13 `q32vA4_grid_plot()`
+q32vA4_grid_plot. Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 
-- #### 8 `qstripchart()`
+- #### 14 `qA4_grid_plot()`
+qA4_grid_plot. Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 
-  qstripchart. Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
+- #### 15 `qMarkdownImageLink()`
+qMarkdownImageLink. Insert Markdown image link to .md report
 
-- #### 9 `qscatter()`
+- #### 16 `qqqAxisLength()`
+qqqAxisLength. Define Axis Length
 
-  qscatter. Draw and save a 2D-scatter plot.
+- #### 17 `qqqNamed.Vec.2.Tbl()`
+qqqNamed.Vec.2.Tbl. Covert a named vector to a table.
 
-- #### 10 `qvenn()`
+- #### 18 `qqqTbl.2.Vec()`
+qqqTbl.2.Vec. Covert a table to a named vector.
 
-  qvenn - Venn Diagram. Draw and save a Venn Diagram using the `ggVennDiagram` package.
-
-- #### 11 `qqSave()`
-
-  qqSave. Quick-Save ggplot objects
-
-- #### 12 `q32vA4_grid_plot()`
-
-  q32vA4_grid_plot. Plot up to 6 panels (3-by-2) on vertically standing A4 page.
-
-- #### 13 `qA4_grid_plot()`
-
-  qA4_grid_plot. Plot up to 6 panels (3-by-1) on vertically standing A4 page.
-
-- #### 14 `qMarkdownImageLink()`
-
-  qMarkdownImageLink. Insert Markdown image link to .md report
-
-- #### 15 `qqqAxisLength()`
-
-  qqqAxisLength. Define Axis Length
-
-- #### 16 `qqqNamed.Vec.2.Tbl()`
-
-  qqqNamed.Vec.2.Tbl. Covert a named vector to a table.
-
-- #### 17 `qqqTbl.2.Vec()`
-
-  qqqTbl.2.Vec. Covert a table to a named vector.
-
-
+- #### 19 `qqqList.2.DF.ggplot()`
+qqqList.2.DF.ggplot. Convert a list to a tow-column data frame to plot boxplots and violin plots
 
