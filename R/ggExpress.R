@@ -702,8 +702,10 @@ qbarplot.df <- function(
     w = qqqAxisLength(df), h = 5,
     ...) {
   message(plotname)
+
+  # browser()
   stopifnot(is.data.frame(df), ncol(df) > 2,
-    "Y axis must be numeric" = is.numeric(y)
+    "Y axis must be numeric" = is.numeric(df[,y, drop=T])
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
