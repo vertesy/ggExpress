@@ -16,6 +16,7 @@ qqSave(
   suffix = NULL,
   w = 4,
   h = w,
+  limitsize = TRUE,
   ...
 )
 }
@@ -42,6 +43,8 @@ Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
+
+\item{limitsize}{Limits the size of the plot below a default size. Default: TRUE.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }

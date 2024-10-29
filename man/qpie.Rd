@@ -5,7 +5,7 @@
 \title{qpie}
 \usage{
 qpie(
-  vec = MyVec,
+  vec,
   also.pdf = FALSE,
   save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
@@ -38,7 +38,7 @@ qpie(
 )
 }
 \arguments{
-\item{vec}{The variable to plot.}
+\item{vec}{A numeric vector or table.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 

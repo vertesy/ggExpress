@@ -37,6 +37,7 @@ qviolin(
   max.categ = 100,
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
+  limitsize = TRUE,
   ...
 )
 }
@@ -102,6 +103,8 @@ qviolin(
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
+
+\item{limitsize}{Logical indicating whether to limit the number of categories.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }

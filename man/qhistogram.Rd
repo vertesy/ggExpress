@@ -9,7 +9,7 @@ qhistogram(
   also.pdf = FALSE,
   save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-  xlab = FALSE,
+  xlab = NULL,
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
