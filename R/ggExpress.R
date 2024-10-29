@@ -469,7 +469,7 @@ qbarplot <- function(
     is.character.or.NULL(subtitle), is.character.or.NULL(suffix), is.character.or.NULL(caption), is.character.or.NULL(filename),
     is.character(palette_use), is.character(col), is.character.or.NULL(xlab), is.character.or.NULL(ylab), is.character.or.NULL(legend.title),
     is.character(grid), grid %in% c("x", "y", "xy"), is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.logical(hline) || is.numeric(hline), is.numeric(filtercol), filtercol %in% c(-1, 0, 1),
+    is.numeric.or.logical(hline), is.numeric(filtercol), filtercol %in% c(-1, 0, 1),
     is.logical(logY), is.logical(annotation_logticks_Y), is.logical(hide.legend), is.logical(also.pdf),
     is.logical(save.obj) , is.logical(limitsize), is.logical(save), is.logical(mdlink), is.logical(plot),
     is.numeric(max.names), is.numeric(xlab.angle), is.numeric(w), is.numeric(h), is.numeric(ylim), length(ylim) == 2
@@ -998,6 +998,7 @@ qscatter <- function(
 #' @param add Add additional graphical elements to the plot. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
+#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1035,6 +1036,7 @@ qboxplot <- function(
     # position = if(add == "jitter") position_dodge(width=.7) else NULL,
     # add.params = if(add == "jitter") list(shape = "supp"),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
+    limitsize = TRUE,
     ...) {
   #
   # message("add.params: ", unlist(add.params), " add: ", add) #, " position: ", position
@@ -1050,7 +1052,7 @@ qboxplot <- function(
     is.character(suffix) | is.null(suffix), is.character(ext),
     is.logical(logY), is.logical(hide.legend), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
     is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
-    is.logical(hline), is.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
+    is.numeric.or.logical(hline), is.numeric.or.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
     is.character(ext), is.character(palette_use), is.character(grid),
     is.numeric(w), is.numeric(h), is.numeric(max.categ),
     is.null(xlab.angle) | is.numeric(xlab.angle)
@@ -1130,7 +1132,8 @@ qboxplot <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
+                   also.pdf = also.pdf, save.obj = save.obj, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1171,7 +1174,7 @@ qboxplot <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param limitsize Logical indicating whether to limit the number of categories.
+#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1295,6 +1298,7 @@ qviolin <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
+#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1330,12 +1334,12 @@ qstripchart <- function(
     grid = "y",
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
+    limitsize = TRUE,
     ...) {
   message("Column 1 should be the X-, Column 2 the Y-axis.")
   stopifnot(
-    CodeAndRoll2::is.list2(df_XYcol_or_list) || is.data.frame(df_XYcol_or_list)
-    # , length(df_XYcol_or_list) > 2
-    , length(x) == 1, length(y) == 1,
+    CodeAndRoll2::is.list2(df_XYcol_or_list) || is.data.frame(df_XYcol_or_list),
+    length(x) == 1, length(y) == 1,
     is.numeric(x) || is.character(x),
     is.numeric(y) || is.character(y),
     is.numeric(col) || is.character.or.NULL(col),
@@ -1385,7 +1389,8 @@ qstripchart <- function(
   } else {
     FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
+                   also.pdf = also.pdf, save.obj = save.obj, limitsize = limitsize)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
