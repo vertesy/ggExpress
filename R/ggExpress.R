@@ -1618,7 +1618,7 @@ qqSave <- function(
     }
   }
   fnp <- paste0(getwd(), "/", fname)
-  message("\n", fnp)
+  message("\n\n", fnp)
 
   # Set the plot background to white
   ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
