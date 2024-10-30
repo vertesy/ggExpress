@@ -58,7 +58,7 @@ qhistogram <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    xlab = NULL, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
     suffix = NULL,
@@ -74,22 +74,8 @@ qhistogram <- function(
     hide.legend = TRUE,
     max.names = 50,
     grid = "y",
-    w = 5, h = w, ...
-    ) {
-
-  stopifnot(
-    is.numeric(vec),
-    is.character(plotname), nchar(plotname) < 200,
-    is.character.or.NULL(subtitle), is.character.or.NULL(suffix), is.character.or.NULL(caption),
-    is.character.or.NULL(filename), is.character(palette_use), is.character(col),
-    is.character(grid), grid %in% c("x", "y", "xy"), is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.numeric(filtercol), filtercol %in% c(-1, 0, 1),
-    is.logical(logY), is.logical(annotation_logticks_Y), is.logical(hide.legend), is.logical(also.pdf),
-    is.logical(save.obj) , is.logical(limitsize), is.logical(save), is.logical(mdlink), is.logical(plot),
-    is.numeric(max.names), is.numeric(xlab.angle), is.numeric(w), is.numeric(h)
-  )
-
-  if (is.null(xlab)) xlab <- plotname
+    w = 5, h = w, ...) {
+  if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   df[["colour"]] <- if (!isFALSE(vline) & filtercol != 0) {
@@ -173,7 +159,7 @@ qdensity <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    xlab = NULL, plot = TRUE,
+    xlab = FALSE, plot = TRUE,
     xlab.angle = 90,
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
@@ -187,18 +173,7 @@ qdensity <- function(
     max.names = 50,
     grid = FALSE,
     w = 5, h = w, ...) {
-  #
-  stopifnot(
-    is.numeric(vec),
-    is.character(plotname), nchar(plotname) < 200, is.character.or.NULL(subtitle), is.character.or.NULL(suffix),
-    is.character.or.NULL(caption), is.character.or.NULL(filename), is.character(palette_use),
-    is.character.or.NULL(xlab), is.character(grid), grid %in% c("x", "y", "xy"), is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.logical(logY), is.logical(hide.legend), is.logical(also.pdf),
-    is.logical(save.obj), is.logical(save), is.logical(mdlink), is.logical(plot),
-    is.numeric(max.names), is.numeric(xlab.angle), is.numeric(w), is.numeric(h)
-  )
-
-  if (is.null(xlab)) xlab <- plotname
+  if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   p <- ggpubr::ggdensity(
@@ -233,7 +208,7 @@ qdensity <- function(
 #' @title qpie
 #'
 #' @description Draw and save a pie chart
-#' @param vec A numeric vector or table.
+#' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
@@ -268,7 +243,7 @@ qdensity <- function(
 #' @examples xvec <- c("A" = 12, "B" = 29)
 #' qpie(vec = xvec)
 qpie <- function(
-    vec,
+    vec = MyVec,
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE, save = TRUE,
@@ -293,19 +268,6 @@ qpie <- function(
     labels = "names", # Set to NULL to remove slice names.
     w = 7, h = 5,
     ...) {
-  #
-  stopifnot(
-    is.numeric(vec) || is.factor(vec) || is.character(vec),
-    is.character(plotname), nchar(plotname) < 200, is.character.or.NULL(subtitle), is.character.or.NULL(suffix),
-    is.character.or.NULL(caption), is.character.or.NULL(filename), is.character(palette_use),
-    is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.logical(also.pdf),
-    is.logical(save.obj), is.logical(save), is.logical(mdlink), is.logical(plot),
-    is.numeric(max.names), is.numeric(w), is.numeric(h),
-    is.character.or.NULL(LegendTitle),is.logical(NoLegend), is.logical(LegendSide)
-  )
-
-
   print(plotname)
   l.orig <- length(vec)
   sum.orig <- sum(vec)
@@ -438,13 +400,11 @@ qbarplot <- function(
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE,
-
     plotname = FixPlotName(substitute(vec)),
     subtitle = paste("Median:", iround(median(vec))),
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     hline = FALSE, filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
@@ -462,20 +422,8 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
-  #
-  stopifnot(
-    is.numeric(vec), is.vector(label),
-    is.character(plotname), nchar(plotname) < 200,
-    is.character.or.NULL(subtitle), is.character.or.NULL(suffix), is.character.or.NULL(caption), is.character.or.NULL(filename),
-    is.character(palette_use), is.character(col), is.character.or.NULL(xlab), is.character.or.NULL(ylab), is.character.or.NULL(legend.title),
-    is.character(grid), grid %in% c("x", "y", "xy"), is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.numeric.or.logical(hline), is.numeric(filtercol), filtercol %in% c(-1, 0, 1),
-    is.logical(logY), is.logical(annotation_logticks_Y), is.logical(hide.legend), is.logical(also.pdf),
-    is.logical(save.obj) , is.logical(limitsize), is.logical(save), is.logical(mdlink), is.logical(plot),
-    is.numeric(max.names), is.numeric(xlab.angle), is.numeric(w), is.numeric(h), is.numeric(ylim), length(ylim) == 2
-    )
-
-  if (is.null(xlab)) xlab <- plotname
+  stopifnot(is.numeric(vec))
+  if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
 
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
@@ -754,10 +702,8 @@ qbarplot.df <- function(
     w = qqqAxisLength(df), h = 5,
     ...) {
   message(plotname)
-
-  # browser()
   stopifnot(is.data.frame(df), ncol(df) > 2,
-    "Y axis must be numeric" = is.numeric(df[,y, drop=T])
+    "Y axis must be numeric" = is.numeric(y)
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
@@ -998,7 +944,6 @@ qscatter <- function(
 #' @param add Add additional graphical elements to the plot. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1036,7 +981,6 @@ qboxplot <- function(
     # position = if(add == "jitter") position_dodge(width=.7) else NULL,
     # add.params = if(add == "jitter") list(shape = "supp"),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    limitsize = TRUE,
     ...) {
   #
   # message("add.params: ", unlist(add.params), " add: ", add) #, " position: ", position
@@ -1052,7 +996,7 @@ qboxplot <- function(
     is.character(suffix) | is.null(suffix), is.character(ext),
     is.logical(logY), is.logical(hide.legend), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
     is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
-    is.numeric.or.logical(hline), is.numeric.or.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
+    is.logical(hline), is.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
     is.character(ext), is.character(palette_use), is.character(grid),
     is.numeric(w), is.numeric(h), is.numeric(max.categ),
     is.null(xlab.angle) | is.numeric(xlab.angle)
@@ -1132,8 +1076,7 @@ qboxplot <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
-                   also.pdf = also.pdf, save.obj = save.obj, limitsize = limitsize)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1174,7 +1117,6 @@ qboxplot <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1208,10 +1150,7 @@ qviolin <- function(
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    limitsize = TRUE,
     ...) {
-
-  # Check if df_XYcol_or_list is a list, and convert it to a data frame
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
   .assertMaxCategories(df_XYcol, col = x, max.categ)
@@ -1252,8 +1191,7 @@ qviolin <- function(
   } else {
     FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
-                   also.pdf = also.pdf, save.obj = save.obj, limitsize = limitsize)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1298,7 +1236,6 @@ qviolin <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param limitsize Limit the size of the plot to standard maximal size? Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
@@ -1334,16 +1271,16 @@ qstripchart <- function(
     grid = "y",
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    limitsize = TRUE,
     ...) {
   message("Column 1 should be the X-, Column 2 the Y-axis.")
   stopifnot(
-    CodeAndRoll2::is.list2(df_XYcol_or_list) || is.data.frame(df_XYcol_or_list),
-    length(x) == 1, length(y) == 1,
-    is.numeric(x) || is.character(x),
-    is.numeric(y) || is.character(y),
-    is.numeric(col) || is.character.or.NULL(col),
-    is.numeric(fill) || is.character.or.NULL(fill)
+    CodeAndRoll2::is.list2(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
+    # , length(df_XYcol_or_list) > 2
+    , length(x) == 1, length(y) == 1,
+    is.numeric(x) | is.character(x),
+    is.numeric(y) | is.character(y),
+    is.null(col) | is.numeric(col) | is.character(col),
+    is.null(fill) | is.numeric(fill) | is.character(fill)
   )
 
   df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
@@ -1389,8 +1326,7 @@ qstripchart <- function(
   } else {
     FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
-                   also.pdf = also.pdf, save.obj = save.obj, limitsize = limitsize)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) p
 }
@@ -1632,7 +1568,6 @@ qvenn <- function(
 #' @param suffix A suffix added to the filename. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param limitsize Limits the size of the plot below a default size. Default: TRUE.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples xplot <- ggplot2::qplot(12)
@@ -1654,17 +1589,8 @@ qqSave <- function(
     fname = FALSE,
     suffix = NULL,
     w = 4, h = w,
-    limitsize = TRUE,
     ...) {
   #
-  stopifnot(
-    inherits(ggobj, "gg"), is.character(ext), ext %in% c("png", "pdf", "jpg"),
-    is.logical(also.pdf), is.logical(save.obj), is.character(bgcol),
-    is.character(page) | is.logical(page), is.character(title) | is.logical(title),
-    is.character(fname) | is.logical(fname), is.character.or.NULL(suffix),
-    is.numeric(w), is.numeric(h), is.logical(limitsize)
-    )
-
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
   if (isFALSE(fname)) fname <- sppp(title, suffix, ext)
@@ -1701,14 +1627,15 @@ qqSave <- function(
   if (also.pdf) {
     cowplot::save_plot(
       plot = ggobj, filename = fname2, base_width = w, base_height = h,
-      title = ww.ttl_field(title, creator = "ggExpress"), limitsize = limitsize,
-      ...)
+      title = ww.ttl_field(title, creator = "ggExpress"),
+      ...
+    )
   }
 
   cowplot::save_plot(
     plot = ggobj, filename = fname,
-    base_width = w, base_height = h,  limitsize = limitsize,
-    ...)
+    base_width = w, base_height = h, ...
+  )
 
   if (save.obj) {
     fnp.qs <- sppp(fnp, "qs")
