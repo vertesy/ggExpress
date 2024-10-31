@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qpie}
 \alias{qpie}
-\title{qpie}
+\title{Draw and save a pie chart quickly (via ggplot2).}
 \usage{
 qpie(
   vec,
@@ -19,7 +19,7 @@ qpie(
   caption = suffix,
   NoLegend = FALSE,
   LegendSide = TRUE,
-  LegendTitle = plotname,
+  LegendTitle = "",
   pcdigits = 2,
   NamedSlices = FALSE,
   custom.order = FALSE,
@@ -38,7 +38,7 @@ qpie(
 )
 }
 \arguments{
-\item{vec}{A numeric vector or table.}
+\item{vec}{The variable to plot.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
@@ -97,7 +97,10 @@ qpie(
 \item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
 }
 \description{
-Draw and save a pie chart
+This all-in-one function draws, annotates, displays and saves a pie chart of a
+distribution provided as a numeric table It is a wrapper around \code{ggpubr::ggpie()},
+with the automation of many features. All \code{ggpubr} parameters can be accessed through
+the \code{...} argument.
 }
 \examples{
 xvec <- c("A" = 12, "B" = 29)

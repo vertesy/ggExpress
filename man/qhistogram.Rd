@@ -2,14 +2,14 @@
 % Please edit documentation in R/ggExpress.R
 \name{qhistogram}
 \alias{qhistogram}
-\title{Quick Histogram Plotting}
+\title{Draw and save a histogram quickly (via ggplot2).}
 \usage{
 qhistogram(
   vec,
   also.pdf = FALSE,
   save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-  xlab = NULL,
+  xlab = FALSE,
   plot = TRUE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
@@ -100,7 +100,10 @@ qhistogram(
 It returns a ggplot object if \code{plot} is TRUE.
 }
 \description{
-This function generates a histogram and saves the plot for a given vector and offers several customizations.
+This all-in-one function draws, annotates, displays and saves a histogram of a
+distribution provided as a numeric vector. It is a wrapper around \code{ggpubr::ggbarplot()},
+with the automation of many features. All \code{ggpubr} parameters can be accessed through
+the \code{...} argument.
 }
 \examples{
 \dontrun{

@@ -13,9 +13,12 @@
 # ____________________________________________________________________
 
 
-#' @title Quick Histogram Plotting
+#' @title Draw and save a histogram quickly (via ggplot2).
 #'
-#' @description This function generates a histogram and saves the plot for a given vector and offers several customizations.
+#' @description This all-in-one function draws, annotates, displays and saves a histogram of a
+#' distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggbarplot()`,
+#' with the automation of many features. All `ggpubr` parameters can be accessed through
+#' the `...` argument.
 #' @param vec A numeric vector for which the histogram is to be plotted.
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -205,9 +208,13 @@ qdensity <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qpie
+#' @title  Draw and save a pie chart quickly (via ggplot2).
 #'
-#' @description Draw and save a pie chart
+#' @description This all-in-one function draws, annotates, displays and saves a pie chart of a
+#' distribution provided as a numeric table It is a wrapper around `ggpubr::ggpie()`,
+#' with the automation of many features. All `ggpubr` parameters can be accessed through
+#' the `...` argument.
+#'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -243,7 +250,7 @@ qdensity <- function(
 #' @examples xvec <- c("A" = 12, "B" = 29)
 #' qpie(vec = xvec)
 qpie <- function(
-    vec = MyVec,
+    vec,
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE, save = TRUE,
@@ -253,9 +260,10 @@ qpie <- function(
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
+    caption.ext = TRUE,
     NoLegend = FALSE,
     LegendSide = TRUE,
-    LegendTitle = plotname,
+    LegendTitle = "",
     pcdigits = 2, NamedSlices = FALSE,
     custom.order = FALSE,
     extended.canvas = TRUE,
@@ -276,7 +284,7 @@ qpie <- function(
   st <- paste("Sum:", sum.orig)
   subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
 
-  ct <- paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names)
+  ct <- if(caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
   caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
 
   # ________________________________________________
