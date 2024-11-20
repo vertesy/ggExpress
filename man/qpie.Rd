@@ -17,6 +17,7 @@ qpie(
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
+  caption.ext = TRUE,
   NoLegend = FALSE,
   LegendSide = TRUE,
   LegendTitle = "",
