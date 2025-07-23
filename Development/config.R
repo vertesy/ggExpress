@@ -13,8 +13,8 @@ DESCRIPTION <- list(
     4. Describe your figures & findings in the same report in a clear and nicely formatted way, parsed from your variables into english sentences.
     5. Share your report, by exporting your report to .pdf, .html or .docx, or via Github or a personal website.",
 
-  depends = "Stringendo, MarkdownHelpers, ggplot2, ggpubr",
-  imports = "cowplot, tibble, tidyr, RColorBrewer, MarkdownReports, CodeAndRoll2, ggVennDiagram, qs, tictoc",
+  depends = "ggplot2, ggpubr, Stringendo, MarkdownHelpers",
+  imports = "cowplot, tibble, tidyr, RColorBrewer, ggVennDiagram, qs, tictoc, MarkdownReports, CodeAndRoll2",
 
   author.given = "Abel",
   author.family = "Vertesy",
