@@ -40,11 +40,11 @@ qvenn(
 
 \item{subtitle}{The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = List element lengths parsed.}
+\item{caption}{Optional text added to bottom right corner of the plot. Default is list element lengths parsed.}
 
-\item{caption2}{Optional text added to bottom right corner of the plot. Default = NULL.}
+\item{caption2}{Optional text added to bottom right corner of the plot. Default is NULL.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{ext}{File extension (.pdf / .png).}
 
@@ -54,11 +54,11 @@ qvenn(
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
-\item{col.min}{Color scale minimum, default: white}
+\item{col.min}{Color scale minimum. Default: white.}
 
-\item{col.max}{Color scale maximum, default: red}
+\item{col.max}{Color scale maximum. Default: red.}
 
-\item{hide.legend}{hide legend}
+\item{hide.legend}{Hide legend.}
 
 \item{x_exp}{Expand axis to show long set labels. Default: 0.2.}
 
@@ -66,7 +66,7 @@ qvenn(
 
 \item{h}{Height of the plot. Default: h = w * 0.75.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Draw and save a Venn Diagram using the \code{ggVennDiagram} package.

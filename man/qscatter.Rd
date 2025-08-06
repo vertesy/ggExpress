@@ -59,9 +59,9 @@ qscatter(
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default is suffix.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
@@ -73,9 +73,9 @@ qscatter(
 
 \item{repel}{Repel labels from each other. Default: TRUE.}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{palette_use}{GGpubr color palette to use.}
 
-\item{hide.legend}{hide legend}
+\item{hide.legend}{Hide legend.}
 
 \item{ext}{File extension (.pdf / .png).}
 
@@ -91,7 +91,7 @@ qscatter(
 
 \item{ylab}{Y-axis label. Default: NULL.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot, yintercept or FALSE}
 
@@ -107,7 +107,7 @@ qscatter(
 
 \item{add_contour_plot}{Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution}
 
-\item{correlation_r2}{Add a correlation value to the plot}
+\item{correlation_r2}{Add a correlation value to the plot.}
 
 \item{plot}{Display the plot.}
 
@@ -121,7 +121,7 @@ qscatter(
 
 \item{h}{Height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Draw and save a 2D-scatter plot.

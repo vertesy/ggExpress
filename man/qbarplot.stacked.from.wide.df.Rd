@@ -66,9 +66,9 @@ qbarplot.stacked.from.wide.df(
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default is suffix.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{scale}{Scale the y axis. Default: TRUE.}
 
@@ -80,11 +80,11 @@ qbarplot.stacked.from.wide.df(
 
 \item{hline}{Draw a horizontal line on the plot.}
 
-\item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
+\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{palette_use}{GGpubr color palette to use.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{xlab}{X-axis label. Default: \code{x}.}
 
@@ -92,11 +92,11 @@ qbarplot.stacked.from.wide.df(
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{hide.legend}{hide legend}
+\item{hide.legend}{Hide legend.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
-\item{limitsize}{limitsize}
+\item{limitsize}{Limit size.}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
@@ -106,7 +106,7 @@ qbarplot.stacked.from.wide.df(
 
 \item{h}{Height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Draw and save a stacked barplot for each row of a dataframe.

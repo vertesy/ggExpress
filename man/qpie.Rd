@@ -55,39 +55,39 @@ qpie(
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default is suffix.}
 
-\item{NoLegend}{NoLegend}
+\item{NoLegend}{No legend.}
 
-\item{LegendSide}{LegendSide}
+\item{LegendSide}{Legend side.}
 
-\item{LegendTitle}{LegendTitle}
+\item{LegendTitle}{Legend title.}
 
-\item{pcdigits}{pcdigits}
+\item{pcdigits}{Number of digits for percentages.}
 
-\item{NamedSlices}{NamedSlices}
+\item{NamedSlices}{Use named slices.}
 
-\item{custom.order}{custom.order}
+\item{custom.order}{Custom order.}
 
-\item{extended.canvas}{Make an extended canvas, default: T}
+\item{extended.canvas}{Make an extended canvas. Default: TRUE.}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{palette_use}{GGpubr color palette to use.}
 
-\item{custom.margin}{custom plot margin, default: T}
+\item{custom.margin}{Custom plot margin. Default: TRUE.}
 
-\item{max.categories}{Maximum number of categories to be shown as a seprate slice}
+\item{max.categories}{Maximum number of categories to be shown as a separate slice}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
-\item{decr.order}{Slices in the order of df. By default would ordered alphabetically in the plot.}
+\item{decr.order}{Slices in the order of df. By default, they are ordered alphabetically in the plot.}
 
-\item{both_pc_and_value}{Report both percentage AND number.}
+\item{both_pc_and_value}{Report both percentage and number.}
 
 \item{labels}{Slice labels. Set to NULL to remove slice names.}
 
@@ -95,11 +95,11 @@ qpie(
 
 \item{h}{Height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 This all-in-one function draws, annotates, displays and saves a pie chart of a
-distribution provided as a numeric table It is a wrapper around \code{ggpubr::ggpie()},
+distribution provided as a numeric table. It is a wrapper around \code{ggpubr::ggpie()},
 with the automation of many features. All \code{ggpubr} parameters can be accessed through
 the \code{...} argument.
 }
