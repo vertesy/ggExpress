@@ -31,7 +31,7 @@
 #' @param plotname Title of the plot and the name of the file (unless specified in `filename`). Default is parsed from `vec`.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Optional filename for the saved plot. Default is parsed from `plotname`.
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
@@ -138,7 +138,7 @@ qhistogram <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -225,7 +225,7 @@ qdensity <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param LegendSide Legend side.
 #' @param LegendTitle Legend title.
@@ -374,7 +374,7 @@ qpie <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
@@ -506,7 +506,7 @@ qbarplot <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param scale Scale the y axis. Default: TRUE.
 #' @param plot Display the plot.
@@ -649,7 +649,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param scale Scale the Y axis to 100%.
 #' @param plot Display the plot.
@@ -773,7 +773,7 @@ qbarplot.df <- function(
 #' @param plotname The name of the file and title of the plot.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
@@ -926,7 +926,7 @@ qscatter <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the plotname. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -937,7 +937,7 @@ qscatter <- function(
 #' @param vline Draw a vertical line on the plot.
 #' @param outlier.shape outlier shape. NA to hide.
 #' @param stat.test Do a statistical test?
-#' @param stat.method Statistical method. NULL for default
+#' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
 #' @param plot Display the plot.
@@ -1102,7 +1102,7 @@ qboxplot <- function(
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -1111,7 +1111,7 @@ qboxplot <- function(
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param stat.test Do a statistical test?
-#' @param stat.method Statistical method. NULL for default
+#' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
 #' @param plot Display the plot.
@@ -1218,7 +1218,7 @@ qviolin <- function(
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default is suffix.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ylab Y-axis label. Default: NULL.
 #' @param plot Display the plot.
@@ -1230,7 +1230,7 @@ qviolin <- function(
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
 #' @param stat.test Do a statistical test?
-#' @param stat.method Statistical method. NULL for default
+#' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
 #' @param size.point Size of points.

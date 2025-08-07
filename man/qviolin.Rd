@@ -57,13 +57,13 @@ qviolin(
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default is suffix.}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{stat.test}{Do a statistical test?}
 
-\item{stat.method}{Statistical method. NULL for default}
+\item{stat.method}{stat method. NULL for default}
 
 \item{stat.label.y.npc}{Stat label y position}
 

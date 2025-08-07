@@ -60,7 +60,7 @@ qhistogram(
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default is suffix.}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Optional filename for the saved plot. Default is parsed from \code{plotname}.}
 
