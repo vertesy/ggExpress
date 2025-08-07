@@ -7,7 +7,7 @@ DESCRIPTION <- list(
   title = "ggExpress is the fastest way to create, annotate and export plots in R",
   description = "ggExpress is a set of R functions that allows you to generate precise figures easily,
     and create clean markdown reports about what you just discovered with your analysis script. It is ggplot-based smaller brother of vertesy/MarkdownReports. It helps you to:
-    1. Create scientifically accurate (annotated) figures with very short code, making use of variable-, row- and columnnames.
+    1. Create scientifically accurate (annotated) figures with very short code, making use of variable-, row- and column names.
     2. Save figures automatically as vector graphic (.pdf), that you can use from presentation to posters anywhere.
     3. Incorporate your figures automatically in a markdown report file.
     4. Describe your figures & findings in the same report in a clear and nicely formatted way, parsed from your variables into english sentences.

@@ -574,7 +574,7 @@ qpie <- function(
 #' @title qboxplot
 #'
 #' @description Draw and save a boxplot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list of values.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix
@@ -673,7 +673,7 @@ qboxplot <- function(
 #' @title qviolin
 #'
 #' @description Draw and save a violin plot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list of values.
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -776,7 +776,7 @@ qviolin <- function(
 #' @title qstripchart
 #'
 #' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list of values.
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.

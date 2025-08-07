@@ -1832,7 +1832,7 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 # _________________________________________________________________________________________________
 #' @title qqqList.2.DF.ggplot
 #'
-#' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
+#' @description Convert a list to a two-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
 #' @importFrom CodeAndRoll2 is.list2
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])

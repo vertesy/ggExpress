@@ -10,7 +10,7 @@ Description: ggExpress is a set of R functions that allows you to generate
     you just discovered with your analysis script. It is ggplot-based
     smaller brother of vertesy/MarkdownReports. It helps you to: 1. Create
     scientifically accurate (annotated) figures with very short code,
-    making use of variable-, row- and columnnames.  2. Save figures
+    making use of variable-, row- and column names.  2. Save figures
     automatically as vector graphic (.pdf), that you can use from
     presentation to posters anywhere.  3. Incorporate your figures
     automatically in a markdown report file.  4. Describe your figures &
