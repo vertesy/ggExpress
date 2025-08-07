@@ -98,17 +98,17 @@ qqqAxisLength <- function(vec = 1:20, minLength=6) {
 
 
 # ------------------------------------------------------------------------------------------------
-#' @title qqqCovert.named.vec2tbl
-#' @description Covert a named vector to a table.
+#' @title qqqConvert.named.vec2tbl
+#' @description Convert a named vector to a table.
 #' @param namedVec namedVec
 #' @param verbose verbose
 #' @param strip.too.many.names strip.too.many.names
 #' @param thr thr
 #' @export
 #'
-#' @examples qqqCovert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
+#' @examples qqqConvert.named.vec2tbl(namedVec = c("A"=2, "B"=29) )
 
-qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqConvert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
   # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))
@@ -128,16 +128,16 @@ qqqCovert.named.vec2tbl <- function(namedVec=1:14, verbose = F, strip.too.many.n
 
 
 # ------------------------------------------------------------------------------------------------
-#' @title qqqCovert.tbl2vec
-#' @description Covert a table to a named vector.
+#' @title qqqConvert.tbl2vec
+#' @description Convert a table to a named vector.
 #' @param tibble.input tibble.input
 #' @param name.column name.column
 #' @param value.column value.column
 #' @export
 #'
-#' @examples a=1:5; x= tibble::tibble(a, a * 2); qqqCovert.tbl2vec(x)
+#' @examples a=1:5; x= tibble::tibble(a, a * 2); qqqConvert.tbl2vec(x)
 
-qqqCovert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
+qqqConvert.tbl2vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
   vec <- tibble.input[[value.column]]
   names(vec) <- tibble.input[[name.column]]
   vec

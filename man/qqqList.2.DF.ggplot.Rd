@@ -10,7 +10,7 @@ qqqList.2.DF.ggplot(ls = LetterSets)
 \item{ls}{A list with all elements named}
 }
 \description{
-Convert a list to a tow-column data frame to plot boxplots and violin plots
+Convert a list to a two-column data frame to plot boxplots and violin plots
 }
 \examples{
 LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])

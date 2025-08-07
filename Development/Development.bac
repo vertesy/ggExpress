@@ -451,7 +451,7 @@ qbarplot.df <- function(
 #' @param NamedSlices NamedSlices
 #' @param extended.canvas Make an extended canvas, default: T
 #' @param custom.margin custom plot margin, default: T
-#' @param max.categories Maximum number of categories to be shown as a seprate slice
+#' @param max.categories Maximum number of categories to be shown as a separate slice
 #' @param decr.order Slices in the order of df. By default would ordered alphabetically in the plot.
 #' @param both_pc_and_value Report both percentage AND number.
 #' @param custom.order custom.order
@@ -1252,7 +1252,7 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 # _________________________________________________________________________________________________
 #' @title qqqNamed.Vec.2.Tbl
 #'
-#' @description Covert a named vector to a table.
+#' @description Convert a named vector to a table.
 #' @param namedVec namedVec
 #' @param verbose verbose
 #' @param strip.too.many.names strip.too.many.names
@@ -1288,7 +1288,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 # _________________________________________________________________________________________________
 #' @title qqqTbl.2.Vec
 #'
-#' @description Covert a table to a named vector.
+#' @description Convert a table to a named vector.
 #' @param tibble.input tibble.input
 #' @param name.column name.column
 #' @param value.column value.column
@@ -1309,7 +1309,7 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 # _________________________________________________________________________________________________
 #' @title qqqList.2.DF.ggplot
 #'
-#' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
+#' @description Convert a list to a two-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
 #' @importFrom CodeAndRoll2 is.list2
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
