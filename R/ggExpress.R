@@ -325,8 +325,7 @@ qpie <- function(
   if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
 
   nrCategories.DFcol1 <- length(unique(df[, 1]))
-  stopif(nrCategories.DFcol1 > max.categories)
-  print(nrCategories.DFcol1)
+  stopifnot("Number of categories exceeds 'max.categories'." = nrCategories.DFcol1 <= max.categories)
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
@@ -849,7 +848,6 @@ qscatter <- function(
     # pt.size = NULL,
     w = 7, h = w,
     ...) {
-  #
   print(plotname)
   stopifnot(
     is.data.frame(df_XYcol) || is.matrix(df_XYcol),
@@ -890,10 +888,10 @@ qscatter <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type) # sum is needed to deal with multiple lines (multiple values in if statement).
-  if (sum(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
-  if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
-  if (add_contour_plot) p <- p + geom_density_2d()
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
+  if (add_contour_plot) p <- p + ggplot2::geom_density_2d()
   if (correlation_r2 %in% c("pearson", "spearman")) p <- p + stat_cor(method = correlation_r2)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
@@ -1044,8 +1042,10 @@ qboxplot <- function(
 
   palette_use_bac <- palette_use
   if (length(fill) > 1) {
-    stopifnot(length(fill) == nrow(df_XYcol) | length(fill) == 1)
-    if (length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
+    stopifnot(
+      "Length of fill must be 1 or equal to the number of rows in the data frame." =
+        length(fill) == nrow(df_XYcol)
+    )
   } else if (length(fill) == 1) {
     fill <- rep(fill, nrow(df_XYcol))
     palette_use <- fill
@@ -1863,9 +1863,11 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 #' qqqList.2.DF.ggplot(LetterSets)
 #' @export
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
-  stopifnot(CodeAndRoll2::is.list2(ls))
-  stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
-  # utils::stack(unlist(ls))[, 2:1]
+  stopifnot(
+    CodeAndRoll2::is.list2(ls),
+    "Not all list elements have a unique name!" =
+      length(ls) == length(unique(names(ls)))
+  )
   utils::stack(ls)[, 2:1]
 }
 
