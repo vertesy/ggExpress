@@ -81,7 +81,7 @@ qpie(
 
 \item{custom.margin}{custom plot margin, default: T}
 
-\item{max.categories}{Maximum number of categories to be shown as a seprate slice}
+\item{max.categories}{Maximum number of categories to be shown as a separate slice}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
