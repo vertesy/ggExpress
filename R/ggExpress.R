@@ -446,9 +446,6 @@ qbarplot <- function(
     } else {
       as.character(rep(col, length(vec))[1:length(vec)])
     }
-  print(df)
-
-
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,
@@ -613,8 +610,8 @@ qbarplot.stacked.from.wide.df <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-
-  if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
+  # Hide x-axis labels when too many categories are present
+  if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
@@ -747,8 +744,8 @@ qbarplot.df <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-
-  if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
+  # Hide x-axis labels when number of unique categories exceeds limit
+  if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
