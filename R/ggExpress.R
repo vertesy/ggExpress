@@ -78,6 +78,7 @@ qhistogram <- function(
     max.names = 50,
     grid = "y",
     w = 5, h = w, ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
@@ -103,12 +104,12 @@ qhistogram <- function(
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
   if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -176,6 +177,7 @@ qdensity <- function(
     max.names = 50,
     grid = FALSE,
     w = 5, h = w, ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
@@ -190,7 +192,7 @@ qdensity <- function(
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -276,6 +278,7 @@ qpie <- function(
     labels = "names", # Set to NULL to remove slice names.
     w = 7, h = 5,
     ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)), all(vec >= 0))
   print(plotname)
   l.orig <- length(vec)
   sum.orig <- sum(vec)
@@ -429,7 +432,7 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
-  stopifnot(is.numeric(vec))
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
 
@@ -462,7 +465,7 @@ qbarplot <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -470,7 +473,7 @@ qbarplot <- function(
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -609,14 +612,14 @@ qbarplot.stacked.from.wide.df <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
     filename
   } else {
@@ -709,8 +712,14 @@ qbarplot.df <- function(
     w = qqqAxisLength(df), h = 5,
     ...) {
   message(plotname)
-  stopifnot(is.data.frame(df), ncol(df) > 2,
-    "Y axis must be numeric" = is.numeric(y)
+  cols <- colnames(df)
+  x <- if (is.numeric(x)) cols[x] else x
+  y <- if (is.numeric(y)) cols[y] else y
+  fill <- if (is.numeric(fill)) cols[fill] else fill
+  stopifnot(
+    is.data.frame(df), ncol(df) > 2,
+    all(c(x, y, fill) %in% cols),
+    is.numeric(df[[y]])
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
@@ -737,14 +746,14 @@ qbarplot.df <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
     filename
   } else {
@@ -841,22 +850,22 @@ qscatter <- function(
     ...) {
   print(plotname)
   stopifnot(
-    ncol(df_XYcol) >= 2,
-    is.numeric(x) | is.character(x),
-    is.numeric(y) | is.character(y)
+    is.data.frame(df_XYcol) || is.matrix(df_XYcol),
+    ncol(df_XYcol) >= 2L,
+    (is.numeric(x) && x <= ncol(df_XYcol)) || (is.character(x) && x %in% colnames(df_XYcol)),
+    (is.numeric(y) && y <= ncol(df_XYcol)) || (is.character(y) && y %in% colnames(df_XYcol))
   )
 
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
-
-  if (!is.numeric(x)) {
-    stopifnot(x %in% colnames(df_XYcol))
-    x <- which(colnames(df_XYcol) == x)
-  }
-
-  if (!is.numeric(y)) {
-    stopifnot(y %in% colnames(df_XYcol))
-    y <- which(colnames(df_XYcol) == y)
-  }
+  if (is.character(x)) x <- which(colnames(df_XYcol) == x)
+  if (is.character(y)) y <- which(colnames(df_XYcol) == y)
+  xv <- df_XYcol[[x]]
+  yv <- df_XYcol[[y]]
+  stopifnot(
+    is.numeric(xv), is.numeric(yv),
+    length(xv) > 0L, length(yv) > 0L,
+    all(is.finite(xv)), all(is.finite(yv))
+  )
 
   vars <- colnames(df_XYcol)
   names(vars) <- vars
@@ -878,7 +887,7 @@ qscatter <- function(
     ggpubr::grids(axis = "xy") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
   if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
@@ -886,10 +895,10 @@ qscatter <- function(
   if (correlation_r2 %in% c("pearson", "spearman")) p <- p + stat_cor(method = correlation_r2)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -1025,7 +1034,11 @@ qboxplot <- function(
   .assertMaxCategories(df_XYcol, col = x, max.categ)
   vars <- colnames(df_XYcol)
   names(vars) <- vars
-
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
 
   palette_use_bac <- palette_use
   if (length(fill) > 1) {
@@ -1069,12 +1082,12 @@ qboxplot <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1166,6 +1179,11 @@ qviolin <- function(
   # Define fill color
   vars <- colnames(df_XYcol)
   names(vars) <- vars
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
@@ -1184,12 +1202,12 @@ qviolin <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1297,6 +1315,11 @@ qstripchart <- function(
   # Define fill color
   vars <- colnames(df_XYcol)
   names(vars) <- vars
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
@@ -1318,12 +1341,12 @@ qstripchart <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1332,7 +1355,7 @@ qstripchart <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
+    FixPlotName(plotname, suffix, fix, flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -1391,6 +1414,7 @@ qvenn <- function(
     x_exp = .2,
     w = 8, h = 0.75 * w,
     ...) {
+  stopifnot(is.list(list), length(list) > 0L)
   #
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
@@ -1832,7 +1856,7 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 # _________________________________________________________________________________________________
 #' @title qqqList.2.DF.ggplot
 #'
-#' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
+#' @description Convert a list to a two-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
 #' @importFrom CodeAndRoll2 is.list2
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
