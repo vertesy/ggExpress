@@ -44,7 +44,7 @@ qboxplot(
 )
 }
 \arguments{
-\item{df_XYcol_or_list}{Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.}
+\item{df_XYcol_or_list}{Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.}
 
 \item{x}{The index or name of the column to be plotted on the X axis. Default: \code{1}.}
 
@@ -60,9 +60,9 @@ qboxplot(
 
 \item{suffix}{Optional suffix added to the plotname. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{outlier.shape}{outlier shape. NA to hide.}
 
@@ -70,13 +70,13 @@ qboxplot(
 
 \item{stat.method}{stat method. NULL for default}
 
-\item{stat.label.y.npc}{stat label y position}
+\item{stat.label.y.npc}{Stat label y position}
 
-\item{stat.label.x}{stat label x position}
+\item{stat.label.x}{Stat label x position}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{palette_use}{GGpubr color palette to use.}
 
-\item{hide.legend}{hide legend}
+\item{hide.legend}{Hide legend.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
@@ -90,7 +90,7 @@ qboxplot(
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{hline}{Draw a horizontal line on the plot.}
 
@@ -112,7 +112,7 @@ qboxplot(
 
 \item{h}{Height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Draw and save a boxplot

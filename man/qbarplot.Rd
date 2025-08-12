@@ -56,9 +56,9 @@ qbarplot(
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
-\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix}
+\item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
-\item{filename}{Manually provided filename (optional). Default: parse from \code{plotname},}
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{save}{Save the plot into a file.}
 
@@ -66,23 +66,23 @@ qbarplot(
 
 \item{hline}{Draw a horizontal line on the plot.}
 
-\item{filtercol}{Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
+\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
-\item{palette_use}{GGpubr Color palette to use.}
+\item{palette_use}{GGpubr color palette to use.}
 
 \item{col}{Color of the plot.}
 
 \item{xlab}{X-axis label. Default: "".}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{logY}{Make Y axis log10-scale.}
 
-\item{ylim}{ylimit values}
+\item{ylim}{Y-axis limit values}
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{label}{label}
+\item{label}{Label text.}
 
 \item{hide.legend}{Hide legend. Default: TRUE.}
 
@@ -90,7 +90,7 @@ qbarplot(
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
-\item{limitsize}{limitsize}
+\item{limitsize}{Limit size}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
@@ -100,7 +100,7 @@ qbarplot(
 
 \item{h}{Height of the plot.}
 
-\item{...}{Pass any other parameter of the corresponding plotting function(most of them should work).}
+\item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
 Draw and save a barplot.

@@ -20,8 +20,8 @@ devtools::install_github(repo = "vertesy/ReadWriter", ref = "main", upgrade = F)
 devtools::install_github(repo = "vertesy/CodeAndRoll2", ref = "main", upgrade = F)
 devtools::install_github(repo = "vertesy/MarkdownHelpers", ref = "main", upgrade = F)
 
-# Install MarkdownHelpers
-devtools::install_github(repo = "vertesy/ggExpress", ref = "main")
+# Install ggExpress
+devtools::install_github(repo = "vertesy/ggExpress", ref = "main", upgrade = F)
 ```
 
 ...then simply load the package:
@@ -117,7 +117,7 @@ qviolin. Draw and save a violin plot
 - #### 10 `qstripchart()`
 qstripchart. Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
 
-- #### 11 `# qheatmap()`
+- #### 11 `qvenn()`
 qvenn - Venn Diagram. Draw and save a Venn Diagram using the `ggVennDiagram` package.
 
 - #### 12 `qqSave()`
@@ -136,11 +136,11 @@ qMarkdownImageLink. Insert Markdown image link to .md report
 qqqAxisLength. Define Axis Length
 
 - #### 17 `qqqNamed.Vec.2.Tbl()`
-qqqNamed.Vec.2.Tbl. Covert a named vector to a table.
+qqqNamed.Vec.2.Tbl. Convert a named vector to a table.
 
 - #### 18 `qqqTbl.2.Vec()`
-qqqTbl.2.Vec. Covert a table to a named vector.
+qqqTbl.2.Vec. Convert a table to a named vector.
 
 - #### 19 `qqqList.2.DF.ggplot()`
-qqqList.2.DF.ggplot. Convert a list to a tow-column data frame to plot boxplots and violin plots
+qqqList.2.DF.ggplot. Convert a list to a two-column data frame to plot boxplots and violin plots
 

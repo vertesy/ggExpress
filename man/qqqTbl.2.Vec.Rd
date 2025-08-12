@@ -14,7 +14,7 @@ qqqTbl.2.Vec(tibble.input, name.column = 1, value.column = 2)
 \item{value.column}{value.column}
 }
 \description{
-Covert a table to a named vector.
+Convert a table to a named vector.
 }
 \examples{
 a <- 1:5
