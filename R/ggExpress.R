@@ -1844,9 +1844,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 #' x <- tibble::tibble(a, a * 2)
 #' qqqTbl.2.Vec(x)
 qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-  vec <- tibble.input[[value.column]]
-  names(vec) <- tibble.input[[name.column]]
-  vec
+  setNames(tibble.input[[value.column]], tibble.input[[name.column]])
 }
 
 
