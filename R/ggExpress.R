@@ -342,13 +342,13 @@ qpie <- function(
     palette = palette_use
     # , ...
   ) +
-    guides(fill = guide_legend(LegendTitle))
+    ggplot2::guides(fill = ggplot2::guide_legend(LegendTitle))
   # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
-  if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
+  if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
 
-  p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
+  p <- if (NoLegend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -466,7 +466,7 @@ qbarplot <- function(
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-  if (!is.null(legend.title)) p <- p + guides(fill = guide_legend(title = legend.title), color = "none") # Hide the color legend
+  if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -1416,14 +1416,14 @@ qvenn <- function(
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
   p <- ggVennDiagram::ggVennDiagram(list, ..., ) +
-    scale_fill_gradient(low = col.min, high = col.max) +
+    ggplot2::scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
       title = paste(" ", plotname),
       subtitle = paste(" ", subtitle, "\n"),
       caption = caption
     ) +
-    scale_x_continuous(expand = expansion(mult = x_exp)) + # expand axis to show long set labels
-    theme(plot.background = element_rect(fill = "white", colour = "white"))
+    ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = x_exp)) + # expand axis to show long set labels
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = "white"))
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -1650,7 +1650,7 @@ qqSave <- function(
   message("\n\n", fnp)
 
   # Set the plot background to white
-  ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
+  ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
 
   # Save the plot
   if (also.pdf) {
@@ -1757,7 +1757,7 @@ qA4_grid_plot <- function(
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname <- sppp(plotname, suffix, extension)
   p1 <- cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...) +
-    theme(plot.background = element_rect(fill = "white"))
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
