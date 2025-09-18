@@ -52,7 +52,7 @@ qbarplot.df(
 
 \item{color}{Color (split) by along Y.}
 
-\item{label}{label}
+\item{label}{Label text.}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 

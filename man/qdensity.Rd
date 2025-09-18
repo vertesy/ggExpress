@@ -44,7 +44,7 @@ qdensity(
 
 \item{plot}{Display the plot.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degree. Default: 90}
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
