@@ -31,7 +31,7 @@
 #' @param plotname Title of the plot and the name of the file (unless specified in `filename`). Default is parsed from `vec`.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Optional filename for the saved plot. Default is parsed from `plotname`.
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
@@ -78,6 +78,7 @@ qhistogram <- function(
     max.names = 50,
     grid = "y",
     w = 5, h = w, ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
@@ -103,12 +104,12 @@ qhistogram <- function(
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
   if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -138,21 +139,21 @@ qhistogram <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param logX Make X axis log10-scale.
 #' @param xlab X-axis label. Default: FALSE.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param palette_use GGpubr Color palette to use.
-#' @param hide.legend hide legend
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param palette_use GGpubr color palette to use.
+#' @param hide.legend Hide legend.
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @export
 #'
@@ -176,6 +177,7 @@ qdensity <- function(
     max.names = 50,
     grid = FALSE,
     w = 5, h = w, ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
@@ -190,7 +192,7 @@ qdensity <- function(
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -211,7 +213,7 @@ qdensity <- function(
 #' @title  Draw and save a pie chart quickly (via ggplot2).
 #'
 #' @description This all-in-one function draws, annotates, displays and saves a pie chart of a
-#' distribution provided as a numeric table It is a wrapper around `ggpubr::ggpie()`,
+#' distribution provided as a numeric table. It is a wrapper around `ggpubr::ggpie()`,
 #' with the automation of many features. All `ggpubr` parameters can be accessed through
 #' the `...` argument.
 #'
@@ -225,25 +227,25 @@ qdensity <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param LegendSide LegendSide
-#' @param LegendTitle LegendTitle
-#' @param NoLegend NoLegend
-#' @param pcdigits pcdigits
-#' @param NamedSlices NamedSlices
-#' @param extended.canvas Make an extended canvas, default: T
-#' @param custom.margin custom plot margin, default: T
-#' @param max.categories Maximum number of categories to be shown as a seprate slice
-#' @param decr.order Slices in the order of df. By default would ordered alphabetically in the plot.
-#' @param both_pc_and_value Report both percentage AND number.
-#' @param custom.order custom.order
-#' @param palette_use GGpubr Color palette to use.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#' @param LegendSide Legend side.
+#' @param LegendTitle Legend title.
+#' @param NoLegend No legend.
+#' @param pcdigits Number of digits for percentages.
+#' @param NamedSlices Use named slices.
+#' @param extended.canvas Make an extended canvas. Default: TRUE.
+#' @param custom.margin Custom plot margin. Default: TRUE.
+#' @param max.categories Maximum number of categories to be shown as a separate slice
+#' @param decr.order Slices in the order of df. By default, they are ordered alphabetically in the plot.
+#' @param both_pc_and_value Report both percentage and number.
+#' @param custom.order Custom order.
+#' @param palette_use GGpubr color palette to use.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param labels Slice labels. Set to NULL to remove slice names.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @export
 #'
@@ -276,6 +278,7 @@ qpie <- function(
     labels = "names", # Set to NULL to remove slice names.
     w = 7, h = 5,
     ...) {
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)), all(vec >= 0))
   print(plotname)
   l.orig <- length(vec)
   sum.orig <- sum(vec)
@@ -322,8 +325,7 @@ qpie <- function(
   if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
 
   nrCategories.DFcol1 <- length(unique(df[, 1]))
-  stopif(nrCategories.DFcol1 > max.categories)
-  print(nrCategories.DFcol1)
+  stopifnot("Number of categories exceeds 'max.categories'." = nrCategories.DFcol1 <= max.categories)
 
   if (NamedSlices) labs <- paste(df$names, "\n", labs)
   if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
@@ -340,13 +342,13 @@ qpie <- function(
     palette = palette_use
     # , ...
   ) +
-    guides(fill = guide_legend(LegendTitle))
+    ggplot2::guides(fill = ggplot2::guide_legend(LegendTitle))
   # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
-  if (custom.margin) p <- p + coord_polar(theta = "y", clip = "off")
+  if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
 
-  p <- if (NoLegend) p + theme(legend.position = "none", validate = TRUE) else p
+  p <- if (NoLegend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -374,29 +376,29 @@ qpie <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr Color palette to use.
+#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr color palette to use.
 #' @param col Color of the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: "".
 #' @param ylab Y-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
-#' @param label label
+#' @param label Label text.
 #' @param hide.legend Hide legend. Default: TRUE.
 #' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param limitsize limitsize
+#' @param limitsize Limit size.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ylim ylimit values
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ylim Y-axis limit values.
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @export
 #'
@@ -430,7 +432,7 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
-  stopifnot(is.numeric(vec))
+  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
 
@@ -444,9 +446,6 @@ qbarplot <- function(
     } else {
       as.character(rep(col, length(vec))[1:length(vec)])
     }
-  print(df)
-
-
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,
@@ -463,15 +462,15 @@ qbarplot <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-  if (!is.null(legend.title)) p <- p + guides(fill = guide_legend(title = legend.title), color = "none") # Hide the color legend
+  if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -506,29 +505,29 @@ qbarplot <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param scale Scale the y axis. Default: TRUE.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr Color palette to use.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr color palette to use.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: `x`.
 #' @param logY Make Y axis log10-scale.
-#' @param label label
-#' @param hide.legend hide legend
+#' @param label Label text.
+#' @param hide.legend Hide legend.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param limitsize limitsize
+#' @param limitsize Limit size.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
 # #' @param top The number of top categories to keep. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples
 #' # Example of wide-format data for stacked bar plot
@@ -610,14 +609,14 @@ qbarplot.stacked.from.wide.df <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-
-  if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  # Hide x-axis labels when too many categories are present
+  if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
     filename
   } else {
@@ -649,28 +648,28 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param scale Scale the Y axis to 100%.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below / above the threshold with red / green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr Color palette to use.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
+#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+#' @param palette_use GGpubr color palette to use.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param label label
-#' @param hide.legend hide legend
+#' @param label Label text.
+#' @param hide.legend Hide legend.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param limitsize limitsize
+#' @param limitsize Limit size.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ Maximum number of categories to show on the plot. Default is 10.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples my_tibble <- tibble(
 #'   Column_1 = c("A", "A", "A", "B", "C", "C"),
@@ -710,8 +709,14 @@ qbarplot.df <- function(
     w = qqqAxisLength(df), h = 5,
     ...) {
   message(plotname)
-  stopifnot(is.data.frame(df), ncol(df) > 2,
-    "Y axis must be numeric" = is.numeric(y)
+  cols <- colnames(df)
+  x <- if (is.numeric(x)) cols[x] else x
+  y <- if (is.numeric(y)) cols[y] else y
+  fill <- if (is.numeric(fill)) cols[fill] else fill
+  stopifnot(
+    is.data.frame(df), ncol(df) > 2,
+    all(c(x, y, fill) %in% cols),
+    is.numeric(df[[y]])
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
@@ -738,14 +743,14 @@ qbarplot.df <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-
-  if (length(df) > max.names) p <- p + ggplot2::guides(x = "none")
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  # Hide x-axis labels when number of unique categories exceeds limit
+  if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
     filename
   } else {
@@ -773,8 +778,8 @@ qbarplot.df <- function(
 #' @param plotname The name of the file and title of the plot.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
 #' @param col Color of the plot.
@@ -794,9 +799,9 @@ qbarplot.df <- function(
 #' @param plot Display the plot.
 #' @param xlab X-axis label. Default: NULL.
 #' @param ylab Y-axis label. Default: NULL.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param palette_use GGpubr Color palette to use.
-#' @param hide.legend hide legend
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param palette_use GGpubr color palette to use.
+#' @param hide.legend Hide legend.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w Width of the plot.
@@ -804,7 +809,7 @@ qbarplot.df <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
 #' qscatter(dfx, suffix = "2D.gaussian")
@@ -840,25 +845,24 @@ qscatter <- function(
     # pt.size = NULL,
     w = 7, h = w,
     ...) {
-  #
   print(plotname)
   stopifnot(
-    ncol(df_XYcol) >= 2,
-    is.numeric(x) | is.character(x),
-    is.numeric(y) | is.character(y)
+    is.data.frame(df_XYcol) || is.matrix(df_XYcol),
+    ncol(df_XYcol) >= 2L,
+    (is.numeric(x) && x <= ncol(df_XYcol)) || (is.character(x) && x %in% colnames(df_XYcol)),
+    (is.numeric(y) && y <= ncol(df_XYcol)) || (is.character(y) && y %in% colnames(df_XYcol))
   )
 
   if (is.matrix(df_XYcol)) df_XYcol <- as.data.frame(df_XYcol)
-
-  if (!is.numeric(x)) {
-    stopifnot(x %in% colnames(df_XYcol))
-    x <- which(colnames(df_XYcol) == x)
-  }
-
-  if (!is.numeric(y)) {
-    stopifnot(y %in% colnames(df_XYcol))
-    y <- which(colnames(df_XYcol) == y)
-  }
+  if (is.character(x)) x <- which(colnames(df_XYcol) == x)
+  if (is.character(y)) y <- which(colnames(df_XYcol) == y)
+  xv <- df_XYcol[[x]]
+  yv <- df_XYcol[[y]]
+  stopifnot(
+    is.numeric(xv), is.numeric(yv),
+    length(xv) > 0L, length(yv) > 0L,
+    all(is.finite(xv)), all(is.finite(yv))
+  )
 
   vars <- colnames(df_XYcol)
   names(vars) <- vars
@@ -880,18 +884,18 @@ qscatter <- function(
     ggpubr::grids(axis = "xy") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
-  if (sum(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type) # sum is needed to deal with multiple lines (multiple values in if statement).
-  if (sum(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
-  if (sum(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
-  if (add_contour_plot) p <- p + geom_density_2d()
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
+  if (add_contour_plot) p <- p + ggplot2::geom_density_2d()
   if (correlation_r2 %in% c("pearson", "spearman")) p <- p + stat_cor(method = correlation_r2)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + annotation_logticks(sides = "b")
+  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -918,7 +922,7 @@ qscatter <- function(
 #' @title qboxplot
 #'
 #' @description Draw and save a boxplot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
@@ -926,8 +930,8 @@ qscatter <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the plotname. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
@@ -938,12 +942,12 @@ qscatter <- function(
 #' @param outlier.shape outlier shape. NA to hide.
 #' @param stat.test Do a statistical test?
 #' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
+#' @param stat.label.y.npc Stat label y position
+#' @param stat.label.x Stat label x position
 #' @param plot Display the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param hide.legend Hide legend.
+#' @param palette_use GGpubr color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
@@ -952,7 +956,7 @@ qscatter <- function(
 #' @param add Add additional graphical elements to the plot. Default: NULL.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
 #' @export
@@ -1027,12 +1031,18 @@ qboxplot <- function(
   .assertMaxCategories(df_XYcol, col = x, max.categ)
   vars <- colnames(df_XYcol)
   names(vars) <- vars
-
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
 
   palette_use_bac <- palette_use
   if (length(fill) > 1) {
-    stopifnot(length(fill) == nrow(df_XYcol) | length(fill) == 1)
-    if (length(fill) != nrow(df_XYcol)) stop("Length of fill must be 1 or equal to the number of rows in the data frame.")
+    stopifnot(
+      "Length of fill must be 1 or equal to the number of rows in the data frame." =
+        length(fill) == nrow(df_XYcol)
+    )
   } else if (length(fill) == 1) {
     fill <- rep(fill, nrow(df_XYcol))
     palette_use <- fill
@@ -1069,12 +1079,12 @@ qboxplot <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1094,7 +1104,7 @@ qboxplot <- function(
 #' @title qviolin
 #'
 #' @description Draw and save a violin plot
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
@@ -1102,8 +1112,8 @@ qboxplot <- function(
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
@@ -1112,12 +1122,12 @@ qboxplot <- function(
 #' @param vline Draw a vertical line on the plot.
 #' @param stat.test Do a statistical test?
 #' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
+#' @param stat.label.y.npc Stat label y position
+#' @param stat.label.x Stat label x position
 #' @param plot Display the plot.
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param hide.legend Hide legend.
+#' @param palette_use GGpubr color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
@@ -1125,7 +1135,7 @@ qboxplot <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
 #' @export
@@ -1166,6 +1176,11 @@ qviolin <- function(
   # Define fill color
   vars <- colnames(df_XYcol)
   names(vars) <- vars
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
@@ -1184,12 +1199,12 @@ qviolin <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1210,7 +1225,7 @@ qviolin <- function(
 #' @title qstripchart
 #'
 #' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
-#' @param df_XYcol_or_list Data, as 2 column data frame, where col.1 is X axis, alternatively a uniquely named list ov values.
+#' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
@@ -1218,11 +1233,11 @@ qviolin <- function(
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = suffix
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
-#' @param ylab Y-axis label. Default: NULL.z
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#' @param ylab Y-axis label. Default: NULL.
 #' @param plot Display the plot.
-#' @param add Add boxplot or violin chart? Default  add = c("violin", "mean_sd"), it can be "boxplot" or only "mean_sd".
+#' @param add Add boxplot or violin chart? Default: add = c("violin", "mean_sd"); it can be "boxplot" or only "mean_sd".
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
@@ -1231,12 +1246,12 @@ qviolin <- function(
 #' @param vline Draw a vertical line on the plot.
 #' @param stat.test Do a statistical test?
 #' @param stat.method stat method. NULL for default
-#' @param stat.label.y.npc stat label y position
-#' @param stat.label.x stat label x position
-#' @param size.point Size of points
-#' @param xlab.angle Rotate X-axis labels by N degree. Default: 90
-#' @param hide.legend hide legend
-#' @param palette_use GGpubr Color palette to use.
+#' @param stat.label.y.npc Stat label y position
+#' @param stat.label.x Stat label x position
+#' @param size.point Size of points.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param hide.legend Hide legend.
+#' @param palette_use GGpubr color palette to use.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
@@ -1244,7 +1259,7 @@ qviolin <- function(
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @importFrom CodeAndRoll2 is.list2
 #' @examples data("ToothGrowth")
@@ -1297,6 +1312,11 @@ qstripchart <- function(
   # Define fill color
   vars <- colnames(df_XYcol)
   names(vars) <- vars
+  stopifnot(
+    if (is.numeric(x)) x <= length(vars) else x %in% vars,
+    if (is.numeric(y)) y <= length(vars) else y %in% vars,
+    is.numeric(df_XYcol[[vars[y]]])
+  )
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
@@ -1318,12 +1338,12 @@ qstripchart <- function(
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + grids(axis = grid)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + annotation_logticks(sides = "l")
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
@@ -1332,7 +1352,7 @@ qstripchart <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, fix, suffix, flag.nameiftrue(logY), "strip", ext)
+    FixPlotName(plotname, suffix, fix, flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -1350,22 +1370,22 @@ qstripchart <- function(
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')
 #' @param suffix Optional suffix added to the filename. Default is NULL.
-#' @param caption Optional text added to bottom right corner of the plot. Default = List element lengths parsed.
-#' @param caption2 Optional text added to bottom right corner of the plot. Default = NULL.
-#' @param filename Manually provided filename (optional). Default: parse from `plotname`,
+#' @param caption Optional text added to bottom right corner of the plot. Default is list element lengths parsed.
+#' @param caption2 Optional text added to bottom right corner of the plot. Default is NULL.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param col.min Color scale minimum, default: white
-#' @param col.max Color scale maximum, default: red
-#' @param hide.legend hide legend
+#' @param col.min Color scale minimum. Default: white.
+#' @param col.max Color scale maximum. Default: red.
+#' @param hide.legend Hide legend.
 #' @param x_exp Expand axis to show long set labels. Default: 0.2.
 #' @param w Width of the plot.
 #' @param h Height of the plot. Default: h = w * 0.75.
-#' @param ... Pass any other parameter of the corresponding plotting function(most of them should work).
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @importFrom ggVennDiagram ggVennDiagram
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
@@ -1391,18 +1411,19 @@ qvenn <- function(
     x_exp = .2,
     w = 8, h = 0.75 * w,
     ...) {
+  stopifnot(is.list(list), length(list) > 0L)
   #
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
   p <- ggVennDiagram::ggVennDiagram(list, ..., ) +
-    scale_fill_gradient(low = col.min, high = col.max) +
+    ggplot2::scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
       title = paste(" ", plotname),
       subtitle = paste(" ", subtitle, "\n"),
       caption = caption
     ) +
-    scale_x_continuous(expand = expansion(mult = x_exp)) + # expand axis to show long set labels
-    theme(plot.background = element_rect(fill = "white", colour = "white"))
+    ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = x_exp)) + # expand axis to show long set labels
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = "white"))
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
@@ -1629,7 +1650,7 @@ qqSave <- function(
   message("\n\n", fnp)
 
   # Set the plot background to white
-  ggobj <- ggobj + theme(plot.background = element_rect(fill = bgcol, color = bgcol))
+  ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
 
   # Save the plot
   if (also.pdf) {
@@ -1736,7 +1757,7 @@ qA4_grid_plot <- function(
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
   fname <- sppp(plotname, suffix, extension)
   p1 <- cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...) +
-    theme(plot.background = element_rect(fill = "white"))
+    ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
 }
@@ -1780,7 +1801,7 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 # _________________________________________________________________________________________________
 #' @title qqqNamed.Vec.2.Tbl
 #'
-#' @description Covert a named vector to a table.
+#' @description Convert a named vector to a table.
 #' @param namedVec namedVec
 #' @param verbose verbose
 #' @param strip.too.many.names strip.too.many.names
@@ -1813,7 +1834,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 # _________________________________________________________________________________________________
 #' @title qqqTbl.2.Vec
 #'
-#' @description Covert a table to a named vector.
+#' @description Convert a table to a named vector.
 #' @param tibble.input tibble.input
 #' @param name.column name.column
 #' @param value.column value.column
@@ -1823,25 +1844,25 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 #' x <- tibble::tibble(a, a * 2)
 #' qqqTbl.2.Vec(x)
 qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
-  vec <- tibble.input[[value.column]]
-  names(vec) <- tibble.input[[name.column]]
-  vec
+  setNames(tibble.input[[value.column]], tibble.input[[name.column]])
 }
 
 
 # _________________________________________________________________________________________________
 #' @title qqqList.2.DF.ggplot
 #'
-#' @description Convert a list to a tow-column data frame to plot boxplots and violin plots
+#' @description Convert a list to a two-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
 #' @importFrom CodeAndRoll2 is.list2
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
 #' qqqList.2.DF.ggplot(LetterSets)
 #' @export
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
-  stopifnot(CodeAndRoll2::is.list2(ls))
-  stopif(length(ls) != length(unique(names(ls))), message = "Not all list elements have a unique name! ")
-  # utils::stack(unlist(ls))[, 2:1]
+  stopifnot(
+    CodeAndRoll2::is.list2(ls),
+    "Not all list elements have a unique name!" =
+      length(ls) == length(unique(names(ls)))
+  )
   utils::stack(ls)[, 2:1]
 }
 
