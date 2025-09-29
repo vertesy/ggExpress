@@ -1,10 +1,9 @@
 Package: ggExpress
 Title: ggExpress is the fastest way to create, annotate and export plots
     in R
-Version: 0.9.5
+Version: 0.9.7
 Authors@R: 
     person("Abel", "Vertesy", , "av@imba.oeaw.ac.at", role = c("aut", "cre"))
-Author: Abel Vertesy <av@imba.oeaw.ac.at> [aut, cre]
 Description: ggExpress is a set of R functions that allows you to generate
     precise figures easily, and create clean markdown reports about what
     you just discovered with your analysis script. It is ggplot-based
@@ -21,22 +20,21 @@ Description: ggExpress is a set of R functions that allows you to generate
 License: GPL-3 + file LICENSE
 BugReports: https://github.com/vertesy/ggExpress/issues
 Depends: 
-    ggplot2,
-    ggpubr,
     MarkdownHelpers,
-    Stringendo
+    Stringendo,
+    ggplot2,
+    ggpubr
 Imports: 
     CodeAndRoll2,
+    MarkdownReports,
+    RColorBrewer,
     cowplot,
     ggVennDiagram,
-    MarkdownReports,
-    heatmaply,
     qs,
-    RColorBrewer,
     tibble,
     tictoc,
     tidyr
 Encoding: UTF-8
-Packaged: 2024-10-24 15:50:59.849277
+Packaged: 2025-09-29 10:15:13.664703
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
