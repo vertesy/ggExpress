@@ -30,6 +30,7 @@ Imports:
     cowplot,
     ggVennDiagram,
     MarkdownReports,
+    heatmaply,
     qs,
     RColorBrewer,
     tibble,
