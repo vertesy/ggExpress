@@ -107,7 +107,7 @@ qscatter(
 
 \item{add_contour_plot}{Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution}
 
-\item{correlation_r2}{Add a correlation value to the plot.}
+\item{correlation_r2}{Add a correlation value to the plot}
 
 \item{plot}{Display the plot.}
 

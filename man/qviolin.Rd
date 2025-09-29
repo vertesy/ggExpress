@@ -51,7 +51,7 @@ qviolin(
 
 \item{fill}{Fill color of the plot. Default: \code{gold}.}
 
-\item{plotname}{Name of the plot.}
+\item{plotname}{Name of the plot}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
 
