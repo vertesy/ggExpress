@@ -19,8 +19,8 @@ qmosaic(
   caption = NULL,
   filename = NULL,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral",
-    "auto")[1],
+  palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+  save_matrix = FALSE,
   w = 6,
   h = 5,
   limitsize = FALSE,
@@ -63,6 +63,8 @@ Default: \code{NULL}.}
 \item{palette_use}{Color palette name. Supported: RColorBrewer palettes
 (\code{"Set2"}, \code{"Dark2"}, \code{"Paired"}, \code{"Pastel1"}, \code{"Accent"}, \code{"Set3"}, \code{"Spectral"})
 or \code{"auto"} for automatic hues. Default: \code{"Set2"}.}
+
+\item{save_matrix}{If \code{TRUE}, saves the contingency table as a TSV file. Default: \code{FALSE}.}
 
 \item{w}{Width of the saved plot (in inches). Default: \code{6}.}
 

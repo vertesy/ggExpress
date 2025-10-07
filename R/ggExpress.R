@@ -1686,6 +1686,7 @@ qheatmap <- function(
 #' @param palette_use Color palette name. Supported: RColorBrewer palettes
 #'   (`"Set2"`, `"Dark2"`, `"Paired"`, `"Pastel1"`, `"Accent"`, `"Set3"`, `"Spectral"`)
 #'   or `"auto"` for automatic hues. Default: `"Set2"`.
+#' @param save_matrix If `TRUE`, saves the contingency table as a TSV file. Default: `FALSE`.
 #' @param w Width of the saved plot (in inches). Default: `6`.
 #' @param h Height of the saved plot (in inches). Default: `5`.
 #' @param limitsize Passed to `ggsave()` to limit image size. Default: `FALSE`.
@@ -1717,7 +1718,8 @@ qmosaic <- function(
     subtitle = NULL, caption = NULL,
     filename = NULL,
     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral", "auto")[1],
+    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+    save_matrix = FALSE,
     w = 6, h = 5, limitsize = FALSE,
     ...
 ) {
@@ -1739,14 +1741,21 @@ qmosaic <- function(
   }
 
   # validate palette
-  fill_scale <- if (palette_use == "auto") {
-    ggplot2::scale_fill_manual(values = scales::hue_pal()(length(unique(df[[y]]))))
-  } else if (palette_use %in% rownames(RColorBrewer::brewer.pal.info)) {
-    ggplot2::scale_fill_brewer(palette = palette_use)
-  } else {
-    warning("Invalid palette name: ", palette_use, " — using 'Set2'.")
-    ggplot2::scale_fill_brewer(palette = "Set2")
+  # fill_scale <- if (palette_use == "auto") {
+  #   ggplot2::scale_fill_manual(values = scales::hue_pal()(length(unique(df[[y]]))))
+  # } else if (palette_use %in% rownames(RColorBrewer::brewer.pal.info)) {
+  #   ggplot2::scale_fill_brewer(palette = palette_use)
+  # } else {
+  #   warning("Invalid palette name: ", palette_use, " — using 'Set2'.")
+  #   ggplot2::scale_fill_brewer(palette = "Set2")
+  # }
+
+  if (!palette_use %in% rownames(RColorBrewer::brewer.pal.info)) {
+    warning("Invalid palette: ", palette_use, " — using 'Set2'.")
+    palette_use <- "Set2"
   }
+  fill_scale <- ggplot2::scale_fill_brewer(palette = palette_use)
+
 
   # Build plot _______
   p <- ggplot2::ggplot(data = df) +
@@ -1775,6 +1784,13 @@ qmosaic <- function(
 
   # file name
   file_name <- if (!is.null(filename)) filename else FixPlotName(plotname, "ddecker", ext)
+
+  # print matrix
+  {
+    xy_matrix <- table(df[[x]], df[[y]]) # build contingency table
+    print(xy_matrix)
+    if(save_matrix) write.simple.tsv(xy_matrix)
+  }
 
   # save
   if (save) {
