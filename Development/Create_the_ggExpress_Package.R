@@ -13,7 +13,9 @@ repository.dir <- "~/GitHub/Packages/ggExpress/"
 (package.name <- basename(repository.dir))
 config.path <- file.path(repository.dir, "Development/config.R")
 
+
 "TAKE A LOOK AT"
+file.edit("~/GitHub/Packages/ggExpress/DESCRIPTION")
 file.edit(config.path)
 source(config.path)
 

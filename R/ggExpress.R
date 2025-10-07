@@ -1533,8 +1533,10 @@ qvenn <- function(
 #' }
 #'
 #' @importFrom heatmaply ggheatmap
+#' @importFrom ggplotify as.ggplot
 #' @importFrom MarkdownHelpers ww.set.file.extension
 #' @importFrom MarkdownHelpers unless.specified
+#'
 #' @export
 qheatmap <- function(
     data_matrix,
@@ -1564,6 +1566,7 @@ qheatmap <- function(
     h = 6,                     # height of saved plot
     ...
 ) {
+  warning("   !!! qheatmap is in experimental status !!! ")
   # ___ Input validation ___
   stopifnot(
     (is.matrix(data_matrix) || is.data.frame(data_matrix)) && is.numeric(as.matrix(data_matrix)),
@@ -1653,6 +1656,137 @@ qheatmap <- function(
   if (plot) gghm_obj else invisible(gghm_obj)
 }
 
+
+#' @title Draw and Save a Doubledecker Mosaic Plot
+#'
+#' @description
+#' Creates a mosaic-style (doubledecker) stacked bar plot where the X-axis bar width is proportional
+#' to the group size and the Y-axis variable determines the color (fill). This function wraps
+#' `ggmosaic::geom_mosaic()` in the style of ggExpress plotting wrappers and supports automatic file
+#' saving, Markdown linking, and default color palettes.
+#'
+#' @param df A data frame containing the variables to plot. Must include the X and Y columns.
+#' @param x The column name (string) for the X-axis variable.
+#' @param y The column name (string) for the Y-axis variable used for fill color.
+#' @param weight Optional column name (string) specifying weights or frequencies.
+#'   If `NULL`, the function looks for a "Freq" column or assumes equal weights.
+#'   Default: `NULL`.
+#' @param ext File extension for output image. Default: set via
+#'   `MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE)`.
+#' @param also.pdf Save plot in both PNG and PDF formats. Default: `TRUE`.
+#' @param save.obj Save the ggplot object as an `.RDS` file. Default: `FALSE`.
+#' @param plot Display the plot after creation. Default: `TRUE`.
+#' @param save Save the plot to file. Default: `TRUE`.
+#' @param plotname Title of the plot and base for the filename. Default: `"Mosaic plot: x vs y"`.
+#' @param subtitle Optional subtitle text. Default: `NULL`.
+#' @param caption Optional text to display at the bottom right of the plot. Default: `NULL`.
+#' @param filename Optional manual filename override. Default: `NULL`.
+#' @param mdlink Insert a Markdown image link in reports. Default: read from
+#'   `"b.mdlink"` global variable using `MarkdownHelpers::unless.specified()`.
+#' @param palette_use Color palette name. Supported: RColorBrewer palettes
+#'   (`"Set2"`, `"Dark2"`, `"Paired"`, `"Pastel1"`, `"Accent"`, `"Set3"`, `"Spectral"`)
+#'   or `"auto"` for automatic hues. Default: `"Set2"`.
+#' @param w Width of the saved plot (in inches). Default: `6`.
+#' @param h Height of the saved plot (in inches). Default: `5`.
+#' @param limitsize Passed to `ggsave()` to limit image size. Default: `FALSE`.
+#' @param ... Additional arguments passed to `ggmosaic::geom_mosaic()`.
+#'
+#' @return A `ggplot` object representing the mosaic plot.
+#' @export
+#'
+#' @importFrom ggmosaic geom_mosaic ddecker product
+#' @importFrom ggplot2 ggplot aes labs theme_minimal scale_fill_brewer scale_fill_manual
+#' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom scales hue_pal
+#'
+#' @examples
+#' df <- data.frame(
+#'   Group = rep(c("A", "B", "C"), each = 50),
+#'   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
+#' )
+#' qmosaic(df = df, x = "Group", y = "Outcome")
+
+qmosaic <- function(
+    df,
+    x, y,
+    weight = NULL,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE),
+    also.pdf = TRUE, save.obj = FALSE,
+    plot = TRUE, save = TRUE,
+    plotname = paste("Mosaic plot:", x, "vs", y),
+    subtitle = NULL, caption = NULL,
+    filename = NULL,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral", "auto")[1],
+    w = 6, h = 5, limitsize = FALSE,
+    ...
+) {
+  warning("   !!! qmosaic is in experimental status !!! ")
+
+  stopifnot(
+    is.data.frame(df),
+    all(c(x, y) %in% colnames(df))
+  )
+
+  # detect weight column
+  if (is.null(weight)) {
+    if ("Freq" %in% colnames(df)) {
+      weight <- "Freq"
+    } else {
+      df$Freq <- 1
+      weight <- "Freq"
+    }
+  }
+
+  # validate palette
+  fill_scale <- if (palette_use == "auto") {
+    ggplot2::scale_fill_manual(values = scales::hue_pal()(length(unique(df[[y]]))))
+  } else if (palette_use %in% rownames(RColorBrewer::brewer.pal.info)) {
+    ggplot2::scale_fill_brewer(palette = palette_use)
+  } else {
+    warning("Invalid palette name: ", palette_use, " — using 'Set2'.")
+    ggplot2::scale_fill_brewer(palette = "Set2")
+  }
+
+  # Build plot _______
+  p <- ggplot2::ggplot(data = df) +
+    ggmosaic::geom_mosaic(
+      ggplot2::aes(
+        x = ggmosaic::product(!!rlang::sym(x)),
+        fill = !!rlang::sym(y),
+        weight = !!rlang::sym(weight)
+      ),
+      divider = ggmosaic::ddecker(),
+      colour = "white",
+      ...
+    ) +
+    fill_scale +
+    ggplot2::labs(
+      title = plotname,
+      subtitle = subtitle,
+      caption = caption,
+      x = x, y = y
+    ) +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+      panel.grid = ggplot2::element_blank()
+    )
+
+  # file name
+  file_name <- if (!is.null(filename)) filename else FixPlotName(plotname, "ddecker", ext)
+
+  # save
+  if (save) {
+    qqSave(
+      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
+    )
+  }
+
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
 
 
 # ______________________________________________________________________________________________----
