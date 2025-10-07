@@ -488,6 +488,160 @@ qbarplot <- function(
   if (plot) p
 }
 
+# _________________________________________________________________________________________________
+#' @title qmosaic
+#'
+#' @description Draw and save a mosaic plot.
+#' @param data A data frame containing the variables to plot.
+#' @param x Character or integer vector of columns defining the mosaic layout.
+#' @param fill Character or integer column used to colour the tiles.
+#' @param weight Optional character or integer column providing weights for the tiles.
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param ext File extension (.pdf / .png).
+#' @param plot Display the plot.
+#' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param subtitle Optional subtitle text added below the title. Default is NULL.
+#' @param suffix Optional suffix added to the filename. Default is NULL.
+#' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#' @param save Save the plot into a file.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param palette_use GGpubr color palette name or vector of colours (single names use `scale_fill_brewer`).
+#' @param legend.title Custom legend title. Provide a string.
+#' @param hide.legend Hide legend. Default: FALSE.
+#' @param border.col Colour of the tile borders.
+#' @param border.size Line width of the tile borders.
+#' @param xlab X-axis label. Default combines the selected columns.
+#' @param ylab Y-axis label. Default: "Proportion".
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 0.
+#' @param limitsize Limit size passed to `qqSave`.
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param ... Additional arguments passed to `ggmosaic::geom_mosaic()`.
+#'
+#' @examples
+#' \dontrun{
+#' qmosaic(ggplot2::mpg, x = c("drv", "class"), fill = "manufacturer", save = FALSE, plot = FALSE)
+#' }
+#'
+#' @export
+qmosaic <- function(
+    data,
+    x,
+    fill,
+    weight = NULL,
+    also.pdf = FALSE, save.obj = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    plot = TRUE,
+    plotname = FixPlotName(substitute(data)),
+    subtitle = NULL,
+    suffix = NULL,
+    caption = suffix,
+    filename = NULL,
+    save = TRUE,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    legend.title = NULL,
+    hide.legend = FALSE,
+    border.col = "grey90",
+    border.size = 0.2,
+    xlab = NULL,
+    ylab = "Proportion",
+    xlab.angle = 0,
+    limitsize = FALSE,
+    w = 7,
+    h = 5,
+    ...) {
+  # Validate the core inputs compactly.
+  stopifnot(
+    !missing(data), !missing(x), !missing(fill),
+    is.data.frame(data), nrow(data) > 0L,
+    is.numeric(x) || is.character(x), length(x) >= 1L,
+    is.numeric(fill) || is.character(fill), length(fill) == 1L,
+    is.null(weight) || is.numeric(weight) || is.character(weight)
+  )
+
+  cols <- colnames(data)
+  stopifnot(
+    all(if (is.numeric(x)) x %in% seq_along(cols) else x %in% cols),
+    if (is.numeric(fill)) fill %in% seq_along(cols) else fill %in% cols,
+    is.null(weight) || if (is.numeric(weight)) weight %in% seq_along(cols) else weight %in% cols
+  )
+
+  # Resolve column names after validation.
+  x_vars <- if (is.numeric(x)) cols[x] else x
+  fill_var <- if (is.numeric(fill)) cols[fill] else fill
+  weight_var <- if (!is.null(weight)) {
+    if (is.numeric(weight)) cols[weight] else weight
+  } else {
+    NULL
+  }
+
+  stopifnot(
+    is.null(weight_var) || is.numeric(data[[weight_var]]),
+    is.character(palette_use), length(palette_use) >= 1L,
+    is.numeric(border.size), border.size >= 0,
+    is.logical(plot), is.logical(save), is.logical(mdlink), is.logical(hide.legend)
+  )
+
+  # Provide informative defaults.
+  if (is.null(xlab)) xlab <- paste(x_vars, collapse = " × ")
+  if (is.null(legend.title)) legend.title <- fill_var
+
+  # Prepare the aesthetics programmatically using aes_string.
+  product <- ggmosaic::product # Expose product for evaluation inside aes_string.
+  x_expr <- if (length(x_vars) == 1L) {
+    x_vars
+  } else {
+    paste0("product(", paste(x_vars, collapse = ","), ")")
+  }
+  aes_args <- list(x = x_expr, fill = fill_var)
+  if (!is.null(weight_var)) aes_args$weight <- weight_var
+  mapping <- do.call(ggplot2::aes_string, aes_args)
+
+  hjust <- if (xlab.angle == 0) 0.5 else 1
+
+  p <- ggplot2::ggplot(data = data) +
+    ggmosaic::geom_mosaic(mapping = mapping, color = border.col, linewidth = border.size, ...) +
+    ggmosaic::scale_x_productlist() +
+    ggplot2::labs(
+      title = FixPlotName(plotname, suffix),
+      subtitle = subtitle,
+      caption = caption,
+      x = xlab,
+      y = ylab,
+      fill = legend.title
+    ) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = hjust))
+
+  # Apply palette when a fill variable is present.
+  if (!is.null(fill_var)) {
+    scale_layer <- if (length(palette_use) == 1L) {
+      ggplot2::scale_fill_brewer(palette = palette_use)
+    } else {
+      ggplot2::scale_fill_manual(values = palette_use)
+    }
+    p <- p + scale_layer
+  }
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, "mosaic", ext)
+  }
+
+  if (save) {
+    qqSave(
+      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
+    )
+  }
+  if (mdlink & save) qMarkdownImageLink(file_name)
+  if (plot) p
+}
+
 
 # _________________________________________________________________________________________________
 #' @title qbarplot.stacked.from.wide.df - Barplot for tibbles or dataframes

@@ -29,6 +29,7 @@ Imports:
     CodeAndRoll2,
     cowplot,
     ggVennDiagram,
+    ggmosaic,
     MarkdownReports,
     qs,
     RColorBrewer,
