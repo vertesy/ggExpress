@@ -1782,6 +1782,7 @@ qmosaic <- function(
       panel.grid = ggplot2::element_blank()
     )
 
+
   # file name
   file_name <- if (!is.null(filename)) filename else FixPlotName(plotname, "ddecker", ext)
 
