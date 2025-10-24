@@ -468,7 +468,7 @@ qbarplot <- function(
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
   if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
 
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
@@ -614,7 +614,7 @@ qbarplot.stacked.from.wide.df <- function(
   if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
@@ -748,7 +748,7 @@ qbarplot.df <- function(
   if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none")
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   file_name <- if (!is.null(filename)) {
@@ -1080,7 +1080,7 @@ qboxplot <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -1200,7 +1200,7 @@ qviolin <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
@@ -1339,7 +1339,7 @@ qstripchart <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (hline) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
