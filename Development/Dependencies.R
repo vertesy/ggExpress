@@ -67,7 +67,7 @@ $`package:base`
 [41] "which"        
 
 $`package:CodeAndRoll2`
-[1] "is.list2"
+[1] "is.list.simple"
 
 $`package:ggExpress`
 [1] ".assertMaxCategories" "ggVennDiagram"        "qMarkdownImageLink"   "qqqAxisLength"       

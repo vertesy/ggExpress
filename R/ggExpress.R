@@ -580,7 +580,7 @@ qbarplot.stacked.from.wide.df <- function(
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
   # if (is.numeric(df[[fill]])) {
   #   df[[fill]] <- as.factor(df[[fill]])
@@ -720,7 +720,7 @@ qbarplot.df <- function(
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[2]])))
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
   if (is.numeric(df[[fill]])) {
     df[[fill]] <- as.factor(df[[fill]])
@@ -958,7 +958,7 @@ qscatter <- function(
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
-#' @importFrom CodeAndRoll2 is.list2
+#' @importFrom CodeAndRoll2 is.list.simple
 #' @export
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
@@ -1000,7 +1000,7 @@ qboxplot <- function(
 
 
   stopifnot(
-    is.data.frame(df_XYcol_or_list) | CodeAndRoll2::is.list2(df_XYcol_or_list),
+    is.data.frame(df_XYcol_or_list) | CodeAndRoll2::is.list.simple(df_XYcol_or_list),
     is.numeric(x) | is.character(x), is.numeric(y) | is.character(y),
     is.character(plotname),
     is.character(filename) | is.null(filename), is.character(subtitle) | is.null(subtitle),
@@ -1016,7 +1016,7 @@ qboxplot <- function(
 
 
   # Define fill color
-  if (CodeAndRoll2::is.list2(df_XYcol_or_list)) {
+  if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) {
     lsX <- df_XYcol_or_list
     df_XYcol <- qqqList.2.DF.ggplot(lsX)
     if (length(fill) == length(lsX)) {
@@ -1137,7 +1137,7 @@ qboxplot <- function(
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
-#' @importFrom CodeAndRoll2 is.list2
+#' @importFrom CodeAndRoll2 is.list.simple
 #' @export
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
@@ -1169,7 +1169,7 @@ qviolin <- function(
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  df_XYcol <- if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
@@ -1256,12 +1256,16 @@ qviolin <- function(
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#'
+#' @param annotate_top_labels Logical or character vector, as labels to add above each column.
+#' @param custom_top_labels
+#'
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
-#' @importFrom CodeAndRoll2 is.list2
+#' @importFrom CodeAndRoll2 is.list.simple
 #' @examples data("ToothGrowth")
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
 #' qstripchart(ToothLen.by.Dose)
@@ -1288,16 +1292,20 @@ qstripchart <- function(
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
-    xlab.angle = 90,
+    xlab.angle = 90, xlab = "",
     hline = FALSE, vline = FALSE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
+
+    annotate_top_labels = FALSE,
+    custom_top_labels = FALSE,
+
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
   message("Column 1 should be the X-, Column 2 the Y-axis.")
   stopifnot(
-    CodeAndRoll2::is.list2(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
+    CodeAndRoll2::is.list.simple(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
     # , length(df_XYcol_or_list) > 2
     , length(x) == 1, length(y) == 1,
     is.numeric(x) | is.character(x),
@@ -1306,7 +1314,7 @@ qstripchart <- function(
     is.null(fill) | is.numeric(fill) | is.character(fill)
   )
 
-  df_XYcol <- if (CodeAndRoll2::is.list2(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
+  df_XYcol <- if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
   # Define fill color
@@ -1332,6 +1340,7 @@ qstripchart <- function(
     add = add,
     size = size.point,
     palette = palette_use,
+    xlab = eval.parent(xlab),
     ...
   ) +
     ggplot2::ylab(ylab) +
@@ -1339,8 +1348,27 @@ qstripchart <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
+
+
+"  annotate_top_labels = FALSE,"
+  "custom_top_labels = FALSE,"
+
+
+  # Top row annotation
+  if (!isFALSE(annotate_top_labels)) {
+    toplabs <- qqqSummarize_mean_median(df_XYcol, x = eval.parent(x), y = eval.parent(y))
+
+    if (!isFALSE(custom_top_labels)) {
+      stopifnot(length(custom_top_labels) == length(unique(df_XYcol[[vars[x]]])))
+    }
+
+    else custom_top_labels
+    p <- p + annotate_top_labels()
+  }
+
+
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
@@ -2082,13 +2110,13 @@ qqqTbl.2.Vec <- function(tibble.input, name.column = 1, value.column = 2) { # Co
 #'
 #' @description Convert a list to a two-column data frame to plot boxplots and violin plots
 #' @param ls A list with all elements named
-#' @importFrom CodeAndRoll2 is.list2
+#' @importFrom CodeAndRoll2 is.list.simple
 #' @examples LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])
 #' qqqList.2.DF.ggplot(LetterSets)
 #' @export
 qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   stopifnot(
-    CodeAndRoll2::is.list2(ls),
+    CodeAndRoll2::is.list.simple(ls),
     "Not all list elements have a unique name!" =
       length(ls) == length(unique(names(ls)))
   )
@@ -2116,6 +2144,62 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 
 # _________________________________________________________________________________________________
 
+#' @title Summarize Mean and Median per Group
+#'
+#' @description
+#' Converts either a list or a long-format data frame to a two-column data frame (group, value) and
+#' calculates the mean and median for each group. This helper is compatible with ggplot-style input
+#' and uses `ggExpress::qqqList.2.DF.ggplot()` to normalize list input.
+#'
+#' @param df_XYcol_or_list A data structure to summarize. Can be either:
+#'   * A named list of numeric vectors (each element = one group), or
+#'   * A data frame in long format with two columns: group and value.
+#' @param x The index of the group column in the data frame (if applicable). Default: 1.
+#' @param y The index of the value column in the data frame (if applicable). Default: 2.#'
+#'
+#' @details
+#' The function unifies both input types into a consistent long-format data frame before summarizing.
+#' The output contains one row per unique group, with corresponding mean and median values.
+#'
+#' @return A data frame with three columns:
+#'   * `group`: group identifiers,
+#'   * `mean`: group mean values, and
+#'   * `median`: group median values.
+#'
+#' @examples
+#' # Example with a named list
+#' lst <- list(A = 1:3, B = 4:6)
+#' summarize_mean_median(lst)
+#'
+#' # Example with a long-format data frame
+#' df <- data.frame(group = rep(c("A", "B"), each = 3), value = 1:6)
+#' summarize_mean_median(df)
+#'
+qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y =2) {
+  # --- Input checks
+  stopifnot(
+    "Input `x` must be a list or data.frame." = is.list(df_XYcol_or_list) || is.data.frame(df_XYcol_or_list),
+    "Input `df_XYcol_or_list` must not be empty." = length(df_XYcol_or_list) > 0
+  )
+
+  # --- Convert list input to a long-format data.frame
+  if (is.list.simple(df_XYcol_or_list)) df_XYcol_or_list <- qqqList.2.DF.ggplot(df_XYcol_or_list)     # convert list → 2-column long-format DF
+
+  # --- Validate normalized data
+  stopifnot(
+    "Input must have at least two columns (group, value)." = ncol(df_XYcol_or_list) >= 2,
+    "First column (group) must not be empty." = all(!is.na(df_XYcol_or_list[[x]])),
+    "Second column (value) must be numeric." = is.numeric(df_XYcol_or_list[[y]])
+  )
+
+  # --- Calculate mean and median per group
+  groups <- unique(df_XYcol_or_list[[x]])                     # extract unique group identifiers
+  data.frame(
+    group  = groups,
+    mean   = sapply(groups, function(g) mean(df_XYcol_or_list[[y]][df_XYcol_or_list[[x]] == g], na.rm = TRUE)),
+    median = sapply(groups, function(g) median(df_XYcol_or_list[[y]][df_XYcol_or_list[[x]] == g], na.rm = TRUE))
+  )
+}
 
 
 # _________________________________________________________________________________________________

@@ -32,11 +32,14 @@ qstripchart(
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 90,
+  xlab = "",
   hline = FALSE,
   vline = FALSE,
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   grid = "y",
+  annotate_top_labels = FALSE,
+  custom_top_labels = FALSE,
   max.categ = 100,
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
@@ -105,6 +108,10 @@ qstripchart(
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{annotate_top_labels}{Logical or character vector, as labels to add above each column.}
+
+\item{custom_top_labels}{}
 
 \item{max.categ}{The maximum allowed number of unique categories.}
 
