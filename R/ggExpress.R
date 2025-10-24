@@ -1008,7 +1008,7 @@ qboxplot <- function(
     is.character(suffix) | is.null(suffix), is.character(ext),
     is.logical(logY), is.logical(hide.legend), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
     is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
-    is.logical(hline), is.logical(vline), is.logical(outlier.shape) | is.null(outlier.shape),
+    is.logical(outlier.shape) | is.null(outlier.shape),
     is.character(ext), is.character(palette_use), is.character(grid),
     is.numeric(w), is.numeric(h), is.numeric(max.categ),
     is.null(xlab.angle) | is.numeric(xlab.angle)
