@@ -21,7 +21,7 @@ qstripchart(
   size.point = 0.2,
   stat.test = TRUE,
   stat.method = NULL,
-  stat.label.y.npc = "png",
+  stat.label.y.npc = "top",
   stat.label.x = 0.75,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
