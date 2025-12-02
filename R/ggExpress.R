@@ -1443,7 +1443,7 @@ qvenn <- function(
   #
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
-  p <- ggVennDiagram::ggVennDiagram(list, ..., ) +
+  p <- ggVennDiagram::ggVennDiagram(list, ...) +
     ggplot2::scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
       title = paste(" ", plotname),
