@@ -67,7 +67,6 @@ weight_hist <- qhistogram(
   vec       = weight, 
   plot = T,
   vline     = 0,
-  suffix    = "demo",
   caption   = "Auto-annotated histogram"
 )
 
@@ -80,7 +79,6 @@ qqSave(weight_hist) # Saves with the auto-generated filename from the variable n
 # but this time also save as PDF and the ggplot object:
 qdensity(
   vec       = weight,
-  suffix    = "demo",
   subtitle  = "Same variable, density view",
   also.pdf  = TRUE,     # save both .png and .pdf
   save.obj  = TRUE      # also save ggplot object as .qs
@@ -107,6 +105,7 @@ qbarplot(
   vec       = Medals,
   label     = Medals,           # show values on bars
   ylab      = "Count",
+  suffix    = "demo",     # Add a suffix string to the filename
   palette_use = "npg",
 )
 
