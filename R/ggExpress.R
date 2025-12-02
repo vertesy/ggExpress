@@ -540,7 +540,8 @@ qbarplot <- function(
 #'
 #' # Create the stacked bar plot using the new qbarplot.df2 function
 #' qbarplot.stacked.from.wide.df(df.SingletSplit)
-#'
+#' 
+#' @importFrom rlang sym
 #' @export qbarplot.stacked.from.wide.df
 
 qbarplot.stacked.from.wide.df <- function(
@@ -589,7 +590,7 @@ qbarplot.stacked.from.wide.df <- function(
   df_long <- df |>
     tibble::rownames_to_column(var = x) |> # Convert row names to a column
     tidyr::pivot_longer(
-      cols = -!!sym(x), # Convert wide to long format
+      cols = -!!rlang::sym(x), # Convert wide to long format
       names_to = z, # "category"
       values_to = y # "Fraction"
     )
