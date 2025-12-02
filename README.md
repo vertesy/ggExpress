@@ -45,42 +45,113 @@ source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.aux
 ## Usage
 
 ```r
-require('ggpubr')
-require('cowplot')
-require('Stringendo')
-require('ReadWriter')
-require('CodeAndRoll2')
-require('MarkdownHelpers')
+# ggExpress mini-vignette: plot, annotate & export in one line
+# -----------------------------------------------------------
 
-require('ggExpress')
+library(ggExpress)
 
-
-# Test ------------------
-
-weight <- rnorm(1000); 
-qhistogram(weight, vline = 3)
-qdensity(weight)
-
-weight3 <- runif (12)
-qbarplot(weight3)
-
-xvec <- c("A"=12, "B"=29)
-qpie(vec = xvec)
+# (Optional) If you use MarkdownReports, switch on automatic markdown links once:
+# b.mdlink <- TRUE   # q* functions will then append image links to the active report
 
 
-dfx <- as.data.frame(cbind("AA"=rnorm(12), "BB"=rnorm(12)))
-qscatter(dfx, suffix = "2D.gaussian")
+# 1) Numeric vector → histogram + density, auto labels, auto filenames, ggplot objects ----
 
+weight <- rnorm(1000)
+
+# One line:
+# - guesses a plot title from the object name 'weight'
+# - draws a histogram with median line
+# - saves PNG
+# - returns the ggplot object for further customization
+weight_hist <- qhistogram(
+  vec       = weight, 
+  plot = T,
+  vline     = 0,
+  suffix    = "demo",
+  caption   = "Auto-annotated histogram"
+)
+
+
+# 1b) You still have a regular ggplot object, that you can further modify and simply resave:
+(weight_hist <- weight_hist + ggplot2::theme_minimal())
+qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
+
+# Same vector, different geometry, same automatic annotations, 
+# but this time also save as PDF and the ggplot object:
+qdensity(
+  vec       = weight,
+  suffix    = "demo",
+  subtitle  = "Same variable, density view",
+  also.pdf  = TRUE,     # save both .png and .pdf
+  save.obj  = TRUE      # also save ggplot object as .qs
+)
 ```
-
 ## Output
 *Saved as pdf by default.* 
 
-![weight.dens](README.assets/weight.dens.png)
-![weight.hist](README.assets/weight.hist.png)
-![weight3.bar](README.assets/weight3.bar.png)
-![xvec.pie](README.assets/xvec.pie.png)
-![dfx.2D.gaussian.scatter](README.assets/dfx.2D.gaussian.scatter.png)
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/3aa413d8-3cda-4f37-8b91-ff5bb122c947" />
+
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/817cba48-9afe-41f9-b82d-364d9a184978" />
+
+
+```R
+# 2) Named vector → barplot & pie chart with auto labels and filenames --------------------
+
+Medals <- c(Bulgaria = 12, Brazil = 29, Burkina = 5)
+
+# Barplot:
+# - uses names(counts) as x-labels
+# - auto-generates plot title from 'counts'
+# - writes files like 'counts.demo.bar.png' / '.pdf'
+qbarplot(
+  vec       = Medals,
+  label     = Medals,           # show values on bars
+  ylab      = "Count",
+  palette_use = "npg",
+)
+
+# Pie chart:
+# - again uses names(counts) as slice labels
+# - can show both % and absolute values
+qpie(
+  vec              = Medals,
+  both_pc_and_value = TRUE,
+  LegendTitle      = "Country"
+)
+```
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/d8654117-3b28-4be7-9f62-93c542e931ca" />
+
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/e04c0044-4280-472a-84f9-aec747916309" />
+
+
+```R
+# 3) Data frame → scatter plot with automatic x/y labels and export -----------------------
+patient_measurements <- data.frame(
+  height_cm = rnorm(200, mean = 170, sd = 10),
+  weight_kg = rnorm(200, mean = 70, sd = 12)
+)
+
+# Minimal scatter:
+# - plot title from 'patient_measurements'
+# - x/y labels from 'height_cm' and 'weight_kg'
+# - filename guessed from the data frame name
+qscatter(patient_measurements)
+
+# You can add contours and correlation annotation, and any other ggpubr stats:
+qscatter(
+  patient_measurements,
+  add_contour_plot = TRUE,
+  correlation_r2 = 'pearson'
+)
+
+# At this point you have:
+# - a set of .png and .pdf files with auto-generated, informative filenames
+# - matching ggplot objects (p_hist, p_dens, p_bar, p_pie, p_scatter) that you can further modify or embed in other figures.
+# - (optionally) auto-saved ggplot objects as .qs files.
+```
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" />
+
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
 
 
 
