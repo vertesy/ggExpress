@@ -297,7 +297,7 @@ qpie <- function(
   st <- paste("Sum:", sum.orig)
   subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
 
-  ct <- if(caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
+  ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
   caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
 
   # ________________________________________________
@@ -1330,10 +1330,8 @@ qstripchart <- function(
     hline = FALSE, vline = FALSE,
     save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     grid = "y",
-
     annotate_top_labels = FALSE,
     custom_top_labels = FALSE,
-
     max.categ = 100,
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
@@ -1385,7 +1383,7 @@ qstripchart <- function(
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
 
 
-"  annotate_top_labels = FALSE,"
+  "  annotate_top_labels = FALSE,"
   "custom_top_labels = FALSE,"
 
 
@@ -1395,9 +1393,9 @@ qstripchart <- function(
 
     if (!isFALSE(custom_top_labels)) {
       stopifnot(length(custom_top_labels) == length(unique(df_XYcol[[vars[x]]])))
+    } else {
+      custom_top_labels
     }
-
-    else custom_top_labels
     p <- p + annotate_top_labels()
   }
 
@@ -1606,32 +1604,31 @@ qvenn <- function(
 #' @export
 qheatmap <- function(
     data_matrix,
-    plotname = FixPlotName("Heatmap of", substitute(data_matrix)),  # default plot title
+    plotname = FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
     subtitle = NULL,
     suffix = NULL,
-    caption = 'caption',
+    caption = "caption",
     filename = NULL,
-    also.pdf = FALSE,          # whether to save also as PDF
-    save.obj = FALSE,          # whether to save the ggplot object itself
+    also.pdf = FALSE, # whether to save also as PDF
+    save.obj = FALSE, # whether to save the ggplot object itself
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf), # set extension
-    save = TRUE,               # save the output to file
+    save = TRUE, # save the output to file
     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE), # create markdown link
     colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
     legend_title = "Intensity",
     scale = c("none", "row", "column"), # heatmaply scaling options
     cluster_rows = TRUE,
     cluster_cols = FALSE,
-    row_annotation = NULL,     # optional: row annotations
-    col_annotation = NULL,     # optional: column annotations
-    row_annot_colors = NULL,   # custom palette for row annotations
-    col_annot_colors = NULL,   # custom palette for column annotations
-    plot = TRUE,               # whether to plot result
+    row_annotation = NULL, # optional: row annotations
+    col_annotation = NULL, # optional: column annotations
+    row_annot_colors = NULL, # custom palette for row annotations
+    col_annot_colors = NULL, # custom palette for column annotations
+    plot = TRUE, # whether to plot result
     xlab = "x axis",
     ylab = "y axis",
-    w = 7,                     # width of saved plot
-    h = 6,                     # height of saved plot
-    ...
-) {
+    w = 7, # width of saved plot
+    h = 6, # height of saved plot
+    ...) {
   warning("   !!! qheatmap is in experimental status !!! ")
   # ___ Input validation ___
   stopifnot(
@@ -1640,12 +1637,12 @@ qheatmap <- function(
     nrow(data_matrix) > 0L, ncol(data_matrix) > 0L, # ensure non-empty
     is.logical(cluster_rows), is.logical(cluster_cols), # clustering flags must be logical
     is.logical(plot), is.logical(save), is.logical(also.pdf), is.logical(save.obj), is.logical(mdlink),
-    is.numeric(w) && w > 0, is.numeric(h) && h > 0   # positive numeric dimensions
+    is.numeric(w) && w > 0, is.numeric(h) && h > 0 # positive numeric dimensions
   )
 
   # ___ Prepare arguments for heatmaply::ggheatmap ___
-  scale <- match.arg(scale)          # ensure scale arg matches options
-  extra_args <- list(...)            # capture additional user-specified args
+  scale <- match.arg(scale) # ensure scale arg matches options
+  extra_args <- list(...) # capture additional user-specified args
   hm_args <- list(x = data_matrix, colors = colors, scale = scale)
 
   # clustering options (unless already passed in ...)
@@ -1671,11 +1668,13 @@ qheatmap <- function(
   gghm_obj <- ggplotify::as.ggplot(gghm_obj)
 
   # ___ Auto-generate subtitle if not provided ___
-  if(is.null(subtitle)) subtitle <- paste0(
-    nrow(data_matrix), "-by-", ncol(data_matrix),
-    " | Median:", median(data_matrix, na.rm=TRUE),
-    " | CV:", round(cv(data_matrix), digits = 1)   # NOTE: cv() must exist in your environment!
-  )
+  if (is.null(subtitle)) {
+    subtitle <- paste0(
+      nrow(data_matrix), "-by-", ncol(data_matrix),
+      " | Median:", median(data_matrix, na.rm = TRUE),
+      " | CV:", round(cv(data_matrix), digits = 1) # NOTE: cv() must exist in your environment!
+    )
+  }
 
   # ___ Add ggplot2 labels and theme ___
   gghm_obj <- gghm_obj +
@@ -1687,7 +1686,7 @@ qheatmap <- function(
       y = ylab,
       fill = legend_title
     ) +
-    ggplot2::theme(axis.title.y = ggplot2::element_text(angle = 90)) +  # rotate y-axis title
+    ggplot2::theme(axis.title.y = ggplot2::element_text(angle = 90)) + # rotate y-axis title
     ggplot2::theme(axis.title.x = ggplot2::element_text())
 
   # ___ File name generation ___
@@ -1703,7 +1702,7 @@ qheatmap <- function(
 
   # ___ Save the plot if requested ___
   if (save) {
-    qqSave(   # NOTE: qqSave is not standard — custom function expected in your project
+    qqSave( # NOTE: qqSave is not standard — custom function expected in your project
       ggobj = gghm_obj,
       title = plotname,
       fname = file_name,
@@ -1716,7 +1715,7 @@ qheatmap <- function(
   }
 
   # ___ Optionally add a markdown image link ___
-  if (mdlink & save) qMarkdownImageLink(file_name)  # NOTE: qMarkdownImageLink is also custom
+  if (mdlink & save) qMarkdownImageLink(file_name) # NOTE: qMarkdownImageLink is also custom
 
   # ___ Return the plot ___
   if (plot) gghm_obj else invisible(gghm_obj)
@@ -1772,7 +1771,6 @@ qheatmap <- function(
 #'   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
 #' )
 #' qmosaic(df = df, x = "Group", y = "Outcome")
-
 qmosaic <- function(
     df,
     x, y,
@@ -1787,8 +1785,7 @@ qmosaic <- function(
     palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
     save_matrix = FALSE,
     w = 6, h = 5, limitsize = FALSE,
-    ...
-) {
+    ...) {
   warning("   !!! qmosaic is in experimental status !!! ")
 
   stopifnot(
@@ -1856,7 +1853,7 @@ qmosaic <- function(
   {
     xy_matrix <- table(df[[x]], df[[y]]) # build contingency table
     print(xy_matrix)
-    if(save_matrix) write.simple.tsv(xy_matrix)
+    if (save_matrix) write.simple.tsv(xy_matrix)
   }
 
   # save
@@ -2213,7 +2210,7 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #' df <- data.frame(group = rep(c("A", "B"), each = 3), value = 1:6)
 #' summarize_mean_median(df)
 #'
-qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y =2) {
+qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y = 2) {
   # --- Input checks
   stopifnot(
     "Input `x` must be a list or data.frame." = is.list(df_XYcol_or_list) || is.data.frame(df_XYcol_or_list),
@@ -2221,7 +2218,7 @@ qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y =2) {
   )
 
   # --- Convert list input to a long-format data.frame
-  if (is.list.simple(df_XYcol_or_list)) df_XYcol_or_list <- qqqList.2.DF.ggplot(df_XYcol_or_list)     # convert list → 2-column long-format DF
+  if (is.list.simple(df_XYcol_or_list)) df_XYcol_or_list <- qqqList.2.DF.ggplot(df_XYcol_or_list) # convert list → 2-column long-format DF
 
   # --- Validate normalized data
   stopifnot(
@@ -2231,7 +2228,7 @@ qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y =2) {
   )
 
   # --- Calculate mean and median per group
-  groups <- unique(df_XYcol_or_list[[x]])                     # extract unique group identifiers
+  groups <- unique(df_XYcol_or_list[[x]]) # extract unique group identifiers
   data.frame(
     group  = groups,
     mean   = sapply(groups, function(g) mean(df_XYcol_or_list[[y]][df_XYcol_or_list[[x]] == g], na.rm = TRUE)),
