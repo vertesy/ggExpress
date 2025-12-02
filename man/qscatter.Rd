@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qscatter}
 \alias{qscatter}
-\title{qscatter}
+\title{Quickly draw and save a scatter plot (png, pdf, ggobj.qs)}
 \usage{
 qscatter(
   df_XYcol,
@@ -124,7 +124,11 @@ qscatter(
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Draw and save a 2D-scatter plot.
+This all-in-one function draws, annotates, displays and saves a scatter plot of
+two variables provided as a 2-column data frame or matrix. It is a wrapper around
+\code{ggpubr::ggscatter()}, with the automation of many features. All \code{ggpubr} parameters can be
+accessed through the \code{...} argument. It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))

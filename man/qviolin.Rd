@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qviolin}
 \alias{qviolin}
-\title{qviolin}
+\title{Quickly draw and save a violin plot (png, pdf, ggobj.qs)}
 \usage{
 qviolin(
   df_XYcol_or_list,
@@ -106,7 +106,12 @@ qviolin(
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Draw and save a violin plot
+This all-in-one function draws, annotates, displays and saves a violin plot from
+a two-column data frame or a named list of values. The first column (or list names) is plotted
+on the X axis, the second column (or list values) on the Y axis. It is a wrapper around
+\code{ggpubr::ggviolin()}, with the automation of many features. All \code{ggpubr} parameters can be
+accessed through the \code{...} argument.#'  It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 data("ToothGrowth")

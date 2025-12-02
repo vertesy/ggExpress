@@ -13,12 +13,15 @@
 # ____________________________________________________________________
 
 
-#' @title Draw and save a histogram quickly (via ggplot2).
+
+#' @title Quickly draw and save a histogram (png, pdf, ggobj.qs)
 #'
 #' @description This all-in-one function draws, annotates, displays and saves a histogram of a
 #' distribution provided as a numeric vector. It is a wrapper around `ggpubr::gghistogram()`,
 #' with the automation of many features. All `ggpubr` parameters can be accessed through
-#' the `...` argument.
+#' the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param vec A numeric vector for which the histogram is to be plotted.
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -128,9 +131,14 @@ qhistogram <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qdensity
+#' @title Quickly draw and save a density plot (png, pdf, ggobj.qs)
 #'
-#' @description Draw and save a density plot.
+#' @description This all-in-one function draws, annotates, displays and saves a density plot of a
+#' distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggdensity()`,
+#' with the automation of many features. All `ggpubr` parameters can be accessed through
+#' the `...` argument.  It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -210,12 +218,13 @@ qdensity <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title  Draw and save a pie chart quickly (via ggplot2).
+#' @title Quickly draw and save a pie chart (png, pdf, ggobj.qs)
 #'
 #' @description This all-in-one function draws, annotates, displays and saves a pie chart of a
 #' distribution provided as a numeric table. It is a wrapper around `ggpubr::ggpie()`,
 #' with the automation of many features. All `ggpubr` parameters can be accessed through
-#' the `...` argument.
+#' the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
@@ -365,9 +374,14 @@ qpie <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qbarplot
+#' @title Quickly draw and save a bar plot (png, pdf, ggobj.qs)
 #'
-#' @description Draw and save a barplot.
+#' @description This all-in-one function draws, annotates, displays and saves a bar plot of a
+#' distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggbarplot()`,
+#' with the automation of many features. All `ggpubr` parameters can be accessed through
+#' the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param vec The variable to plot.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
@@ -512,7 +526,7 @@ qbarplot <- function(
 #' @param save Save the plot into a file.
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
+# #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param palette_use GGpubr color palette to use.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: `x`.
@@ -540,7 +554,7 @@ qbarplot <- function(
 #'
 #' # Create the stacked bar plot using the new qbarplot.df2 function
 #' qbarplot.stacked.from.wide.df(df.SingletSplit)
-#' 
+#'
 #' @importFrom rlang sym
 #' @export qbarplot.stacked.from.wide.df
 
@@ -561,7 +575,8 @@ qbarplot.stacked.from.wide.df <- function(
     plot = TRUE,
     save = TRUE,
     mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    hline = FALSE, filtercol = 1,
+    hline = FALSE,
+    # filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     xlab.angle = 45, xlab = x,
     logY = FALSE,
@@ -769,9 +784,13 @@ qbarplot.df <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qscatter
+#' @title Quickly draw and save a scatter plot (png, pdf, ggobj.qs)
 #'
-#' @description Draw and save a 2D-scatter plot.
+#' @description This all-in-one function draws, annotates, displays and saves a scatter plot of
+#' two variables provided as a 2-column data frame or matrix. It is a wrapper around
+#' `ggpubr::ggscatter()`, with the automation of many features. All `ggpubr` parameters can be
+#' accessed through the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param df_XYcol Data, as 2 column data frame, where col.1 is X axis.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
@@ -868,7 +887,6 @@ qscatter <- function(
   vars <- colnames(df_XYcol)
   names(vars) <- vars
   cat("Variable (column) names 1-5:", head(vars), "...\n")
-  # browser()
 
   p <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
@@ -915,14 +933,18 @@ qscatter <- function(
 
 
 # ______________________________________________________________________________________________----
-# List-based distributio plots ----
+# List-based distribution plots ----
 # ____________________________________________________________________
 
 
 
-#' @title qboxplot
+#' @title Quickly draw and save a boxplot (png, pdf, ggobj.qs)
 #'
-#' @description Draw and save a boxplot
+#' @description This all-in-one function draws, annotates, displays and saves a boxplot from
+#' a two-column data frame or a named list of values. The first column (or list names) is plotted on the X axis,
+#' the second column (or list values) on the Y axis.  It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
@@ -1056,14 +1078,12 @@ qboxplot <- function(
 
 
   if (!is.null(col)) {
-    # browser()
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
     palette_use <- palette_use_bac
   }
 
-  # browser()
   p <- ggpubr::ggboxplot(
     data = df_XYcol, x = vars[x], y = vars[y],
     fill = fill,
@@ -1102,9 +1122,15 @@ qboxplot <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qviolin
+#' @title Quickly draw and save a violin plot (png, pdf, ggobj.qs)
 #'
-#' @description Draw and save a violin plot
+#' @description This all-in-one function draws, annotates, displays and saves a violin plot from
+#' a two-column data frame or a named list of values. The first column (or list names) is plotted
+#' on the X axis, the second column (or list values) on the Y axis. It is a wrapper around
+#' `ggpubr::ggviolin()`, with the automation of many features. All `ggpubr` parameters can be
+#' accessed through the `...` argument.#'  It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
@@ -1223,9 +1249,15 @@ qviolin <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qstripchart
+#' @title Quickly draw and save a stripchart (png, pdf, ggobj.qs)
 #'
-#' @description Generates a stripchart and saves the plot for a given 2-column dataframe and offers several customizations.
+#' @description This all-in-one function draws, annotates, displays and saves a stripchart from
+#' a two-column data frame or a named list of values. The first column (or list names) is plotted
+#' on the X axis, the second column (or list values) on the Y axis. It is a wrapper around
+#' `ggpubr::ggstripchart()`, with the automation of many features. All `ggpubr` parameters can be
+#' accessed through the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
+#'
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
@@ -1331,7 +1363,6 @@ qstripchart <- function(
     if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
-  # browser()
 
   p <- ggpubr::ggstripchart(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
@@ -1392,9 +1423,14 @@ qstripchart <- function(
 
 
 # _________________________________________________________________________________________________
-#' @title qvenn - Venn Diagram
+#' @title Quickly draw and save a Venn Diagram (png, pdf, ggobj.qs)
+
+#' @description This all-in-one function draws, annotates, displays and saves a Venn Diagram from
+#' a named list of values. It is a wrapper around `ggVennDiagram::ggVennDiagram()`,
+#' with the automation of many features. All `ggVennDiagram` parameters can be
+#' accessed through the `...` argument. It can automatically save the plot as png (default) and/or
+#' pdf files, and the ggplot object as a .qs file.
 #'
-#' @description Draw and save a Venn Diagram using the `ggVennDiagram` package.
 #' @param list The variable to plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle The subtitle of the plot. Default: paste (length(unique(unlist(list))), 'elements in total')

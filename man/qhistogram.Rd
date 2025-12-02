@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qhistogram}
 \alias{qhistogram}
-\title{Draw and save a histogram quickly (via ggplot2).}
+\title{Quickly draw and save a histogram (png, pdf, ggobj.qs)}
 \usage{
 qhistogram(
   vec,
@@ -44,7 +44,7 @@ qhistogram(
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.}
+\item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.}
 
 \item{xlab}{Label for the X-axis. By default, it uses the plot name.}
 
@@ -101,9 +101,10 @@ It returns a ggplot object if \code{plot} is TRUE.
 }
 \description{
 This all-in-one function draws, annotates, displays and saves a histogram of a
-distribution provided as a numeric vector. It is a wrapper around \code{ggpubr::ggbarplot()},
+distribution provided as a numeric vector. It is a wrapper around \code{ggpubr::gghistogram()},
 with the automation of many features. All \code{ggpubr} parameters can be accessed through
-the \code{...} argument.
+the \code{...} argument. It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 \dontrun{

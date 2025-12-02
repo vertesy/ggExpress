@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qdensity}
 \alias{qdensity}
-\title{qdensity}
+\title{Quickly draw and save a density plot (png, pdf, ggobj.qs)}
 \usage{
 qdensity(
   vec,
@@ -79,7 +79,11 @@ qdensity(
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Draw and save a density plot.
+This all-in-one function draws, annotates, displays and saves a density plot of a
+distribution provided as a numeric vector. It is a wrapper around \code{ggpubr::ggdensity()},
+with the automation of many features. All \code{ggpubr} parameters can be accessed through
+the \code{...} argument.  It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 weight <- rnorm(1000)

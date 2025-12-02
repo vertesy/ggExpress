@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qpie}
 \alias{qpie}
-\title{Draw and save a pie chart quickly (via ggplot2).}
+\title{Quickly draw and save a pie chart (png, pdf, ggobj.qs)}
 \usage{
 qpie(
   vec,
@@ -101,7 +101,8 @@ qpie(
 This all-in-one function draws, annotates, displays and saves a pie chart of a
 distribution provided as a numeric table. It is a wrapper around \code{ggpubr::ggpie()},
 with the automation of many features. All \code{ggpubr} parameters can be accessed through
-the \code{...} argument.
+the \code{...} argument. It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 xvec <- c("A" = 12, "B" = 29)

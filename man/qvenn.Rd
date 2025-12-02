@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qvenn}
 \alias{qvenn}
-\title{qvenn - Venn Diagram}
+\title{Quickly draw and save a Venn Diagram (png, pdf, ggobj.qs)}
 \usage{
 qvenn(
   list,
@@ -69,7 +69,11 @@ qvenn(
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Draw and save a Venn Diagram using the \code{ggVennDiagram} package.
+This all-in-one function draws, annotates, displays and saves a Venn Diagram from
+a named list of values. It is a wrapper around \code{ggVennDiagram::ggVennDiagram()},
+with the automation of many features. All \code{ggVennDiagram} parameters can be
+accessed through the \code{...} argument. It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 LetterSets <- list("One" = LETTERS[1:7], "Two" = LETTERS[3:12])

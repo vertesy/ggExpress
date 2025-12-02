@@ -24,7 +24,6 @@ qbarplot.stacked.from.wide.df(
   save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   hline = FALSE,
-  filtercol = 1,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
   xlab.angle = 45,
@@ -79,8 +78,6 @@ qbarplot.stacked.from.wide.df(
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{hline}{Draw a horizontal line on the plot.}
-
-\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
 \item{palette_use}{GGpubr color palette to use.}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggExpress.R
 \name{qboxplot}
 \alias{qboxplot}
-\title{qboxplot}
+\title{Quickly draw and save a boxplot (png, pdf, ggobj.qs)}
 \usage{
 qboxplot(
   df_XYcol_or_list,
@@ -115,7 +115,10 @@ qboxplot(
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Draw and save a boxplot
+This all-in-one function draws, annotates, displays and saves a boxplot from
+a two-column data frame or a named list of values. The first column (or list names) is plotted on the X axis,
+the second column (or list values) on the Y axis.  It can automatically save the plot as png (default) and/or
+pdf files, and the ggplot object as a .qs file.
 }
 \examples{
 data("ToothGrowth")
