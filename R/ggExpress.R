@@ -82,12 +82,16 @@ qhistogram <- function(
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
-  df[["colour"]] <- if (!isFALSE(vline) & filtercol != 0) {
-    if (filtercol == 1) (df$"value" > vline) else if (filtercol == -1) (df$"value" < vline)
-  } else if (length(col) == length(vec)) {
-    as.character(col)
+  df[["colour"]] <- if (!isFALSE(vline) && filtercol != 0) {
+    if (filtercol == 1) {
+      df$"value" > vline
+    } else if (filtercol == -1) {
+      df$"value" < vline
+    } else {
+      rep_len(as.character(col), length(vec))
+    }
   } else {
-    as.character(rep(col, length(vec))[1:length(vec)])
+    rep_len(as.character(col), length(vec))
   }
 
   p <- ggpubr::gghistogram(
