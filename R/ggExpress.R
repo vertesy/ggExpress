@@ -125,7 +125,7 @@ qhistogram <- function(
 
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -213,7 +213,7 @@ qdensity <- function(
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -368,7 +368,7 @@ qpie <- function(
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
 
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -499,7 +499,7 @@ qbarplot <- function(
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -645,7 +645,7 @@ qbarplot.stacked.from.wide.df <- function(
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -779,7 +779,7 @@ qbarplot.df <- function(
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -923,7 +923,7 @@ qscatter <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
-  if (plot) p
+  if (plot) print(p)
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   p
@@ -1117,7 +1117,7 @@ qboxplot <- function(
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -1243,7 +1243,7 @@ qviolin <- function(
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -1416,7 +1416,7 @@ qstripchart <- function(
   }
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -1508,7 +1508,7 @@ qvenn <- function(
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
@@ -1867,7 +1867,7 @@ qmosaic <- function(
   }
 
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) p
+  if (plot) print(p)
 }
 
 
