@@ -87,7 +87,7 @@ qdensity(
 )
 ```
 ## Output
-*Saved as pdf by default.* 
+*Saved as .png by default.* 
 
 <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/3aa413d8-3cda-4f37-8b91-ff5bb122c947" />
 
