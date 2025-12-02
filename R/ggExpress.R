@@ -889,7 +889,7 @@ qscatter <- function(
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
   if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
   if (add_contour_plot) p <- p + ggplot2::geom_density_2d()
-  if (correlation_r2 %in% c("pearson", "spearman")) p <- p + stat_cor(method = correlation_r2)
+  if (correlation_r2 %in% c("pearson", "spearman")) p <- p + ggpubr::stat_cor(method = correlation_r2)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
