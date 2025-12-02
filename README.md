@@ -72,7 +72,7 @@ weight_hist <- qhistogram(
 
 
 # 1b) You still have a regular ggplot object, that you can further modify and simply resave:
-(weight_hist <- weight_hist + ggplot2::theme_minimal())
+(weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
 qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
 
 # Same vector, different geometry, same automatic annotations, 
@@ -87,9 +87,11 @@ qdensity(
 ## Output
 *Saved as .png by default.* 
 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/3aa413d8-3cda-4f37-8b91-ff5bb122c947" />
+Histogram | Density plot
+-- | -- 
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/3aa413d8-3cda-4f37-8b91-ff5bb122c947" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/817cba48-9afe-41f9-b82d-364d9a184978" />
 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/817cba48-9afe-41f9-b82d-364d9a184978" />
+
 
 
 ```R
@@ -118,9 +120,9 @@ qpie(
   LegendTitle      = "Country"
 )
 ```
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/d8654117-3b28-4be7-9f62-93c542e931ca" />
-
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/e04c0044-4280-472a-84f9-aec747916309" />
+Bar plot | Pie chart
+-- | -- 
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/d8654117-3b28-4be7-9f62-93c542e931ca" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/e04c0044-4280-472a-84f9-aec747916309" />
 
 
 ```R
@@ -148,9 +150,10 @@ qscatter(
 # - matching ggplot objects (p_hist, p_dens, p_bar, p_pie, p_scatter) that you can further modify or embed in other figures.
 # - (optionally) auto-saved ggplot objects as .qs files.
 ```
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" />
 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
+Simple | Customized
+-- | -- 
+<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
 
 
 
