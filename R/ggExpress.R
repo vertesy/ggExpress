@@ -356,6 +356,7 @@ qpie <- function(
   # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
+  if (extended.canvas) p <- p + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
   if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
 
   p <- if (NoLegend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
@@ -2005,6 +2006,7 @@ q32vA4_grid_plot <- function(
   p1 <- cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...)
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
+  if (plot) p1
 }
 
 
@@ -2052,6 +2054,7 @@ qA4_grid_plot <- function(
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
   ww.FnP_parser(fname)
+  if (plot) p1
 }
 
 
