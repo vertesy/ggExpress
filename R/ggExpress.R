@@ -16,11 +16,11 @@
 #' @title Draw and save a histogram quickly (via ggplot2).
 #'
 #' @description This all-in-one function draws, annotates, displays and saves a histogram of a
-#' distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggbarplot()`,
+#' distribution provided as a numeric vector. It is a wrapper around `ggpubr::gghistogram()`,
 #' with the automation of many features. All `ggpubr` parameters can be accessed through
 #' the `...` argument.
 #' @param vec A numeric vector for which the histogram is to be plotted.
-#' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.pdf'.
+#' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param xlab Label for the X-axis. By default, it uses the plot name.

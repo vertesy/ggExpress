@@ -1,6 +1,6 @@
 # ggExpress ![status: active](https://raw.githubusercontent.com/vertesy/TheCorvinas/master/GitHub/Badges/active.svg)
 Development of the ggExpress package for quick ggpubr based plotting ala 'Type less, Plot more'.
-This package is work in progress.
+This package is a work in progress.
 
 ![image](https://github.com/vertesy/CON/assets/5101911/fb840023-9685-433b-af58-6003edd36830)
 
@@ -30,7 +30,7 @@ devtools::install_github(repo = "vertesy/ggExpress", ref = "main", upgrade = F)
 require("ggExpress")
 ```
 
-Alternatively, you simply source it from the web. 
+Alternatively, you can simply source it from the web.
 *This way function help will not work, and you will have no local copy of the code on your hard drive.*
 
 ```r
@@ -40,7 +40,7 @@ source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.aux
 
 ### Troubleshooting
 
-*If you encounter a **bug**, something doesn't work or unclear, please let me know by raising an issue on [ggExpress](https://github.com/vertesy/ggExpress/issues) – Please check if it has been asked.*
+*If you encounter a **bug**, something doesn't work or is unclear, please let me know by raising an issue on [ggExpress](https://github.com/vertesy/ggExpress/issues) – Please check if it has been asked.*
 
 ## Usage
 
