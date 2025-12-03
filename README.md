@@ -101,7 +101,9 @@ Medals <- c(Bulgaria = 12, Brazil = 29, Burkina = 5)
 
 # One liners annotated and saved plots with full path printed on the console
 qbarplot(Medals)
+# > /your/path/Medals.bar.png
 qpie(Medals)
+# > /your/path/Medals.pie.png
 
 
 # Barplot:
