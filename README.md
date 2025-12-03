@@ -99,6 +99,11 @@ Histogram | Density plot
 
 Medals <- c(Bulgaria = 12, Brazil = 29, Burkina = 5)
 
+# One liners annotated and saved plots with full path printed on the console
+qbarplot(Medals)
+qpie(Medals)
+
+
 # Barplot:
 # - uses names(counts) as x-labels
 # - auto-generates plot title from 'counts'
