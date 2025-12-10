@@ -437,7 +437,7 @@ qbarplot <- function(
     col = as.character(1:3)[1],
     xlab = "", xlab.angle = 45,
     logY = FALSE,
-    ylim = c(0, 1.1 * as.numeric(max(vec, na.rm = TRUE))),
+    ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
     annotation_logticks_Y = logY,
     label = NULL,
     hide.legend = TRUE,
@@ -448,6 +448,7 @@ qbarplot <- function(
     ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
+
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
@@ -462,6 +463,7 @@ qbarplot <- function(
     } else {
       as.character(rep(col, length(vec))[1:length(vec)])
     }
+
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,
