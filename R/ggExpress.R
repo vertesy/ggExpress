@@ -629,9 +629,6 @@ qbarplot.stacked.from.wide.df <- function(
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
-  # if (is.numeric(df[[fill]])) {
-  #   df[[fill]] <- as.factor(df[[fill]])
-  # }
 
   df_long <- df |>
     tibble::rownames_to_column(var = x) |> # Convert row names to a column
@@ -1048,10 +1045,6 @@ qboxplot <- function(
     # add.params = if(add == "jitter") list(shape = "supp"),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
-  #
-  # message("add.params: ", unlist(add.params), " add: ", add) #, " position: ", position
-  # message( " position: ", position, " add: ", add)
-
 
   stopifnot(
     is.data.frame(df_XYcol_or_list) | CodeAndRoll2::is.list.simple(df_XYcol_or_list),
