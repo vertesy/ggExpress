@@ -7,6 +7,7 @@
 qbarplot(
   vec,
   also.pdf = FALSE,
+  save = F,
   save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
@@ -15,17 +16,16 @@ qbarplot(
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  save = TRUE,
   mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   hline = FALSE,
   filtercol = 1,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  col = as.character(1:3)[1],
+  col = 1,
   xlab = "",
   xlab.angle = 45,
   logY = FALSE,
-  ylim = c(0, 1.1 * as.numeric(max(vec, na.rm = TRUE))),
+  ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
   annotation_logticks_Y = logY,
   label = NULL,
   hide.legend = TRUE,
@@ -44,6 +44,8 @@ qbarplot(
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
+\item{save}{Save the plot into a file.}
+
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{ext}{File extension (.pdf / .png).}
@@ -59,8 +61,6 @@ qbarplot(
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
-
-\item{save}{Save the plot into a file.}
 
 \item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 

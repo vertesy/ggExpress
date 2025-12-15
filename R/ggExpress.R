@@ -423,7 +423,7 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
-    also.pdf = FALSE, save.obj = FALSE,
+    also.pdf = FALSE, save = F, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
@@ -431,10 +431,12 @@ qbarplot <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     hline = FALSE, filtercol = 1,
+
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    col = as.character(1:3)[1],
+    col = 1,
+
     xlab = "", xlab.angle = 45,
     logY = FALSE,
     ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
@@ -452,17 +454,42 @@ qbarplot <- function(
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
-
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
-  df[["colour"]] <-
-    if (length(col) == length(vec)) {
-      as.character(col)
-    } else if (hline & filtercol != 0) {
-      if (filtercol == 1) (df$"value" > hline) else if (filtercol == -1) (df$"value" < hline)
-    } else {
-      as.character(rep(col, length(vec))[1:length(vec)])
+
+  # --- Name-aware color handling (minimal, ggpubr-native) ----------------
+  col_src <- if (!is.null(names(col))) col else palette_use # Decide which vector carries names for color semantics
+  if (!is.null(names(col_src)) && !is.null(names(vec))) {
+    name_overlap <- intersect(names(col_src), names(vec))
+
+    Stringendo::warnifnot(
+      "No overlap between names(vec) and names(col) / names(palette)! Names are ignored, match by order!" = length(name_overlap) > 0,
+      "Partial overlap between names(vec) and names(col). Non-matching names are grey (NA)." = (length(name_overlap) == 0 || length(name_overlap) == length(vec))
+    )
+
+    if (length(name_overlap) == length(vec)) { # IMPORTANT: only mutate col on FULL or ZERO overlap
+      col <- col_src[names(vec)]
+    } else if (length(name_overlap) == 0) {
+      col <- unname(col)
     }
+    # partial overlap: warn only, do NOT touch col
+  }
+
+  # Handling colors ________________________________________________________________
+  # Palette argument
+  pal <- if (length(palette_use) == 1)
+    ggpubr::get_palette(palette_use, length(vec)) # For a name of a palette or a single color.
+  else
+    palette_use
+
+  # Color argument
+  cols <- if (is.numeric(col))
+    pal[rep(col, length.out = length(vec))]
+  else rep(col, length.out = length(vec))
+
+  keys <- as.character(seq_along(cols))
+  pal2 <- setNames(cols, keys)
+  df$colour <- keys
 
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
@@ -470,15 +497,14 @@ qbarplot <- function(
     subtitle = subtitle,
     caption = caption,
     color = "colour", fill = "colour",
+    palette = pal2,
     label = label,
     ylim = ylim,
-    palette = palette_use,
     ...
   ) +
     ggplot2::labs(y = ylab) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
@@ -505,6 +531,7 @@ qbarplot <- function(
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) print(p)
 }
+
 
 
 # _________________________________________________________________________________________________
