@@ -85,23 +85,38 @@ qhistogram <- function(
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
-  df[["colour"]] <- if (!isFALSE(vline) & filtercol != 0) {
-    if (filtercol == 1) (df$"value" > vline) else if (filtercol == -1) (df$"value" < vline)
-  } else if (length(col) == length(vec)) {
-    as.character(col)
-  } else {
-    as.character(rep(col, length(vec))[1:length(vec)])
+  # Color handling (histogram-safe) _______________________________________
+  pal <- if (length(palette_use) == 1)
+    ggpubr::get_palette(palette_use, 2)
+  else palette_use
+
+  # Resolve `col` to an actual color
+  col_resolved <- if (is.numeric(col) || grepl("^[0-9]+$", col))
+    pal[as.integer(col)]
+  else
+    col
+
+  # Default: single-color histogram
+  df$colour <- factor("all")
+  pal2 <- c(all = col_resolved)
+
+  # Optional split by vline
+  if (is.numeric(vline) && filtercol %in% c(1, -1)) {
+    df$colour <- factor(
+      if (filtercol == 1) df$value > vline else df$value < vline
+    )
+    pal2 <- setNames(pal[1:2], levels(df$colour))
   }
 
   p <- ggpubr::gghistogram(
     data = df, x = "value",
     title = plotname, xlab = xlab,
-    add = add
+    add = add,
     # , color = "names", fill = "names"
-    , subtitle = subtitle,
+    subtitle = subtitle,
     caption = caption,
     color = "colour", fill = "colour",
-    palette = palette_use, ...
+    palette = pal2, ...
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
@@ -127,7 +142,6 @@ qhistogram <- function(
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) print(p)
 }
-
 
 
 # _________________________________________________________________________________________________
