@@ -469,9 +469,7 @@ qbarplot <- function(
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
 
-
   # Name-aware color handling ____________________________________________________________
-
   col_src <- if (!is.null(names(col))) col else palette_use # Decide which vector carries names for color semantics
   if (!is.null(names(col_src)) && !is.null(names(vec))) {
     name_overlap <- intersect(names(col_src), names(vec))
@@ -489,14 +487,13 @@ qbarplot <- function(
     # partial overlap: warn only, do NOT touch col
   }
 
-  # Handling colors ________________________________________________________________
-  # Palette argument
+  # Handling colors: Palette argument __________________________________________________________
   pal <- if (length(palette_use) == 1)
     ggpubr::get_palette(palette_use, length(vec)) # For a name of a palette or a single color.
   else
     palette_use
 
-  # Color argument_______________________________________________
+  # Color argument _________________________________________________________________
   cols <- if (is.numeric(col))
     pal[rep(col, length.out = length(vec))]         # If numeric, use as indices into palette
   else rep(col, length.out = length(vec))           # Else use colors as is, recycling if needed.
@@ -515,7 +512,6 @@ qbarplot <- function(
   df$colour <- keys
 
   pal2 <- setNames(cols, keys)
-
 
   # Plot _________________________________________________________________
   p <- ggpubr::ggbarplot(
