@@ -430,43 +430,42 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
+    also.pdf = FALSE, save = F, save.obj = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
-    filename = NULL,
     subtitle = paste("Median:", iround(median(vec))),
     suffix = NULL,
     caption = suffix,
+    filename = NULL,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
 
-    also.pdf = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE,
-    save = F, save.obj = FALSE,
-
-    col = 1,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hline = FALSE,
     filtercol = 1,
-    filtercol_default = TRUE,
+    filtercol_default = TRUE, # c("#008B45FF", "#EE0000FF") # Default green/red colors for filtering
+
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    col = 1,
 
     xlab = "", xlab.angle = 45,
-    ylab = NULL,
     logY = FALSE,
     ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
     annotation_logticks_Y = logY,
-
     label = NULL,
     hide.legend = TRUE,
     legend.title = NULL,
     max.names = 100,
     limitsize = FALSE,
     grid = "y",
+    ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     ...) {
 
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
+
 
 
   # Name-aware color handling ____________________________________________________________
@@ -487,13 +486,14 @@ qbarplot <- function(
     # partial overlap: warn only, do NOT touch col
   }
 
-  # Handling colors: Palette argument __________________________________________________________
+  # Handling colors ________________________________________________________________
+  # Palette argument
   pal <- if (length(palette_use) == 1)
     ggpubr::get_palette(palette_use, length(vec)) # For a name of a palette or a single color.
   else
     palette_use
 
-  # Color argument _________________________________________________________________
+  # Color argument_______________________________________________
   cols <- if (is.numeric(col))
     pal[rep(col, length.out = length(vec))]         # If numeric, use as indices into palette
   else rep(col, length.out = length(vec))           # Else use colors as is, recycling if needed.
@@ -512,6 +512,20 @@ qbarplot <- function(
   df$colour <- keys
 
   pal2 <- setNames(cols, keys)
+
+  # log10Y axis handling ____________________________________________________________
+  if (logY) {
+
+    if (any(vec <= 0)) {
+      warning( sum(vec <= 0), " input value(s) are <=0. \nA pseudocount of min(vec)/10 will be added.")
+
+      # minimal & explicit pseudocount
+      pseudo <- min(vec[vec > 0]) / 10
+      vec <- vec + pseudo
+    }
+
+    ylim <- NULL  # CRITICAL: never pass ylim to scale_y_log10()
+  }
 
   # Plot _________________________________________________________________
   p <- ggpubr::ggbarplot(
@@ -554,6 +568,7 @@ qbarplot <- function(
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) print(p)
 }
+
 
 
 
