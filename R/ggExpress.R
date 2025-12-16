@@ -385,35 +385,42 @@ qpie <- function(
 #' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param vec The variable to plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param plot Display the plot.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
+#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
-#' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param ext File extension (.pdf / .png).
+#' @param plot Display the plot.
 #' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
+#' @param col The fill color of the bars. Default: 1st color of the palette.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors.
 #' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr color palette to use.
-#' @param col Color of the plot.
-#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by
+#' -1 or 1. Takes effect if "*line" is defined.
+#' @param filtercol_default Use default red/green colors for filtering. If FALSE, use the
+#' first two colors of the palette. Default: TRUE, `c("#008B45FF", "#EE0000FF")`
+#'
 #' @param xlab X-axis label. Default: "".
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param ylab Y-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
-#' @param label Label text.
+#' @param ylim Y-axis limit values. Default: c(0, 1.1*max(vec))
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#'
+#' @param label Label bars with their values, or by a custom string vector. Default: NULL (no labels).
 #' @param hide.legend Hide legend. Default: TRUE.
 #' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param ylim Y-axis limit values.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @export
@@ -423,32 +430,37 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
-    also.pdf = FALSE, save = F, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
+    filename = NULL,
     subtitle = paste("Median:", iround(median(vec))),
     suffix = NULL,
     caption = suffix,
-    filename = NULL,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    hline = FALSE, filtercol = 1,
 
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    also.pdf = FALSE,
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    plot = TRUE,
+    save = F, save.obj = FALSE,
+
     col = 1,
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    hline = FALSE,
+    filtercol = 1,
+    filtercol_default = TRUE,
 
     xlab = "", xlab.angle = 45,
+    ylab = NULL,
     logY = FALSE,
     ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
     annotation_logticks_Y = logY,
+
     label = NULL,
     hide.legend = TRUE,
     legend.title = NULL,
     max.names = 100,
     limitsize = FALSE,
     grid = "y",
-    ylab = NULL,
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     ...) {
 
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
@@ -457,7 +469,9 @@ qbarplot <- function(
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
 
 
-  # --- Name-aware color handling (minimal, ggpubr-native) ----------------
+
+  # Name-aware color handling ____________________________________________________________
+
   col_src <- if (!is.null(names(col))) col else palette_use # Decide which vector carries names for color semantics
   if (!is.null(names(col_src)) && !is.null(names(vec))) {
     name_overlap <- intersect(names(col_src), names(vec))
@@ -482,15 +496,28 @@ qbarplot <- function(
   else
     palette_use
 
-  # Color argument
+  # Color argument_______________________________________________
   cols <- if (is.numeric(col))
-    pal[rep(col, length.out = length(vec))]
-  else rep(col, length.out = length(vec))
+    pal[rep(col, length.out = length(vec))]         # If numeric, use as indices into palette
+  else rep(col, length.out = length(vec))           # Else use colors as is, recycling if needed.
 
+
+  # Optional filter coloring via hline _______________________________________________
+  if (is.numeric(hline) && filtercol %in% c(1, -1)) {
+    pal_fc <- if  (isTRUE(filtercol_default))  c("#008B45FF", "#EE0000FF")  # If filtercol_default is TRUE, use default green/red colors
+    else pal[1:2]                                                    # Else use first two colors of the palette
+    fc <- pal_fc[if (filtercol == 1) c(1, 2) else c(2, 1)]            # Flip colors if filtercol is -1
+    cols <- ifelse(vec > hline, fc[1], fc[2])                         # Overwrite colors based on hline comparison
+  }
+
+  # Assign colors to dataframe _______________________________________________
   keys <- as.character(seq_along(cols))
-  pal2 <- setNames(cols, keys)
   df$colour <- keys
 
+  pal2 <- setNames(cols, keys)
+
+
+  # Plot _________________________________________________________________
   p <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,

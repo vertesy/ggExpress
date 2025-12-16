@@ -6,24 +6,25 @@
 \usage{
 qbarplot(
   vec,
-  also.pdf = FALSE,
-  save = F,
-  save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-  plot = TRUE,
   plotname = FixPlotName(substitute(vec)),
+  filename = NULL,
   subtitle = paste("Median:", iround(median(vec))),
   suffix = NULL,
   caption = suffix,
-  filename = NULL,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  hline = FALSE,
-  filtercol = 1,
+  also.pdf = FALSE,
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  plot = TRUE,
+  save = F,
+  save.obj = FALSE,
+  col = 1,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  col = 1,
+  hline = FALSE,
+  filtercol = 1,
+  filtercol_default = TRUE,
   xlab = "",
   xlab.angle = 45,
+  ylab = NULL,
   logY = FALSE,
   ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
   annotation_logticks_Y = logY,
@@ -33,26 +34,18 @@ qbarplot(
   max.names = 100,
   limitsize = FALSE,
   grid = "y",
-  ylab = NULL,
   w = qqqAxisLength(vec, factor = 0.25),
   h = 5,
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   ...
 )
 }
 \arguments{
 \item{vec}{The variable to plot.}
 
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save}{Save the plot into a file.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
-\item{plot}{Display the plot.}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
+
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
 
@@ -60,29 +53,41 @@ qbarplot(
 
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
-\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{ext}{File extension (.pdf / .png).}
+
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{col}{The fill color of the bars. Default: 1st color of the palette.}
+
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors.}
 
 \item{hline}{Draw a horizontal line on the plot.}
 
-\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
+\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by
+-1 or 1. Takes effect if "*line" is defined.}
 
-\item{palette_use}{GGpubr color palette to use.}
-
-\item{col}{Color of the plot.}
+\item{filtercol_default}{Use default red/green colors for filtering. If FALSE, use the
+first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF")}}
 
 \item{xlab}{X-axis label. Default: "".}
 
 \item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
+\item{ylab}{Y-axis label. Default: NULL.}
+
 \item{logY}{Make Y axis log10-scale.}
 
-\item{ylim}{Y-axis limit values.}
+\item{ylim}{Y-axis limit values. Default: c(0, 1.1*max(vec))}
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{label}{Label text.}
+\item{label}{Label bars with their values, or by a custom string vector. Default: NULL (no labels).}
 
 \item{hide.legend}{Hide legend. Default: TRUE.}
 
@@ -94,11 +99,11 @@ qbarplot(
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{ylab}{Y-axis label. Default: NULL.}
-
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
+
+\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
