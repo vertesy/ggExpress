@@ -739,33 +739,41 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param df The variable to plot.
 #' @param x Colname to split along X axis. Default: `colnames(df)[1]`.
 #' @param y Colname to count along y axis. Default: `colnames(df)[2]`.
-#' @param fill Color (split) by along Y. Default: `colnames(df)[3]`.
-#' @param color Color (split) by along Y.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
-#' @param scale Scale the Y axis to 100%.
+#'
+#' @param fill Color (split) by along Y. Default: `colnames(df)[3]`.
+#' @param color Color (split) by along Y.
+#' @param palette_use GGpubr color palette to use.
+#' @param label Label text.
+#'
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
-#' @param hline Draw a horizontal line on the plot.
-#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr color palette to use.
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
+#' @param scale Scale the Y axis to 100%.
+#' @param position Position adjustment of the bars. If `scale` is TRUE, position is set to "fill",
+#' otherwise to "dodge". Can also be "stack".
+#'
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: NULL.
 #' @param logY Make Y axis log10-scale.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param label Label text.
+#'
+#' @param hline Draw a horizontal line on the plot.
+#' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
 #' @param hide.legend Hide legend.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ Maximum number of categories to show on the plot. Default is 10.
+#'
+#' @param ext File extension (.pdf / .png).
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -783,38 +791,48 @@ qbarplot.df <- function(
     df,
     x = colnames(df)[1],
     y = colnames(df)[2],
-    fill = colnames(df)[3],
-    color = 1,
-    label = NULL,
-    also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
     filename = NULL,
-    scale = TRUE,
-    plot = TRUE,
-    save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    hline = FALSE, filtercol = 1,
+
+    fill = colnames(df)[3],
+    color = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    label = NULL,
+
+    plot = TRUE,
+    save = TRUE, also.pdf = FALSE,
+    save.obj = FALSE,
+
+    scale = TRUE,
+    position = if(scale) "fill" else "dodge", # also can be "stack"
+
     xlab.angle = 45, xlab = NULL,
     logY = FALSE,
     annotation_logticks_Y = logY,
+
+    hline = FALSE, filtercol = 1,
     hide.legend = TRUE,
     max.names = 50,
     limitsize = FALSE,
     grid = "y",
     max.categ = 10,
+
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     w = qqqAxisLength(df), h = 5,
     ...) {
+
   message(plotname)
   cols <- colnames(df)
   x <- if (is.numeric(x)) cols[x] else x
   y <- if (is.numeric(y)) cols[y] else y
   fill <- if (is.numeric(fill)) cols[fill] else fill
+
+  # Check inputs ____________________________________________________________
   stopifnot(
     is.data.frame(df), ncol(df) > 2,
-    all(c(x, y, fill) %in% cols),
+    "Some variable names are not found in data frame: (x, y, fill)!" = all(c(x, y, fill) %in% cols),
     is.numeric(df[[y]])
   )
 
@@ -827,6 +845,16 @@ qbarplot.df <- function(
     stopifnot("3rd column has too many categories" = nr_categ < max.categ)
   }
 
+  # Position handling ____________________________________________________________
+  pos_gg <- switch(
+    position,
+    dodge = ggplot2::position_dodge(),
+    stack = ggplot2::position_stack(),
+    fill  = ggplot2::position_fill()
+  )
+
+
+  # Plot _________________________________________________________________
   p <- ggpubr::ggbarplot(
     data = df, x = x, y = y,
     color = color,
@@ -836,12 +864,13 @@ qbarplot.df <- function(
     caption = caption,
     label = label,
     palette = palette_use,
-    position = if (scale) position_fill() else position_stack(),
+    position = pos_gg,
     ...
   ) +
     ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  # Additional elements _________________________________________________________________
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   # Hide x-axis labels when number of unique categories exceeds limit
   if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none")
@@ -850,6 +879,8 @@ qbarplot.df <- function(
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+
+  # Save and print _________________________________________________________________
   file_name <- if (!is.null(filename)) {
     filename
   } else {

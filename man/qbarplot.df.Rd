@@ -8,34 +8,35 @@ qbarplot.df(
   df,
   x = colnames(df)[1],
   y = colnames(df)[2],
-  fill = colnames(df)[3],
-  color = 1,
-  label = NULL,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plotname = FixPlotName(substitute(df)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  scale = TRUE,
-  plot = TRUE,
-  save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  hline = FALSE,
-  filtercol = 1,
+  fill = colnames(df)[3],
+  color = 1,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
+  label = NULL,
+  plot = TRUE,
+  save = TRUE,
+  also.pdf = FALSE,
+  save.obj = FALSE,
+  scale = TRUE,
+  position = if (scale) "fill" else "dodge",
   xlab.angle = 45,
   xlab = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
+  hline = FALSE,
+  filtercol = 1,
   hide.legend = TRUE,
   max.names = 50,
   limitsize = FALSE,
   grid = "y",
   max.categ = 10,
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   w = qqqAxisLength(df),
   h = 5,
   ...
@@ -48,18 +49,6 @@ qbarplot.df(
 
 \item{y}{Colname to count along y axis. Default: \code{colnames(df)[2]}.}
 
-\item{fill}{Color (split) by along Y. Default: \code{colnames(df)[3]}.}
-
-\item{color}{Color (split) by along Y.}
-
-\item{label}{Label text.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -70,19 +59,26 @@ qbarplot.df(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{scale}{Scale the Y axis to 100\%.}
+\item{fill}{Color (split) by along Y. Default: \code{colnames(df)[3]}.}
+
+\item{color}{Color (split) by along Y.}
+
+\item{palette_use}{GGpubr color palette to use.}
+
+\item{label}{Label text.}
 
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{also.pdf}{Save plot in both png and pdf formats.}
 
-\item{hline}{Draw a horizontal line on the plot.}
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
+\item{scale}{Scale the Y axis to 100\%.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{position}{Position adjustment of the bars. If \code{scale} is TRUE, position is set to "fill",
+otherwise to "dodge". Can also be "stack".}
 
 \item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
@@ -91,6 +87,10 @@ qbarplot.df(
 \item{logY}{Make Y axis log10-scale.}
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
+
+\item{hline}{Draw a horizontal line on the plot.}
+
+\item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
 \item{hide.legend}{Hide legend.}
 
@@ -101,6 +101,10 @@ qbarplot.df(
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{max.categ}{Maximum number of categories to show on the plot. Default is 10.}
+
+\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+
+\item{ext}{File extension (.pdf / .png).}
 
 \item{w}{Width of the plot.}
 
