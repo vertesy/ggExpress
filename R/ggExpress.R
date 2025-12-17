@@ -853,7 +853,6 @@ qbarplot.df <- function(
     fill  = ggplot2::position_fill()
   )
 
-
   # Plot _________________________________________________________________
   p <- ggpubr::ggbarplot(
     data = df, x = x, y = y,
@@ -945,7 +944,7 @@ qbarplot.df <- function(
 #' @param line.width Width of the line (vline, hline, abline). Default: 0.5.
 #' @param line.type Type of the line (vline, hline, abline). Default: "dashed".
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
-#' @param correlation_r2 Add a correlation value to the plot
+#' @param correlation_r2 Add a correlation value to the plot. Set as "pearson" or "spearman". Default: FALSE.
 #'
 #' @param w Width of the plot.
 #' @param h Height of the plot.
@@ -975,6 +974,7 @@ qscatter <- function(
     label = NULL, repel = TRUE,
     hide.legend = FALSE,
     col = c(NULL, 3)[1],
+    # fill = NULL,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
 
     xlab = NULL, ylab = NULL,
@@ -1023,13 +1023,12 @@ qscatter <- function(
 
   # Isometric axes handling ____________________________________________________________
   if (isometric) {
-    # browser()
     rng <- df_XYcol[, c(vars[x], vars[y])] |> range()
     rng <- range(rng, xlim, ylim, na.rm = TRUE) |>
       CodeAndRoll2::iround()
 
-    warning("Isometric axes are calculated automatically from the data:\n",
-            paste(rng, collapse = ", "), " - It can be extended by providing xlim arg.", immediate. = TRUE )
+    message("Isometric axes are calculated automatically from the data:\n",
+            paste(rng, collapse = ", "), " - It can be extended by providing xlim arg.")
     xlim <- rng
     ylim <- rng
   }
@@ -1041,15 +1040,15 @@ qscatter <- function(
     title = FixPlotName(plotname, suffix),
     subtitle = subtitle,
     caption = caption,
-    palette = palette_use,
+    # palette = palette_use, # There is an upstream, internal problem with ggscatter that producing warnings.
     label = label, repel = repel,
     xlab = xlab, ylab = ylab,
     xlim = xlim, ylim = ylim,
-    # size = pt.size,
     ...
   ) +
     ggpubr::grids(axis = "xy") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
+    ggplot2::scale_color_manual(values = palette_use)
 
   # Additional plot features ____________________________________________________________
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
@@ -1057,7 +1056,12 @@ qscatter <- function(
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
   if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
   if (add_contour_plot) p <- p + ggplot2::geom_density_2d()
-  if (correlation_r2 %in% c("pearson", "spearman")) p <- p + ggpubr::stat_cor(method = correlation_r2) else warning("correlation_r2 must be either 'pearson' or 'spearman'")
+
+  if (correlation_r2 %in% c("pearson", "spearman")) {
+    p <- p + ggpubr::stat_cor(method = correlation_r2)
+  } else if (!isFALSE(correlation_r2)) {
+    warning("correlation_r2 must be either 'pearson' or 'spearman'")
+  }
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
@@ -1073,6 +1077,7 @@ qscatter <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
+
   if (plot) print(p)
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
                    also.pdf = also.pdf, save.obj = save.obj)
