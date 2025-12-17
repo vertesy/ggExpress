@@ -437,6 +437,7 @@ qpie <- function(
 #' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
+#' @return It returns a ggplot object if `plot` is TRUE.
 #' @export
 #'
 #' @examples weight3 <- runif(12)
@@ -444,7 +445,9 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
-    also.pdf = FALSE, save = F, save.obj = FALSE,
+    also.pdf = FALSE,
+    save = MarkdownHelpers::unless.specified("b.save.plots.ggExpress"),
+    save.obj = MarkdownHelpers::unless.specified("b.save.ggobj.ggExpress"),
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE,
     plotname = FixPlotName(substitute(vec)),

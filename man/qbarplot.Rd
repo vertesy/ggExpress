@@ -7,8 +7,8 @@
 qbarplot(
   vec,
   also.pdf = FALSE,
-  save = F,
-  save.obj = FALSE,
+  save = MarkdownHelpers::unless.specified("b.save.plots.ggExpress"),
+  save.obj = MarkdownHelpers::unless.specified("b.save.ggobj.ggExpress"),
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
   plotname = FixPlotName(substitute(vec)),
@@ -106,6 +106,9 @@ first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF"
 \item{h}{Height of the plot.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
+}
+\value{
+It returns a ggplot object if \code{plot} is TRUE.
 }
 \description{
 This all-in-one function draws, annotates, displays and saves a bar plot of a
