@@ -13,22 +13,27 @@ qscatter(
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  also.pdf = TRUE,
+  plot = TRUE,
+  save = TRUE,
   save.obj = FALSE,
-  col = c(NULL, 3)[1],
+  also.pdf = TRUE,
+  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   label = NULL,
   repel = TRUE,
+  hide.legend = FALSE,
+  col = c(NULL, 3)[1],
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],
-  hide.legend = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  xlab = NULL,
+  ylab = NULL,
+  xlab.angle = 90,
   logX = FALSE,
   logY = FALSE,
   annotation_logticks_Y = logY,
   annotation_logticks_X = logX,
-  xlab = NULL,
-  ylab = NULL,
-  xlab.angle = 90,
+  xlim = NULL,
+  ylim = NULL,
+  isometric = FALSE,
   hline = FALSE,
   vline = FALSE,
   abline = FALSE,
@@ -37,12 +42,10 @@ qscatter(
   line.type = "dashed",
   add_contour_plot = FALSE,
   correlation_r2 = FALSE,
-  plot = TRUE,
-  save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-  grid = "xy",
   w = 7,
   h = w,
+  grid = "xy",
+  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
   ...
 )
 }
@@ -63,21 +66,31 @@ qscatter(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{also.pdf}{Save plot in both png and pdf formats.}
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{col}{Color of the plot.}
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{ext}{File extension (.pdf / .png).}
 
 \item{label}{Point labels. Default: NULL.}
 
 \item{repel}{Repel labels from each other. Default: TRUE.}
 
-\item{palette_use}{GGpubr color palette to use.}
-
 \item{hide.legend}{Hide legend.}
 
-\item{ext}{File extension (.pdf / .png).}
+\item{col}{Color of the plot.}
+
+\item{palette_use}{GGpubr color palette to use.}
+
+\item{xlab}{X-axis label. Default: NULL.}
+
+\item{ylab}{Y-axis label. Default: NULL.}
+
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{logX}{Make X axis log10-scale.}
 
@@ -87,11 +100,11 @@ qscatter(
 
 \item{annotation_logticks_X}{Logical indicating whether to add annotation logticks on X-axis. Default follows the value of \code{logX}.}
 
-\item{xlab}{X-axis label. Default: NULL.}
+\item{xlim}{X-axis limit values. Default: NULL.}
 
-\item{ylab}{Y-axis label. Default: NULL.}
+\item{ylim}{Y-axis limit values. Default: NULL.}
 
-\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
+\item{isometric}{Make both axes isometric (same scale).}
 
 \item{hline}{Draw a horizontal line on the plot, yintercept or FALSE}
 
@@ -109,17 +122,13 @@ qscatter(
 
 \item{correlation_r2}{Add a correlation value to the plot}
 
-\item{plot}{Display the plot.}
-
-\item{save}{Save the plot into a file.}
-
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
-
-\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
-
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }

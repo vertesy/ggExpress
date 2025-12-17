@@ -883,14 +883,30 @@ qbarplot.df <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param ext File extension (.pdf / .png).
+#'
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
+#' @param hide.legend Hide legend.
 #' @param col Color of the plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param palette_use GGpubr color palette to use.
+#'
+#' @param xlab X-axis label. Default: NULL.
+#' @param ylab Y-axis label. Default: NULL.
+#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param logX Make X axis log10-scale.
 #' @param logY Make Y axis log10-scale.
+#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
+#' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
+#' @param xlim X-axis limit values. Default: NULL.
+#' @param ylim Y-axis limit values. Default: NULL.
+#' @param isometric Make both axes isometric (same scale).
+#'
 #' @param hline Draw a horizontal line on the plot, yintercept or FALSE
 #' @param vline Draw a vertical line on the plot, xintercept or FALSE.
 #' @param abline Draw a sloped line on the plot. Set to FALSE, or `intercept = abline[1], slope = abline[2]`.
@@ -899,19 +915,11 @@ qbarplot.df <- function(
 #' @param line.type Type of the line (vline, hline, abline). Default: "dashed".
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
 #' @param correlation_r2 Add a correlation value to the plot
-#' @param plot Display the plot.
-#' @param xlab X-axis label. Default: NULL.
-#' @param ylab Y-axis label. Default: NULL.
-#' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
-#' @param palette_use GGpubr color palette to use.
-#' @param hide.legend Hide legend.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#'
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
@@ -926,29 +934,40 @@ qscatter <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    also.pdf = TRUE,
+
+    plot = TRUE,
+    save = TRUE,
     save.obj = FALSE,
-    col = c(NULL, 3)[1],
-    label = NULL, repel = TRUE,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    hide.legend = FALSE,
+    also.pdf = TRUE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+
+    label = NULL, repel = TRUE,
+    hide.legend = FALSE,
+    col = c(NULL, 3)[1],
+    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+
+    xlab = NULL, ylab = NULL,
+    xlab.angle = 90,
     logX = FALSE, logY = FALSE,
     annotation_logticks_Y = logY,
     annotation_logticks_X = logX,
-    xlab = NULL, ylab = NULL,
-    xlab.angle = 90,
+    xlim = NULL,
+    ylim = NULL,
+    isometric = FALSE,
+
     hline = FALSE, vline = FALSE, abline = FALSE,
     line.col = "darkgrey", line.width = 0.5, line.type = "dashed",
     add_contour_plot = FALSE,
     correlation_r2 = FALSE, # add as  c("pearson", "spearman")
-    plot = TRUE, save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
-    grid = "xy",
-    # pt.size = NULL,
+
     w = 7, h = w,
+    grid = "xy",
+    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
     ...) {
+
   print(plotname)
+
+  # Input validation ____________________________________________________________
   stopifnot(
     is.data.frame(df_XYcol) || is.matrix(df_XYcol),
     ncol(df_XYcol) >= 2L,
@@ -971,6 +990,20 @@ qscatter <- function(
   names(vars) <- vars
   cat("Variable (column) names 1-5:", head(vars), "...\n")
 
+  # Isometric axes handling ____________________________________________________________
+  if (isometric) {
+    # browser()
+    rng <- df_XYcol[, c(vars[x], vars[y])] |> range()
+    rng <- range(rng, xlim, ylim, na.rm = TRUE) |>
+      CodeAndRoll2::iround()
+
+    warning("Isometric axes are calculated automatically from the data:\n",
+            paste(rng, collapse = ", "), " - It can be extended by providing xlim arg.", immediate. = TRUE )
+    xlim <- rng
+    ylim <- rng
+  }
+
+  # Scatter plot ____________________________________________________________
   p <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
     color = col,
@@ -980,12 +1013,14 @@ qscatter <- function(
     palette = palette_use,
     label = label, repel = repel,
     xlab = xlab, ylab = ylab,
+    xlim = xlim, ylim = ylim,
     # size = pt.size,
     ...
   ) +
     ggpubr::grids(axis = "xy") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  # Additional plot features ____________________________________________________________
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
@@ -1001,13 +1036,15 @@ qscatter <- function(
 
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
+  # Save plot and okject ____________________________________________________________
   file_name <- if (!is.null(filename)) {
     filename
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
   if (plot) print(p)
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
+                   also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   p
 }
