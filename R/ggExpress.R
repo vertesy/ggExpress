@@ -1951,11 +1951,12 @@ qmosaic <- function(
 
 #' @title qqSave
 #'
-#' @description Quick-Save ggplot objects
+#' @description Quick-Save ggplot objects to file (png / pdf) with automatic naming and as .qs object.
 #' @param ggobj Plot as ggplot object.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
 #' @param bgcol Plot background color. Default: "white".
 #' @param page Set page size to a predefined value, eg. "A4".
 #' Default: `c(F, "A4p", "A4l", "A5p", "A5l")[1]`
@@ -1969,6 +1970,7 @@ qmosaic <- function(
 #' @examples xplot <- ggplot2::qplot(12)
 #' qqSave(ggobj = xplot)
 #' qqSave(ggobj = xplot, ext = "pdf")
+#'
 #' @importFrom cowplot save_plot
 #' @importFrom qs qsave
 #' @importFrom tictoc tic toc
@@ -1979,6 +1981,7 @@ qqSave <- function(
     ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
     also.pdf = FALSE,
     save.obj = FALSE,
+    max.obj.size = 5e+06, # 5 MB
     bgcol = "white",
     page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
     title = FALSE,
@@ -2013,6 +2016,7 @@ qqSave <- function(
       h <- wA4 / 2
     }
   }
+
   fnp <- paste0(getwd(), "/", fname)
   message("\n\n", fnp)
 
@@ -2020,24 +2024,31 @@ qqSave <- function(
   ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
 
   # Save the plot
+  cowplot::save_plot(
+    plot = ggobj, filename = fname,
+    base_width = w, base_height = h, ...
+    )
+
+
   if (also.pdf) {
     cowplot::save_plot(
       plot = ggobj, filename = fname2, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
-      ...
-    )
-  }
+      ...)
+    }
 
-  cowplot::save_plot(
-    plot = ggobj, filename = fname,
-    base_width = w, base_height = h, ...
-  )
-
+  # Save the ggplot object if requested
   if (save.obj) {
-    fnp.qs <- sppp(fnp, "qs")
-    qs::qsave(ggobj, file = fnp.qs)
-    CMND <- paste0("ggplot_obj <- xread('", fnp.qs, "')")
-    message(CMND)
+    ggobj.size <- object.size(ggobj)
+    if (ggobj.size > max.obj.size) {
+      warning("The ggplot object is larger than " , max.obj.size/1e6, "MBs. It is: ", iround(ggobj.size/1e6),
+              " MB. Increase max.obj.size to save the object.\n")
+    } else {
+      fnp.qs <- sppp(fnp, "qs")
+      qs::qsave(ggobj, file = fnp.qs)
+      CMND <- paste0("ggplot_obj <- xread('", fnp.qs, "')")
+      message(CMND)
+    }
   }
 
   tictoc::toc()

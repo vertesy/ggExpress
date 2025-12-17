@@ -9,6 +9,7 @@ qqSave(
   ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
   save.obj = FALSE,
+  max.obj.size = 5e+06,
   bgcol = "white",
   page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
   title = FALSE,
@@ -28,6 +29,8 @@ qqSave(
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
+\item{max.obj.size}{Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).}
+
 \item{bgcol}{Plot background color. Default: "white".}
 
 \item{page}{Set page size to a predefined value, eg. "A4".
@@ -46,10 +49,11 @@ Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Quick-Save ggplot objects
+Quick-Save ggplot objects to file (png / pdf) with automatic naming and as .qs object.
 }
 \examples{
 xplot <- ggplot2::qplot(12)
 qqSave(ggobj = xplot)
 qqSave(ggobj = xplot, ext = "pdf")
+
 }
