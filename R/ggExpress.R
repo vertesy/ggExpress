@@ -2027,20 +2027,27 @@ qmosaic <- function(
 
 #' @title qqSave
 #'
-#' @description Quick-Save ggplot objects to file (png / pdf) with automatic naming and as .qs object.
+#' @description Quick-Save ggplot objects to file with automatic file naming.
+#' Default format: png, optionally also: .pdf and .qs ggplot object.
 #' @param ggobj Plot as ggplot object.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
-#' @param bgcol Plot background color. Default: "white".
-#' @param page Set page size to a predefined value, eg. "A4".
-#' Default: `c(F, "A4p", "A4l", "A5p", "A5l")[1]`
+#'
 #' @param title title field for pdf file (saved into file metadata)
 #' @param fname Manual filename
 #' @param suffix A suffix added to the filename. Default: NULL.
+#'
+#' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
+#' @param pdf.subdir Save pdf files into a subdirectory. Default: FALSE.
+#' @param pdf.dir.name Name of the pdf subdirectory. Default: "pdf".
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param obj.subdir Save ggplot objects into a subdirectory. Default: FALSE.
+#' @param obj.dir.name Name of the ggplot object subdirectory. Default: "ggobj".#'
+#'
+#' @param bgcol Plot background color. Default: "white".
+#' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
 #' @param w Width of the plot.
 #' @param h Height of the plot.
+#' @param plot_on_page Use standard page sizes for plots? Options are:
+#' FALSE, "A4p", "A4l", "A5p", "A5l". Overwrites w and h.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples xplot <- ggplot2::qplot(12)
@@ -2054,81 +2061,97 @@ qmosaic <- function(
 #' @export
 qqSave <- function(
     ggobj,
-    ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
+    # ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
     also.pdf = FALSE,
+    pdf.subdir = FALSE, pdf.dir.name = "pdf",
     save.obj = FALSE,
-    max.obj.size = 5e+06, # 5 MB
-    bgcol = "white",
-    page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
+    obj.subdir = FALSE, obj.dir.name = "ggobj",
     title = FALSE,
     fname = FALSE,
     suffix = NULL,
-    w = 4, h = w,
+    bgcol = "white",
+    max.obj.size = 5e+06, # 5 MB
+    w = 6, h = w,
+    plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
     ...) {
-  #
+
+  stopifnot(
+    is.ggplot(ggobj), is.numeric(max.obj.size), is.numeric(w), is.numeric(h),
+    is.logical(also.pdf), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
+    is.character(bgcol), is.character(pdf.dir.name), is.character(obj.dir.name),
+    is.null(suffix) | is.character(suffix),
+    is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
+  )
+
+  # Helper
+  add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, sppp(x, ext))
+
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
-  if (isFALSE(fname)) fname <- sppp(title, suffix, ext)
-  fname <- sppp(make.names(fname))
-  if (also.pdf) fname2 <- if (isFALSE(fname)) sppp(title, suffix, "pdf") else sppp(make.names(fname), "pdf")
+  fname <- if (isFALSE(fname)) sppp(title, suffix) else fname
 
-  if (!isFALSE(page)) {
-    wA4 <- 8.27
-    hA4 <- 11.69
-    if (page == "A4p") {
-      w <- wA4
-      h <- hA4
-    }
-    if (page == "A4l") {
-      w <- hA4
-      h <- wA4
-    }
-    if (page == "A5p") {
-      w <- wA4 / 2
-      h <- hA4 / 2
-    }
-    if (page == "A5l") {
-      w <- hA4 / 2
-      h <- wA4 / 2
+
+  # Determine page size
+  if (!isFALSE(plot_on_page)) {
+    # Get A4 or A5 dimensions
+    dimA4 <- c(8.27, 11.69) * ifelse(grepl("^A5", plot_on_page), 0.5, 1)
+    # Flip for landscape
+    if (grepl("l$", plot_on_page)) dimA4 <- rev(dimA4)
+    w <- dimA4[1]; h <- dimA4[2]
+  }
+
+  # Create PDF / object subdirectories and adjust file paths if needed ___________________________
+  if (also.pdf) {
+    fname_pdf <- add_ext_if_missing(fname, "pdf")
+    if (pdf.subdir) {
+      dir.create(pdf.dir.name, showWarnings = FALSE)
+      fname_pdf <- file.path(pdf.dir.name, fname_pdf)
     }
   }
 
-  fnp <- paste0(getwd(), "/", fname)
-  message("\n\n", fnp)
+  if (save.obj) {
+    if (obj.subdir) {
+      dir.create(obj.dir.name, showWarnings = FALSE)
+      fname_qs <- file.path(obj.dir.name, fname)
+    }
+    fname_qs <- add_ext_if_missing(fname_qs, "qs")
+  }
 
+
+  # Plotting ______________________________________________________________________________________
   # Set the plot background to white
   ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
 
   # Save the plot
   cowplot::save_plot(
-    plot = ggobj, filename = fname,
+    plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
     base_width = w, base_height = h, ...
-    )
+  )
 
 
+  # Saving ______________________________________________________________________________________
   if (also.pdf) {
     cowplot::save_plot(
-      plot = ggobj, filename = fname2, base_width = w, base_height = h,
+      plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
       ...)
-    }
+  }
 
-  # Save the ggplot object if requested
   if (save.obj) {
     ggobj.size <- object.size(ggobj)
     if (ggobj.size > max.obj.size) {
       warning("The ggplot object is larger than " , max.obj.size/1e6, "MBs. It is: ", iround(ggobj.size/1e6),
               " MB. Increase max.obj.size to save the object.\n")
     } else {
-      fnp.qs <- sppp(fnp, "qs")
-      qs::qsave(ggobj, file = fnp.qs)
-      CMND <- paste0("ggplot_obj <- xread('", fnp.qs, "')")
+      qs::qsave(ggobj, file = fname_qs)
+      CMND <- paste0("ggplot_obj <- xread('", getwd(), "/", fname_qs, "')")
       message(CMND)
     }
   }
-
   tictoc::toc()
 }
+
+
 
 
 # _________________________________________________________________________________________________

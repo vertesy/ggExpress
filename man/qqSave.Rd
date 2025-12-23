@@ -6,35 +6,37 @@
 \usage{
 qqSave(
   ggobj,
-  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
+  pdf.subdir = FALSE,
+  pdf.dir.name = "pdf",
   save.obj = FALSE,
-  max.obj.size = 5e+06,
-  bgcol = "white",
-  page = c(F, "A4p", "A4l", "A5p", "A5l")[1],
+  obj.subdir = FALSE,
+  obj.dir.name = "ggobj",
   title = FALSE,
   fname = FALSE,
   suffix = NULL,
-  w = 4,
+  bgcol = "white",
+  max.obj.size = 5e+06,
+  w = 6,
   h = w,
+  plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
   ...
 )
 }
 \arguments{
 \item{ggobj}{Plot as ggplot object.}
 
-\item{ext}{File extension (.pdf / .png).}
-
 \item{also.pdf}{Save plot in both png and pdf formats. Default: FALSE.}
+
+\item{pdf.subdir}{Save pdf files into a subdirectory. Default: FALSE.}
+
+\item{pdf.dir.name}{Name of the pdf subdirectory. Default: "pdf".}
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{max.obj.size}{Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).}
+\item{obj.subdir}{Save ggplot objects into a subdirectory. Default: FALSE.}
 
-\item{bgcol}{Plot background color. Default: "white".}
-
-\item{page}{Set page size to a predefined value, eg. "A4".
-Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
+\item{obj.dir.name}{Name of the ggplot object subdirectory. Default: "ggobj".#'}
 
 \item{title}{title field for pdf file (saved into file metadata)}
 
@@ -42,14 +44,22 @@ Default: \code{c(F, "A4p", "A4l", "A5p", "A5l")[1]}}
 
 \item{suffix}{A suffix added to the filename. Default: NULL.}
 
+\item{bgcol}{Plot background color. Default: "white".}
+
+\item{max.obj.size}{Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).}
+
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
 
+\item{plot_on_page}{Use standard page sizes for plots? Options are:
+FALSE, "A4p", "A4l", "A5p", "A5l". Overwrites w and h.}
+
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }
 \description{
-Quick-Save ggplot objects to file (png / pdf) with automatic naming and as .qs object.
+Quick-Save ggplot objects to file with automatic file naming.
+Default format: png, optionally also: .pdf and .qs ggplot object.
 }
 \examples{
 xplot <- ggplot2::qplot(12)
