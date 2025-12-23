@@ -2,4 +2,6 @@
 layout: default
 ---
 
-{% include_relative ../README.md %}
+# Pages test
+
+If you see this page, GitHub Pages works.
