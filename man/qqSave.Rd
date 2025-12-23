@@ -6,6 +6,7 @@
 \usage{
 qqSave(
   ggobj,
+  ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
   also.pdf = FALSE,
   pdf.subdir = FALSE,
   pdf.dir.name = "pdf",

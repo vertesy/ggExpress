@@ -1823,7 +1823,7 @@ qheatmap <- function(
     subtitle <- paste0(
       nrow(data_matrix), "-by-", ncol(data_matrix),
       " | Median:", median(data_matrix, na.rm = TRUE),
-      " | CV:", round(cv(data_matrix), digits = 1) # NOTE: cv() must exist in your environment!
+      " | CV:", round(cv(data_matrix), digits = 1)
     )
   }
 
@@ -1853,7 +1853,7 @@ qheatmap <- function(
 
   # ___ Save the plot if requested ___
   if (save) {
-    qqSave( # NOTE: qqSave is not standard — custom function expected in your project
+    qqSave(
       ggobj = gghm_obj,
       title = plotname,
       fname = file_name,
@@ -1866,7 +1866,7 @@ qheatmap <- function(
   }
 
   # ___ Optionally add a markdown image link ___
-  if (mdlink & save) qMarkdownImageLink(file_name) # NOTE: qMarkdownImageLink is also custom
+  if (mdlink & save) qMarkdownImageLink(file_name)
 
   # ___ Return the plot ___
   if (plot) gghm_obj else invisible(gghm_obj)
@@ -2061,7 +2061,13 @@ qmosaic <- function(
 #' @export
 qqSave <- function(
     ggobj,
-    # ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
+
+    ## Argument `ext` is completely ignored atm.
+    ## It is needed so that ggXXX do not fail
+    ## Atm, png is always saved. This may be changed in the future.
+    ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
+
+
     also.pdf = FALSE,
     pdf.subdir = FALSE, pdf.dir.name = "pdf",
     save.obj = FALSE,
