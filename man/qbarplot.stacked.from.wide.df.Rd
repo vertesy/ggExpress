@@ -22,7 +22,7 @@ qbarplot.stacked.from.wide.df(
   scale = TRUE,
   plot = TRUE,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   hline = FALSE,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
     "uchicago")[4],

@@ -34,7 +34,7 @@ qboxplot(
   vline = FALSE,
   plot = TRUE,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   grid = "y",
   max.categ = 100,
   add = NULL,

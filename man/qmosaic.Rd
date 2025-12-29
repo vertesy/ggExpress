@@ -18,7 +18,7 @@ qmosaic(
   subtitle = NULL,
   caption = NULL,
   filename = NULL,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
   save_matrix = FALSE,
   w = 6,

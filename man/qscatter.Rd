@@ -45,7 +45,7 @@ qscatter(
   w = 7,
   h = w,
   grid = "xy",
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   ...
 )
 }

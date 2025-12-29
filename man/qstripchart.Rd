@@ -36,7 +36,7 @@ qstripchart(
   hline = FALSE,
   vline = FALSE,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   grid = "y",
   annotate_top_labels = FALSE,
   custom_top_labels = FALSE,

@@ -33,7 +33,7 @@ qviolin(
   grid = FALSE,
   plot = TRUE,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   max.categ = 100,
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,

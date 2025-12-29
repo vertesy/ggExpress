@@ -64,7 +64,7 @@ qhistogram <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    xlab = FALSE, plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    xlab = FALSE, plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
     suffix = NULL,
@@ -192,7 +192,7 @@ qdensity <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     logX = FALSE, logY = FALSE,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = TRUE,
@@ -280,7 +280,7 @@ qpie <- function(
     also.pdf = FALSE, save.obj = FALSE,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE, save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
     filename = NULL,
     subtitle = NULL,
@@ -446,8 +446,8 @@ qpie <- function(
 qbarplot <- function(
     vec,
     also.pdf = FALSE,
-    save = MarkdownHelpers::unless.specified("b.save.plots.ggExpress"),
-    save.obj = MarkdownHelpers::unless.specified("b.save.ggobj.ggExpress"),
+    save = get0("b.save.plots.ggExpress", ifnotfound = TRUE),
+    save.obj = get0("b.save.ggobj.ggExpress", ifnotfound = TRUE),
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
@@ -455,7 +455,7 @@ qbarplot <- function(
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
 
     hline = FALSE,
     filtercol = 1,
@@ -660,7 +660,7 @@ qbarplot.stacked.from.wide.df <- function(
     scale = TRUE,
     plot = TRUE,
     save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     hline = FALSE,
     # filtercol = 1,
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
@@ -818,7 +818,7 @@ qbarplot.df <- function(
     grid = "y",
     max.categ = 10,
 
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     w = qqqAxisLength(df), h = 5,
     ...) {
@@ -993,7 +993,7 @@ qscatter <- function(
 
     w = 7, h = w,
     grid = "xy",
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     ...) {
 
   print(plotname)
@@ -1165,7 +1165,7 @@ qboxplot <- function(
     annotation_logticks_Y = logY,
     xlab.angle = 90,
     hline = FALSE, vline = FALSE,
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     grid = "y",
     max.categ = 100,
     add = NULL,
@@ -1342,7 +1342,7 @@ qviolin <- function(
     hline = FALSE, vline = FALSE,
     grid = FALSE,
     plot = TRUE, save = TRUE,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     # , outlier.shape = NULL
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     max.categ = 100,
@@ -1479,7 +1479,7 @@ qstripchart <- function(
     annotation_logticks_Y = logY,
     xlab.angle = 90, xlab = "",
     hline = FALSE, vline = FALSE,
-    save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     grid = "y",
     annotate_top_labels = FALSE,
     custom_top_labels = FALSE,
@@ -1617,7 +1617,7 @@ qvenn <- function(
     caption2 = NULL,
     filename = NULL,
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE, save = TRUE, mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
     # , col = as.character(1:3)[1]
     # , xlab.angle = 90
@@ -1750,7 +1750,6 @@ qvenn <- function(
 #' @importFrom heatmaply ggheatmap
 #' @importFrom ggplotify as.ggplot
 #' @importFrom MarkdownHelpers ww.set.file.extension
-#' @importFrom MarkdownHelpers unless.specified
 #'
 #' @export
 qheatmap <- function(
@@ -1764,7 +1763,7 @@ qheatmap <- function(
     save.obj = FALSE, # whether to save the ggplot object itself
     ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf), # set extension
     save = TRUE, # save the output to file
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE), # create markdown link
+    mdlink = get0("b.mdlink", ifnotfound = FALSE), # create markdown link
     colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
     legend_title = "Intensity",
     scale = c("none", "row", "column"), # heatmaply scaling options
@@ -1932,7 +1931,7 @@ qmosaic <- function(
     plotname = paste("Mosaic plot:", x, "vs", y),
     subtitle = NULL, caption = NULL,
     filename = NULL,
-    mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
     save_matrix = FALSE,
     w = 6, h = 5, limitsize = FALSE,
@@ -2065,7 +2064,7 @@ qqSave <- function(
     ## Argument `ext` is completely ignored atm.
     ## It is needed so that ggXXX do not fail
     ## Atm, png is always saved. This may be changed in the future.
-    ext = MarkdownHelpers::unless.specified("b.def.ext", def = "png"),
+    ext = get0("b.def.ext", ifnotfound = "png"),
 
 
     also.pdf = FALSE,

@@ -18,7 +18,7 @@ qdensity(
   caption = suffix,
   filename = NULL,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   logX = FALSE,
   logY = FALSE,
   palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",

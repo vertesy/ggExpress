@@ -35,7 +35,7 @@ qbarplot.df(
   limitsize = FALSE,
   grid = "y",
   max.categ = 10,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   w = qqqAxisLength(df),
   h = 5,

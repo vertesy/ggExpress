@@ -15,7 +15,7 @@ qheatmap(
   save.obj = FALSE,
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   colors = (grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026")))(256),
   legend_title = "Intensity",
   scale = c("none", "row", "column"),

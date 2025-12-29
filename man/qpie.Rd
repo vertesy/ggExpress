@@ -11,7 +11,7 @@ qpie(
   ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
   plot = TRUE,
   save = TRUE,
-  mdlink = MarkdownHelpers::unless.specified("b.mdlink", def = FALSE),
+  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   plotname = FixPlotName(substitute(vec)),
   filename = NULL,
   subtitle = NULL,
