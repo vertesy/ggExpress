@@ -13,7 +13,7 @@ qheatmap(
   filename = NULL,
   also.pdf = FALSE,
   save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   save = TRUE,
   mdlink = get0("b.mdlink", ifnotfound = FALSE),
   colors = (grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026")))(256),
@@ -56,7 +56,7 @@ Default: "png".}
 \item{save}{Logical; indicates whether to save the plot to file. Default: TRUE.}
 
 \item{mdlink}{Logical; if TRUE and \code{save} is also TRUE, generates a markdown link for the saved
-plot image. Default: FALSE, using \code{MarkdownHelpers::unless.specified}.}
+plot image. Default: FALSE, reads from global variable \code{b.mdlink}.}
 
 \item{scale}{Character; indicates how to scale the data ("none", "row", or "column").
 Default: "row".}

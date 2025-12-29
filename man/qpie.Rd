@@ -8,7 +8,7 @@ qpie(
   vec,
   also.pdf = FALSE,
   save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   plot = TRUE,
   save = TRUE,
   mdlink = get0("b.mdlink", ifnotfound = FALSE),

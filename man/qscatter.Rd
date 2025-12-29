@@ -17,7 +17,7 @@ qscatter(
   save = TRUE,
   save.obj = FALSE,
   also.pdf = TRUE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   label = NULL,
   repel = TRUE,
   hide.legend = FALSE,

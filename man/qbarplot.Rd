@@ -9,7 +9,7 @@ qbarplot(
   also.pdf = FALSE,
   save = get0("b.save.plots.ggExpress", ifnotfound = TRUE),
   save.obj = get0("b.save.ggobj.ggExpress", ifnotfound = TRUE),
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   plot = TRUE,
   plotname = FixPlotName(substitute(vec)),
   subtitle = paste("Median:", iround(median(vec))),

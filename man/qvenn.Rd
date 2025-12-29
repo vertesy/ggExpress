@@ -14,7 +14,7 @@ qvenn(
   caption = parseParamStringWNames(sapply(list, length)),
   caption2 = NULL,
   filename = NULL,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   plot = TRUE,
   save = TRUE,
   mdlink = get0("b.mdlink", ifnotfound = FALSE),

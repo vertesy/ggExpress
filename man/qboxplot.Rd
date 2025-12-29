@@ -25,7 +25,7 @@ qboxplot(
   hide.legend = FALSE,
   also.pdf = TRUE,
   save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   ylab = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,

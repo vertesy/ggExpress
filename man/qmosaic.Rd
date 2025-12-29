@@ -9,7 +9,7 @@ qmosaic(
   x,
   y,
   weight = NULL,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE),
+  ext = "png",
   also.pdf = TRUE,
   save.obj = FALSE,
   plot = TRUE,
@@ -38,8 +38,7 @@ qmosaic(
 If \code{NULL}, the function looks for a "Freq" column or assumes equal weights.
 Default: \code{NULL}.}
 
-\item{ext}{File extension for output image. Default: set via
-\code{MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE)}.}
+\item{ext}{File extension for output image. Default:}
 
 \item{also.pdf}{Save plot in both PNG and PDF formats. Default: \code{TRUE}.}
 
@@ -58,7 +57,7 @@ Default: \code{NULL}.}
 \item{filename}{Optional manual filename override. Default: \code{NULL}.}
 
 \item{mdlink}{Insert a Markdown image link in reports. Default: read from
-\code{"b.mdlink"} global variable using \code{MarkdownHelpers::unless.specified()}.}
+\code{"b.mdlink"} global variable.}
 
 \item{palette_use}{Color palette name. Supported: RColorBrewer palettes
 (\code{"Set2"}, \code{"Dark2"}, \code{"Paired"}, \code{"Pastel1"}, \code{"Accent"}, \code{"Set3"}, \code{"Spectral"})

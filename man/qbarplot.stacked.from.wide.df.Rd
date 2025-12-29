@@ -13,7 +13,7 @@ qbarplot.stacked.from.wide.df(
   label = NULL,
   also.pdf = FALSE,
   save.obj = FALSE,
-  ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  ext = "png",
   plotname = FixPlotName(substitute(df)),
   subtitle = NULL,
   suffix = NULL,

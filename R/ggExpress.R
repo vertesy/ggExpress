@@ -63,7 +63,8 @@
 qhistogram <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     xlab = FALSE, plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
@@ -184,7 +185,8 @@ qhistogram <- function(
 qdensity <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     xlab = FALSE, plot = TRUE,
     xlab.angle = 90,
     plotname = FixPlotName(substitute(vec)),
@@ -278,7 +280,8 @@ qdensity <- function(
 qpie <- function(
     vec,
     also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     plot = TRUE, save = TRUE,
     mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
@@ -448,7 +451,8 @@ qbarplot <- function(
     also.pdf = FALSE,
     save = get0("b.save.plots.ggExpress", ifnotfound = TRUE),
     save.obj = get0("b.save.ggobj.ggExpress", ifnotfound = TRUE),
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
     subtitle = paste("Median:", iround(median(vec))),
@@ -653,7 +657,8 @@ qbarplot.stacked.from.wide.df <- function(
     color = 1,
     label = NULL,
     also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
     filename = NULL,
@@ -819,7 +824,8 @@ qbarplot.df <- function(
     max.categ = 10,
 
     mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
     w = qqqAxisLength(df), h = 5,
     ...) {
 
@@ -969,7 +975,8 @@ qscatter <- function(
     save = TRUE,
     save.obj = FALSE,
     also.pdf = TRUE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
 
     label = NULL, repel = TRUE,
     hide.legend = FALSE,
@@ -1159,7 +1166,8 @@ qboxplot <- function(
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     ylab = NULL, # xlab = NULL,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1335,7 +1343,8 @@ qviolin <- function(
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = FALSE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 45,
@@ -1474,7 +1483,8 @@ qstripchart <- function(
     palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     hide.legend = FALSE,
     also.pdf = TRUE, save.obj = FALSE,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 90, xlab = "",
@@ -1616,7 +1626,8 @@ qvenn <- function(
     caption = parseParamStringWNames(sapply(list, length)),
     caption2 = NULL,
     filename = NULL,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
     # , col = as.character(1:3)[1]
@@ -1679,7 +1690,7 @@ qvenn <- function(
 #' @param title The main title for the heatmap. Default: "Heatmap".
 #' @param save Logical; indicates whether to save the plot to file. Default: TRUE.
 #' @param mdlink Logical; if TRUE and `save` is also TRUE, generates a markdown link for the saved
-#' plot image. Default: FALSE, using `MarkdownHelpers::unless.specified`.
+#' plot image. Default: FALSE, reads from global variable `b.mdlink`.
 #' @param plotname The base name for the plot file. Default: "heatmap".
 #' @param subtitle The subtitle for the heatmap. Default: "NULL" (indicating no subtitle).
 #' @param caption The caption for the heatmap. Default: "mousse".
@@ -1749,7 +1760,7 @@ qvenn <- function(
 #'
 #' @importFrom heatmaply ggheatmap
 #' @importFrom ggplotify as.ggplot
-#' @importFrom MarkdownHelpers ww.set.file.extension
+# #' @importFrom MarkdownHelpers ww.set.file.extension
 #'
 #' @export
 qheatmap <- function(
@@ -1761,7 +1772,8 @@ qheatmap <- function(
     filename = NULL,
     also.pdf = FALSE, # whether to save also as PDF
     save.obj = FALSE, # whether to save the ggplot object itself
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf), # set extension
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf), # set extension
     save = TRUE, # save the output to file
     mdlink = get0("b.mdlink", ifnotfound = FALSE), # create markdown link
     colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
@@ -1886,8 +1898,7 @@ qheatmap <- function(
 #' @param weight Optional column name (string) specifying weights or frequencies.
 #'   If `NULL`, the function looks for a "Freq" column or assumes equal weights.
 #'   Default: `NULL`.
-#' @param ext File extension for output image. Default: set via
-#'   `MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE)`.
+#' @param ext File extension for output image. Default:
 #' @param also.pdf Save plot in both PNG and PDF formats. Default: `TRUE`.
 #' @param save.obj Save the ggplot object as an `.RDS` file. Default: `FALSE`.
 #' @param plot Display the plot after creation. Default: `TRUE`.
@@ -1897,7 +1908,7 @@ qheatmap <- function(
 #' @param caption Optional text to display at the bottom right of the plot. Default: `NULL`.
 #' @param filename Optional manual filename override. Default: `NULL`.
 #' @param mdlink Insert a Markdown image link in reports. Default: read from
-#'   `"b.mdlink"` global variable using `MarkdownHelpers::unless.specified()`.
+#'   `"b.mdlink"` global variable.
 #' @param palette_use Color palette name. Supported: RColorBrewer palettes
 #'   (`"Set2"`, `"Dark2"`, `"Paired"`, `"Pastel1"`, `"Accent"`, `"Set3"`, `"Spectral"`)
 #'   or `"auto"` for automatic hues. Default: `"Set2"`.
@@ -1925,7 +1936,8 @@ qmosaic <- function(
     df,
     x, y,
     weight = NULL,
-    ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE),
     also.pdf = TRUE, save.obj = FALSE,
     plot = TRUE, save = TRUE,
     plotname = paste("Mosaic plot:", x, "vs", y),
