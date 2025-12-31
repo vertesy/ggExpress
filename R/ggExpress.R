@@ -1538,8 +1538,11 @@ qviolin <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #'
-#' @param annotate_top_labels Logical or character vector, as labels to add above each column.
-#' @param custom_top_labels Add custom top labels provided in `annotate_top_labels` argument. Default: FALSE
+#' @param annotate_top_labels Logical indicating whether to add one label per x-category
+#' at the top of the plot, or a character/numeric vector of labels to use directly.
+#' @param custom_top_labels Optional character or numeric vector of custom labels,
+#' one per x-category, overriding automatically computed labels.
+
 #' @param max.categ The maximum allowed number of unique categories.
 #'
 #' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
@@ -1640,17 +1643,36 @@ qstripchart <- function(
 
   # Top row annotation
   if (!isFALSE(annotate_top_labels)) {
-    toplabs <- qqqSummarize_mean_median(df_XYcol, x = eval.parent(x), y = eval.parent(y))
 
-    if (!isFALSE(custom_top_labels)) {
-      stopifnot(length(custom_top_labels) == length(unique(df_XYcol[[vars[x]]])))
+    xvar <- vars[x]
+    yvar <- vars[y]
+
+    labels <- if (isFALSE(custom_top_labels)) {
+      NULL
     } else {
+      stopifnot(length(custom_top_labels) == dplyr::n_distinct(df_XYcol[[xvar]]))
       custom_top_labels
     }
-    p <- p + annotate_top_labels()
+
+    p <- p + qqqAnnotateTopLabels(
+      df = df_XYcol,
+      x  = xvar,
+      y  = yvar,
+      labels = labels
+    )
   }
 
-
+  # THIS WAS NEVER WORKING
+  # if (!isFALSE(annotate_top_labels)) {
+  #   toplabs <- qqqSummarize_mean_median(df_XYcol, x = eval.parent(x), y = eval.parent(y))
+  #
+  #   if (!isFALSE(custom_top_labels)) {
+  #     stopifnot(length(custom_top_labels) == length(unique(df_XYcol[[vars[x]]])))
+  #   } else {
+  #     custom_top_labels
+  #   }
+  #   p <- p + annotate_top_labels()
+  # }
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
@@ -2468,6 +2490,49 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   utils::stack(ls)[, 2:1]
 }
 
+
+# _________________________________________________________________________________________________
+#' @title Annotate Top Labels on a ggplot
+#'
+#' @description Creates a ggplot2 text layer that annotates one label per x-category
+#' at the top of the plotting panel. Labels can be computed from the data (default)
+#' or provided explicitly.
+#'
+#' @param df A data frame containing the data to be plotted.
+#' @param x Character string. Column name mapped to the x-axis.
+#' @param y Character string. Numeric column name mapped to the y-axis.
+#' @param labels Optional character or numeric vector of labels, one per x-category.
+#' If NULL, labels are computed using \code{fun}.
+#' @param fun Summary function used to compute labels when \code{labels} is NULL.
+#' Default is \code{mean}.
+#' @param digits Number of digits used to round computed labels. Default is 2.
+#'
+#' @return A ggplot2 layer (\code{geom_text}) to be added to a ggplot object.
+#'
+#' @examples
+#' p + qqqAnnotateTopLabels(df, x = "dose", y = "len")
+#' p + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
+#'
+qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2) {
+  stopifnot(is.character(x), is.character(y))
+
+  lab_df <- df |>
+    dplyr::group_by(.data[[x]]) |>
+    dplyr::summarise(
+      lab = if (is.null(labels)) fun(.data[[y]], na.rm = TRUE) else labels[dplyr::cur_group_id()],
+      .groups = "drop"
+    ) |>
+    dplyr::mutate(lab = round(lab, digits))
+
+  ggplot2::geom_text(
+    data = lab_df,
+    ggplot2::aes(x = .data[[x]], y = Inf, label = lab),
+    vjust = -0.6,
+    inherit.aes = FALSE
+  )
+}
+
+
 # _________________________________________________________________________________________________
 #' @title Assert Maximum Categories in a DataFrame Column
 #'
@@ -2484,6 +2549,9 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
   # Assert that the number of categories is less than or equal to max.categ
   stopifnot(nrCategories <= max.categ)
 }
+
+
+
 
 
 

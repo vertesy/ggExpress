@@ -104,9 +104,11 @@ qstripchart(
 
 \item{vline}{Draw a vertical line on the plot.}
 
-\item{annotate_top_labels}{Logical or character vector, as labels to add above each column.}
+\item{annotate_top_labels}{Logical indicating whether to add one label per x-category
+at the top of the plot, or a character/numeric vector of labels to use directly.}
 
-\item{custom_top_labels}{Add custom top labels provided in \code{annotate_top_labels} argument. Default: FALSE}
+\item{custom_top_labels}{Optional character or numeric vector of custom labels,
+one per x-category, overriding automatically computed labels.}
 
 \item{max.categ}{The maximum allowed number of unique categories.}
 
