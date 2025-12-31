@@ -1756,8 +1756,9 @@ qvenn <- function(
     mdlink = getOption("gg.mdlink", F),
     w = 8, h = 0.75 * w,
     ...) {
-  stopifnot(is.list(list), length(list) > 0L)
   #
+  stopifnot(is.list(list), length(list) > 0L)
+
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
   p <- ggVennDiagram::ggVennDiagram(list, ...) +
@@ -1775,12 +1776,7 @@ qvenn <- function(
   s1 <- paste0(length(list), "s")
   s2 <- kpp(s1, paste0(length(unique(unlist(list))), "el"))
 
-  file_name <- if (!is.null(filename)) {
-    kpp(filename, s2)
-  } else {
-    sppp(plotname, suffix, s2, "venn", ext)
-  }
-
+  file_name <- if (!is.null(filename)) kpp(filename, s2) else sppp(plotname, suffix, s2, "venn", ext)
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name,
@@ -2392,7 +2388,7 @@ qA4_grid_plot <- function(
 #' @title qMarkdownImageLink
 #'
 #' @description Insert Markdown image link to .md report
-#' @param file_name file_name
+#' @param file_name File name (basename) of the image file to convert into a markdown image link.
 #' @export
 #'
 #' @examples qMarkdownImageLink(file_name = "myplot.pdf")
