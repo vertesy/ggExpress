@@ -6,26 +6,25 @@
 \usage{
 qdensity(
   vec,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
-  xlab = FALSE,
-  plot = TRUE,
-  xlab.angle = 90,
   plotname = FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  plot = TRUE,
   save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
+  xlab = FALSE,
+  xlab.angle = 90,
   logX = FALSE,
   logY = FALSE,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   hide.legend = TRUE,
   max.names = 50,
   grid = FALSE,
+  mdlink = getOption("gg.mdlink", F),
   w = 5,
   h = w,
   ...
@@ -33,18 +32,6 @@ qdensity(
 }
 \arguments{
 \item{vec}{The variable to plot.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
-\item{xlab}{X-axis label. Default: FALSE.}
-
-\item{plot}{Display the plot.}
-
-\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
@@ -56,21 +43,34 @@ qdensity(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
+\item{plot}{Display the plot.}
+
 \item{save}{Save the plot into a file.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{xlab}{X-axis label. Default: FALSE.}
+
+\item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
 \item{logX}{Make X axis log10-scale.}
 
 \item{logY}{Make Y axis log10-scale.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{hide.legend}{Hide legend.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

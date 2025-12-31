@@ -6,16 +6,16 @@
 \usage{
 qqSave(
   ggobj,
-  ext = get0("b.def.ext", ifnotfound = "png"),
-  also.pdf = FALSE,
-  pdf.subdir = FALSE,
-  pdf.dir.name = "pdf",
-  save.obj = FALSE,
-  obj.subdir = FALSE,
-  obj.dir.name = "ggobj",
   title = FALSE,
   fname = FALSE,
   suffix = NULL,
+  ext = "png",
+  also.pdf = FALSE,
+  pdf.subdir = FALSE,
+  pdf.dir.name = "pdf",
+  save.obj = getOption("gg.save.obj", F),
+  obj.subdir = FALSE,
+  obj.dir.name = "ggobj",
   bgcol = "white",
   max.obj.size = 5e+06,
   w = 6,
@@ -26,6 +26,12 @@ qqSave(
 }
 \arguments{
 \item{ggobj}{Plot as ggplot object.}
+
+\item{title}{title field for pdf file (saved into file metadata)}
+
+\item{fname}{Manual filename}
+
+\item{suffix}{A suffix added to the filename. Default: NULL.}
 
 \item{also.pdf}{Save plot in both png and pdf formats. Default: FALSE.}
 
@@ -38,12 +44,6 @@ qqSave(
 \item{obj.subdir}{Save ggplot objects into a subdirectory. Default: FALSE.}
 
 \item{obj.dir.name}{Name of the ggplot object subdirectory. Default: "ggobj".#'}
-
-\item{title}{title field for pdf file (saved into file metadata)}
-
-\item{fname}{Manual filename}
-
-\item{suffix}{A suffix added to the filename. Default: NULL.}
 
 \item{bgcol}{Plot background color. Default: "white".}
 

@@ -6,18 +6,17 @@
 \usage{
 qpie(
   vec,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
-  plot = TRUE,
-  save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   plotname = FixPlotName(substitute(vec)),
-  filename = NULL,
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   caption.ext = TRUE,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   NoLegend = FALSE,
   LegendSide = TRUE,
   LegendTitle = "",
@@ -25,14 +24,14 @@ qpie(
   NamedSlices = FALSE,
   custom.order = FALSE,
   extended.canvas = TRUE,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   custom.margin = TRUE,
   max.categories = 100,
   max.names = 10,
   decr.order = TRUE,
   both_pc_and_value = FALSE,
   labels = "names",
+  mdlink = getOption("gg.mdlink", F),
   w = 7,
   h = 5,
   ...
@@ -41,27 +40,25 @@ qpie(
 \arguments{
 \item{vec}{The variable to plot.}
 
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
-\item{plot}{Display the plot.}
-
-\item{save}{Save the plot into a file.}
-
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
-
-\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
 
 \item{suffix}{Optional suffix added to the filename. Default is NULL.}
 
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
+
+\item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
+
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{NoLegend}{No legend.}
 
@@ -77,7 +74,7 @@ qpie(
 
 \item{extended.canvas}{Make an extended canvas. Default: TRUE.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{custom.margin}{Custom plot margin. Default: TRUE.}
 
@@ -90,6 +87,9 @@ qpie(
 \item{both_pc_and_value}{Report both percentage and number.}
 
 \item{labels}{Slice labels. Set to NULL to remove slice names.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

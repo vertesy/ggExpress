@@ -8,6 +8,32 @@
 # devtools::load_all("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 # devtools::check_man("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 
+
+
+# ______________________________________________________________________________________________----
+# Define package options  ----
+
+.onLoad <- function(libname, pkgname) {
+  op <- options()
+
+  pkg_op <- list(
+    # insert at top
+
+    gg.fill.col = "gold",
+    gg.save.obj = FALSE,
+    gg.palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    # gg.def.ext = "png",
+    gg.mdlink = FALSE
+  )
+
+  # Only set options that are not already defined
+  to_set <- pkg_op[!names(pkg_op) %in% names(op)]
+  if (length(to_set)) options(to_set)
+
+  invisible()
+}
+
+
 # ______________________________________________________________________________________________----
 # Simple plots  ----
 # ____________________________________________________________________
@@ -23,31 +49,36 @@
 #' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param vec A numeric vector for which the histogram is to be plotted.
+#'
 #' @param ext File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.
+#' @param plot Logical indicating whether to display the plot. Default is TRUE.
+#' @param save Logical indicating whether to save the plot into a file. Default is TRUE.
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param xlab Label for the X-axis. By default, it uses the plot name.
-#' @param plot Logical indicating whether to display the plot. Default is TRUE.
-#' @param add Character defining the type of plot annotations to add. Default is 'median'.
-#' @param save Logical indicating whether to save the plot into a file. Default is TRUE.
-#' @param mdlink Logical indicating whether to insert .pdf and .png image links in the markdown report, set by "path_of_report". Default is FALSE.
+#'
 #' @param plotname Title of the plot and the name of the file (unless specified in `filename`). Default is parsed from `vec`.
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Optional filename for the saved plot. Default is parsed from `plotname`.
+#'
+#' @param xlab Label for the X-axis. By default, it uses the plot name.
+#' @param add Character defining the type of plot annotations to add. Default is 'median'.
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
-#' @param palette_use Color palette to use from GGpubr. Default is 'jco'.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param col Color of the plot. Default is '1'.
 #' @param xlab.angle Angle to rotate X-axis labels. Default is 90 degrees.
 #' @param hide.legend Logical indicating whether to hide the legend. Default is TRUE.
 #' @param max.names Maximum number of names to show on the axis. Default is 50.
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param logX Logical indicating whether to make X axis on log10 scale. Default is FALSE.
 #' @param logY Logical indicating whether to make Y axis on log10 scale. Default is FALSE.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param w Width of the plot. Default is 5.
 #' @param h Height of the plot. Default is the same as width.
 #' @param ... Additional parameters for the corresponding plotting function.
@@ -62,26 +93,32 @@
 #' @export
 qhistogram <- function(
     vec,
-    also.pdf = FALSE, save.obj = FALSE,
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
-    xlab = FALSE, plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
+
+    plot = TRUE,
+    save = TRUE,
+    also.pdf = FALSE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    save.obj = getOption("gg.save.obj", F),
+
+    xlab = FALSE,
     logX = FALSE, logY = FALSE,
     annotation_logticks_X = logX, annotation_logticks_Y = logY,
     vline = FALSE, filtercol = 0,
     add = "median",
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     col = as.character(1:3)[1],
     xlab.angle = 90,
     hide.legend = TRUE,
     max.names = 50,
-    grid = "y",
-    w = 5, h = w, ...) {
+    grid = "y", mdlink = getOption("gg.mdlink", F),
+    w = 5, h = w,
+    ...) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -155,24 +192,29 @@ qhistogram <- function(
 #' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param vec The variable to plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param plot Display the plot.
+#'
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
 #' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
 #' @param logX Make X axis log10-scale.
 #' @param xlab X-axis label. Default: FALSE.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
-#' @param palette_use GGpubr color palette to use.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param hide.legend Hide legend.
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -184,22 +226,26 @@ qhistogram <- function(
 #' qdensity(weight)
 qdensity <- function(
     vec,
-    also.pdf = FALSE, save.obj = FALSE,
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
-    xlab = FALSE, plot = TRUE,
-    xlab.angle = 90,
     plotname = FixPlotName(substitute(vec)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
+
+    plot = TRUE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
+    xlab = FALSE,
+    xlab.angle = 90,
     logX = FALSE, logY = FALSE,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     hide.legend = TRUE,
     max.names = 50,
-    grid = FALSE,
+    grid = FALSE, mdlink = getOption("gg.mdlink", F),
     w = 5, h = w, ...) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
@@ -244,17 +290,18 @@ qdensity <- function(
 #' pdf files, and the ggplot object as a .qs file.
 #'
 #' @param vec The variable to plot.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param plot Display the plot.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
 #' @param LegendSide Legend side.
 #' @param LegendTitle Legend title.
 #' @param NoLegend No legend.
@@ -266,9 +313,12 @@ qdensity <- function(
 #' @param decr.order Slices in the order of df. By default, they are ordered alphabetically in the plot.
 #' @param both_pc_and_value Report both percentage and number.
 #' @param custom.order Custom order.
-#' @param palette_use GGpubr color palette to use.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param labels Slice labels. Set to NULL to remove slice names.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -279,30 +329,33 @@ qdensity <- function(
 #' qpie(vec = xvec)
 qpie <- function(
     vec,
-    also.pdf = FALSE, save.obj = FALSE,
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
-    plot = TRUE, save = TRUE,
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     plotname = FixPlotName(substitute(vec)),
-    filename = NULL,
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     caption.ext = TRUE,
+    filename = NULL,
+
+    plot = TRUE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
     NoLegend = FALSE,
     LegendSide = TRUE,
     LegendTitle = "",
     pcdigits = 2, NamedSlices = FALSE,
     custom.order = FALSE,
     extended.canvas = TRUE,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     custom.margin = TRUE,
     max.categories = 100,
     max.names = 10,
     decr.order = TRUE,
     both_pc_and_value = FALSE,
-    labels = "names", # Set to NULL to remove slice names.
+    labels = "names", mdlink = getOption("gg.mdlink", F),
     w = 7, h = 5,
     ...) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)), all(vec >= 0))
@@ -408,14 +461,14 @@ qpie <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #'
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param ext File extension (.pdf / .png).
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #'
 #' @param col The fill color of the bars. Default: 1st color of the palette.
-#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by
 #' -1 or 1. Takes effect if "*line" is defined.
@@ -434,10 +487,12 @@ qpie <- function(
 #' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
-#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @return It returns a ggplot object if `plot` is TRUE.
@@ -448,24 +503,24 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
     vec,
-    also.pdf = FALSE,
-    save = get0("b.save.plots.ggExpress", ifnotfound = TRUE),
-    save.obj = get0("b.save.ggobj.ggExpress", ifnotfound = TRUE),
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
-    plot = TRUE,
     plotname = FixPlotName(substitute(vec)),
     subtitle = paste("Median:", iround(median(vec))),
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
+
+    plot = TRUE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
 
     hline = FALSE,
     filtercol = 1,
     filtercol_default = TRUE, # c("#008B45FF", "#EE0000FF") # Default green/red colors for filtering
 
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     col = 1,
 
     xlab = "", xlab.angle = 45,
@@ -477,8 +532,8 @@ qbarplot <- function(
     legend.title = NULL,
     max.names = 100,
     limitsize = FALSE,
-    grid = "y",
     ylab = NULL,
+    grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(vec, factor = 0.25), h = 5,
     ...) {
 
@@ -603,21 +658,24 @@ qbarplot <- function(
 #' @param z Colname to split along Y axis. Default: "Category.
 #' @param color Color (split) by along Y.
 # #' @param fill Color (split) by along Y.
-#' @param ext File extension (.pdf / .png).
-#' @param also.pdf Save plot in both png and pdf formats.
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
-#' @param scale Scale the y axis. Default: TRUE.
+#'
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param ext File extension (.pdf / .png).
+#' @param also.pdf Save plot in both png and pdf formats.
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
+#' @param scale Scale the y axis. Default: TRUE.
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param hline Draw a horizontal line on the plot.
 # #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param palette_use GGpubr color palette to use.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param xlab X-axis label. Default: `x`.
 #' @param logY Make Y axis log10-scale.
@@ -629,6 +687,9 @@ qbarplot <- function(
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
 # #' @param top The number of top categories to keep. Default: NULL.
+#'
+#'  @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -653,31 +714,36 @@ qbarplot.stacked.from.wide.df <- function(
     x = "Samples",
     y = "Fraction",
     z = "Category",
-    # fill = colnames(df)[3],
-    color = 1,
-    label = NULL,
-    also.pdf = FALSE, save.obj = FALSE,
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
+
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
     filename = NULL,
-    scale = TRUE,
+
     plot = TRUE,
     save = TRUE,
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
+    # fill = colnames(df)[3],
+    color = 1,
+    label = NULL,
+
+    scale = TRUE,
+
     hline = FALSE,
     # filtercol = 1,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     xlab.angle = 45, xlab = x,
     logY = FALSE,
     annotation_logticks_Y = logY,
     hide.legend = FALSE,
     max.names = 50,
     limitsize = FALSE,
-    grid = "y",
     max.categ = 10,
     # top = NULL,
+    grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df, factor = .7), h = 5,
     ...) {
   message(plotname)
@@ -752,11 +818,12 @@ qbarplot.stacked.from.wide.df <- function(
 #'
 #' @param fill Color (split) by along Y. Default: `colnames(df)[3]`.
 #' @param color Color (split) by along Y.
-#' @param palette_use GGpubr color palette to use.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param label Label text.
 #'
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
+#' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #'
@@ -777,8 +844,8 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ Maximum number of categories to show on the plot. Default is 10.
 #'
-#' @param ext File extension (.pdf / .png).
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -802,12 +869,15 @@ qbarplot.df <- function(
 
     fill = colnames(df)[3],
     color = 1,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     label = NULL,
 
     plot = TRUE,
-    save = TRUE, also.pdf = FALSE,
-    save.obj = FALSE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
 
     scale = TRUE,
     position = if(scale) "fill" else "dodge", # also can be "stack"
@@ -820,12 +890,10 @@ qbarplot.df <- function(
     hide.legend = TRUE,
     max.names = 50,
     limitsize = FALSE,
-    grid = "y",
     max.categ = 10,
 
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    ext = "png",
+
+    grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df), h = 5,
     ...) {
 
@@ -922,15 +990,15 @@ qbarplot.df <- function(
 #'
 #' @param plot Display the plot.
 #' @param save Save the plot into a file.
+#' @param ext File extension (.pdf / .png).
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param also.pdf Save plot in both png and pdf formats.
-#' @param ext File extension (.pdf / .png).
 #'
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
 #' @param hide.legend Hide legend.
 #' @param col Color of the plot.
-#' @param palette_use GGpubr color palette to use.
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #'
 #' @param xlab X-axis label. Default: NULL.
 #' @param ylab Y-axis label. Default: NULL.
@@ -952,10 +1020,11 @@ qbarplot.df <- function(
 #' @param add_contour_plot Add 2D contour plot. See: http://www.sthda.com/english/articles/32-r-graphics-essentials/131-plot-two-continuous-variables-scatter-graph-and-alternatives/#continuous-bivariate-distribution
 #' @param correlation_r2 Add a correlation value to the plot. Set as "pearson" or "spearman". Default: FALSE.
 #'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
 #' @examples dfx <- as.data.frame(cbind("AA" = rnorm(500), "BB" = rnorm(500)))
@@ -973,16 +1042,16 @@ qscatter <- function(
 
     plot = TRUE,
     save = TRUE,
-    save.obj = FALSE,
-    also.pdf = TRUE,
     ext = "png",
     # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
 
     label = NULL, repel = TRUE,
     hide.legend = FALSE,
     col = c(NULL, 3)[1],
     # fill = NULL,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
 
     xlab = NULL, ylab = NULL,
     xlab.angle = 90,
@@ -998,9 +1067,8 @@ qscatter <- function(
     add_contour_plot = FALSE,
     correlation_r2 = FALSE, # add as  c("pearson", "spearman")
 
+    grid = "xy", mdlink = getOption("gg.mdlink", F),
     w = 7, h = w,
-    grid = "xy",
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     ...) {
 
   print(plotname)
@@ -1113,14 +1181,19 @@ qscatter <- function(
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
 #' @param fill Fill color of the plot. Default: `gold`.
+#'
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the plotname. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
 #' @param ylab Y-axis label. Default: `NULL`.
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
@@ -1130,16 +1203,16 @@ qscatter <- function(
 #' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
-#' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param hide.legend Hide legend.
-#' @param palette_use GGpubr color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
 #' @param add Add additional graphical elements to the plot. Default: NULL.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -1152,33 +1225,38 @@ qscatter <- function(
 qboxplot <- function(
     df_XYcol_or_list,
     x = 1, y = 2,
-    col = NULL,
-    fill = "gold",
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
+
+    plot = TRUE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
+    col = NULL,
+    fill = getOption("gg.fill.col", "gold"),
     outlier.shape = NULL,
     stat.test = TRUE,
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     hide.legend = FALSE,
-    also.pdf = TRUE, save.obj = FALSE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     ylab = NULL, # xlab = NULL,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 90,
     hline = FALSE, vline = FALSE,
-    plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    grid = "y",
+
     max.categ = 100,
     add = NULL,
     # position = if(add == "jitter") position_dodge(width=.7) else NULL,
     # add.params = if(add == "jitter") list(shape = "supp"),
+    grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
 
@@ -1301,9 +1379,13 @@ qboxplot <- function(
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -1311,15 +1393,15 @@ qboxplot <- function(
 #' @param stat.method stat method. NULL for default
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
-#' @param plot Display the plot.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param hide.legend Hide legend.
-#' @param palette_use GGpubr color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #' @param max.categ The maximum allowed number of unique categories.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -1332,29 +1414,32 @@ qboxplot <- function(
 qviolin <- function(
     df_XYcol_or_list,
     x = 1, y = 2, col = NULL,
-    fill = "gold",
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    stat.test = FALSE,
-    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
-    hide.legend = FALSE,
-    also.pdf = FALSE, save.obj = FALSE,
+
+    plot = TRUE,
+    save = TRUE,
     ext = "png",
     # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
+    fill = getOption("gg.fill.col", "gold"),
+    stat.test = FALSE,
+    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
+    palette_use = getOption("gg.palette_use", 'jco'),
+    hide.legend = FALSE,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 45,
     hline = FALSE, vline = FALSE,
-    grid = FALSE,
-    plot = TRUE, save = TRUE,
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
     # , outlier.shape = NULL
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     max.categ = 100,
+    grid = FALSE, mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
   df_XYcol <- if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
@@ -1424,17 +1509,21 @@ qviolin <- function(
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
 #' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
 #' @param fill Fill color of the plot. Default: `gold`.
+#'
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
 #' @param caption Optional text added to bottom right corner of the plot. Default = suffix.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
-#' @param ylab Y-axis label. Default: NULL.
+#'
 #' @param plot Display the plot.
-#' @param add Add boxplot or violin chart? Default: add = c("violin", "mean_sd"); it can be "boxplot" or only "mean_sd".
+#' @param save Save the plot into a file.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#'
+#' @param ylab Y-axis label. Default: NULL.
+#' @param add Add boxplot or violin chart? Default: add = c("violin", "mean_sd"); it can be "boxplot" or only "mean_sd".
 #' @param logY Make Y axis log10-scale.
 #' @param hline Draw a horizontal line on the plot.
 #' @param vline Draw a vertical line on the plot.
@@ -1445,16 +1534,16 @@ qviolin <- function(
 #' @param size.point Size of points.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param hide.legend Hide legend.
-#' @param palette_use GGpubr color palette to use.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
 #'
 #' @param annotate_top_labels Logical or character vector, as labels to add above each column.
-#' @param custom_top_labels
-#'
+#' @param custom_top_labels Add custom top labels provided in `annotate_top_labels` argument. Default: FALSE
 #' @param max.categ The maximum allowed number of unique categories.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -1468,32 +1557,37 @@ qviolin <- function(
 qstripchart <- function(
     df_XYcol_or_list,
     x = 1, y = 2, col = NULL,
-    fill = "gold",
     plotname = FixPlotName(substitute(df_XYcol_or_list)),
     subtitle = NULL,
     suffix = NULL,
     caption = suffix,
     filename = NULL,
-    ylab = NULL,
+
     plot = TRUE,
+    save = TRUE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
+    fill = getOption("gg.fill.col", "gold"),
+    ylab = NULL,
     add = c("violin", "mean_sd"),
     size.point = .2,
     stat.test = TRUE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
-    palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
+    palette_use = getOption("gg.palette_use", 'jco'),
     hide.legend = FALSE,
-    also.pdf = TRUE, save.obj = FALSE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 90, xlab = "",
     hline = FALSE, vline = FALSE,
-    save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    grid = "y",
+
     annotate_top_labels = FALSE,
     custom_top_labels = FALSE,
     max.categ = 100,
+    grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
     ...) {
   message("Column 1 should be the X-, Column 2 the Y-axis.")
@@ -1542,10 +1636,6 @@ qstripchart <- function(
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
-
-
-  "  annotate_top_labels = FALSE,"
-  "custom_top_labels = FALSE,"
 
 
   # Top row annotation
@@ -1598,16 +1688,20 @@ qstripchart <- function(
 #' @param caption Optional text added to bottom right corner of the plot. Default is list element lengths parsed.
 #' @param caption2 Optional text added to bottom right corner of the plot. Default is NULL.
 #' @param filename Manually provided filename (optional). Default: parsed from `plotname`.
+#'
+#' @param plot Display the plot.
+#' @param save Save the plot into a file.
 #' @param ext File extension (.pdf / .png).
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param plot Display the plot.
-#' @param save Save the plot into a file.
-#' @param mdlink Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".
+#'
 #' @param col.min Color scale minimum. Default: white.
 #' @param col.max Color scale maximum. Default: red.
 #' @param hide.legend Hide legend.
 #' @param x_exp Expand axis to show long set labels. Default: 0.2.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the plot.
 #' @param h Height of the plot. Default: h = w * 0.75.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
@@ -1619,22 +1713,25 @@ qstripchart <- function(
 #' @export
 qvenn <- function(
     list,
-    also.pdf = FALSE, save.obj = FALSE,
+
     plotname = FixPlotName(substitute(list)),
     suffix = NULL,
     subtitle = paste(length(unique(unlist(list))), "elements in total"),
     caption = parseParamStringWNames(sapply(list, length)),
     caption2 = NULL,
     filename = NULL,
+
+    plot = TRUE,
+    save = TRUE,
     ext = "png",
     # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    plot = TRUE, save = TRUE, mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    # , palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4]
-    # , col = as.character(1:3)[1]
-    # , xlab.angle = 90
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
     col.min = "white", col.max = "red",
     hide.legend = FALSE,
     x_exp = .2,
+    mdlink = getOption("gg.mdlink", F),
     w = 8, h = 0.75 * w,
     ...) {
   stopifnot(is.list(list), length(list) > 0L)
@@ -1684,19 +1781,20 @@ qvenn <- function(
 #'
 #' @param data_matrix The data matrix to be plotted; must be either a matrix or a data frame.
 #' Default: None (must be provided).
-#' @param also.pdf Logical; indicates whether to also save the plot as a PDF. Default: FALSE.
-#' @param ext The file extension for the saved plot image, adjusted based on `also.pdf`.
-#' Default: "png".
+#'
 #' @param title The main title for the heatmap. Default: "Heatmap".
-#' @param save Logical; indicates whether to save the plot to file. Default: TRUE.
-#' @param mdlink Logical; if TRUE and `save` is also TRUE, generates a markdown link for the saved
-#' plot image. Default: FALSE, reads from global variable `b.mdlink`.
 #' @param plotname The base name for the plot file. Default: "heatmap".
 #' @param subtitle The subtitle for the heatmap. Default: "NULL" (indicating no subtitle).
 #' @param caption The caption for the heatmap. Default: "mousse".
 #' @param suffix An optional suffix to append to the plot filename. Default: NULL.
 #' @param filename The specific filename to save the plot as; if NULL, a name is generated based on
 #' `plotname` and other parameters. Default: NULL.
+#'
+#' @param save Logical; indicates whether to save the plot to file. Default: TRUE.
+#' @param ext The file extension for the saved plot image, adjusted based on `also.pdf`.
+#' Default: "png".
+#' @param also.pdf Logical; indicates whether to also save the plot as a PDF. Default: FALSE.
+#'
 #' @param color The color palette for the heatmap values, using a blue-white-yellow gradient.
 #' Default: colorRampPalette(c( "#0073c2","white","#efc000"))(100).
 #' @param legendName The title of the heatmap legend. Default: "Intensity".
@@ -1707,12 +1805,13 @@ qvenn <- function(
 #' @param annotation_rows Data frame with row annotations. Default: NULL.
 #' @param annotation_cols Data frame with column annotations. Default: NULL.
 #' @param annotation_color List of colors for the annotations. Default: NULL.
+#' @param xlab The global label for the x-axis; this might not display due to limitations.
+#' @param ylab The global label for the y-axis; this might not display due to limitations.
+#'
+#' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+#' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
 #' @param w Width of the saved plot image, in inches. Default: 10.
 #' @param h Height of the saved plot image, in inches. Default: 8.
-#' @param xlab The global label for the x-axis; this might not display due to limitations.
-#' Default: "Global X Label".
-#' @param ylab The global label for the y-axis; this might not display due to limitations.
-#' Default: "Global Y Label".
 #' @param ... Additional arguments passed to `ggheatmap`.
 #'
 #' @return A `ggplot` object representing the heatmap, conditionally modified based on the provided
@@ -1765,17 +1864,20 @@ qvenn <- function(
 #' @export
 qheatmap <- function(
     data_matrix,
+
     plotname = FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
     subtitle = NULL,
     suffix = NULL,
     caption = "caption",
     filename = NULL,
-    also.pdf = FALSE, # whether to save also as PDF
-    save.obj = FALSE, # whether to save the ggplot object itself
+
+    plot = TRUE,
+    save = TRUE,
     ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf), # set extension
-    save = TRUE, # save the output to file
-    mdlink = get0("b.mdlink", ifnotfound = FALSE), # create markdown link
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    also.pdf = FALSE,
+    save.obj = getOption("gg.save.obj", F),
+
     colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
     legend_title = "Intensity",
     scale = c("none", "row", "column"), # heatmaply scaling options
@@ -1785,11 +1887,11 @@ qheatmap <- function(
     col_annotation = NULL, # optional: column annotations
     row_annot_colors = NULL, # custom palette for row annotations
     col_annot_colors = NULL, # custom palette for column annotations
-    plot = TRUE, # whether to plot result
+
     xlab = "x axis",
     ylab = "y axis",
-    w = 7, # width of saved plot
-    h = 6, # height of saved plot
+    mdlink = getOption("gg.mdlink", F),
+    w = 7, h = 6,
     ...) {
   warning("   !!! qheatmap is in experimental status !!! ")
   # ___ Input validation ___
@@ -1898,24 +2000,25 @@ qheatmap <- function(
 #' @param weight Optional column name (string) specifying weights or frequencies.
 #'   If `NULL`, the function looks for a "Freq" column or assumes equal weights.
 #'   Default: `NULL`.
-#' @param ext File extension for output image. Default:
-#' @param also.pdf Save plot in both PNG and PDF formats. Default: `TRUE`.
-#' @param save.obj Save the ggplot object as an `.RDS` file. Default: `FALSE`.
-#' @param plot Display the plot after creation. Default: `TRUE`.
-#' @param save Save the plot to file. Default: `TRUE`.
+#'
 #' @param plotname Title of the plot and base for the filename. Default: `"Mosaic plot: x vs y"`.
 #' @param subtitle Optional subtitle text. Default: `NULL`.
 #' @param caption Optional text to display at the bottom right of the plot. Default: `NULL`.
 #' @param filename Optional manual filename override. Default: `NULL`.
-#' @param mdlink Insert a Markdown image link in reports. Default: read from
-#'   `"b.mdlink"` global variable.
-#' @param palette_use Color palette name. Supported: RColorBrewer palettes
-#'   (`"Set2"`, `"Dark2"`, `"Paired"`, `"Pastel1"`, `"Accent"`, `"Set3"`, `"Spectral"`)
-#'   or `"auto"` for automatic hues. Default: `"Set2"`.
+#'
+#' @param plot Display the plot after creation. Default: `TRUE`.
+#' @param save Save the plot to file. Default: `TRUE`.
+#' @param ext File extension for output image. Default:
+#' @param also.pdf Save plot in both PNG and PDF formats. Default: `TRUE`.
+#' @param save.obj Save the ggplot object as an `.RDS` file. Default: `FALSE`.
 #' @param save_matrix If `TRUE`, saves the contingency table as a TSV file. Default: `FALSE`.
+#' #'
+#' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
+#' @param mdlink Insert a Markdown image link in to a markdown report file,
+#' setup by `MarkdownReports::setup_MarkdownReports()`. Default: FALSE
+#' @param limitsize Passed to `ggsave()` to limit image size. Default: `FALSE`.
 #' @param w Width of the saved plot (in inches). Default: `6`.
 #' @param h Height of the saved plot (in inches). Default: `5`.
-#' @param limitsize Passed to `ggsave()` to limit image size. Default: `FALSE`.
 #' @param ... Additional arguments passed to `ggmosaic::geom_mosaic()`.
 #'
 #' @return A `ggplot` object representing the mosaic plot.
@@ -1935,18 +2038,22 @@ qheatmap <- function(
 qmosaic <- function(
     df,
     x, y,
-    weight = NULL,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = TRUE),
-    also.pdf = TRUE, save.obj = FALSE,
-    plot = TRUE, save = TRUE,
     plotname = paste("Mosaic plot:", x, "vs", y),
     subtitle = NULL, caption = NULL,
     filename = NULL,
-    mdlink = get0("b.mdlink", ifnotfound = FALSE),
-    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+
+    plot = TRUE,
+    save = TRUE,
+    also.pdf = FALSE,
+    ext = "png",
+    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+    save.obj = getOption("gg.save.obj", F),
     save_matrix = FALSE,
-    w = 6, h = 5, limitsize = FALSE,
+
+    weight = NULL,
+    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+    limitsize = FALSE, mdlink = getOption("gg.mdlink", F),
+    w = 6, h = 5,
     ...) {
   warning("   !!! qmosaic is in experimental status !!! ")
 
@@ -2072,20 +2179,19 @@ qmosaic <- function(
 #' @export
 qqSave <- function(
     ggobj,
+    title = FALSE,
+    fname = FALSE,
+    suffix = NULL,
 
     ## Argument `ext` is completely ignored atm.
     ## It is needed so that ggXXX do not fail
     ## Atm, png is always saved. This may be changed in the future.
-    ext = get0("b.def.ext", ifnotfound = "png"),
-
-
+    ext = "png",
     also.pdf = FALSE,
     pdf.subdir = FALSE, pdf.dir.name = "pdf",
-    save.obj = FALSE,
+    save.obj = getOption("gg.save.obj", F),
     obj.subdir = FALSE, obj.dir.name = "ggobj",
-    title = FALSE,
-    fname = FALSE,
-    suffix = NULL,
+
     bgcol = "white",
     max.obj.size = 5e+06, # 5 MB
     w = 6, h = w,

@@ -8,36 +8,35 @@ qboxplot(
   df_XYcol_or_list,
   x = 1,
   y = 2,
-  col = NULL,
-  fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
+  col = NULL,
+  fill = getOption("gg.fill.col", "gold"),
   outlier.shape = NULL,
   stat.test = TRUE,
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = NULL,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   hide.legend = FALSE,
-  also.pdf = TRUE,
-  save.obj = FALSE,
-  ext = "png",
   ylab = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 90,
   hline = FALSE,
   vline = FALSE,
-  plot = TRUE,
-  save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
-  grid = "y",
   max.categ = 100,
   add = NULL,
+  grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...
@@ -50,10 +49,6 @@ qboxplot(
 
 \item{y}{The index or name of the column to be plotted on the Y axis. Default: \code{2}.}
 
-\item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
-
-\item{fill}{Fill color of the plot. Default: \code{gold}.}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -63,6 +58,20 @@ qboxplot(
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
+
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
+
+\item{fill}{Fill color of the plot. Default: \code{gold}.}
 
 \item{outlier.shape}{outlier shape. NA to hide.}
 
@@ -74,15 +83,9 @@ qboxplot(
 
 \item{stat.label.x}{Stat label x position}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{hide.legend}{Hide legend.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
 
 \item{ylab}{Y-axis label. Default: \code{NULL}.}
 
@@ -96,17 +99,14 @@ qboxplot(
 
 \item{vline}{Draw a vertical line on the plot.}
 
-\item{plot}{Display the plot.}
-
-\item{save}{Save the plot into a file.}
-
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
-
-\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
-
 \item{max.categ}{The maximum allowed number of unique categories.}
 
 \item{add}{Add additional graphical elements to the plot. Default: NULL.}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

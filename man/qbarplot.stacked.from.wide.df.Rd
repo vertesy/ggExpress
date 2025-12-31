@@ -9,23 +9,21 @@ qbarplot.stacked.from.wide.df(
   x = "Samples",
   y = "Fraction",
   z = "Category",
-  color = 1,
-  label = NULL,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
   plotname = FixPlotName(substitute(df)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  scale = TRUE,
   plot = TRUE,
   save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
+  color = 1,
+  label = NULL,
+  scale = TRUE,
   hline = FALSE,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   xlab.angle = 45,
   xlab = x,
   logY = FALSE,
@@ -33,8 +31,9 @@ qbarplot.stacked.from.wide.df(
   hide.legend = FALSE,
   max.names = 50,
   limitsize = FALSE,
-  grid = "y",
   max.categ = 10,
+  grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(df, factor = 0.7),
   h = 5,
   ...
@@ -49,16 +48,6 @@ qbarplot.stacked.from.wide.df(
 
 \item{z}{Colname to split along Y axis. Default: "Category.}
 
-\item{color}{Color (split) by along Y.}
-
-\item{label}{Label text.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -69,17 +58,26 @@ qbarplot.stacked.from.wide.df(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{scale}{Scale the y axis. Default: TRUE.}
-
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{color}{Color (split) by along Y.}
+
+\item{label}{Label text.}
+
+\item{scale}{Scale the y axis. Default: TRUE.
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{hline}{Draw a horizontal line on the plot.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
 
@@ -95,9 +93,12 @@ qbarplot.stacked.from.wide.df(
 
 \item{limitsize}{Limit size.}
 
-\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+\item{max.categ}{The maximum allowed number of unique categories.
 
-\item{max.categ}{The maximum allowed number of unique categories.}
+@param mdlink Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
+
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
 \item{w}{Width of the plot.}
 

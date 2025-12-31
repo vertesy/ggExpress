@@ -9,32 +9,31 @@ qviolin(
   x = 1,
   y = 2,
   col = NULL,
-  fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
+  fill = getOption("gg.fill.col", "gold"),
   stat.test = FALSE,
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = 0.5,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   hide.legend = FALSE,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 45,
   hline = FALSE,
   vline = FALSE,
-  grid = FALSE,
-  plot = TRUE,
-  save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   max.categ = 100,
+  grid = FALSE,
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...
@@ -49,8 +48,6 @@ qviolin(
 
 \item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
 
-\item{fill}{Fill color of the plot. Default: \code{gold}.}
-
 \item{plotname}{Name of the plot}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -61,6 +58,18 @@ qviolin(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{fill}{Fill color of the plot. Default: \code{gold}.}
+
 \item{stat.test}{Do a statistical test?}
 
 \item{stat.method}{stat method. NULL for default}
@@ -69,15 +78,9 @@ qviolin(
 
 \item{stat.label.x}{Stat label x position}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{hide.legend}{Hide legend.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
 
 \item{logY}{Make Y axis log10-scale.}
 
@@ -89,15 +92,12 @@ qviolin(
 
 \item{vline}{Draw a vertical line on the plot.}
 
+\item{max.categ}{The maximum allowed number of unique categories.}
+
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{plot}{Display the plot.}
-
-\item{save}{Save the plot into a file.}
-
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
-
-\item{max.categ}{The maximum allowed number of unique categories.}
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

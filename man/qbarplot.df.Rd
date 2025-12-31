@@ -15,13 +15,13 @@ qbarplot.df(
   filename = NULL,
   fill = colnames(df)[3],
   color = 1,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   label = NULL,
   plot = TRUE,
   save = TRUE,
+  ext = "png",
   also.pdf = FALSE,
-  save.obj = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   scale = TRUE,
   position = if (scale) "fill" else "dodge",
   xlab.angle = 45,
@@ -33,10 +33,9 @@ qbarplot.df(
   hide.legend = TRUE,
   max.names = 50,
   limitsize = FALSE,
-  grid = "y",
   max.categ = 10,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
-  ext = "png",
+  grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(df),
   h = 5,
   ...
@@ -63,13 +62,15 @@ qbarplot.df(
 
 \item{color}{Color (split) by along Y.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{label}{Label text.}
 
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
@@ -98,13 +99,12 @@ otherwise to "dodge". Can also be "stack".}
 
 \item{limitsize}{Limit size.}
 
-\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
-
 \item{max.categ}{Maximum number of categories to show on the plot. Default is 10.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{ext}{File extension (.pdf / .png).}
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

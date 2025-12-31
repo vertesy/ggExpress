@@ -9,38 +9,37 @@ qstripchart(
   x = 1,
   y = 2,
   col = NULL,
-  fill = "gold",
   plotname = FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  ylab = NULL,
   plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
+  fill = getOption("gg.fill.col", "gold"),
+  ylab = NULL,
   add = c("violin", "mean_sd"),
   size.point = 0.2,
   stat.test = TRUE,
   stat.method = NULL,
   stat.label.y.npc = "top",
   stat.label.x = 0.75,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   hide.legend = FALSE,
-  also.pdf = TRUE,
-  save.obj = FALSE,
-  ext = "png",
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 90,
   xlab = "",
   hline = FALSE,
   vline = FALSE,
-  save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
-  grid = "y",
   annotate_top_labels = FALSE,
   custom_top_labels = FALSE,
   max.categ = 100,
+  grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...
@@ -55,8 +54,6 @@ qstripchart(
 
 \item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
 
-\item{fill}{Fill color of the plot. Default: \code{gold}.}
-
 \item{plotname}{Name of the plot}
 
 \item{subtitle}{Optional subtitle text added below the title. Default is NULL.}
@@ -67,9 +64,19 @@ qstripchart(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{ylab}{Y-axis label. Default: NULL.}
-
 \item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{fill}{Fill color of the plot. Default: \code{gold}.}
+
+\item{ylab}{Y-axis label. Default: NULL.}
 
 \item{add}{Add boxplot or violin chart? Default: add = c("violin", "mean_sd"); it can be "boxplot" or only "mean_sd".}
 
@@ -83,15 +90,9 @@ qstripchart(
 
 \item{stat.label.x}{Stat label x position}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{hide.legend}{Hide legend.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
 
 \item{logY}{Make Y axis log10-scale.}
 
@@ -103,17 +104,16 @@ qstripchart(
 
 \item{vline}{Draw a vertical line on the plot.}
 
-\item{save}{Save the plot into a file.}
+\item{annotate_top_labels}{Logical or character vector, as labels to add above each column.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{custom_top_labels}{Add custom top labels provided in \code{annotate_top_labels} argument. Default: FALSE}
+
+\item{max.categ}{The maximum allowed number of unique categories.}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{annotate_top_labels}{Logical or character vector, as labels to add above each column.}
-
-\item{custom_top_labels}{}
-
-\item{max.categ}{The maximum allowed number of unique categories.}
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

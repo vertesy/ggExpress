@@ -15,15 +15,14 @@ qscatter(
   filename = NULL,
   plot = TRUE,
   save = TRUE,
-  save.obj = FALSE,
-  also.pdf = TRUE,
   ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   label = NULL,
   repel = TRUE,
   hide.legend = FALSE,
   col = c(NULL, 3)[1],
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL,
   ylab = NULL,
   xlab.angle = 90,
@@ -42,10 +41,10 @@ qscatter(
   line.type = "dashed",
   add_contour_plot = FALSE,
   correlation_r2 = FALSE,
+  grid = "xy",
+  mdlink = getOption("gg.mdlink", F),
   w = 7,
   h = w,
-  grid = "xy",
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   ...
 )
 }
@@ -70,11 +69,11 @@ qscatter(
 
 \item{save}{Save the plot into a file.}
 
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+\item{ext}{File extension (.pdf / .png).}
 
 \item{also.pdf}{Save plot in both png and pdf formats.}
 
-\item{ext}{File extension (.pdf / .png).}
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{label}{Point labels. Default: NULL.}
 
@@ -84,7 +83,7 @@ qscatter(
 
 \item{col}{Color of the plot.}
 
-\item{palette_use}{GGpubr color palette to use.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{xlab}{X-axis label. Default: NULL.}
 
@@ -122,13 +121,14 @@ qscatter(
 
 \item{correlation_r2}{Add a correlation value to the plot. Set as "pearson" or "spearman". Default: FALSE.}
 
+\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
+
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
-
-\item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
-
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }

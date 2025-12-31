@@ -11,11 +11,11 @@ qheatmap(
   suffix = NULL,
   caption = "caption",
   filename = NULL,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
+  plot = TRUE,
   save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   colors = (grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026")))(256),
   legend_title = "Intensity",
   scale = c("none", "row", "column"),
@@ -25,9 +25,9 @@ qheatmap(
   col_annotation = NULL,
   row_annot_colors = NULL,
   col_annot_colors = NULL,
-  plot = TRUE,
   xlab = "x axis",
   ylab = "y axis",
+  mdlink = getOption("gg.mdlink", F),
   w = 7,
   h = 6,
   ...
@@ -48,15 +48,12 @@ Default: None (must be provided).}
 \item{filename}{The specific filename to save the plot as; if NULL, a name is generated based on
 \code{plotname} and other parameters. Default: NULL.}
 
-\item{also.pdf}{Logical; indicates whether to also save the plot as a PDF. Default: FALSE.}
+\item{save}{Logical; indicates whether to save the plot to file. Default: TRUE.}
 
 \item{ext}{The file extension for the saved plot image, adjusted based on \code{also.pdf}.
 Default: "png".}
 
-\item{save}{Logical; indicates whether to save the plot to file. Default: TRUE.}
-
-\item{mdlink}{Logical; if TRUE and \code{save} is also TRUE, generates a markdown link for the saved
-plot image. Default: FALSE, reads from global variable \code{b.mdlink}.}
+\item{also.pdf}{Logical; indicates whether to also save the plot as a PDF. Default: FALSE.}
 
 \item{scale}{Character; indicates how to scale the data ("none", "row", or "column").
 Default: "row".}
@@ -65,11 +62,12 @@ Default: "row".}
 
 \item{cluster_cols}{Logical; indicates whether to cluster columns. Default: FALSE.}
 
-\item{xlab}{The global label for the x-axis; this might not display due to limitations.
-Default: "Global X Label".}
+\item{xlab}{The global label for the x-axis; this might not display due to limitations.}
 
-\item{ylab}{The global label for the y-axis; this might not display due to limitations.
-Default: "Global Y Label".}
+\item{ylab}{The global label for the y-axis; this might not display due to limitations.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the saved plot image, in inches. Default: 10.}
 

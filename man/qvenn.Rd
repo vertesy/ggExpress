@@ -6,22 +6,22 @@
 \usage{
 qvenn(
   list,
-  also.pdf = FALSE,
-  save.obj = FALSE,
   plotname = FixPlotName(substitute(list)),
   suffix = NULL,
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
   caption = parseParamStringWNames(sapply(list, length)),
   caption2 = NULL,
   filename = NULL,
-  ext = "png",
   plot = TRUE,
   save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   col.min = "white",
   col.max = "red",
   hide.legend = FALSE,
   x_exp = 0.2,
+  mdlink = getOption("gg.mdlink", F),
   w = 8,
   h = 0.75 * w,
   ...
@@ -29,10 +29,6 @@ qvenn(
 }
 \arguments{
 \item{list}{The variable to plot.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
@@ -46,13 +42,15 @@ qvenn(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{ext}{File extension (.pdf / .png).}
-
 \item{plot}{Display the plot.}
 
 \item{save}{Save the plot into a file.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{col.min}{Color scale minimum. Default: white.}
 
@@ -61,6 +59,9 @@ qvenn(
 \item{hide.legend}{Hide legend.}
 
 \item{x_exp}{Expand axis to show long set labels. Default: 0.2.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

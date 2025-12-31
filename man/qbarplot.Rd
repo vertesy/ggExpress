@@ -6,22 +6,20 @@
 \usage{
 qbarplot(
   vec,
-  also.pdf = FALSE,
-  save = get0("b.save.plots.ggExpress", ifnotfound = TRUE),
-  save.obj = get0("b.save.ggobj.ggExpress", ifnotfound = TRUE),
-  ext = "png",
-  plot = TRUE,
   plotname = FixPlotName(substitute(vec)),
   subtitle = paste("Median:", iround(median(vec))),
   suffix = NULL,
   caption = suffix,
   filename = NULL,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", F),
   hline = FALSE,
   filtercol = 1,
   filtercol_default = TRUE,
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   col = 1,
   xlab = "",
   xlab.angle = 45,
@@ -33,8 +31,9 @@ qbarplot(
   legend.title = NULL,
   max.names = 100,
   limitsize = FALSE,
-  grid = "y",
   ylab = NULL,
+  grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = qqqAxisLength(vec, factor = 0.25),
   h = 5,
   ...
@@ -42,16 +41,6 @@ qbarplot(
 }
 \arguments{
 \item{vec}{The variable to plot.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save}{Save the plot into a file.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension (.pdf / .png).}
-
-\item{plot}{Display the plot.}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
@@ -63,7 +52,15 @@ qbarplot(
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
 
-\item{mdlink}{Insert a .pdf and a .png image link in the markdown report, set by "path_of_report".}
+\item{plot}{Display the plot.}
+
+\item{save}{Save the plot into a file.}
+
+\item{ext}{File extension (.pdf / .png).}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
 \item{hline}{Draw a horizontal line on the plot.}
 
@@ -73,7 +70,7 @@ qbarplot(
 \item{filtercol_default}{Use default red/green colors for filtering. If FALSE, use the
 first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF")}}
 
-\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{col}{The fill color of the bars. Default: 1st color of the palette.}
 
@@ -97,9 +94,12 @@ first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF"
 
 \item{limitsize}{Limit size.}
 
+\item{ylab}{Y-axis label. Default: NULL.}
+
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
 
-\item{ylab}{Y-axis label. Default: NULL.}
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot.}
 

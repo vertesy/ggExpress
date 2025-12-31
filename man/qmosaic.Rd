@@ -8,22 +8,22 @@ qmosaic(
   df,
   x,
   y,
-  weight = NULL,
-  ext = "png",
-  also.pdf = TRUE,
-  save.obj = FALSE,
-  plot = TRUE,
-  save = TRUE,
   plotname = paste("Mosaic plot:", x, "vs", y),
   subtitle = NULL,
   caption = NULL,
   filename = NULL,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
-  palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+  plot = TRUE,
+  save = TRUE,
+  also.pdf = FALSE,
+  ext = "png",
+  save.obj = getOption("gg.save.obj", F),
   save_matrix = FALSE,
+  weight = NULL,
+  palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+  limitsize = FALSE,
+  mdlink = getOption("gg.mdlink", F),
   w = 6,
   h = 5,
-  limitsize = FALSE,
   ...
 )
 }
@@ -34,20 +34,6 @@ qmosaic(
 
 \item{y}{The column name (string) for the Y-axis variable used for fill color.}
 
-\item{weight}{Optional column name (string) specifying weights or frequencies.
-If \code{NULL}, the function looks for a "Freq" column or assumes equal weights.
-Default: \code{NULL}.}
-
-\item{ext}{File extension for output image. Default:}
-
-\item{also.pdf}{Save plot in both PNG and PDF formats. Default: \code{TRUE}.}
-
-\item{save.obj}{Save the ggplot object as an \code{.RDS} file. Default: \code{FALSE}.}
-
-\item{plot}{Display the plot after creation. Default: \code{TRUE}.}
-
-\item{save}{Save the plot to file. Default: \code{TRUE}.}
-
 \item{plotname}{Title of the plot and base for the filename. Default: \code{"Mosaic plot: x vs y"}.}
 
 \item{subtitle}{Optional subtitle text. Default: \code{NULL}.}
@@ -56,20 +42,33 @@ Default: \code{NULL}.}
 
 \item{filename}{Optional manual filename override. Default: \code{NULL}.}
 
-\item{mdlink}{Insert a Markdown image link in reports. Default: read from
-\code{"b.mdlink"} global variable.}
+\item{plot}{Display the plot after creation. Default: \code{TRUE}.}
 
-\item{palette_use}{Color palette name. Supported: RColorBrewer palettes
-(\code{"Set2"}, \code{"Dark2"}, \code{"Paired"}, \code{"Pastel1"}, \code{"Accent"}, \code{"Set3"}, \code{"Spectral"})
-or \code{"auto"} for automatic hues. Default: \code{"Set2"}.}
+\item{save}{Save the plot to file. Default: \code{TRUE}.}
 
-\item{save_matrix}{If \code{TRUE}, saves the contingency table as a TSV file. Default: \code{FALSE}.}
+\item{also.pdf}{Save plot in both PNG and PDF formats. Default: \code{TRUE}.}
+
+\item{ext}{File extension for output image. Default:}
+
+\item{save.obj}{Save the ggplot object as an \code{.RDS} file. Default: \code{FALSE}.}
+
+\item{save_matrix}{If \code{TRUE}, saves the contingency table as a TSV file. Default: \code{FALSE}.
+#'}
+
+\item{weight}{Optional column name (string) specifying weights or frequencies.
+If \code{NULL}, the function looks for a "Freq" column or assumes equal weights.
+Default: \code{NULL}.}
+
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
+
+\item{limitsize}{Passed to \code{ggsave()} to limit image size. Default: \code{FALSE}.}
+
+\item{mdlink}{Insert a Markdown image link in to a markdown report file,
+setup by \code{MarkdownReports::setup_MarkdownReports()}. Default: FALSE}
 
 \item{w}{Width of the saved plot (in inches). Default: \code{6}.}
 
 \item{h}{Height of the saved plot (in inches). Default: \code{5}.}
-
-\item{limitsize}{Passed to \code{ggsave()} to limit image size. Default: \code{FALSE}.}
 
 \item{...}{Additional arguments passed to \code{ggmosaic::geom_mosaic()}.}
 }

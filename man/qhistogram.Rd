@@ -6,18 +6,17 @@
 \usage{
 qhistogram(
   vec,
-  also.pdf = FALSE,
-  save.obj = FALSE,
-  ext = "png",
-  xlab = FALSE,
-  plot = TRUE,
-  save = TRUE,
-  mdlink = get0("b.mdlink", ifnotfound = FALSE),
   plotname = FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
   filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  also.pdf = FALSE,
+  ext = "png",
+  save.obj = getOption("gg.save.obj", F),
+  xlab = FALSE,
   logX = FALSE,
   logY = FALSE,
   annotation_logticks_X = logX,
@@ -25,13 +24,13 @@ qhistogram(
   vline = FALSE,
   filtercol = 0,
   add = "median",
-  palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb",
-    "uchicago")[4],
+  palette_use = getOption("gg.palette_use", "jco"),
   col = as.character(1:3)[1],
   xlab.angle = 90,
   hide.legend = TRUE,
   max.names = 50,
   grid = "y",
+  mdlink = getOption("gg.mdlink", F),
   w = 5,
   h = w,
   ...
@@ -39,20 +38,6 @@ qhistogram(
 }
 \arguments{
 \item{vec}{A numeric vector for which the histogram is to be plotted.}
-
-\item{also.pdf}{Save plot in both png and pdf formats.}
-
-\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
-
-\item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.}
-
-\item{xlab}{Label for the X-axis. By default, it uses the plot name.}
-
-\item{plot}{Logical indicating whether to display the plot. Default is TRUE.}
-
-\item{save}{Logical indicating whether to save the plot into a file. Default is TRUE.}
-
-\item{mdlink}{Logical indicating whether to insert .pdf and .png image links in the markdown report, set by "path_of_report". Default is FALSE.}
 
 \item{plotname}{Title of the plot and the name of the file (unless specified in \code{filename}). Default is parsed from \code{vec}.}
 
@@ -63,6 +48,18 @@ qhistogram(
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Optional filename for the saved plot. Default is parsed from \code{plotname}.}
+
+\item{plot}{Logical indicating whether to display the plot. Default is TRUE.}
+
+\item{save}{Logical indicating whether to save the plot into a file. Default is TRUE.}
+
+\item{also.pdf}{Save plot in both png and pdf formats.}
+
+\item{ext}{File extension for the saved plot. Either '.pdf' or '.png'. Default is '.png'.}
+
+\item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
+
+\item{xlab}{Label for the X-axis. By default, it uses the plot name.}
 
 \item{logX}{Logical indicating whether to make X axis on log10 scale. Default is FALSE.}
 
@@ -78,7 +75,7 @@ qhistogram(
 
 \item{add}{Character defining the type of plot annotations to add. Default is 'median'.}
 
-\item{palette_use}{Color palette to use from GGpubr. Default is 'jco'.}
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{col}{Color of the plot. Default is '1'.}
 
@@ -89,6 +86,9 @@ qhistogram(
 \item{max.names}{Maximum number of names to show on the axis. Default is 50.}
 
 \item{grid}{Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{w}{Width of the plot. Default is 5.}
 
