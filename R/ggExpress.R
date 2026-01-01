@@ -2171,6 +2171,9 @@ qmosaic <- function(
 #' @param fname Manual filename
 #' @param suffix A suffix added to the filename. Default: NULL.
 #'
+#' @param ext File extension. Default: "png".
+#' @param png.subdir Save png files into a subdirectory. Default: FALSE.
+#' @param png.dir.name Name of the png subdirectory. Default: "png".
 #' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
 #' @param pdf.subdir Save pdf files into a subdirectory. Default: FALSE.
 #' @param pdf.dir.name Name of the pdf subdirectory. Default: "pdf".
@@ -2205,6 +2208,7 @@ qqSave <- function(
     ## It is needed so that ggXXX do not fail
     ## Atm, png is always saved. This may be changed in the future.
     ext = "png",
+    png.subdir = FALSE, png.dir.name = "pdf",
     also.pdf = FALSE,
     pdf.subdir = FALSE, pdf.dir.name = "pdf",
     save.obj = getOption("gg.save.obj", F),
