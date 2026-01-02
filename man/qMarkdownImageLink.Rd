@@ -7,7 +7,7 @@
 qMarkdownImageLink(file_name = "myplot.pdf")
 }
 \arguments{
-\item{file_name}{file_name}
+\item{file_name}{File name (basename) of the image file to convert into a markdown image link.}
 }
 \description{
 Insert Markdown image link to .md report

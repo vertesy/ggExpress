@@ -10,6 +10,8 @@ qqSave(
   fname = FALSE,
   suffix = NULL,
   ext = "png",
+  png.subdir = FALSE,
+  png.dir.name = "pdf",
   also.pdf = FALSE,
   pdf.subdir = FALSE,
   pdf.dir.name = "pdf",
@@ -32,6 +34,12 @@ qqSave(
 \item{fname}{Manual filename}
 
 \item{suffix}{A suffix added to the filename. Default: NULL.}
+
+\item{ext}{File extension. Default: "png".}
+
+\item{png.subdir}{Save png files into a subdirectory. Default: FALSE.}
+
+\item{png.dir.name}{Name of the png subdirectory. Default: "png".}
 
 \item{also.pdf}{Save plot in both png and pdf formats. Default: FALSE.}
 
