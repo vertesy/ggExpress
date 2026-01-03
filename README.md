@@ -83,18 +83,13 @@ patient_weight <- rnorm(1000, mean = 80, sd = 10)
 # - draws a histogram with median line
 # - saves PNG
 # - returns the ggplot object for further customization (through `invisible()`).
-
 qhistogram(patient_weight)
 
-# 1b) You still have a regular ggplot object, that you can further modify and simply resave:
-(weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
+# Add show threshold
+qhistogram(vec = patient_weight, vline = 93.99, filtercol = T, 
+      subtitle = "passing below limit", caption = "District Hospital X")
 
-weight_hist <- qhistogram(vec = patient_weight, vline = 93.99, subtitle = "passing below limit", caption = "District Hospital X", filtercol = T)
-qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
-
-# Same vector, different geometry, same automatic annotations, 
-# but this time also save as PDF and the ggplot object:
-
+# Desity plot. Also save as PDF and the ggplot object:
 qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
 ```
 
@@ -103,9 +98,13 @@ qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
 
 Histogram | Density plot
 -- | -- 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/3aa413d8-3cda-4f37-8b91-ff5bb122c947" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/817cba48-9afe-41f9-b82d-364d9a184978" />
+<img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/5442954b-a0e0-438b-b30f-274fdfc695bf" /> | <img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/c3031e9f-bdb3-4a47-ad10-44e8d93feabd" />
 
-
+```R
+# 1b) You still have a regular ggplot object, that you can further modify and simply resave:
+(weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
+qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
+```
 
 
 ```R
