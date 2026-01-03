@@ -144,7 +144,7 @@ qviolin(ToothLen.by.Dose, stat.test = T, col = "dose")
 ```
 Venn Diagram | Violin plot
 -- | -- 
-<img alt="Image" src="https://github.com/user-attachments/assets/ef16c993-8361-4d85-a417-ae96cac2d0ec" /> |  <img alt="Image" src="https://github.com/user-attachments/assets/338f49a6-2abc-44b0-9014-48148375989b" />
+<img alt="Image" src="https://github.com/user-attachments/assets/952f1f2e-7712-4355-a0bd-34a13f1099c1" /> |  <img alt="Image" src="https://github.com/user-attachments/assets/338f49a6-2abc-44b0-9014-48148375989b" />
 
 
 ### 2D plots (scatterplot, mosaic plot)
