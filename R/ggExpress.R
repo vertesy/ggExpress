@@ -1436,7 +1436,6 @@ qviolin <- function(
     xlab.angle = 45,
     hline = FALSE, vline = FALSE,
     # , outlier.shape = NULL
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     max.categ = 100,
     grid = FALSE, mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df_XYcol_or_list), h = 6,
@@ -1475,7 +1474,7 @@ qviolin <- function(
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, hjust = 0, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!is.null(filename)) {
