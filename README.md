@@ -75,34 +75,29 @@ library(ggExpress)
 
 # 1) Numeric vector → histogram + density, auto labels, auto filenames, ggplot objects ----
 
-weight <- rnorm(1000)
+patient_weight <- rnorm(1000, mean = 80, sd = 10)
 
-# One line:
-# - guesses a plot title from the object name 'weight'
+
+# The one liner below:
+# - Takes plot title from the object name 'weight'
 # - draws a histogram with median line
 # - saves PNG
-# - returns the ggplot object for further customization
-weight_hist <- qhistogram(
-  vec       = weight, 
-  plot = T,
-  vline     = 0,
-  caption   = "Auto-annotated histogram"
-)
+# - returns the ggplot object for further customization (through `invisible()`).
 
+qhistogram(patient_weight)
 
 # 1b) You still have a regular ggplot object, that you can further modify and simply resave:
 (weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
+
+weight_hist <- qhistogram(vec = patient_weight, vline = 93.99, subtitle = "passing below limit", caption = "District Hospital X", filtercol = T)
 qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
 
 # Same vector, different geometry, same automatic annotations, 
 # but this time also save as PDF and the ggplot object:
-qdensity(
-  vec       = weight,
-  subtitle  = "Same variable, density view",
-  also.pdf  = TRUE,     # save both .png and .pdf
-  save.obj  = TRUE      # also save ggplot object as .qs
-)
+
+qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
 ```
+
 ## Output
 *Saved as .png by default.* 
 
