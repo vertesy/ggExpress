@@ -1,7 +1,7 @@
 # ggExpress ![status: active](https://raw.githubusercontent.com/vertesy/TheCorvinas/master/GitHub/Badges/active.svg)
 
 **ggExpress** is an R package designed to generate publication- and presentation-ready figures with minimal effort. Built on top of [`ggplot2`](https://ggplot2.tidyverse.org/) and [`ggpubr`](https://github.com/cran/ggpubr), it dramatically reduces the amount of code required to produce clean, well-annotated visualizations. 
-It automatically handling common repetitive tasks such as plot annotation, sizing, and file export. The guiding principle is simple: *understandable, annotated, high-quality figures from minimal code*.
+It automatically handles common, repetitive tasks such as plot annotation, sizing, and file export. The guiding principle is simple: *understandable, annotated, high-quality figures from minimal code*.
 A base graphics based alternative is [`MarkDownreports`](https://github.com/vertesy/MarkdownReports), which follows the same principles.
 
 #### Problem
