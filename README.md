@@ -1,20 +1,23 @@
 # ggExpress ![status: active](https://raw.githubusercontent.com/vertesy/TheCorvinas/master/GitHub/Badges/active.svg)
 
 **ggExpress** is an R package designed to generate publication- and presentation-ready figures with minimal effort. Built on top of [`ggplot2`](https://ggplot2.tidyverse.org/) and [`ggpubr`](https://github.com/cran/ggpubr), it dramatically reduces the amount of code required to produce clean, well-annotated visualizations. 
-It automatically handling common repetitive tasks such as plot annotation, sizing, and file export. The guiding principle is simple: *understandable, annotated, high-quality figures from minimal code*.
+It automatically handles common, repetitive tasks such as plot annotation, sizing, and file export. The guiding principle is simple: *understandable, annotated, high-quality figures from minimal code*.
 A base graphics based alternative is [`MarkDownreports`](https://github.com/vertesy/MarkdownReports), which follows the same principles.
 
 #### Problem
 
-Although `ggplot2` is the standard for professional visualization in R, achieving polished results typically requires verbose code and extensive manual tuning. Default aesthetics are rarely optimal for talks or publications, and users repeatedly reimplement the same logic for annotation, sizing, and saving outputs. The simplest tasks often take way too much effort in ggplot (e.g.: *I have a vector of values, show how much pass a threshold, plot this, annotate, export drop-in ready for a work meeting*). This is a one liner in **ggExpress**. 
+Although `ggplot2` is the standard for professional visualization in R, achieving polished results typically requires verbose code and extensive manual tuning. Default aesthetics are rarely optimal for talks or publications, and users repeatedly reimplement the same logic for annotation, sizing, and saving outputs. The simplest tasks often take way too much effort in ggplot (e.g.: *I have a numeric vector, show how many pass a threshold? (calculate and plot this, annotate, export drop-in ready for a work meeting*). This is a one liner in **ggExpress**. 
 
 #### Solution
 
-**ggExpress** addresses this friction by providing single-function calls that automatically infer annotations from data structures, guess sensible canvas sizes based on the amount of data shown, and apply clean, presentation-ready aesthetics out of the box. 
+**ggExpress** addresses this friction by providing single-function calls that automatically infer annotations from data structures, row- and column-names; It guesses sensible canvas sizes based on the amount of data shown, and apply clean, presentation-ready aesthetics out of the box. 
 
-Each call simultaneously displays the plot, saves it as PNG and PDF, and stores the corresponding ggplot object, without additional code. This supports a smooth workflow across the usability–customizability spectrum: images for immediate use, vector PDFs for post hoc editing, and ggplot objects for further refinement in R. All underlying `ggpubr` arguments remain accessible via `...`, ensuring speed without sacrificing control.
+Each call simultaneously (1) displays the plot, (2) saves it as PNG (optionally also PDF), and (3) saves the corresponding ggplot object, without additional code. 
 
-FYI: <u>Base R graphics</u> can produce acceptable plots with minimal code, but lacks similar automation, and the flexibility and extensibility required for serious figure production. **If you prefer a base graphics, see:  [`MarkDownreports`](https://github.com/vertesy/MarkdownReports).**
+This supports a smooth workflow across the usability–customizability spectrum: PNG for immediate use, vector PDFs for post hoc editing, and ggplot objects for further refinement in R. Underlying `ggpubr` arguments remain accessible via `...`, ensuring speed without sacrificing control.
+
+FYI: <u>Base R graphics</u> can produce visually acceptable plots with minimal code, but lacks similar automation, and the flexibility and extensibility required for serious figure production. 
+**If you prefer a base graphics, see:  [`MarkDownreports`](https://github.com/vertesy/MarkdownReports).**
 
 ---------------------------------------------
 
