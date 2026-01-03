@@ -97,7 +97,7 @@ qpie(Medals, both_pc_and_value = T, LegendTitle = "Country")
 
 | Bar plot                                                     | Pie chart                                                    |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| <img width="1800" height="1500" alt="Image" src="https://github.com/user-attachments/assets/6a4e9797-4062-410d-b335-42ebd3340541" /> | <img width="2100" height="1500" alt="Image" src="https://github.com/user-attachments/assets/ab57b9a9-aa78-4554-ba8a-db644e8e82fa" /> |
+| <img alt="Image" src="https://github.com/user-attachments/assets/6a4e9797-4062-410d-b335-42ebd3340541" /> | <img alt="Image" src="https://github.com/user-attachments/assets/ab57b9a9-aa78-4554-ba8a-db644e8e82fa" /> |
 
 
 ### Histogram and density plot
@@ -126,7 +126,7 @@ Output plots
 
 Histogram | Density plot
 -- | -- 
-<img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/5442954b-a0e0-438b-b30f-274fdfc695bf" /> | <img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/c3031e9f-bdb3-4a47-ad10-44e8d93feabd" />
+<img alt="Image" src="https://github.com/user-attachments/assets/5442954b-a0e0-438b-b30f-274fdfc695bf" /> | <img alt="Image" src="https://github.com/user-attachments/assets/c3031e9f-bdb3-4a47-ad10-44e8d93feabd" />
 
 ```R
 # 1b) You still have a regular ggplot object, that you can further modify and simply resave:
@@ -144,7 +144,7 @@ qviolin(ToothLen.by.Dose, stat.test = T, col = "dose")
 ```
 Venn Diagram | Violin plot
 -- | -- 
-<img alt="Image" src="https://github.com/user-attachments/assets/ef16c993-8361-4d85-a417-ae96cac2d0ec" /> |  <img alt="Image" src="https://github.com/user-attachments/assets/5b418a5b-d7a2-47dc-b70b-9f868df2c4ae" />
+<img alt="Image" src="https://github.com/user-attachments/assets/ef16c993-8361-4d85-a417-ae96cac2d0ec" /> |  <img alt="Image" src="https://github.com/user-attachments/assets/338f49a6-2abc-44b0-9014-48148375989b" />
 
 
 ### 2D plots (scatterplot, mosaic plot)
@@ -177,7 +177,7 @@ qscatter(
 
 Simple | Customized
 -- | -- 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
+<img alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" /> | <img alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
 
 
 
