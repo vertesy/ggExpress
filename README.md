@@ -135,6 +135,17 @@ qqSave(weight_hist) # Saves with the auto-generated filename from the variable n
 ```
 
 
+```R
+LetterSets <- list("Alpha" = LETTERS[1:7], "Bet" = LETTERS[6:14])
+qvenn(LetterSets)
+
+ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]; head(ToothLen.by.Dose)
+qviolin(ToothLen.by.Dose, stat.test = T, col = "dose")
+```
+Venn Diagram | Violin plot
+-- | -- 
+<img alt="Image" src="https://github.com/user-attachments/assets/ef16c993-8361-4d85-a417-ae96cac2d0ec" /> |  <img alt="Image" src="https://github.com/user-attachments/assets/5b418a5b-d7a2-47dc-b70b-9f868df2c4ae" />
+
 
 ### 2D plots (scatterplot, mosaic plot)
 
