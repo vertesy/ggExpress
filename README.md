@@ -72,11 +72,15 @@ source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.aux
 
 Medals <- c(Bulgaria = 12, Brazil = 29, Burkina = 5)
 
-# One liners annotated and saved plots with full path printed on the console
+# The one liner below:
+# - Creates and annotates the plot (X axis and title)
+# - saves PNG
+# - returns the ggplot object for further customization (through `invisible()`).
 qbarplot(Medals)
-# > /your/path/Medals.bar.png
+# > /path/to/Medals.bar.png
+
 qpie(Medals)
-# > /your/path/Medals.pie.png
+# > /path/to/Medals.pie.png
 
 
 
@@ -120,6 +124,7 @@ qhistogram(vec = patient_weight, vline = 93.99, filtercol = T,
 
 # Desity plot. Also save as PDF and the ggplot object:
 qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
+> ggplot_obj <- xread('~/path/to/patient_weight.dens.png.qs')
 ```
 
 Output plots
