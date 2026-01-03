@@ -20,7 +20,6 @@ qstripchart(
   also.pdf = FALSE,
   save.obj = getOption("gg.save.obj", F),
   fill = getOption("gg.fill.col", "gold"),
-  ylab = NULL,
   add = c("violin", "mean_sd"),
   size.point = 0.2,
   stat.test = TRUE,
@@ -33,6 +32,7 @@ qstripchart(
   annotation_logticks_Y = logY,
   xlab.angle = 90,
   xlab = "",
+  ylab = NULL,
   hline = FALSE,
   vline = FALSE,
   annotate_top_labels = FALSE,
@@ -76,8 +76,6 @@ qstripchart(
 
 \item{fill}{Fill color of the plot. Default: \code{gold}.}
 
-\item{ylab}{Y-axis label. Default: NULL.}
-
 \item{add}{Add boxplot or violin chart? Default: add = c("violin", "mean_sd"); it can be "boxplot" or only "mean_sd".}
 
 \item{size.point}{Size of points.}
@@ -99,6 +97,8 @@ qstripchart(
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
 \item{xlab.angle}{Rotate X-axis labels by N degrees. Default: 90}
+
+\item{ylab}{Y-axis label. Default: NULL.}
 
 \item{hline}{Draw a horizontal line on the plot.}
 

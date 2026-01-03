@@ -264,10 +264,10 @@ qdensity <- function(
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
 
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!is.null(filename)) {
@@ -275,6 +275,7 @@ qdensity <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "dens", ext)
   }
+
   if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) print(p)
@@ -618,18 +619,15 @@ qbarplot <- function(
     ...
   ) +
     ggplot2::labs(y = ylab) +
-    ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-
-  if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-  if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
-
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
+  if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -779,22 +777,17 @@ qbarplot.stacked.from.wide.df <- function(
     position = if (scale) position_fill() else position_stack(),
     ...
   ) +
-    ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  # Hide x-axis labels when too many categories are present
-  if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none")
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
-
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  file_name <- if (!is.null(filename)) {
-    filename
-  } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
-  }
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when too many categories are present
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
+
+  file_name <- if (!is.null(filename)) { filename } else { FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext) }
+
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
@@ -944,18 +937,17 @@ qbarplot.df <- function(
     position = pos_gg,
     ...
   ) +
-    ggpubr::grids(axis = "y") +
+
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   # Additional elements _________________________________________________________________
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  # Hide x-axis labels when number of unique categories exceeds limit
-  if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none")
+  if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when number of unique categories exceeds limit
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   # Save and print _________________________________________________________________
   file_name <- if (!is.null(filename)) {
@@ -963,6 +955,7 @@ qbarplot.df <- function(
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
   }
+
   if (save) {
     qqSave(
       ggobj = p, title = plotname, fname = file_name, ext = ext,
@@ -1340,7 +1333,7 @@ qboxplot <- function(
     ...
   ) +
     ggplot2::labs(y = ylab) +
-    ggpubr::grids(axis = "y") +
+
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
@@ -1350,7 +1343,7 @@ qboxplot <- function(
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!is.null(filename)) {
@@ -1475,17 +1468,14 @@ qviolin <- function(
     palette = palette_use,
     ...
   ) +
-    ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
-
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
 
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
+  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
   if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   file_name <- if (!is.null(filename)) {
@@ -1581,7 +1571,6 @@ qstripchart <- function(
     save.obj = getOption("gg.save.obj", F),
 
     fill = getOption("gg.fill.col", "gold"),
-    ylab = NULL,
     add = c("violin", "mean_sd"),
     size.point = .2,
     stat.test = TRUE,
@@ -1592,6 +1581,7 @@ qstripchart <- function(
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 90, xlab = "",
+    ylab = NULL,
     hline = FALSE, vline = FALSE,
 
     annotate_top_labels = FALSE,
@@ -1610,7 +1600,7 @@ qstripchart <- function(
     is.null(col) | is.numeric(col) | is.character(col),
     is.null(fill) | is.numeric(fill) | is.character(fill)
   )
-
+  # df_XYcol <- df_XYcol_or_list
   df_XYcol <- if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   .assertMaxCategories(df_XYcol, col = x, max.categ)
 
@@ -1622,6 +1612,7 @@ qstripchart <- function(
     if (is.numeric(y)) y <= length(vars) else y %in% vars,
     is.numeric(df_XYcol[[vars[y]]])
   )
+  # browser()
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
@@ -1640,12 +1631,16 @@ qstripchart <- function(
     ...
   ) +
     ggplot2::ylab(ylab) +
-    ggpubr::grids(axis = "y") +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
+  if (logY) p <- p + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
+
 
 
   # Top row annotation
@@ -1681,11 +1676,6 @@ qstripchart <- function(
   #   p <- p + annotate_top_labels()
   # }
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-
-  if (stat.test) p <- p + stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
 
   fix <- sppp("stripchart", sppp(add))
   file_name <- if (!is.null(filename)) {
@@ -2268,7 +2258,7 @@ qqSave <- function(
       dir.create(obj.dir.name, showWarnings = FALSE)
       fname_qs <- file.path(obj.dir.name, fname)
     }
-    fname_qs <- add_ext_if_missing(fname_qs, "qs")
+    fname_qs <- add_ext_if_missing(fname, "qs")
   }
 
 
