@@ -63,52 +63,12 @@ source("https://raw.githubusercontent.com/vertesy/ggExpress/main/R/ggExpress.aux
 
 ## Usage
 
-```r
+
+```R
 # ggExpress mini-vignette: plot, annotate & export in one line
 # -----------------------------------------------------------
 
-library(ggExpress)
-
-# (Optional) If you use MarkdownReports, switch on automatic markdown links once:
-# b.mdlink <- TRUE   # q* functions will then append image links to the active report
-
-
-# 1) Numeric vector → histogram + density, auto labels, auto filenames, ggplot objects ----
-
-patient_weight <- rnorm(1000, mean = 80, sd = 10)
-
-
-# The one liner below:
-# - Takes plot title from the object name 'weight'
-# - draws a histogram with median line
-# - saves PNG
-# - returns the ggplot object for further customization (through `invisible()`).
-qhistogram(patient_weight)
-
-# Add show threshold
-qhistogram(vec = patient_weight, vline = 93.99, filtercol = T, 
-      subtitle = "passing below limit", caption = "District Hospital X")
-
-# Desity plot. Also save as PDF and the ggplot object:
-qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
-```
-
-## Output
-*Saved as .png by default.* 
-
-Histogram | Density plot
--- | -- 
-<img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/5442954b-a0e0-438b-b30f-274fdfc695bf" /> | <img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/c3031e9f-bdb3-4a47-ad10-44e8d93feabd" />
-
-```R
-# 1b) You still have a regular ggplot object, that you can further modify and simply resave:
-(weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
-qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
-```
-
-
-```R
-# 2) Named vector → barplot & pie chart with auto labels and filenames --------------------
+# 1) Named vector → barplot & pie chart with auto labels and filenames --------------------
 
 Medals <- c(Bulgaria = 12, Brazil = 29, Burkina = 5)
 
@@ -129,13 +89,54 @@ qbarplot(Medals, label = T, suffix = "BigGames26", hline = 10, filtercol = T)
 # Add a legend title
 qpie(Medals, both_pc_and_value = T, LegendTitle = "Country")
 
-
-
 ```
-Bar plot | Pie chart
--- | -- 
-<img width="1800" height="1500" alt="Image" src="https://github.com/user-attachments/assets/6a4e9797-4062-410d-b335-42ebd3340541" /> | <img width="2100" height="1500" alt="Image" src="https://github.com/user-attachments/assets/ab57b9a9-aa78-4554-ba8a-db644e8e82fa" /> 
 
+## Output
+
+*Saved as .png by default.* 
+
+| Bar plot                                                     | Pie chart                                                    |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img width="1800" height="1500" alt="Image" src="https://github.com/user-attachments/assets/6a4e9797-4062-410d-b335-42ebd3340541" /> | <img width="2100" height="1500" alt="Image" src="https://github.com/user-attachments/assets/ab57b9a9-aa78-4554-ba8a-db644e8e82fa" /> |
+
+
+### Histogram and density plot
+
+```r
+# 2) Numeric vector → histogram + density, auto labels, auto filenames, ggplot objects ----
+patient_weight <- rnorm(1000, mean = 80, sd = 10)
+
+
+# The one liner below:
+# - Takes plot title from the object name 'weight'
+# - draws a histogram with median line
+# - saves PNG
+# - returns the ggplot object for further customization (through `invisible()`).
+qhistogram(patient_weight)
+
+# Add show threshold
+qhistogram(vec = patient_weight, vline = 93.99, filtercol = T, 
+      subtitle = "passing below limit", caption = "District Hospital X")
+
+# Desity plot. Also save as PDF and the ggplot object:
+qdensity(patient_weight, also.pdf  = TRUE, save.obj  = TRUE)
+```
+
+Output plots
+
+Histogram | Density plot
+-- | -- 
+<img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/5442954b-a0e0-438b-b30f-274fdfc695bf" /> | <img width="1500" height="1500" alt="Image" src="https://github.com/user-attachments/assets/c3031e9f-bdb3-4a47-ad10-44e8d93feabd" />
+
+```R
+# 1b) You still have a regular ggplot object, that you can further modify and simply resave:
+(weight_hist <- weight_hist + ggplot2::theme_minimal() + ggplot2::labs(subtitle = "Modified with theme_minimal") )
+qqSave(weight_hist) # Saves with the auto-generated filename from the variable name
+```
+
+
+
+### 2D plots (scatterplot, mosaic plot)
 
 ```R
 # 3) Data frame → scatter plot with automatic x/y labels and export -----------------------
@@ -166,6 +167,7 @@ qscatter(
 Simple | Customized
 -- | -- 
 <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/0ad242eb-6c5f-4620-b5ac-196a2a9969ed" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/7b869d88-cec5-4470-beb3-13be4803fbe8" />
+
 
 
 
