@@ -120,30 +120,22 @@ qpie(Medals)
 # > /your/path/Medals.pie.png
 
 
-# Barplot:
-# - uses names(counts) as x-labels
-# - auto-generates plot title from 'counts'
-# - writes files like 'counts.demo.bar.png' / '.pdf'
-qbarplot(
-  vec       = Medals,
-  label     = Medals,           # show values on bars
-  ylab      = "Count",
-  suffix    = "demo",     # Add a suffix string to the filename
-  palette_use = "npg",
-)
 
-# Pie chart:
-# - again uses names(counts) as slice labels
-# - can show both % and absolute values
-qpie(
-  vec              = Medals,
-  both_pc_and_value = TRUE,
-  LegendTitle      = "Country"
-)
+# Show values on bars
+# Add a suffix string to the filename
+# Add a horizontal line at y = 10
+qbarplot(Medals, label = T, suffix = "BigGames26", hline = 10, filtercol = T)
+
+# Show both percentage and value on bars
+# Add a legend title
+qpie(Medals, both_pc_and_value = T, LegendTitle = "Country")
+
+
+
 ```
 Bar plot | Pie chart
 -- | -- 
-<img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/d8654117-3b28-4be7-9f62-93c542e931ca" /> | <img width="536" height="510" alt="image" src="https://github.com/user-attachments/assets/e04c0044-4280-472a-84f9-aec747916309" />
+<img width="1800" height="1500" alt="Image" src="https://github.com/user-attachments/assets/6a4e9797-4062-410d-b335-42ebd3340541" /> | <img width="2100" height="1500" alt="Image" src="https://github.com/user-attachments/assets/ab57b9a9-aa78-4554-ba8a-db644e8e82fa" /> 
 
 
 ```R
