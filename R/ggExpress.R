@@ -1236,6 +1236,7 @@ qboxplot <- function(
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
+    add.params = NULL,
     col = NULL,
     fill = getOption("gg.fill.col", "gold"),
     outlier.shape = NULL,
@@ -1330,6 +1331,7 @@ qboxplot <- function(
     palette = palette_use,
     outlier.shape = outlier.shape,
     add = add,
+    add.params = add.params,
     ...
   ) +
     ggplot2::labs(y = ylab) +
@@ -1426,6 +1428,7 @@ qviolin <- function(
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
+    add.params = NULL,
     fill = getOption("gg.fill.col", "gold"),
     stat.test = FALSE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
@@ -1465,6 +1468,7 @@ qviolin <- function(
     caption = caption,
     # , outlier.shape = outlier.shape
     palette = palette_use,
+    add.params = add.params,
     ...
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
@@ -1576,6 +1580,7 @@ qstripchart <- function(
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
     palette_use = getOption("gg.palette_use", 'jco'),
     hide.legend = FALSE,
+    add.params = NULL,
 
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1627,6 +1632,7 @@ qstripchart <- function(
     size = size.point,
     palette = palette_use,
     xlab = eval.parent(xlab),
+    add.params = add.params,
     ...
   ) +
     ggplot2::ylab(ylab) +
@@ -2270,7 +2276,8 @@ qqSave <- function(
     plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
     base_width = w, base_height = h, ...
   )
-
+  FnPp <- spps(getwd(), add_ext_if_missing(fname, 'png'))
+  message(FnPp)
 
   # Saving ______________________________________________________________________________________
   if (also.pdf) {
@@ -2278,7 +2285,9 @@ qqSave <- function(
       plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
       ...)
+    message(getwd(),fname_pdf)
   }
+
 
   if (save.obj) {
     ggobj.size <- object.size(ggobj)
