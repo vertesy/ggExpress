@@ -19,6 +19,7 @@ qviolin(
   ext = "png",
   also.pdf = FALSE,
   save.obj = getOption("gg.save.obj", F),
+  add.params = NULL,
   fill = getOption("gg.fill.col", "gold"),
   stat.test = FALSE,
   stat.method = NULL,

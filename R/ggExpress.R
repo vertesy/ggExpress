@@ -2259,11 +2259,11 @@ qqSave <- function(
   }
 
   if (save.obj) {
+    fname_qs <- add_ext_if_missing(fname, "qs")
     if (obj.subdir) {
       dir.create(obj.dir.name, showWarnings = FALSE)
       fname_qs <- file.path(obj.dir.name, fname)
     }
-    fname_qs <- add_ext_if_missing(fname, "qs")
   }
 
 

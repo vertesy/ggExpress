@@ -18,6 +18,7 @@ qboxplot(
   ext = "png",
   also.pdf = FALSE,
   save.obj = getOption("gg.save.obj", F),
+  add.params = NULL,
   col = NULL,
   fill = getOption("gg.fill.col", "gold"),
   outlier.shape = NULL,

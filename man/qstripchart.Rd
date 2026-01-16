@@ -28,6 +28,7 @@ qstripchart(
   stat.label.x = 0.75,
   palette_use = getOption("gg.palette_use", "jco"),
   hide.legend = FALSE,
+  add.params = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 90,
