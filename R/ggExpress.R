@@ -2184,6 +2184,9 @@ qmosaic <- function(
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #' @param obj.subdir Save ggplot objects into a subdirectory. Default: FALSE.
 #' @param obj.dir.name Name of the ggplot object subdirectory. Default: "ggobj".#'
+#' @param save.meta.info Save metadata (script of origin, original location) as a sidecar
+#' metadata file "fname.meta.txt" ? Default: TRUE.
+#' @param meta.info.custom Custom text to add to the metadata file. Default: "".
 #'
 #' @param bgcol Plot background color. Default: "white".
 #' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
@@ -2217,6 +2220,7 @@ qqSave <- function(
     pdf.subdir = FALSE, pdf.dir.name = "pdf",
     save.obj = getOption("gg.save.obj", F),
     obj.subdir = FALSE, obj.dir.name = "ggobj",
+    save.meta.info= TRUE, meta.info.custom = "",
 
     bgcol = "white",
     max.obj.size = 5e+06, # 5 MB
@@ -2238,7 +2242,6 @@ qqSave <- function(
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
   fname <- if (isFALSE(fname)) sppp(title, suffix) else fname
-
 
   # Determine page size
   if (!isFALSE(plot_on_page)) {
@@ -2288,7 +2291,6 @@ qqSave <- function(
     message(getwd(),fname_pdf)
   }
 
-
   if (save.obj) {
     ggobj.size <- object.size(ggobj)
     if (ggobj.size > max.obj.size) {
@@ -2300,6 +2302,25 @@ qqSave <- function(
       message(CMND)
     }
   }
+
+  if (isTRUE(save.meta.info)) {
+
+    if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+      script_path <- rstudioapi::getActiveDocumentContext()$path
+    } else {
+      message("save.meta.info only saves script path, if ran from Rstudio.")
+      script_path <- "Unknown"
+    }
+
+    meta_lines <- c( "File created by:", script_path, "\nOriginally saved to:", FnPp )
+    if (nzchar(meta.info.custom)) meta_lines <- c(meta_lines, "", meta.info.custom)
+
+    writeLines(
+      meta_lines,
+      paste0(tools::file_path_sans_ext(FnPp), ".meta.txt")
+    )
+  }
+
   tictoc::toc()
 }
 

@@ -18,6 +18,8 @@ qqSave(
   save.obj = getOption("gg.save.obj", F),
   obj.subdir = FALSE,
   obj.dir.name = "ggobj",
+  save.meta.info = TRUE,
+  meta.info.custom = "",
   bgcol = "white",
   max.obj.size = 5e+06,
   w = 6,
@@ -52,6 +54,11 @@ qqSave(
 \item{obj.subdir}{Save ggplot objects into a subdirectory. Default: FALSE.}
 
 \item{obj.dir.name}{Name of the ggplot object subdirectory. Default: "ggobj".#'}
+
+\item{save.meta.info}{Save metadata (script of origin, original location) as a sidecar
+metadata file "fname.meta.txt" ? Default: TRUE.}
+
+\item{meta.info.custom}{Custom text to add to the metadata file. Default: "".}
 
 \item{bgcol}{Plot background color. Default: "white".}
 
