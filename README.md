@@ -12,7 +12,7 @@ Although `ggplot2` is the standard for professional visualization in R, achievin
 
 **ggExpress** addresses this friction by providing single-function calls that automatically infer annotations from data structures, row- and column-names; It guesses sensible canvas sizes based on the amount of data shown, and apply clean, presentation-ready aesthetics out of the box. 
 
-Each call simultaneously (1) displays the plot, (2) saves it as PNG (optionally also PDF), (3) retruns and saves the corresponding ggplot object, without additional code. 
+Each call simultaneously (1) displays the plot, (2) saves it as PNG (optionally also PDF), (3) returns and saves the corresponding ggplot object, without additional code. 
 
 This supports a smooth workflow across the usability–customizability spectrum: PNG for immediate use, vector PDFs for post hoc editing, and ggplot objects for further refinement in R. Underlying `ggpubr` arguments remain accessible via `...`, ensuring speed without sacrificing control.
 
