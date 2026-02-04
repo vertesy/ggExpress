@@ -747,10 +747,11 @@ qbarplot.stacked.from.wide.df <- function(
     grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df, factor = .7), h = 5,
     ...) {
+  # warning("This funciton has known issues, may not work!", immediate. = T)
   message(plotname)
   stopifnot(
     is.data.frame(df),
-    ncol(df) > 2
+    ncol(df) >= 2
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
