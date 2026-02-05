@@ -715,6 +715,7 @@ qbarplot.stacked.from.wide.df <- function(
     x = "Samples",
     y = "Fraction",
     z = "Category",
+    y_axis_factor_levels = colnames(df),
 
     plotname = FixPlotName(substitute(df)),
     subtitle = NULL, suffix = NULL, caption = suffix,
@@ -747,6 +748,7 @@ qbarplot.stacked.from.wide.df <- function(
     grid = "y", mdlink = getOption("gg.mdlink", F),
     w = qqqAxisLength(df, factor = .7), h = 5,
     ...) {
+
   # warning("This funciton has known issues, may not work!", immediate. = T)
   message(plotname)
   stopifnot(
@@ -757,7 +759,6 @@ qbarplot.stacked.from.wide.df <- function(
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
   if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
-
   df_long <- df |>
     tibble::rownames_to_column(var = x) |> # Convert row names to a column
     tidyr::pivot_longer(
@@ -765,6 +766,13 @@ qbarplot.stacked.from.wide.df <- function(
       names_to = z, # "category"
       values_to = y # "Fraction"
     )
+
+  if(is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar) ----------
+    df_long[[2]] <- factor(
+      df_long[[2]],
+      levels = y_axis_factor_levels
+    )
+  }
 
   p <- ggpubr::ggbarplot(
     data = df_long, x = x, y = y,

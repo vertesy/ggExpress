@@ -9,6 +9,7 @@ qbarplot.stacked.from.wide.df(
   x = "Samples",
   y = "Fraction",
   z = "Category",
+  y_axis_factor_levels = colnames(df),
   plotname = FixPlotName(substitute(df)),
   subtitle = NULL,
   suffix = NULL,
