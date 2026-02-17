@@ -17,7 +17,7 @@ qpie(
   ext = "png",
   also.pdf = FALSE,
   save.obj = getOption("gg.save.obj", F),
-  NoLegend = FALSE,
+  hide.legend = FALSE,
   LegendSide = TRUE,
   LegendTitle = "",
   pcdigits = 2,
@@ -60,7 +60,7 @@ qpie(
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{NoLegend}{No legend.}
+\item{hide.legend}{No legend.}
 
 \item{LegendSide}{Legend side.}
 

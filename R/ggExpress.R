@@ -307,7 +307,7 @@ qdensity <- function(
 #'
 #' @param LegendSide Legend side.
 #' @param LegendTitle Legend title.
-#' @param NoLegend No legend.
+#' @param hide.legend No legend.
 #' @param pcdigits Number of digits for percentages.
 #' @param NamedSlices Use named slices.
 #' @param extended.canvas Make an extended canvas. Default: TRUE.
@@ -346,7 +346,7 @@ qpie <- function(
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
-    NoLegend = FALSE,
+    hide.legend = FALSE,
     LegendSide = TRUE,
     LegendTitle = "",
     pcdigits = 2, NamedSlices = FALSE,
@@ -432,7 +432,7 @@ qpie <- function(
   if (extended.canvas) p <- p + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
   if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
 
-  p <- if (NoLegend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
+  p <- if (hide.legend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
 
   file_name <- if (!is.null(filename)) {
     filename
