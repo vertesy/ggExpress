@@ -21,7 +21,7 @@ qdensity(
   logX = FALSE,
   logY = FALSE,
   palette_use = getOption("gg.palette_use", "jco"),
-  hide.legend = TRUE,
+  legend.position = "none",
   max.names = 50,
   grid = FALSE,
   mdlink = getOption("gg.mdlink", F),
@@ -63,7 +63,7 @@ qdensity(
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

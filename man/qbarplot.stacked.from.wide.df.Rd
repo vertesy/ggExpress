@@ -29,7 +29,7 @@ qbarplot.stacked.from.wide.df(
   xlab = x,
   logY = FALSE,
   annotation_logticks_Y = logY,
-  hide.legend = FALSE,
+  legend.position = FALSE,
   max.names = 50,
   limitsize = FALSE,
   max.categ = 10,
@@ -88,7 +88,7 @@ qbarplot.stacked.from.wide.df(
 
 \item{annotation_logticks_Y}{Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of \code{logY}.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

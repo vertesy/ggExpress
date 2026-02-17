@@ -69,7 +69,7 @@
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param col Color of the plot. Default is '1'.
 #' @param xlab.angle Angle to rotate X-axis labels. Default is 90 degrees.
-#' @param hide.legend Logical indicating whether to hide the legend. Default is TRUE.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param max.names Maximum number of names to show on the axis. Default is 50.
 #' @param annotation_logticks_X Logical indicating whether to add annotation logticks on X-axis. Default follows the value of `logX`.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
@@ -114,7 +114,7 @@ qhistogram <- function(
     palette_use = getOption("gg.palette_use", 'jco'),
     col = as.character(1:3)[1],
     xlab.angle = 90,
-    hide.legend = TRUE,
+    legend.position = 'none',
     max.names = 50,
     grid = "y", mdlink = getOption("gg.mdlink", F),
     w = 5, h = w,
@@ -167,7 +167,7 @@ qhistogram <- function(
 
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -210,7 +210,7 @@ qhistogram <- function(
 #' @param xlab X-axis label. Default: FALSE.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param logY Make Y axis log10-scale.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #'
@@ -244,7 +244,7 @@ qdensity <- function(
     xlab.angle = 90,
     logX = FALSE, logY = FALSE,
     palette_use = getOption("gg.palette_use", 'jco'),
-    hide.legend = TRUE,
+    legend.position = 'none',
     max.names = 50,
     grid = FALSE, mdlink = getOption("gg.mdlink", F),
     w = 5, h = w, ...) {
@@ -268,7 +268,7 @@ qdensity <- function(
   if (logX) p <- p + ggplot2::scale_x_log10()
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -307,7 +307,7 @@ qdensity <- function(
 #'
 #' @param LegendSide Legend side.
 #' @param LegendTitle Legend title.
-#' @param hide.legend No legend.
+#' @param legend.position No legend.
 #' @param pcdigits Number of digits for percentages.
 #' @param NamedSlices Use named slices.
 #' @param extended.canvas Make an extended canvas. Default: TRUE.
@@ -346,7 +346,7 @@ qpie <- function(
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
-    hide.legend = FALSE,
+    legend.position = FALSE,
     LegendSide = TRUE,
     LegendTitle = "",
     pcdigits = 2, NamedSlices = FALSE,
@@ -431,8 +431,8 @@ qpie <- function(
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (extended.canvas) p <- p + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
   if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
-
-  p <- if (hide.legend) p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  # if (legend.position %!in% c("none", FALSE)) p <- p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -486,7 +486,7 @@ qpie <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #'
 #' @param label Label bars with their values, or by a custom string vector. Default: NULL (no labels).
-#' @param hide.legend Hide legend. Default: TRUE.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
@@ -531,7 +531,7 @@ qbarplot <- function(
     ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
     annotation_logticks_Y = logY,
     label = NULL,
-    hide.legend = TRUE,
+    legend.position = 'none',
     legend.title = NULL,
     max.names = 100,
     limitsize = FALSE,
@@ -627,7 +627,8 @@ qbarplot <- function(
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
   if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
   if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -681,7 +682,7 @@ qbarplot <- function(
 #' @param xlab X-axis label. Default: `x`.
 #' @param logY Make Y axis log10-scale.
 #' @param label Label text.
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
@@ -740,7 +741,7 @@ qbarplot.stacked.from.wide.df <- function(
     xlab.angle = 45, xlab = x,
     logY = FALSE,
     annotation_logticks_Y = logY,
-    hide.legend = FALSE,
+    legend.position = FALSE,
     max.names = 50,
     limitsize = FALSE,
     max.categ = 10,
@@ -792,7 +793,7 @@ qbarplot.stacked.from.wide.df <- function(
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when too many categories are present
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
 
   file_name <- if (!is.null(filename)) { filename } else { FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext) }
@@ -844,7 +845,7 @@ qbarplot.stacked.from.wide.df <- function(
 #'
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param max.names The maximum number of names still to be shown on the axis.
 #' @param limitsize Limit size.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -893,7 +894,7 @@ qbarplot.df <- function(
     annotation_logticks_Y = logY,
 
     hline = FALSE, filtercol = 1,
-    hide.legend = TRUE,
+    legend.position = 'none',
     max.names = 50,
     limitsize = FALSE,
     max.categ = 10,
@@ -954,7 +955,7 @@ qbarplot.df <- function(
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when number of unique categories exceeds limit
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
 
@@ -1003,7 +1004,7 @@ qbarplot.df <- function(
 #'
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param col Color of the plot.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #'
@@ -1055,7 +1056,7 @@ qscatter <- function(
     save.obj = getOption("gg.save.obj", F),
 
     label = NULL, repel = TRUE,
-    hide.legend = FALSE,
+    legend.position = FALSE,
     col = c(NULL, 3)[1],
     # fill = NULL,
     palette_use = getOption("gg.palette_use", 'jco'),
@@ -1151,7 +1152,7 @@ qscatter <- function(
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   # Save plot and okject ____________________________________________________________
   file_name <- if (!is.null(filename)) {
@@ -1211,7 +1212,7 @@ qscatter <- function(
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -1253,7 +1254,7 @@ qboxplot <- function(
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
     palette_use = getOption("gg.palette_use", 'jco'),
-    hide.legend = FALSE,
+    legend.position = FALSE,
     ylab = NULL, # xlab = NULL,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1275,7 +1276,7 @@ qboxplot <- function(
     is.character(filename) | is.null(filename), is.character(subtitle) | is.null(subtitle),
     is.character(caption) | is.null(caption), is.character(ylab) | is.null(ylab),
     is.character(suffix) | is.null(suffix), is.character(ext),
-    is.logical(logY), is.logical(hide.legend), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
+    is.logical(logY), is.logical(legend.position), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
     is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
     is.logical(outlier.shape) | is.null(outlier.shape),
     is.character(ext), is.character(palette_use), is.character(grid),
@@ -1355,7 +1356,7 @@ qboxplot <- function(
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
 
   if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -1404,7 +1405,7 @@ qboxplot <- function(
 #' @param stat.label.y.npc Stat label y position
 #' @param stat.label.x Stat label x position
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -1442,7 +1443,7 @@ qviolin <- function(
     stat.test = FALSE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
     palette_use = getOption("gg.palette_use", 'jco'),
-    hide.legend = FALSE,
+    legend.position = FALSE,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 45,
@@ -1488,7 +1489,7 @@ qviolin <- function(
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, hjust = 0, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -1542,7 +1543,7 @@ qviolin <- function(
 #' @param stat.label.x Stat label x position
 #' @param size.point Size of points.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #' @param grid Character indicating the axis to add gridlines. Options are 'x', 'y', or 'xy'. Default is 'y'.
@@ -1588,7 +1589,7 @@ qstripchart <- function(
     stat.test = TRUE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
     palette_use = getOption("gg.palette_use", 'jco'),
-    hide.legend = FALSE,
+    legend.position = FALSE,
     add.params = NULL,
 
     logY = FALSE, # , logX = FALSE
@@ -1650,7 +1651,7 @@ qstripchart <- function(
   if (logY) p <- p + ggplot2::scale_y_log10()
   if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
   if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
@@ -1731,7 +1732,7 @@ qstripchart <- function(
 #'
 #' @param col.min Color scale minimum. Default: white.
 #' @param col.max Color scale maximum. Default: red.
-#' @param hide.legend Hide legend.
+#' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param x_exp Expand axis to show long set labels. Default: 0.2.
 #'
 #' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
@@ -1763,7 +1764,7 @@ qvenn <- function(
     save.obj = getOption("gg.save.obj", F),
 
     col.min = "white", col.max = "red",
-    hide.legend = FALSE,
+    legend.position = FALSE,
     x_exp = .2,
     mdlink = getOption("gg.mdlink", F),
     w = 8, h = 0.75 * w,
@@ -1783,7 +1784,7 @@ qvenn <- function(
     ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = x_exp)) + # expand axis to show long set labels
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = "white"))
 
-  if (hide.legend) p <- p + ggplot2::theme(legend.position = "none")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
 
   s1 <- paste0(length(list), "s")
   s2 <- kpp(s1, paste0(length(unique(unlist(list))), "el"))

@@ -30,7 +30,7 @@ qbarplot.df(
   annotation_logticks_Y = logY,
   hline = FALSE,
   filtercol = 1,
-  hide.legend = TRUE,
+  legend.position = "none",
   max.names = 50,
   limitsize = FALSE,
   max.categ = 10,
@@ -93,7 +93,7 @@ otherwise to "dodge". Can also be "stack".}
 
 \item{filtercol}{Color bars below/above the threshold with red/green. Define the direction by -1 or 1. Takes effect if "*line" is defined.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{max.names}{The maximum number of names still to be shown on the axis.}
 

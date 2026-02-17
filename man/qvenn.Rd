@@ -19,7 +19,7 @@ qvenn(
   save.obj = getOption("gg.save.obj", F),
   col.min = "white",
   col.max = "red",
-  hide.legend = FALSE,
+  legend.position = FALSE,
   x_exp = 0.2,
   mdlink = getOption("gg.mdlink", F),
   w = 8,
@@ -56,7 +56,7 @@ qvenn(
 
 \item{col.max}{Color scale maximum. Default: red.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{x_exp}{Expand axis to show long set labels. Default: 0.2.}
 

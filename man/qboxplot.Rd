@@ -27,7 +27,7 @@ qboxplot(
   stat.label.y.npc = "top",
   stat.label.x = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
-  hide.legend = FALSE,
+  legend.position = FALSE,
   ylab = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
@@ -86,7 +86,7 @@ qboxplot(
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{ylab}{Y-axis label. Default: \code{NULL}.}
 

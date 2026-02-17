@@ -27,7 +27,7 @@ qhistogram(
   palette_use = getOption("gg.palette_use", "jco"),
   col = as.character(1:3)[1],
   xlab.angle = 90,
-  hide.legend = TRUE,
+  legend.position = "none",
   max.names = 50,
   grid = "y",
   mdlink = getOption("gg.mdlink", F),
@@ -81,7 +81,7 @@ qhistogram(
 
 \item{xlab.angle}{Angle to rotate X-axis labels. Default is 90 degrees.}
 
-\item{hide.legend}{Logical indicating whether to hide the legend. Default is TRUE.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{max.names}{Maximum number of names to show on the axis. Default is 50.}
 

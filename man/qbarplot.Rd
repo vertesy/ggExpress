@@ -27,7 +27,7 @@ qbarplot(
   ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
   annotation_logticks_Y = logY,
   label = NULL,
-  hide.legend = TRUE,
+  legend.position = "none",
   legend.title = NULL,
   max.names = 100,
   limitsize = FALSE,
@@ -86,7 +86,7 @@ first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF"
 
 \item{label}{Label bars with their values, or by a custom string vector. Default: NULL (no labels).}
 
-\item{hide.legend}{Hide legend. Default: TRUE.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{legend.title}{Custom legend title. Provide a string.}
 

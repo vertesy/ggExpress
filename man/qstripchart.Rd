@@ -27,7 +27,7 @@ qstripchart(
   stat.label.y.npc = "top",
   stat.label.x = 0.75,
   palette_use = getOption("gg.palette_use", "jco"),
-  hide.legend = FALSE,
+  legend.position = FALSE,
   add.params = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
@@ -91,7 +91,7 @@ qstripchart(
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{logY}{Make Y axis log10-scale.}
 

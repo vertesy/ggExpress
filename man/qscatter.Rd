@@ -20,7 +20,7 @@ qscatter(
   save.obj = getOption("gg.save.obj", F),
   label = NULL,
   repel = TRUE,
-  hide.legend = FALSE,
+  legend.position = FALSE,
   col = c(NULL, 3)[1],
   palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL,
@@ -79,7 +79,7 @@ qscatter(
 
 \item{repel}{Repel labels from each other. Default: TRUE.}
 
-\item{hide.legend}{Hide legend.}
+\item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
 \item{col}{Color of the plot.}
 
