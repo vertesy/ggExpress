@@ -767,7 +767,7 @@ qbarplot.stacked.from.wide.df <- function(
       values_to = y # "Fraction"
     )
 
-  if(is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar) ----------
+  if(is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
     df_long[[2]] <- factor(
       df_long[[2]],
       levels = y_axis_factor_levels
@@ -944,9 +944,9 @@ qbarplot.df <- function(
     label = label,
     palette = palette_use,
     position = pos_gg,
+    legend = legend.position,
     ...
   ) +
-
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   # Additional elements _________________________________________________________________
