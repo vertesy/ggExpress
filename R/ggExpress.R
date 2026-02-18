@@ -307,7 +307,7 @@ qdensity <- function(
 #'
 #' @param LegendSide Legend side.
 #' @param LegendTitle Legend title.
-#' @param legend.position No legend.
+#' @param legend.position Character indicating the position of the legend. Default is FALSE (no legend).
 #' @param pcdigits Number of digits for percentages.
 #' @param NamedSlices Use named slices.
 #' @param extended.canvas Make an extended canvas. Default: TRUE.
@@ -346,7 +346,7 @@ qpie <- function(
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
-    legend.position = FALSE,
+    legend.position = "none",
     LegendSide = TRUE,
     LegendTitle = "",
     pcdigits = 2, NamedSlices = FALSE,
@@ -740,7 +740,7 @@ qbarplot.stacked.from.wide.df <- function(
     xlab.angle = 45, xlab = x,
     logY = FALSE,
     annotation_logticks_Y = logY,
-    legend.position = FALSE,
+    legend.position = 'none',
     max.names = 50,
     limitsize = FALSE,
     max.categ = 10,
@@ -1055,7 +1055,7 @@ qscatter <- function(
     save.obj = getOption("gg.save.obj", F),
 
     label = NULL, repel = TRUE,
-    legend.position = FALSE,
+    legend.position = 'none',
     col = c(NULL, 3)[1],
     # fill = NULL,
     palette_use = getOption("gg.palette_use", 'jco'),
@@ -1253,7 +1253,7 @@ qboxplot <- function(
     # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
     palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = FALSE,
+    legend.position = 'none',
     ylab = NULL, # xlab = NULL,
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
@@ -1442,7 +1442,7 @@ qviolin <- function(
     stat.test = FALSE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
     palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = FALSE,
+    legend.position = 'none',
     logY = FALSE, # , logX = FALSE
     annotation_logticks_Y = logY,
     xlab.angle = 45,
@@ -1588,7 +1588,7 @@ qstripchart <- function(
     stat.test = TRUE,
     stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
     palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = FALSE,
+    legend.position = 'none',
     add.params = NULL,
 
     logY = FALSE, # , logX = FALSE
@@ -1763,7 +1763,7 @@ qvenn <- function(
     save.obj = getOption("gg.save.obj", F),
 
     col.min = "white", col.max = "red",
-    legend.position = FALSE,
+    legend.position = 'none',
     x_exp = .2,
     mdlink = getOption("gg.mdlink", F),
     w = 8, h = 0.75 * w,

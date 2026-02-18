@@ -29,7 +29,7 @@ qbarplot.stacked.from.wide.df(
   xlab = x,
   logY = FALSE,
   annotation_logticks_Y = logY,
-  legend.position = FALSE,
+  legend.position = "none",
   max.names = 50,
   limitsize = FALSE,
   max.categ = 10,

@@ -20,7 +20,7 @@ qscatter(
   save.obj = getOption("gg.save.obj", F),
   label = NULL,
   repel = TRUE,
-  legend.position = FALSE,
+  legend.position = "none",
   col = c(NULL, 3)[1],
   palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL,

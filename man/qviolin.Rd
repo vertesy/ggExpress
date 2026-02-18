@@ -26,7 +26,7 @@ qviolin(
   stat.label.y.npc = "top",
   stat.label.x = 0.5,
   palette_use = getOption("gg.palette_use", "jco"),
-  legend.position = FALSE,
+  legend.position = "none",
   logY = FALSE,
   annotation_logticks_Y = logY,
   xlab.angle = 45,

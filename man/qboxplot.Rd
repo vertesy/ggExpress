@@ -27,7 +27,7 @@ qboxplot(
   stat.label.y.npc = "top",
   stat.label.x = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
-  legend.position = FALSE,
+  legend.position = "none",
   ylab = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,

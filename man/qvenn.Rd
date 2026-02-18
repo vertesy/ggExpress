@@ -19,7 +19,7 @@ qvenn(
   save.obj = getOption("gg.save.obj", F),
   col.min = "white",
   col.max = "red",
-  legend.position = FALSE,
+  legend.position = "none",
   x_exp = 0.2,
   mdlink = getOption("gg.mdlink", F),
   w = 8,

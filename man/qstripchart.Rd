@@ -27,7 +27,7 @@ qstripchart(
   stat.label.y.npc = "top",
   stat.label.x = 0.75,
   palette_use = getOption("gg.palette_use", "jco"),
-  legend.position = FALSE,
+  legend.position = "none",
   add.params = NULL,
   logY = FALSE,
   annotation_logticks_Y = logY,
