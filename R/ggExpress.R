@@ -373,7 +373,7 @@ qpie <- function(
   ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
   caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
 
-  # ________________________________________________
+  # Category handling ________________________________________________
   if (l.orig > max.categories) {
     iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
     sv <- sort(vec, decreasing = TRUE)
@@ -389,20 +389,21 @@ qpie <- function(
     vec <- vec.new
   }
 
-  if (is.null(names(vec))) {
-    names(vec) <- as.character(1:length(vec))
-  }
+  # Ensure names are present for all categories
+  if (is.null(names(vec))) names(vec) <- as.character(1:length(vec))
 
+  # Create data frame for plotting
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
+  df$"category.orig" <- df$"names"
 
+  # Calculate percentages and prepare labels
   pcX <- df$"value" / sum(df$"value")
   labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
-
   idx.named <- which(!df$"names" == "")
   df$"names"[idx.named] <- paste(df$"names"[idx.named], labs[idx.named], sep = "\n")
 
-  # print('- -')
+
   if (both_pc_and_value) df$"names"[idx.named] <- paste(df$"names"[idx.named], df$"value"[idx.named], sep = "\n")
 
   if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
@@ -419,20 +420,18 @@ qpie <- function(
     label = labels,
     subtitle = subtitle,
     caption = caption,
-    fill = "names",
+    fill = "category.orig",
     color = "white",
     title = plotname,
     palette = palette_use
-    # , ...
+    , ...
   ) +
     ggplot2::guides(fill = ggplot2::guide_legend(LegendTitle))
-  # theme(legend.title = LegendTitle)
 
   if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
   if (extended.canvas) p <- p + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
   if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
   if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
-  # if (legend.position %!in% c("none", FALSE)) p <- p + ggplot2::theme(legend.position = "none", validate = TRUE) else p
 
   file_name <- if (!is.null(filename)) {
     filename
