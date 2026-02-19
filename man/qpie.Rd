@@ -12,6 +12,8 @@ qpie(
   caption = suffix,
   caption.ext = TRUE,
   filename = NULL,
+  palette_use = getOption("gg.palette_use", "jco"),
+  color = "white",
   plot = TRUE,
   save = TRUE,
   ext = "png",
@@ -24,7 +26,6 @@ qpie(
   pcdigits = 2,
   custom.order = FALSE,
   extended.canvas = TRUE,
-  palette_use = getOption("gg.palette_use", "jco"),
   custom.margin = TRUE,
   max.categories = 100,
   max.names = 10,
@@ -47,6 +48,8 @@ qpie(
 \item{caption}{Optional text added to bottom right corner of the plot. Default = suffix.}
 
 \item{filename}{Manually provided filename (optional). Default: parsed from \code{plotname}.}
+
+\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{plot}{Display the plot.}
 
@@ -72,8 +75,6 @@ qpie(
 \item{custom.order}{Custom order.}
 
 \item{extended.canvas}{Make an extended canvas. Default: TRUE.}
-
-\item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
 \item{custom.margin}{Custom plot margin. Default: TRUE.}
 
@@ -102,4 +103,5 @@ pdf files, and the ggplot object as a .qs file.
 \examples{
 xvec <- c("A" = 12, "B" = 29)
 qpie(vec = xvec)
+
 }

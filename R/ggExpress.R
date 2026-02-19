@@ -333,6 +333,7 @@ qdensity <- function(
 #'
 #' @examples xvec <- c("A" = 12, "B" = 29)
 #' qpie(vec = xvec)
+#'
 qpie <- function(
     vec,
     plotname = FixPlotName(substitute(vec)),
@@ -341,6 +342,9 @@ qpie <- function(
     caption = suffix,
     caption.ext = TRUE,
     filename = NULL,
+
+    palette_use = getOption("gg.palette_use", 'jco'), # fill palette
+    color = "white", # outline color
 
     plot = TRUE,
     save = TRUE,
@@ -353,14 +357,13 @@ qpie <- function(
     LegendTitle = "",
 
     label.mode = "both",
+    pcdigits = 2,
     # labels = "names",
     # NamedSlices = FALSE,
     # both_pc_and_value = FALSE,
 
-    pcdigits = 2,
     custom.order = FALSE,
     extended.canvas = TRUE,
-    palette_use = getOption("gg.palette_use", 'jco'),
     custom.margin = TRUE,
     max.categories = 100,
     max.names = 10,
@@ -425,16 +428,16 @@ qpie <- function(
   )
 
   ## Order slices / legend __________________________________________________
-  if (decr.order) {                                                           # decreasing by value?
-    df$names <- factor(                                                       # reorder factor levels
-      df$names,
-      levels = df$names[order(df$value, decreasing = TRUE)]                  # big → small
-    )
+  if (decr.order) {                                                          # decreasing by value?
+    levs <- df$names[order(df$value, decreasing = TRUE)]                      # ordered labels
+    levs <- unique(levs)                                                      # factor levels must be unique
+    df$names <- factor(df$names, levels = levs)                               # apply order
   }
 
   if (!identical(custom.order, FALSE)) {                                      # custom order provided?
-    df$names <- factor(df$names, levels = custom.order)                       # user-defined order
+    df$names <- factor(df$names, levels = unique(custom.order))               # ensure unique levels
   }
+
 
   # # Calculate percentages and prepare labels
   # pcX <- df$"value" / sum(df$"value")
@@ -460,7 +463,7 @@ qpie <- function(
     subtitle = subtitle,
     caption = caption,
     fill = "names",
-    color = "white",
+    color = color,
     title = plotname,
     palette = palette_use
     , ...
