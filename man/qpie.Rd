@@ -20,8 +20,8 @@ qpie(
   legend.position = "none",
   LegendSide = TRUE,
   LegendTitle = "",
+  label.mode = "both",
   pcdigits = 2,
-  NamedSlices = FALSE,
   custom.order = FALSE,
   extended.canvas = TRUE,
   palette_use = getOption("gg.palette_use", "jco"),
@@ -29,11 +29,9 @@ qpie(
   max.categories = 100,
   max.names = 10,
   decr.order = TRUE,
-  both_pc_and_value = FALSE,
-  labels = "names",
-  mdlink = getOption("gg.mdlink", F),
   w = 7,
   h = 5,
+  mdlink = getOption("gg.mdlink", F),
   ...
 )
 }
@@ -66,9 +64,10 @@ qpie(
 
 \item{LegendTitle}{Legend title.}
 
-\item{pcdigits}{Number of digits for percentages.}
+\item{label.mode}{Mode for slice labels. Options are "none" (no labels), "name" (only category names),
+"percent" (only percentages), and "both" (category names and percentages). Default is "both".}
 
-\item{NamedSlices}{Use named slices.}
+\item{pcdigits}{Number of digits for percentages.}
 
 \item{custom.order}{Custom order.}
 
@@ -84,16 +83,12 @@ qpie(
 
 \item{decr.order}{Slices in the order of df. By default, they are ordered alphabetically in the plot.}
 
-\item{both_pc_and_value}{Report both percentage and number.}
-
-\item{labels}{Slice labels. Set to NULL to remove slice names.}
-
-\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
-\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
-
 \item{w}{Width of the plot.}
 
 \item{h}{Height of the plot.}
+
+\item{mdlink}{Insert .pdf and .png image links to a markdown report file, setup by
+\code{MarkdownReports::setup_MarkdownReports()}, located at \code{path_of_report}. Default: FALSE}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
 }

@@ -309,16 +309,19 @@ qdensity <- function(
 #' @param LegendTitle Legend title.
 #' @param legend.position Character indicating the position of the legend. Default is FALSE (no legend).
 #' @param pcdigits Number of digits for percentages.
-#' @param NamedSlices Use named slices.
 #' @param extended.canvas Make an extended canvas. Default: TRUE.
 #' @param custom.margin Custom plot margin. Default: TRUE.
 #' @param max.categories Maximum number of categories to be shown as a separate slice
 #' @param decr.order Slices in the order of df. By default, they are ordered alphabetically in the plot.
-#' @param both_pc_and_value Report both percentage and number.
 #' @param custom.order Custom order.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param max.names The maximum number of names still to be shown on the axis.
-#' @param labels Slice labels. Set to NULL to remove slice names.
+#'
+#' @param label.mode Mode for slice labels. Options are "none" (no labels), "name" (only category names),
+#' "percent" (only percentages), and "both" (category names and percentages). Default is "both".
+# #' @param labels Slice labels. Set to NULL to remove slice names.
+# #' @param NamedSlices Use named slices.
+# #' @param both_pc_and_value Report both percentage and number.
 #'
 #' @param mdlink Insert .pdf and .png image links to a markdown report file, setup by
 #' `MarkdownReports::setup_MarkdownReports()`, located at `path_of_report`. Default: FALSE
@@ -342,14 +345,19 @@ qpie <- function(
     plot = TRUE,
     save = TRUE,
     ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
     also.pdf = FALSE,
     save.obj = getOption("gg.save.obj", F),
 
     legend.position = "none",
     LegendSide = TRUE,
     LegendTitle = "",
-    pcdigits = 2, NamedSlices = FALSE,
+
+    label.mode = "both",
+    # labels = "names",
+    # NamedSlices = FALSE,
+    # both_pc_and_value = FALSE,
+
+    pcdigits = 2,
     custom.order = FALSE,
     extended.canvas = TRUE,
     palette_use = getOption("gg.palette_use", 'jco'),
@@ -357,9 +365,7 @@ qpie <- function(
     max.categories = 100,
     max.names = 10,
     decr.order = TRUE,
-    both_pc_and_value = FALSE,
-    labels = "names", mdlink = getOption("gg.mdlink", F),
-    w = 7, h = 5,
+    w = 7, h = 5, mdlink = getOption("gg.mdlink", F),
     ...) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)), all(vec >= 0))
   print(plotname)
@@ -395,32 +401,65 @@ qpie <- function(
   # Create data frame for plotting
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
-  df$"category.orig" <- df$"names"
+  has_lab    <- nzchar(df$names)                                             # keep qqqNamed.Vec.2.Tbl() blanks
+  # df$"category.orig" <- df$"names"
 
-  # Calculate percentages and prepare labels
-  pcX <- df$"value" / sum(df$"value")
-  labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
-  idx.named <- which(!df$"names" == "")
-  df$"names"[idx.named] <- paste(df$"names"[idx.named], labs[idx.named], sep = "\n")
+  # browser()
+  # df
 
 
-  if (both_pc_and_value) df$"names"[idx.named] <- paste(df$"names"[idx.named], df$"value"[idx.named], sep = "\n")
+  ## Labels (4 modes) ____________________________________________
+  label.mode <- match.arg(label.mode, c("none", "name", "percent", "both"))   # new arg
+  pc_lab     <- paste0(100 * signif(df$value / sum(df$value), pcdigits), "%")
 
-  if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
+  df$label <- ifelse(                                                         # build slice labels
+    has_lab,                                                                  # only where names exist
+    switch(                                                                   # choose labeling mode
+      label.mode,
+      none    = "",                                                           # no labels
+      name    = df$names,                                                     # names only
+      percent = pc_lab,                                                       # percent only
+      both    = paste0(df$names, "\n", pc_lab)                                # name + percent
+    ),
+    ""                                                                        # keep blanks blank
+  )
 
-  nrCategories.DFcol1 <- length(unique(df[, 1]))
-  stopifnot("Number of categories exceeds 'max.categories'." = nrCategories.DFcol1 <= max.categories)
+  ## Order slices / legend __________________________________________________
+  if (decr.order) {                                                           # decreasing by value?
+    df$names <- factor(                                                       # reorder factor levels
+      df$names,
+      levels = df$names[order(df$value, decreasing = TRUE)]                  # big → small
+    )
+  }
 
-  if (NamedSlices) labs <- paste(df$names, "\n", labs)
-  if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
+  if (!identical(custom.order, FALSE)) {                                      # custom order provided?
+    df$names <- factor(df$names, levels = custom.order)                       # user-defined order
+  }
+
+  # # Calculate percentages and prepare labels
+  # pcX <- df$"value" / sum(df$"value")
+  # labs <- paste(100 * signif(pcX, pcdigits), "%", sep = "")
+  # idx.named <- which(!df$"names" == "")
+  # df$"names"[idx.named] <- paste(df$"names"[idx.named], labs[idx.named], sep = "\n")
+  #
+  #
+  # if (both_pc_and_value) df$"names"[idx.named] <- paste(df$"names"[idx.named], df$"value"[idx.named], sep = "\n")
+  #
+  # if (decr.order) df[["names"]] <- factor(df$"names", levels = rev(make.unique(df$"names")))
+  #
+  # nrCategories.DFcol1 <- length(unique(df[, 1]))
+  # stopifnot("Number of categories exceeds 'max.categories'." = nrCategories.DFcol1 <= max.categories)
+  #
+  # if (NamedSlices) labs <- paste(df$names, "\n", labs)
+  # if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
 
   p <- ggpubr::ggpie(
     data = df,
     x = "value",
-    label = labels,
+    label = "label",
     subtitle = subtitle,
     caption = caption,
-    fill = "category.orig",
+    fill = "names",
     color = "white",
     title = plotname,
     palette = palette_use
@@ -485,6 +524,7 @@ qpie <- function(
 #' @param annotation_logticks_Y Logical indicating whether to add annotation logticks on Y-axis. Default follows the value of `logY`.
 #'
 #' @param label Label bars with their values, or by a custom string vector. Default: NULL (no labels).
+#'
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param legend.title Custom legend title. Provide a string.
 #' @param max.names The maximum number of names still to be shown on the axis.
