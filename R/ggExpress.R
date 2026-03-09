@@ -2220,14 +2220,14 @@ qmosaic <- function(
 #' @title qqSave
 #'
 #' @description Quick-Save ggplot objects to file with automatic file naming.
-#' Default format: png, optionally also: .pdf and .qs ggplot object.
+#' Default format: png, optionally also saves a .pdf and/or .qs ggplot object.
 #' @param ggobj Plot as ggplot object.
 #'
 #' @param title title field for pdf file (saved into file metadata)
 #' @param fname Manual filename
 #' @param suffix A suffix added to the filename. Default: NULL.
 #'
-#' @param ext File extension. Default: "png".
+#' @param ext File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.
 #' @param png.subdir Save png files into a subdirectory. Default: FALSE.
 #' @param png.dir.name Name of the png subdirectory. Default: "png".
 #' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
