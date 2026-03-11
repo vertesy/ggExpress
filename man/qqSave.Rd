@@ -9,6 +9,7 @@ qqSave(
   title = FALSE,
   fname = FALSE,
   suffix = NULL,
+  ext = "png",
   png.subdir = FALSE,
   png.dir.name = "pdf",
   also.pdf = FALSE,
@@ -35,6 +36,8 @@ qqSave(
 \item{fname}{Manual filename}
 
 \item{suffix}{A suffix added to the filename. Default: NULL.}
+
+\item{ext}{File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.}
 
 \item{png.subdir}{Save png files into a subdirectory. Default: FALSE.}
 
@@ -69,8 +72,6 @@ metadata file "fname.meta.txt" ? Default: TRUE.}
 FALSE, "A4p", "A4l", "A5p", "A5l". Overwrites w and h.}
 
 \item{...}{Pass any other parameter of the corresponding plotting function (most of them should work).}
-
-\item{ext}{File extension. Default: "png".}
 }
 \description{
 Quick-Save ggplot objects to file with automatic file naming.

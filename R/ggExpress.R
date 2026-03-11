@@ -1318,7 +1318,7 @@ qboxplot <- function(
     is.character(filename) | is.null(filename), is.character(subtitle) | is.null(subtitle),
     is.character(caption) | is.null(caption), is.character(ylab) | is.null(ylab),
     is.character(suffix) | is.null(suffix), is.character(ext),
-    is.logical(logY), is.logical(legend.position), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
+    is.logical(logY), is.logical(also.pdf), is.logical(save.obj), is.logical(save),
     is.logical(mdlink), is.logical(plot), is.logical(stat.test), is.logical(annotation_logticks_Y),
     is.logical(outlier.shape) | is.null(outlier.shape),
     is.character(ext), is.character(palette_use), is.character(grid),
