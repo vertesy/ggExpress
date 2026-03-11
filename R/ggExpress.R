@@ -2293,7 +2293,7 @@ qqSave <- function(
 
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
-  fname <- if (isFALSE(fname)) sppp(title, suffix) else fname
+  fname <- if (isFALSE(fname)) sppp(ReplaceSpecialCharacters(title), suffix) else fname
 
   # Determine page size
   if (!isFALSE(plot_on_page)) {
