@@ -20,10 +20,12 @@
     # insert at top
 
     gg.fill.col = "gold",
+    gg.save.pdf = TRUE,
     gg.save.obj = FALSE,
     gg.palette_use = c("RdBu", "Dark2", "Set2", "jco", "npg", "aaas", "lancet", "ucscgb", "uchicago")[4],
     # gg.def.ext = "png",
-    gg.mdlink = FALSE
+    gg.mdlink = FALSE,
+    gg.save.meta = FALSE
   )
 
   # Only set options that are not already defined
@@ -34,9 +36,170 @@
 }
 
 
+
 # ______________________________________________________________________________________________----
 # Simple plots  ----
 # ____________________________________________________________________
+
+
+#' @title qqSave
+#'
+#' @description Quick-Save ggplot objects to file with automatic file naming.
+#' Default format: png, optionally also saves a .pdf and/or .qs ggplot object.
+#' @param ggobj Plot as ggplot object.
+#'
+#' @param title title field for pdf file (saved into file metadata)
+#' @param fname Manual filename
+#' @param suffix A suffix added to the filename. Default: NULL.
+#'
+#' @param ext File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.
+#' @param png.subdir Save png files into a subdirectory. Default: FALSE.
+#' @param png.dir.name Name of the png subdirectory. Default: "png".
+#' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
+#' @param pdf.subdir Save pdf files into a subdirectory. Default: FALSE.
+#' @param pdf.dir.name Name of the pdf subdirectory. Default: "pdf".
+#' @param save.obj Save the ggplot object to a file. Default: FALSE.
+#' @param obj.subdir Save ggplot objects into a subdirectory. Default: FALSE.
+#' @param obj.dir.name Name of the ggplot object subdirectory. Default: "ggobj".#'
+#' @param save.meta.info Save metadata (script of origin, original location) as a sidecar
+#' metadata file "fname.meta.txt" ? Default: TRUE.
+#' @param meta.info.custom Custom text to add to the metadata file. Default: "".
+#'
+#' @param bgcol Plot background color. Default: "white".
+#' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
+#' @param w Width of the plot.
+#' @param h Height of the plot.
+#' @param plot_on_page Use standard page sizes for plots? Options are:
+#' FALSE, "A4p", "A4l", "A5p", "A5l". Overwrites w and h.
+#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
+#'
+#' @examples xplot <- ggplot2::qplot(12)
+#' qqSave(ggobj = xplot)
+#' qqSave(ggobj = xplot, ext = "pdf")
+#'
+#' @importFrom cowplot save_plot
+#' @importFrom qs qsave
+#' @importFrom tictoc tic toc
+#'
+#' @export
+qqSave <- function(
+    ggobj,
+    title = FALSE,
+    fname = FALSE,
+    suffix = NULL,
+
+    ## Argument `ext` is completely ignored atm.
+    ## It is needed so that ggXXX do not fail
+    ## Atm, png is always saved. This may be changed in the future.
+    ext = "png",
+    png.subdir = FALSE, png.dir.name = "pdf",
+    also.pdf = getOption("gg.save.pdf", T),
+    pdf.subdir = FALSE, pdf.dir.name = "pdf",
+    save.obj = getOption("gg.save.obj", F),
+    obj.subdir = FALSE, obj.dir.name = "ggobj",
+    save.meta.info = getOption("gg.save.meta", F), meta.info.custom = "",
+
+    bgcol = "white",
+    max.obj.size = 5e+06, # 5 MB
+    w = 6, h = w,
+    plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
+    ...) {
+
+  stopifnot(
+    is.ggplot(ggobj), is.numeric(max.obj.size), is.numeric(w), is.numeric(h),
+    is.logical(also.pdf), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
+    is.character(bgcol), is.character(pdf.dir.name), is.character(obj.dir.name),
+    is.null(suffix) | is.character(suffix),
+    is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
+  )
+
+  # Helper
+  add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, sppp(x, ext))
+
+  tictoc::tic()
+  if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
+  fname <- if (isFALSE(fname)) sppp(ReplaceSpecialCharacters(title), suffix) else fname
+
+  # Determine page size
+  if (!isFALSE(plot_on_page)) {
+    # Get A4 or A5 dimensions
+    dimA4 <- c(8.27, 11.69) * ifelse(grepl("^A5", plot_on_page), 0.5, 1)
+    # Flip for landscape
+    if (grepl("l$", plot_on_page)) dimA4 <- rev(dimA4)
+    w <- dimA4[1]; h <- dimA4[2]
+  }
+
+  # Create PDF / object subdirectories and adjust file paths if needed ___________________________
+  if (also.pdf) {
+    fname_pdf <- add_ext_if_missing(fname, "pdf")
+    if (pdf.subdir) {
+      dir.create(pdf.dir.name, showWarnings = FALSE)
+      fname_pdf <- file.path(pdf.dir.name, fname_pdf)
+    }
+  }
+
+  if (save.obj) {
+    fname_qs <- add_ext_if_missing(fname, "qs")
+    if (obj.subdir) {
+      dir.create(obj.dir.name, showWarnings = FALSE)
+      fname_qs <- file.path(obj.dir.name, fname)
+    }
+  }
+
+
+  # Plotting ______________________________________________________________________________________
+  # Set the plot background to white
+  ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
+
+  # Save the plot
+  cowplot::save_plot(
+    plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
+    base_width = w, base_height = h, ...
+  )
+  FnPp <- spps(getwd(), add_ext_if_missing(fname, 'png'))
+  message(FnPp)
+
+  # Saving ______________________________________________________________________________________
+  if (also.pdf) {
+    cowplot::save_plot(
+      plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
+      title = ww.ttl_field(title, creator = "ggExpress"),
+      ...)
+    message(getwd(),fname_pdf)
+  }
+
+  if (save.obj) {
+    ggobj.size <- object.size(ggobj)
+    if (ggobj.size > max.obj.size) {
+      warning("The ggplot object is larger than " , max.obj.size/1e6, "MBs. It is: ", iround(ggobj.size/1e6),
+              " MB. Increase max.obj.size to save the object.\n")
+    } else {
+      qs::qsave(ggobj, file = fname_qs)
+      CMND <- paste0("ggplot_obj <- xread('", getwd(), "/", fname_qs, "')")
+      message(CMND)
+    }
+  }
+
+  if (isTRUE(save.meta.info)) {
+
+    if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
+      script_path <- rstudioapi::getActiveDocumentContext()$path
+    } else {
+      message("save.meta.info only saves script path, if ran from Rstudio.")
+      script_path <- "Unknown"
+    }
+
+    meta_lines <- c( "File created by:", script_path, "\nOriginally saved to:", FnPp )
+    if (nzchar(meta.info.custom)) meta_lines <- c(meta_lines, "", meta.info.custom)
+
+    writeLines(
+      meta_lines,
+      paste0(tools::file_path_sans_ext(FnPp), ".meta.txt")
+    )
+  }
+
+  tictoc::toc()
+}
 
 
 
@@ -2215,166 +2378,6 @@ qmosaic <- function(
 # ______________________________________________________________________________________________----
 # Auxiliary functions ----
 # ____________________________________________________________________
-
-
-#' @title qqSave
-#'
-#' @description Quick-Save ggplot objects to file with automatic file naming.
-#' Default format: png, optionally also saves a .pdf and/or .qs ggplot object.
-#' @param ggobj Plot as ggplot object.
-#'
-#' @param title title field for pdf file (saved into file metadata)
-#' @param fname Manual filename
-#' @param suffix A suffix added to the filename. Default: NULL.
-#'
-#' @param ext File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.
-#' @param png.subdir Save png files into a subdirectory. Default: FALSE.
-#' @param png.dir.name Name of the png subdirectory. Default: "png".
-#' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
-#' @param pdf.subdir Save pdf files into a subdirectory. Default: FALSE.
-#' @param pdf.dir.name Name of the pdf subdirectory. Default: "pdf".
-#' @param save.obj Save the ggplot object to a file. Default: FALSE.
-#' @param obj.subdir Save ggplot objects into a subdirectory. Default: FALSE.
-#' @param obj.dir.name Name of the ggplot object subdirectory. Default: "ggobj".#'
-#' @param save.meta.info Save metadata (script of origin, original location) as a sidecar
-#' metadata file "fname.meta.txt" ? Default: TRUE.
-#' @param meta.info.custom Custom text to add to the metadata file. Default: "".
-#'
-#' @param bgcol Plot background color. Default: "white".
-#' @param max.obj.size Maximum allowed size of the ggplot object to be saved (in bytes). Default: 5e+06 (5 MB).
-#' @param w Width of the plot.
-#' @param h Height of the plot.
-#' @param plot_on_page Use standard page sizes for plots? Options are:
-#' FALSE, "A4p", "A4l", "A5p", "A5l". Overwrites w and h.
-#' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
-#'
-#' @examples xplot <- ggplot2::qplot(12)
-#' qqSave(ggobj = xplot)
-#' qqSave(ggobj = xplot, ext = "pdf")
-#'
-#' @importFrom cowplot save_plot
-#' @importFrom qs qsave
-#' @importFrom tictoc tic toc
-#'
-#' @export
-qqSave <- function(
-    ggobj,
-    title = FALSE,
-    fname = FALSE,
-    suffix = NULL,
-
-    ## Argument `ext` is completely ignored atm.
-    ## It is needed so that ggXXX do not fail
-    ## Atm, png is always saved. This may be changed in the future.
-    ext = "png",
-    png.subdir = FALSE, png.dir.name = "pdf",
-    also.pdf = FALSE,
-    pdf.subdir = FALSE, pdf.dir.name = "pdf",
-    save.obj = getOption("gg.save.obj", F),
-    obj.subdir = FALSE, obj.dir.name = "ggobj",
-    save.meta.info= TRUE, meta.info.custom = "",
-
-    bgcol = "white",
-    max.obj.size = 5e+06, # 5 MB
-    w = 6, h = w,
-    plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
-    ...) {
-
-  stopifnot(
-    is.ggplot(ggobj), is.numeric(max.obj.size), is.numeric(w), is.numeric(h),
-    is.logical(also.pdf), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
-    is.character(bgcol), is.character(pdf.dir.name), is.character(obj.dir.name),
-    is.null(suffix) | is.character(suffix),
-    is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
-  )
-
-  # Helper
-  add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, sppp(x, ext))
-
-  tictoc::tic()
-  if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
-  fname <- if (isFALSE(fname)) sppp(ReplaceSpecialCharacters(title), suffix) else fname
-
-  # Determine page size
-  if (!isFALSE(plot_on_page)) {
-    # Get A4 or A5 dimensions
-    dimA4 <- c(8.27, 11.69) * ifelse(grepl("^A5", plot_on_page), 0.5, 1)
-    # Flip for landscape
-    if (grepl("l$", plot_on_page)) dimA4 <- rev(dimA4)
-    w <- dimA4[1]; h <- dimA4[2]
-  }
-
-  # Create PDF / object subdirectories and adjust file paths if needed ___________________________
-  if (also.pdf) {
-    fname_pdf <- add_ext_if_missing(fname, "pdf")
-    if (pdf.subdir) {
-      dir.create(pdf.dir.name, showWarnings = FALSE)
-      fname_pdf <- file.path(pdf.dir.name, fname_pdf)
-    }
-  }
-
-  if (save.obj) {
-    fname_qs <- add_ext_if_missing(fname, "qs")
-    if (obj.subdir) {
-      dir.create(obj.dir.name, showWarnings = FALSE)
-      fname_qs <- file.path(obj.dir.name, fname)
-    }
-  }
-
-
-  # Plotting ______________________________________________________________________________________
-  # Set the plot background to white
-  ggobj <- ggobj + ggplot2::theme(plot.background = ggplot2::element_rect(fill = bgcol, color = bgcol))
-
-  # Save the plot
-  cowplot::save_plot(
-    plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
-    base_width = w, base_height = h, ...
-  )
-  FnPp <- spps(getwd(), add_ext_if_missing(fname, 'png'))
-  message(FnPp)
-
-  # Saving ______________________________________________________________________________________
-  if (also.pdf) {
-    cowplot::save_plot(
-      plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
-      title = ww.ttl_field(title, creator = "ggExpress"),
-      ...)
-    message(getwd(),fname_pdf)
-  }
-
-  if (save.obj) {
-    ggobj.size <- object.size(ggobj)
-    if (ggobj.size > max.obj.size) {
-      warning("The ggplot object is larger than " , max.obj.size/1e6, "MBs. It is: ", iround(ggobj.size/1e6),
-              " MB. Increase max.obj.size to save the object.\n")
-    } else {
-      qs::qsave(ggobj, file = fname_qs)
-      CMND <- paste0("ggplot_obj <- xread('", getwd(), "/", fname_qs, "')")
-      message(CMND)
-    }
-  }
-
-  if (isTRUE(save.meta.info)) {
-
-    if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
-      script_path <- rstudioapi::getActiveDocumentContext()$path
-    } else {
-      message("save.meta.info only saves script path, if ran from Rstudio.")
-      script_path <- "Unknown"
-    }
-
-    meta_lines <- c( "File created by:", script_path, "\nOriginally saved to:", FnPp )
-    if (nzchar(meta.info.custom)) meta_lines <- c(meta_lines, "", meta.info.custom)
-
-    writeLines(
-      meta_lines,
-      paste0(tools::file_path_sans_ext(FnPp), ".meta.txt")
-    )
-  }
-
-  tictoc::toc()
-}
 
 
 
