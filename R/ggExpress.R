@@ -118,7 +118,9 @@ qqSave <- function(
 
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
+
   fname <- if (isFALSE(fname)) sppp(ReplaceSpecialCharacters(title), suffix) else fname
+  fname <- sppp(make.names(fname), suffix)
 
   # Determine page size
   if (!isFALSE(plot_on_page)) {
@@ -420,7 +422,7 @@ qdensity <- function(
     title = plotname, xlab = xlab,
     add = "median",
     color = "names", fill = "names",
-    subtitle = subtitle,
+  subtitle = subtitle,
     caption = caption,
     palette = palette_use,
     ...
@@ -568,11 +570,6 @@ qpie <- function(
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
   has_lab    <- nzchar(df$names)                                             # keep qqqNamed.Vec.2.Tbl() blanks
-  # df$"category.orig" <- df$"names"
-
-  # browser()
-  # df
-
 
   ## Labels (4 modes) ____________________________________________
   label.mode <- match.arg(label.mode, c("none", "name", "percent", "both"))   # new arg
@@ -1328,15 +1325,15 @@ qscatter <- function(
     title = FixPlotName(plotname, suffix),
     subtitle = subtitle,
     caption = caption,
-    # palette = palette_use, # There is an upstream, internal problem with ggscatter that producing warnings.
+    palette = palette_use, # There is an upstream, internal problem with ggscatter that producing warnings.
     label = label, repel = repel,
     xlab = xlab, ylab = ylab,
     xlim = xlim, ylim = ylim,
     ...
   ) +
     ggpubr::grids(axis = "xy") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
-    ggplot2::scale_color_manual(values = palette_use)
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
+  # +     ggplot2::scale_color_manual(values = palette_use) ### This is not a resolved problem. It does not take the same strings such as "jco" as the above palette argument.
 
   # Additional plot features ____________________________________________________________
   if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
@@ -1831,7 +1828,7 @@ qstripchart <- function(
     if (is.numeric(y)) y <= length(vars) else y %in% vars,
     is.numeric(df_XYcol[[vars[y]]])
   )
-  # browser()
+
   if (!is.null(col)) {
     if (is.numeric(col) & col < length(vars)) col <- col
     if (col %in% vars) col <- vars[col]
