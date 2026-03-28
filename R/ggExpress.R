@@ -158,7 +158,7 @@ qqSave <- function(
     plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
     base_width = w, base_height = h, ...
   )
-  FnPp <- spps(getwd(), add_ext_if_missing(fname, 'png'))
+  FnPp <- spps(getwd(), "/", add_ext_if_missing(fname, 'png'))
   message(FnPp)
 
   # Saving ______________________________________________________________________________________
@@ -167,7 +167,7 @@ qqSave <- function(
       plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
       ...)
-    message(getwd(),fname_pdf)
+    message(getwd(), "/", fname_pdf)
   }
 
   if (save.obj) {
