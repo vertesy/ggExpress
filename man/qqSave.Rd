@@ -10,7 +10,7 @@ qqSave(
   fname = FALSE,
   suffix = NULL,
   ext = "png",
-  subir = FALSE,
+  subdir = FALSE,
   png.subdir = FALSE,
   png.dir.name = "pdf",
   also.pdf = getOption("gg.save.pdf", T),
@@ -40,7 +40,7 @@ qqSave(
 
 \item{ext}{File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.}
 
-\item{subir}{Save all files within a subdirectory. The subdirectory is named after the string
+\item{subdir}{Save all files within a subdirectory. The subdirectory is named after the string
 provided here, and will be created using MarkdownReports. Default: FALSE.}
 
 \item{png.subdir}{Save png files into a subdirectory. Default: FALSE.}
