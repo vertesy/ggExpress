@@ -53,6 +53,8 @@
 #' @param suffix A suffix added to the filename. Default: NULL.
 #'
 #' @param ext File extension. Default: "png". Ignored atm, but needed for ggX... functions to not fail.
+#' @param subir Save all files within a subdirectory. The subdirectory is named after the string
+#' provided here, and will be created using MarkdownReports. Default: FALSE.
 #' @param png.subdir Save png files into a subdirectory. Default: FALSE.
 #' @param png.dir.name Name of the png subdirectory. Default: "png".
 #' @param also.pdf Save plot in both png and pdf formats. Default: FALSE.
@@ -92,6 +94,7 @@ qqSave <- function(
     ## It is needed so that ggXXX do not fail
     ## Atm, png is always saved. This may be changed in the future.
     ext = "png",
+    subir = FALSE,
     png.subdir = FALSE, png.dir.name = "pdf",
     also.pdf = getOption("gg.save.pdf", T),
     pdf.subdir = FALSE, pdf.dir.name = "pdf",
@@ -112,6 +115,11 @@ qqSave <- function(
     is.null(suffix) | is.character(suffix),
     is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
   )
+
+  if(!isFALSE(subir)) {
+    stopifnot(is.character(subir), subir == "" )
+    MarkdownReports::create_set_SubDir(subdir)
+  }
 
   # Helper
   add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, sppp(x, ext))
@@ -199,6 +207,7 @@ qqSave <- function(
     )
   }
 
+  if(!isFALSE(subir)) MarkdownReports::create_set_OutDir(ParentDir)
   tictoc::toc()
 }
 
