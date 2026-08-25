@@ -9,7 +9,6 @@
 # devtools::check_man("~/GitHub/Packages/ggExpress"); # devtools::document("~/GitHub/Packages/ggExpress")
 
 
-
 # ______________________________________________________________________________________________----
 # Define package options  ----
 
@@ -18,7 +17,6 @@
 
   pkg_op <- list(
     # insert at top
-
     gg.fill.col = "gold",
     gg.save.pdf = TRUE,
     gg.save.obj = FALSE,
@@ -34,7 +32,6 @@
 
   invisible()
 }
-
 
 
 # ______________________________________________________________________________________________----
@@ -85,29 +82,27 @@
 #'
 #' @export
 qqSave <- function(
-    ggobj,
-    title = FALSE,
-    fname = FALSE,
-    suffix = NULL,
-
-    ## Argument `ext` is completely ignored atm.
-    ## It is needed so that ggXXX do not fail
-    ## Atm, png is always saved. This may be changed in the future.
-    ext = "png",
-    subdir = FALSE,
-    png.subdir = FALSE, png.dir.name = "pdf",
-    also.pdf = getOption("gg.save.pdf", T),
-    pdf.subdir = FALSE, pdf.dir.name = "pdf",
-    save.obj = getOption("gg.save.obj", F),
-    obj.subdir = FALSE, obj.dir.name = "ggobj",
-    save.meta.info = getOption("gg.save.meta", F), meta.info.custom = "",
-
-    bgcol = "white",
-    max.obj.size = 5e+06, # 5 MB
-    w = 6, h = w,
-    plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
-    ...) {
-
+  ggobj,
+  title = FALSE,
+  fname = FALSE,
+  suffix = NULL,
+  ## Argument `ext` is completely ignored atm.
+  ## It is needed so that ggXXX do not fail
+  ## Atm, png is always saved. This may be changed in the future.
+  ext = "png",
+  subdir = FALSE,
+  png.subdir = FALSE, png.dir.name = "pdf",
+  also.pdf = getOption("gg.save.pdf", TRUE),
+  pdf.subdir = FALSE, pdf.dir.name = "pdf",
+  save.obj = getOption("gg.save.obj", FALSE),
+  obj.subdir = FALSE, obj.dir.name = "ggobj",
+  save.meta.info = getOption("gg.save.meta", FALSE), meta.info.custom = "",
+  bgcol = "white",
+  max.obj.size = 5e+06, # 5 MB
+  w = 6, h = w,
+  plot_on_page = list(FALSE, "A4p", "A4l", "A5p", "A5l")[[1]],
+  ...
+) {
   stopifnot(
     is.ggplot(ggobj), is.numeric(max.obj.size), is.numeric(w), is.numeric(h),
     is.logical(also.pdf), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
@@ -116,8 +111,8 @@ qqSave <- function(
     is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
   )
 
-  if(!isFALSE(subdir)) {
-    stopifnot(is.character(subdir), subdir != "" )
+  if (!isFALSE(subdir)) {
+    stopifnot(is.character(subdir), subdir != "")
     MarkdownReports::create_set_SubDir(... = subdir)
   }
 
@@ -135,7 +130,8 @@ qqSave <- function(
     dimA4 <- c(8.27, 11.69) * ifelse(grepl("^A5", plot_on_page), 0.5, 1)
     # Flip for landscape
     if (grepl("l$", plot_on_page)) dimA4 <- rev(dimA4)
-    w <- dimA4[1]; h <- dimA4[2]
+    w <- dimA4[1]
+    h <- dimA4[2]
   }
 
   # Create PDF / object subdirectories and adjust file paths if needed ___________________________
@@ -162,10 +158,10 @@ qqSave <- function(
 
   # Save the plot
   cowplot::save_plot(
-    plot = ggobj, filename = add_ext_if_missing(fname, 'png'),
+    plot = ggobj, filename = add_ext_if_missing(fname, "png"),
     base_width = w, base_height = h, ...
   )
-  FnPp <- spps(getwd(), "/", add_ext_if_missing(fname, 'png'))
+  FnPp <- spps(getwd(), "/", add_ext_if_missing(fname, "png"))
   message(FnPp)
 
   # Saving ______________________________________________________________________________________
@@ -173,15 +169,18 @@ qqSave <- function(
     cowplot::save_plot(
       plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
       title = ww.ttl_field(title, creator = "ggExpress"),
-      ...)
+      ...
+    )
     message(getwd(), "/", fname_pdf)
   }
 
   if (save.obj) {
     ggobj.size <- object.size(ggobj)
     if (ggobj.size > max.obj.size) {
-      warning("The ggplot object is larger than " , max.obj.size/1e6, "MBs. It is: ", iround(ggobj.size/1e6),
-              " MB. Increase max.obj.size to save the object.\n")
+      warning(
+        "The ggplot object is larger than ", max.obj.size / 1e6, "MBs. It is: ", iround(ggobj.size / 1e6),
+        " MB. Increase max.obj.size to save the object.\n"
+      )
     } else {
       qs::qsave(ggobj, file = fname_qs)
       CMND <- paste0("ggplot_obj <- xread('", getwd(), "/", fname_qs, "')")
@@ -190,7 +189,6 @@ qqSave <- function(
   }
 
   if (isTRUE(save.meta.info)) {
-
     if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
       script_path <- rstudioapi::getActiveDocumentContext()$path
     } else {
@@ -198,7 +196,7 @@ qqSave <- function(
       script_path <- "Unknown"
     }
 
-    meta_lines <- c( "File created by:", script_path, "\nOriginally saved to:", FnPp )
+    meta_lines <- c("File created by:", script_path, "\nOriginally saved to:", FnPp)
     if (nzchar(meta.info.custom)) meta_lines <- c(meta_lines, "", meta.info.custom)
 
     writeLines(
@@ -207,10 +205,9 @@ qqSave <- function(
     )
   }
 
-  if(!isFALSE(subdir)) MarkdownReports::create_set_OutDir(ParentDir)
+  if (!isFALSE(subdir)) MarkdownReports::create_set_OutDir(ParentDir)
   tictoc::toc()
 }
-
 
 
 #' @title Quickly draw and save a histogram (png, pdf, ggobj.qs)
@@ -265,47 +262,49 @@ qqSave <- function(
 #'
 #' @export
 qhistogram <- function(
-    vec,
-    plotname = FixPlotName(substitute(vec)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    also.pdf = FALSE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    save.obj = getOption("gg.save.obj", F),
-
-    xlab = FALSE,
-    logX = FALSE, logY = FALSE,
-    annotation_logticks_X = logX, annotation_logticks_Y = logY,
-    vline = FALSE, filtercol = 0,
-    add = "median",
-    palette_use = getOption("gg.palette_use", 'jco'),
-    col = as.character(1:3)[1],
-    xlab.angle = 90,
-    legend.position = 'none',
-    max.names = 50,
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = 5, h = w,
-    ...) {
+  vec,
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  also.pdf = FALSE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  save.obj = getOption("gg.save.obj", FALSE),
+  xlab = FALSE,
+  logX = FALSE, logY = FALSE,
+  annotation_logticks_X = logX, annotation_logticks_Y = logY,
+  vline = FALSE, filtercol = 0,
+  add = "median",
+  palette_use = getOption("gg.palette_use", "jco"),
+  col = as.character(1:3)[1],
+  xlab.angle = 90,
+  legend.position = "none",
+  max.names = 50,
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = 5, h = w,
+  ...
+) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   # Color handling (histogram-safe) _______________________________________
-  pal <- if (length(palette_use) == 1)
+  pal <- if (length(palette_use) == 1) {
     ggpubr::get_palette(palette_use, 2)
-  else palette_use
+  } else {
+    palette_use
+  }
 
   # Resolve `col` to an actual color
-  col_resolved <- if (is.numeric(col) || grepl("^[0-9]+$", col))
+  col_resolved <- if (is.numeric(col) || grepl("^[0-9]+$", col)) {
     pal[as.integer(col)]
-  else
+  } else {
     col
+  }
 
   # Default: single-color histogram
   df$colour <- factor("all")
@@ -399,28 +398,27 @@ qhistogram <- function(
 #' @examples weight <- rnorm(1000)
 #' qdensity(weight)
 qdensity <- function(
-    vec,
-    plotname = FixPlotName(substitute(vec)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    xlab = FALSE,
-    xlab.angle = 90,
-    logX = FALSE, logY = FALSE,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = 'none',
-    max.names = 50,
-    grid = FALSE, mdlink = getOption("gg.mdlink", F),
-    w = 5, h = w, ...) {
+  vec,
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  xlab = FALSE,
+  xlab.angle = 90,
+  logX = FALSE, logY = FALSE,
+  palette_use = getOption("gg.palette_use", "jco"),
+  legend.position = "none",
+  max.names = 50,
+  grid = FALSE, mdlink = getOption("gg.mdlink", FALSE),
+  w = 5, h = w, ...
+) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
@@ -430,7 +428,7 @@ qdensity <- function(
     title = plotname, xlab = xlab,
     add = "median",
     color = "names", fill = "names",
-  subtitle = subtitle,
+    subtitle = subtitle,
     caption = caption,
     palette = palette_use,
     ...
@@ -508,41 +506,37 @@ qdensity <- function(
 #' qpie(vec = xvec)
 #'
 qpie <- function(
-    vec,
-    plotname = FixPlotName(substitute(vec)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    caption.ext = TRUE,
-    filename = NULL,
-
-    palette_use = getOption("gg.palette_use", 'jco'), # fill palette
-    color = "white", # outline color
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    legend.position = "none",
-    LegendSide = TRUE,
-    LegendTitle = "",
-
-    label.mode = "both",
-    pcdigits = 2,
-    # labels = "names",
-    # NamedSlices = FALSE,
-    # both_pc_and_value = FALSE,
-
-    custom.order = FALSE,
-    extended.canvas = TRUE,
-    custom.margin = TRUE,
-    max.categories = 100,
-    max.names = 10,
-    decr.order = TRUE,
-    w = 7, h = 5, mdlink = getOption("gg.mdlink", F),
-    ...) {
+  vec,
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  caption.ext = TRUE,
+  filename = NULL,
+  palette_use = getOption("gg.palette_use", "jco"), # fill palette
+  color = "white", # outline color
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  legend.position = "none",
+  LegendSide = TRUE,
+  LegendTitle = "",
+  label.mode = "both",
+  pcdigits = 2,
+  # labels = "names",
+  # NamedSlices = FALSE,
+  # both_pc_and_value = FALSE,
+  custom.order = FALSE,
+  extended.canvas = TRUE,
+  custom.margin = TRUE,
+  max.categories = 100,
+  max.names = 10,
+  decr.order = TRUE,
+  w = 7, h = 5, mdlink = getOption("gg.mdlink", FALSE),
+  ...
+) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)), all(vec >= 0))
   print(plotname)
   l.orig <- length(vec)
@@ -577,33 +571,33 @@ qpie <- function(
   # Create data frame for plotting
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
   if (l.orig > max.categories) df[["names"]][length(df$"names")] <- name.of.last
-  has_lab    <- nzchar(df$names)                                             # keep qqqNamed.Vec.2.Tbl() blanks
+  has_lab <- nzchar(df$names) # keep qqqNamed.Vec.2.Tbl() blanks
 
   ## Labels (4 modes) ____________________________________________
-  label.mode <- match.arg(label.mode, c("none", "name", "percent", "both"))   # new arg
-  pc_lab     <- paste0(100 * signif(df$value / sum(df$value), pcdigits), "%")
+  label.mode <- match.arg(label.mode, c("none", "name", "percent", "both")) # new arg
+  pc_lab <- paste0(100 * signif(df$value / sum(df$value), pcdigits), "%")
 
-  df$label <- ifelse(                                                         # build slice labels
-    has_lab,                                                                  # only where names exist
-    switch(                                                                   # choose labeling mode
+  df$label <- ifelse( # build slice labels
+    has_lab, # only where names exist
+    switch( # choose labeling mode
       label.mode,
-      none    = "",                                                           # no labels
-      name    = df$names,                                                     # names only
-      percent = pc_lab,                                                       # percent only
-      both    = paste0(df$names, "\n", pc_lab)                                # name + percent
+      none    = "", # no labels
+      name    = df$names, # names only
+      percent = pc_lab, # percent only
+      both    = paste0(df$names, "\n", pc_lab) # name + percent
     ),
-    ""                                                                        # keep blanks blank
+    "" # keep blanks blank
   )
 
   ## Order slices / legend __________________________________________________
-  if (decr.order) {                                                          # decreasing by value?
-    levs <- df$names[order(df$value, decreasing = TRUE)]                      # ordered labels
-    levs <- unique(levs)                                                      # factor levels must be unique
-    df$names <- factor(df$names, levels = levs)                               # apply order
+  if (decr.order) { # decreasing by value?
+    levs <- df$names[order(df$value, decreasing = TRUE)] # ordered labels
+    levs <- unique(levs) # factor levels must be unique
+    df$names <- factor(df$names, levels = levs) # apply order
   }
 
-  if (!identical(custom.order, FALSE)) {                                      # custom order provided?
-    df$names <- factor(df$names, levels = unique(custom.order))               # ensure unique levels
+  if (!identical(custom.order, FALSE)) { # custom order provided?
+    df$names <- factor(df$names, levels = unique(custom.order)) # ensure unique levels
   }
 
 
@@ -633,8 +627,8 @@ qpie <- function(
     fill = "names",
     color = color,
     title = plotname,
-    palette = palette_use
-    , ...
+    palette = palette_use,
+    ...
   ) +
     ggplot2::guides(fill = ggplot2::guide_legend(LegendTitle))
 
@@ -654,7 +648,6 @@ qpie <- function(
   if (plot) print(p)
   invisible(p)
 }
-
 
 
 # _________________________________________________________________________________________________
@@ -715,46 +708,41 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = -1, hline = .5)
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
-    vec,
-    plotname = FixPlotName(substitute(vec)),
-    subtitle = paste("Median:", iround(median(vec))),
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    hline = FALSE,
-    filtercol = 1,
-    filtercol_default = TRUE, # c("#008B45FF", "#EE0000FF") # Default green/red colors for filtering
-
-    palette_use = getOption("gg.palette_use", 'jco'),
-    col = 1,
-
-    xlab = "", xlab.angle = 45,
-    logY = FALSE,
-    ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
-    annotation_logticks_Y = logY,
-    label = NULL,
-    legend.position = 'none',
-    legend.title = NULL,
-    max.names = 100,
-    limitsize = FALSE,
-    ylab = NULL,
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(vec, factor = 0.25), h = 5,
-    ...) {
-
+  vec,
+  plotname = FixPlotName(substitute(vec)),
+  subtitle = paste("Median:", iround(median(vec))),
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  hline = FALSE,
+  filtercol = 1,
+  filtercol_default = TRUE, # c("#008B45FF", "#EE0000FF") # Default green/red colors for filtering
+  palette_use = getOption("gg.palette_use", "jco"),
+  col = 1,
+  xlab = "", xlab.angle = 45,
+  logY = FALSE,
+  ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
+  annotation_logticks_Y = logY,
+  label = NULL,
+  legend.position = "none",
+  legend.title = NULL,
+  max.names = 100,
+  limitsize = FALSE,
+  ylab = NULL,
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(vec, factor = 0.25), h = 5,
+  ...
+) {
   stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, strip.too.many.names = FALSE)
   if (length(unique(df$"names")) == 1) df$"names" <- as.character(1:length(vec))
-
 
 
   # Name-aware color handling ____________________________________________________________
@@ -777,23 +765,32 @@ qbarplot <- function(
 
   # Handling colors ________________________________________________________________
   # Palette argument
-  pal <- if (length(palette_use) == 1)
-    ggpubr::get_palette(palette_use, length(vec)) # For a name of a palette or a single color.
-  else
+  pal <- if (length(palette_use) == 1) {
+    ggpubr::get_palette(palette_use, length(vec))
+  } # For a name of a palette or a single color.
+  else {
     palette_use
+  }
 
   # Color argument_______________________________________________
-  cols <- if (is.numeric(col))
-    pal[rep(col, length.out = length(vec))]         # If numeric, use as indices into palette
-  else rep(col, length.out = length(vec))           # Else use colors as is, recycling if needed.
+  cols <- if (is.numeric(col)) {
+    pal[rep(col, length.out = length(vec))]
+  } # If numeric, use as indices into palette
+  else {
+    rep(col, length.out = length(vec))
+  } # Else use colors as is, recycling if needed.
 
 
   # Optional filter coloring via hline _______________________________________________
   if (is.numeric(hline) && filtercol %in% c(1, -1)) {
-    pal_fc <- if  (isTRUE(filtercol_default))  c("#008B45FF", "#EE0000FF")  # If filtercol_default is TRUE, use default green/red colors
-    else pal[1:2]                                                    # Else use first two colors of the palette
-    fc <- pal_fc[if (filtercol == 1) c(1, 2) else c(2, 1)]            # Flip colors if filtercol is -1
-    cols <- ifelse(vec > hline, fc[1], fc[2])                         # Overwrite colors based on hline comparison
+    pal_fc <- if (isTRUE(filtercol_default)) {
+      c("#008B45FF", "#EE0000FF")
+    } # If filtercol_default is TRUE, use default green/red colors
+    else {
+      pal[1:2]
+    } # Else use first two colors of the palette
+    fc <- pal_fc[if (filtercol == 1) c(1, 2) else c(2, 1)] # Flip colors if filtercol is -1
+    cols <- ifelse(vec > hline, fc[1], fc[2]) # Overwrite colors based on hline comparison
   }
 
   # Assign colors to dataframe _______________________________________________
@@ -804,16 +801,15 @@ qbarplot <- function(
 
   # log10Y axis handling ____________________________________________________________
   if (logY) {
-
     if (any(vec <= 0)) {
-      warning( sum(vec <= 0), " input value(s) are <=0. \nA pseudocount of min(vec)/10 will be added.")
+      warning(sum(vec <= 0), " input value(s) are <=0. \nA pseudocount of min(vec)/10 will be added.")
 
       # minimal & explicit pseudocount
       pseudo <- min(vec[vec > 0]) / 10
       vec <- vec + pseudo
     }
 
-    ylim <- NULL  # CRITICAL: never pass ylim to scale_y_log10()
+    ylim <- NULL # CRITICAL: never pass ylim to scale_y_log10()
   }
 
   # Plot _________________________________________________________________
@@ -856,8 +852,6 @@ qbarplot <- function(
   if (plot) print(p)
   invisible(p)
 }
-
-
 
 
 # _________________________________________________________________________________________________
@@ -922,45 +916,40 @@ qbarplot <- function(
 #' @export qbarplot.stacked.from.wide.df
 
 qbarplot.stacked.from.wide.df <- function(
-    df,
-    x = "Samples",
-    y = "Fraction",
-    z = "Category",
-    y_axis_factor_levels = colnames(df),
-
-    plotname = FixPlotName(substitute(df)),
-    subtitle = NULL, suffix = NULL, caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    # fill = colnames(df)[3],
-    color = 1,
-    label = NULL,
-
-    scale = TRUE,
-
-    hline = FALSE,
-    # filtercol = 1,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    xlab.angle = 45, xlab = x,
-    logY = FALSE,
-    annotation_logticks_Y = logY,
-    legend.position = 'none',
-    max.names = 50,
-    limitsize = FALSE,
-    max.categ = 10,
-    # top = NULL,
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(df, factor = .7), h = 5,
-    ...) {
-
-  # warning("This funciton has known issues, may not work!", immediate. = T)
+  df,
+  x = "Samples",
+  y = "Fraction",
+  z = "Category",
+  y_axis_factor_levels = colnames(df),
+  plotname = FixPlotName(substitute(df)),
+  subtitle = NULL, suffix = NULL, caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  # fill = colnames(df)[3],
+  color = 1,
+  label = NULL,
+  scale = TRUE,
+  hline = FALSE,
+  # filtercol = 1,
+  palette_use = getOption("gg.palette_use", "jco"),
+  xlab.angle = 45, xlab = x,
+  logY = FALSE,
+  annotation_logticks_Y = logY,
+  legend.position = "none",
+  max.names = 50,
+  limitsize = FALSE,
+  max.categ = 10,
+  # top = NULL,
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(df, factor = .7), h = 5,
+  ...
+) {
+  # warning("This funciton has known issues, may not work!", immediate. = TRUE)
   message(plotname)
   stopifnot(
     is.data.frame(df),
@@ -978,7 +967,7 @@ qbarplot.stacked.from.wide.df <- function(
       values_to = y # "Fraction"
     )
 
-  if(is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
+  if (is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
     df_long[[2]] <- factor(
       df_long[[2]],
       levels = y_axis_factor_levels
@@ -1006,7 +995,11 @@ qbarplot.stacked.from.wide.df <- function(
   if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
   if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
 
-  file_name <- if (!is.null(filename)) { filename } else { FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext) }
+  file_name <- if (!is.null(filename)) {
+    filename
+  } else {
+    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
+  }
 
   if (save) {
     qqSave(
@@ -1077,43 +1070,36 @@ qbarplot.stacked.from.wide.df <- function(
 #' @export qbarplot.df
 
 qbarplot.df <- function(
-    df,
-    x = colnames(df)[1],
-    y = colnames(df)[2],
-    plotname = FixPlotName(substitute(df)),
-    subtitle = NULL, suffix = NULL, caption = suffix,
-    filename = NULL,
-
-    fill = colnames(df)[3],
-    color = 1,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    label = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    scale = TRUE,
-    position = if(scale) "fill" else "dodge", # also can be "stack"
-
-    xlab.angle = 45, xlab = NULL,
-    logY = FALSE,
-    annotation_logticks_Y = logY,
-
-    hline = FALSE, filtercol = 1,
-    legend.position = 'none',
-    max.names = 50,
-    limitsize = FALSE,
-    max.categ = 10,
-
-
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(df), h = 5,
-    ...) {
-
+  df,
+  x = colnames(df)[1],
+  y = colnames(df)[2],
+  plotname = FixPlotName(substitute(df)),
+  subtitle = NULL, suffix = NULL, caption = suffix,
+  filename = NULL,
+  fill = colnames(df)[3],
+  color = 1,
+  palette_use = getOption("gg.palette_use", "jco"),
+  label = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  scale = TRUE,
+  position = if (scale) "fill" else "dodge", # also can be "stack"
+  xlab.angle = 45, xlab = NULL,
+  logY = FALSE,
+  annotation_logticks_Y = logY,
+  hline = FALSE, filtercol = 1,
+  legend.position = "none",
+  max.names = 50,
+  limitsize = FALSE,
+  max.categ = 10,
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(df), h = 5,
+  ...
+) {
   message(plotname)
   cols <- colnames(df)
   x <- if (is.numeric(x)) cols[x] else x
@@ -1137,8 +1123,7 @@ qbarplot.df <- function(
   }
 
   # Position handling ____________________________________________________________
-  pos_gg <- switch(
-    position,
+  pos_gg <- switch(position,
     dodge = ggplot2::position_dodge(),
     stack = ggplot2::position_stack(),
     fill  = ggplot2::position_fill()
@@ -1250,45 +1235,40 @@ qbarplot.df <- function(
 #'
 #' @export
 qscatter <- function(
-    df_XYcol,
-    x = 1, y = 2,
-    plotname = FixPlotName(substitute(df_XYcol)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    label = NULL, repel = TRUE,
-    legend.position = 'none',
-    col = c(NULL, 3)[1],
-    # fill = NULL,
-    palette_use = getOption("gg.palette_use", 'jco'),
-
-    xlab = NULL, ylab = NULL,
-    xlab.angle = 90,
-    logX = FALSE, logY = FALSE,
-    annotation_logticks_Y = logY,
-    annotation_logticks_X = logX,
-    xlim = NULL,
-    ylim = NULL,
-    isometric = FALSE,
-
-    hline = FALSE, vline = FALSE, abline = FALSE,
-    line.col = "darkgrey", line.width = 0.5, line.type = "dashed",
-    add_contour_plot = FALSE,
-    correlation_r2 = FALSE, # add as  c("pearson", "spearman")
-
-    grid = "xy", mdlink = getOption("gg.mdlink", F),
-    w = 7, h = w,
-    ...) {
-
+  df_XYcol,
+  x = 1, y = 2,
+  plotname = FixPlotName(substitute(df_XYcol)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  label = NULL, repel = TRUE,
+  legend.position = "none",
+  col = c(NULL, 3)[1],
+  # fill = NULL,
+  palette_use = getOption("gg.palette_use", "jco"),
+  xlab = NULL, ylab = NULL,
+  xlab.angle = 90,
+  logX = FALSE, logY = FALSE,
+  annotation_logticks_Y = logY,
+  annotation_logticks_X = logX,
+  xlim = NULL,
+  ylim = NULL,
+  isometric = FALSE,
+  hline = FALSE, vline = FALSE, abline = FALSE,
+  line.col = "darkgrey", line.width = 0.5, line.type = "dashed",
+  add_contour_plot = FALSE,
+  correlation_r2 = FALSE, # add as  c("pearson", "spearman")
+  grid = "xy", mdlink = getOption("gg.mdlink", FALSE),
+  w = 7, h = w,
+  ...
+) {
   print(plotname)
 
   # Input validation ____________________________________________________________
@@ -1320,8 +1300,10 @@ qscatter <- function(
     rng <- range(rng, xlim, ylim, na.rm = TRUE) |>
       CodeAndRoll2::iround()
 
-    message("Isometric axes are calculated automatically from the data:\n",
-            paste(rng, collapse = ", "), " - It can be extended by providing xlim arg.")
+    message(
+      "Isometric axes are calculated automatically from the data:\n",
+      paste(rng, collapse = ", "), " - It can be extended by providing xlim arg."
+    )
     xlim <- rng
     ylim <- rng
   }
@@ -1371,20 +1353,21 @@ qscatter <- function(
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
   }
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
-                   also.pdf = also.pdf, save.obj = save.obj)
+  if (save) {
+    qqSave(
+      ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
+      also.pdf = also.pdf, save.obj = save.obj
+    )
+  }
   if (mdlink & save) qMarkdownImageLink(file_name)
   if (plot) print(p)
   invisible(p)
 }
 
 
-
-
 # ______________________________________________________________________________________________----
 # List-based distribution plots ----
 # ____________________________________________________________________
-
 
 
 #' @title Quickly draw and save a boxplot (png, pdf, ggobj.qs)
@@ -1441,44 +1424,41 @@ qscatter <- function(
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
 #' qboxplot(ToothLen.by.Dose)
 qboxplot <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    add.params = NULL,
-    col = NULL,
-    fill = getOption("gg.fill.col", "gold"),
-    outlier.shape = NULL,
-    stat.test = TRUE,
-    # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
-    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = 'none',
-    ylab = NULL, # xlab = NULL,
-    logY = FALSE, # , logX = FALSE
-    annotation_logticks_Y = logY,
-    xlab.angle = 90,
-    hline = FALSE, vline = FALSE,
-
-    max.categ = 100,
-    add = NULL,
-    # position = if(add == "jitter") position_dodge(width=.7) else NULL,
-    # add.params = if(add == "jitter") list(shape = "supp"),
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    ...) {
-
+  df_XYcol_or_list,
+  x = 1, y = 2,
+  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  add.params = NULL,
+  col = NULL,
+  fill = getOption("gg.fill.col", "gold"),
+  outlier.shape = NULL,
+  stat.test = TRUE,
+  # , stat.method = "wilcox.test", stat.label.y.npc = 0, stat.label.x = .5
+  stat.method = NULL, stat.label.y.npc = "top", stat.label.x = NULL,
+  palette_use = getOption("gg.palette_use", "jco"),
+  legend.position = "none",
+  ylab = NULL, # xlab = NULL,
+  logY = FALSE, # , logX = FALSE
+  annotation_logticks_Y = logY,
+  xlab.angle = 90,
+  hline = FALSE, vline = FALSE,
+  max.categ = 100,
+  add = NULL,
+  # position = if(add == "jitter") position_dodge(width=.7) else NULL,
+  # add.params = if(add == "jitter") list(shape = "supp"),
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(df_XYcol_or_list), h = 6,
+  ...
+) {
   stopifnot(
     is.data.frame(df_XYcol_or_list) | CodeAndRoll2::is.list.simple(df_XYcol_or_list),
     is.numeric(x) | is.character(x), is.numeric(y) | is.character(y),
@@ -1633,36 +1613,35 @@ qboxplot <- function(
 #' ToothLen.by.Dose <- ToothGrowth[, c("dose", "len")]
 #' qviolin(ToothLen.by.Dose)
 qviolin <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2, col = NULL,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    add.params = NULL,
-    fill = getOption("gg.fill.col", "gold"),
-    stat.test = FALSE,
-    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = 'none',
-    logY = FALSE, # , logX = FALSE
-    annotation_logticks_Y = logY,
-    xlab.angle = 45,
-    hline = FALSE, vline = FALSE,
-    # , outlier.shape = NULL
-    max.categ = 100,
-    grid = FALSE, mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    ...) {
+  df_XYcol_or_list,
+  x = 1, y = 2, col = NULL,
+  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  add.params = NULL,
+  fill = getOption("gg.fill.col", "gold"),
+  stat.test = FALSE,
+  stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.5,
+  palette_use = getOption("gg.palette_use", "jco"),
+  legend.position = "none",
+  logY = FALSE, # , logX = FALSE
+  annotation_logticks_Y = logY,
+  xlab.angle = 45,
+  hline = FALSE, vline = FALSE,
+  # , outlier.shape = NULL
+  max.categ = 100,
+  grid = FALSE, mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(df_XYcol_or_list), h = 6,
+  ...
+) {
   df_XYcol <- if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) qqqList.2.DF.ggplot(df_XYcol_or_list) else df_XYcol_or_list
   message("nrow(df_XYcol): ", nrow(df_XYcol))
   .assertMaxCategories(df_XYcol, col = x, max.categ)
@@ -1711,7 +1690,6 @@ qviolin <- function(
   if (plot) print(p)
   invisible(p)
 }
-
 
 
 # _________________________________________________________________________________________________
@@ -1778,42 +1756,39 @@ qviolin <- function(
 #'
 #' @export
 qstripchart <- function(
-    df_XYcol_or_list,
-    x = 1, y = 2, col = NULL,
-    plotname = FixPlotName(substitute(df_XYcol_or_list)),
-    subtitle = NULL,
-    suffix = NULL,
-    caption = suffix,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    fill = getOption("gg.fill.col", "gold"),
-    add = c("violin", "mean_sd"),
-    size.point = .2,
-    stat.test = TRUE,
-    stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
-    palette_use = getOption("gg.palette_use", 'jco'),
-    legend.position = 'none',
-    add.params = NULL,
-
-    logY = FALSE, # , logX = FALSE
-    annotation_logticks_Y = logY,
-    xlab.angle = 90, xlab = "",
-    ylab = NULL,
-    hline = FALSE, vline = FALSE,
-
-    annotate_top_labels = FALSE,
-    custom_top_labels = FALSE,
-    max.categ = 100,
-    grid = "y", mdlink = getOption("gg.mdlink", F),
-    w = qqqAxisLength(df_XYcol_or_list), h = 6,
-    ...) {
+  df_XYcol_or_list,
+  x = 1, y = 2, col = NULL,
+  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  subtitle = NULL,
+  suffix = NULL,
+  caption = suffix,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  fill = getOption("gg.fill.col", "gold"),
+  add = c("violin", "mean_sd"),
+  size.point = .2,
+  stat.test = TRUE,
+  stat.method = NULL, stat.label.y.npc = "top", stat.label.x = 0.75,
+  palette_use = getOption("gg.palette_use", "jco"),
+  legend.position = "none",
+  add.params = NULL,
+  logY = FALSE, # , logX = FALSE
+  annotation_logticks_Y = logY,
+  xlab.angle = 90, xlab = "",
+  ylab = NULL,
+  hline = FALSE, vline = FALSE,
+  annotate_top_labels = FALSE,
+  custom_top_labels = FALSE,
+  max.categ = 100,
+  grid = "y", mdlink = getOption("gg.mdlink", FALSE),
+  w = qqqAxisLength(df_XYcol_or_list), h = 6,
+  ...
+) {
   message("Column 1 should be the X-, Column 2 the Y-axis.")
   stopifnot(
     CodeAndRoll2::is.list.simple(df_XYcol_or_list) | is.data.frame(df_XYcol_or_list)
@@ -1867,10 +1842,8 @@ qstripchart <- function(
   if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
 
 
-
   # Top row annotation
   if (!isFALSE(annotate_top_labels)) {
-
     xvar <- vars[x]
     yvar <- vars[y]
 
@@ -1883,8 +1856,8 @@ qstripchart <- function(
 
     p <- p + qqqAnnotateTopLabels(
       df = df_XYcol,
-      x  = xvar,
-      y  = yvar,
+      x = xvar,
+      y = yvar,
       labels = labels
     )
   }
@@ -1913,8 +1886,6 @@ qstripchart <- function(
   if (plot) print(p)
   invisible(p)
 }
-
-
 
 
 # _________________________________________________________________________________________________
@@ -1957,28 +1928,26 @@ qstripchart <- function(
 #'
 #' @export
 qvenn <- function(
-    list,
-
-    plotname = FixPlotName(substitute(list)),
-    suffix = NULL,
-    subtitle = paste(length(unique(unlist(list))), "elements in total"),
-    caption = parseParamStringWNames(sapply(list, length)),
-    caption2 = NULL,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    col.min = "white", col.max = "red",
-    legend.position = 'none',
-    x_exp = .2,
-    mdlink = getOption("gg.mdlink", F),
-    w = 8, h = 0.75 * w,
-    ...) {
+  list,
+  plotname = FixPlotName(substitute(list)),
+  suffix = NULL,
+  subtitle = paste(length(unique(unlist(list))), "elements in total"),
+  caption = parseParamStringWNames(sapply(list, length)),
+  caption2 = NULL,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  col.min = "white", col.max = "red",
+  legend.position = "none",
+  x_exp = .2,
+  mdlink = getOption("gg.mdlink", FALSE),
+  w = 8, h = 0.75 * w,
+  ...
+) {
   #
   stopifnot(is.list(list), length(list) > 0L)
 
@@ -2010,8 +1979,6 @@ qvenn <- function(
   if (plot) print(p)
   invisible(p)
 }
-
-
 
 
 # _________________________________________________________________________________________________
@@ -2105,36 +2072,33 @@ qvenn <- function(
 #'
 #' @export
 qheatmap <- function(
-    data_matrix,
-
-    plotname = FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
-    subtitle = NULL,
-    suffix = NULL,
-    caption = "caption",
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    also.pdf = FALSE,
-    save.obj = getOption("gg.save.obj", F),
-
-    colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
-    legend_title = "Intensity",
-    scale = c("none", "row", "column"), # heatmaply scaling options
-    cluster_rows = TRUE,
-    cluster_cols = FALSE,
-    row_annotation = NULL, # optional: row annotations
-    col_annotation = NULL, # optional: column annotations
-    row_annot_colors = NULL, # custom palette for row annotations
-    col_annot_colors = NULL, # custom palette for column annotations
-
-    xlab = "x axis",
-    ylab = "y axis",
-    mdlink = getOption("gg.mdlink", F),
-    w = 7, h = 6,
-    ...) {
+  data_matrix,
+  plotname = FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
+  subtitle = NULL,
+  suffix = NULL,
+  caption = "caption",
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  also.pdf = FALSE,
+  save.obj = getOption("gg.save.obj", FALSE),
+  colors = grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026"))(256), # default diverging palette
+  legend_title = "Intensity",
+  scale = c("none", "row", "column"), # heatmaply scaling options
+  cluster_rows = TRUE,
+  cluster_cols = FALSE,
+  row_annotation = NULL, # optional: row annotations
+  col_annotation = NULL, # optional: column annotations
+  row_annot_colors = NULL, # custom palette for row annotations
+  col_annot_colors = NULL, # custom palette for column annotations
+  xlab = "x axis",
+  ylab = "y axis",
+  mdlink = getOption("gg.mdlink", FALSE),
+  w = 7, h = 6,
+  ...
+) {
   warning("   !!! qheatmap is in experimental status !!! ")
   # ___ Input validation ___
   stopifnot(
@@ -2277,25 +2241,24 @@ qheatmap <- function(
 #' )
 #' qmosaic(df = df, x = "Group", y = "Outcome")
 qmosaic <- function(
-    df,
-    x, y,
-    plotname = paste("Mosaic plot:", x, "vs", y),
-    subtitle = NULL, caption = NULL,
-    filename = NULL,
-
-    plot = TRUE,
-    save = TRUE,
-    also.pdf = FALSE,
-    ext = "png",
-    # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
-    save.obj = getOption("gg.save.obj", F),
-    save_matrix = FALSE,
-
-    weight = NULL,
-    palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
-    limitsize = FALSE, mdlink = getOption("gg.mdlink", F),
-    w = 6, h = 5,
-    ...) {
+  df,
+  x, y,
+  plotname = paste("Mosaic plot:", x, "vs", y),
+  subtitle = NULL, caption = NULL,
+  filename = NULL,
+  plot = TRUE,
+  save = TRUE,
+  also.pdf = FALSE,
+  ext = "png",
+  # ext = MarkdownHelpers::ww.set.file.extension(default = "png", also_pdf = also.pdf),
+  save.obj = getOption("gg.save.obj", FALSE),
+  save_matrix = FALSE,
+  weight = NULL,
+  palette_use = c("Set2", "Dark2", "Paired", "Pastel1", "Accent", "Set3", "Spectral")[1],
+  limitsize = FALSE, mdlink = getOption("gg.mdlink", FALSE),
+  w = 6, h = 5,
+  ...
+) {
   warning("   !!! qmosaic is in experimental status !!! ")
 
   stopifnot(
@@ -2385,8 +2348,6 @@ qmosaic <- function(
 # ____________________________________________________________________
 
 
-
-
 # _________________________________________________________________________________________________
 #' @title  q32vA4_grid_plot
 #'
@@ -2407,14 +2368,15 @@ qmosaic <- function(
 #' @examples # q32vA4_grid_plot()
 #' @export
 q32vA4_grid_plot <- function(
-    plot_list,
-    suffix = NULL,
-    plotname = FixPlotName(substitute(plot_list), suffix),
-    plot = FALSE,
-    nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
-    scale = 1,
-    h = hA4 * scale, w = wA4 * scale,
-    ...) { # Save 4 umaps on an A4 page.
+  plot_list,
+  suffix = NULL,
+  plotname = FixPlotName(substitute(plot_list), suffix),
+  plot = FALSE,
+  nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
+  scale = 1,
+  h = hA4 * scale, w = wA4 * scale,
+  ...
+) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
   stopifnot(length(plot_list) < 7)
 
@@ -2425,7 +2387,6 @@ q32vA4_grid_plot <- function(
   ww.FnP_parser(fname)
   if (plot) p1
 }
-
 
 
 # _________________________________________________________________________________________________
@@ -2451,17 +2412,18 @@ q32vA4_grid_plot <- function(
 #'
 #' @export
 qA4_grid_plot <- function(
-    plot_list,
-    plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
-    suffix = NULL,
-    nrow = 3, ncol = 2,
-    plot = FALSE,
-    labels = LETTERS[1:length(plot_list)],
-    max.list.length = 16,
-    extension = c("pdf", "png")[2],
-    scale = 1,
-    h = hA4 * scale, w = wA4 * scale,
-    ...) { # Save 4 umaps on an A4 page.
+  plot_list,
+  plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
+  suffix = NULL,
+  nrow = 3, ncol = 2,
+  plot = FALSE,
+  labels = LETTERS[1:length(plot_list)],
+  max.list.length = 16,
+  extension = c("pdf", "png")[2],
+  scale = 1,
+  h = hA4 * scale, w = wA4 * scale,
+  ...
+) { # Save 4 umaps on an A4 page.
   stopifnot(length(plot_list) < max.list.length)
   message("Plot panels ", nrow, " rows by ", ncol, " cols, on an A4 page.")
 
@@ -2473,7 +2435,6 @@ qA4_grid_plot <- function(
   ww.FnP_parser(fname)
   if (plot) p1
 }
-
 
 
 # _________________________________________________________________________________________________
@@ -2489,7 +2450,6 @@ qA4_grid_plot <- function(
 qMarkdownImageLink <- function(file_name = "myplot.pdf") {
   MarkdownHelpers::llogit(paste0("![", file_name, "]", "(", file_name, ")", collapse = ""))
 }
-
 
 
 # ______________________________________________________________________________________________----
@@ -2540,7 +2500,6 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
   df$"names" <- if (!is.null(nm)) nm else rep(".", length(namedVec))
   df
 }
-
 
 
 # _________________________________________________________________________________________________
@@ -2639,10 +2598,6 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 }
 
 
-
-
-
-
 # _________________________________________________________________________________________________
 
 #' @title Summarize Mean and Median per Group
@@ -2705,7 +2660,6 @@ qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y = 2) {
 
 # _________________________________________________________________________________________________
 # _________________________________________________________________________________________________
-
 
 
 # _________________________________________________________________________________________________

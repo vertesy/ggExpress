@@ -187,72 +187,164 @@ Simple | Customized
 
 
 
-## List of Functions in ggExpress.R (22) 
-Updated: 2025/12/02 20:14
+## List of Functions in ggExpress.R (23) 
 
-- #### 1 `qhistogram()`
-Quickly draw and save a histogram (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a histogram of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::gghistogram()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+Updated: 2026/08/25 16:23
 
-- #### 2 `qdensity()`
-Quickly draw and save a density plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a density plot of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggdensity()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument.  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+- #### 1 `  add_ext_if_missing()`
 
-- #### 3 `qpie()`
-Quickly draw and save a pie chart (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a pie chart of a  distribution provided as a numeric table. It is a wrapper around `ggpubr::ggpie()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+  qqSave. Quick-Save ggplot objects to file with automatic file naming.  Default format: png, optionally also saves a .pdf and/or .qs ggplot object.
 
-- #### 4 `qbarplot()`
-Quickly draw and save a bar plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a bar plot of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggbarplot()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+- #### 2 `qhistogram()`
 
-- #### 5 `qbarplot.stacked.from.wide.df()`
-qbarplot.stacked.from.wide.df - Barplot for tibbles or dataframes. Draw and save a stacked barplot for each row of a dataframe.
+  Quickly draw and save a histogram (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a histogram of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::gghistogram()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
 
-- #### 6 `qbarplot.df()`
-qbarplot.df - Barplot for tibbles or dataframes. Draw and save a barplot for tibbles or dataframes
+- #### 3 `qdensity()`
 
-- #### 7 `qscatter()`
-Quickly draw and save a scatter plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a scatter plot of  two variables provided as a 2-column data frame or matrix. It is a wrapper around  `ggpubr::ggscatter()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+  Quickly draw and save a density plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a density plot of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggdensity()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument.  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
 
-- #### 8 `qboxplot()`
-Quickly draw and save a boxplot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a boxplot from  a two-column data frame or a named list of values. The first column (or list names) is plotted on the X axis,  the second column (or list values) on the Y axis.  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+- #### 4 `qpie()`
 
-- #### 9 `qviolin()`
-Quickly draw and save a violin plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a violin plot from  a two-column data frame or a named list of values. The first column (or list names) is plotted  on the X axis, the second column (or list values) on the Y axis. It is a wrapper around  `ggpubr::ggviolin()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument.#'  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+  Quickly draw and save a pie chart (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a pie chart of a  distribution provided as a numeric table. It is a wrapper around `ggpubr::ggpie()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
 
-- #### 10 `qstripchart()`
-Quickly draw and save a stripchart (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a stripchart from  a two-column data frame or a named list of values. The first column (or list names) is plotted  on the X axis, the second column (or list values) on the Y axis. It is a wrapper around  `ggpubr::ggstripchart()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+- #### 5 `qbarplot()`
 
-- #### 11 `qvenn()`
-Quickly draw and save a Venn Diagram (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a Venn Diagram from  a named list of values. It is a wrapper around `ggVennDiagram::ggVennDiagram()`,  with the automation of many features. All `ggVennDiagram` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+  Quickly draw and save a bar plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a bar plot of a  distribution provided as a numeric vector. It is a wrapper around `ggpubr::ggbarplot()`,  with the automation of many features. All `ggpubr` parameters can be accessed through  the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
 
-- #### 12 `qheatmap()`
-Quick Heatmap Plot. Generates a heatmap plot using the `ggheatmap` package with features such as automatic  file saving and markdown link generation. This function simplifies the process of creating and  customizing heatmaps, with support for clustering, annotations, and scaling. 
+- #### 6 `qbarplot.stacked.from.wide.df()`
 
-- #### 13 `qmosaic()`
-Draw and Save a Doubledecker Mosaic Plot.   Creates a mosaic-style (doubledecker) stacked bar plot where the X-axis bar width is proportional  to the group size and the Y-axis variable determines the color (fill). This function wraps  `ggmosaic::geom_mosaic()` in the style of ggExpress plotting wrappers and supports automatic file  saving, Markdown linking, and default color palettes. 
+  qbarplot.stacked.from.wide.df - Barplot for tibbles or dataframes. Draw and save a stacked barplot for each row of a dataframe.
 
-- #### 14 `qqSave()`
-qqSave. Quick-Save ggplot objects
+- #### 7 `qbarplot.df()`
+
+  qbarplot.df - Barplot for tibbles or dataframes. Draw and save a barplot for tibbles or dataframes
+
+- #### 8 `qscatter()`
+
+  Quickly draw and save a scatter plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a scatter plot of  two variables provided as a 2-column data frame or matrix. It is a wrapper around  `ggpubr::ggscatter()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+
+- #### 9 `qboxplot()`
+
+  Quickly draw and save a boxplot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a boxplot from  a two-column data frame or a named list of values. The first column (or list names) is plotted on the X axis,  the second column (or list values) on the Y axis.  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+
+- #### 10 `qviolin()`
+
+  Quickly draw and save a violin plot (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a violin plot from  a two-column data frame or a named list of values. The first column (or list names) is plotted  on the X axis, the second column (or list values) on the Y axis. It is a wrapper around  `ggpubr::ggviolin()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument.#'  It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+
+- #### 11 `qstripchart()`
+
+  Quickly draw and save a stripchart (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a stripchart from  a two-column data frame or a named list of values. The first column (or list names) is plotted  on the X axis, the second column (or list values) on the Y axis. It is a wrapper around  `ggpubr::ggstripchart()`, with the automation of many features. All `ggpubr` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+
+- #### 12 `qvenn()`
+
+  Quickly draw and save a Venn Diagram (png, pdf, ggobj.qs). This all-in-one function draws, annotates, displays and saves a Venn Diagram from  a named list of values. It is a wrapper around `ggVennDiagram::ggVennDiagram()`,  with the automation of many features. All `ggVennDiagram` parameters can be  accessed through the `...` argument. It can automatically save the plot as png (default) and/or  pdf files, and the ggplot object as a .qs file. 
+
+- #### 13 `qheatmap()`
+
+  Quick Heatmap Plot. Generates a heatmap plot using the `ggheatmap` package with features such as automatic  file saving and markdown link generation. This function simplifies the process of creating and  customizing heatmaps, with support for clustering, annotations, and scaling. 
+
+- #### 14 `qmosaic()`
+
+  Draw and Save a Doubledecker Mosaic Plot.   Creates a mosaic-style (doubledecker) stacked bar plot where the X-axis bar width is proportional  to the group size and the Y-axis variable determines the color (fill). This function wraps  `ggmosaic::geom_mosaic()` in the style of ggExpress plotting wrappers and supports automatic file  saving, Markdown linking, and default color palettes. 
 
 - #### 15 `q32vA4_grid_plot()`
-q32vA4_grid_plot. Plot up to 6 panels (3-by-2) on vertically standing A4 page.
+
+  q32vA4_grid_plot. Plot up to 6 panels (3-by-2) on vertically standing A4 page.
 
 - #### 16 `qA4_grid_plot()`
-qA4_grid_plot. Plot up to 6 panels (3-by-1) on vertically standing A4 page.
+
+  qA4_grid_plot. Plot up to 6 panels (3-by-1) on vertically standing A4 page.
 
 - #### 17 `qMarkdownImageLink()`
-qMarkdownImageLink. Insert Markdown image link to .md report
+
+  qMarkdownImageLink. Insert Markdown image link to .md report
 
 - #### 18 `qqqAxisLength()`
-qqqAxisLength. Define Axis Length
+
+  qqqAxisLength. Define Axis Length
 
 - #### 19 `qqqNamed.Vec.2.Tbl()`
-qqqNamed.Vec.2.Tbl. Convert a named vector to a table.
+
+  qqqNamed.Vec.2.Tbl. Convert a named vector to a table.
 
 - #### 20 `qqqTbl.2.Vec()`
-qqqTbl.2.Vec. Convert a table to a named vector.
+
+  qqqTbl.2.Vec. Convert a table to a named vector.
 
 - #### 21 `qqqList.2.DF.ggplot()`
-qqqList.2.DF.ggplot. Convert a list to a two-column data frame to plot boxplots and violin plots
 
-- #### 22 `.assertMaxCategories()`
-Assert Maximum Categories in a data frame Column. Checks if the number of unique categories in a column of a dataframe is within the allowed limit.
+  qqqList.2.DF.ggplot. Convert a list to a two-column data frame to plot boxplots and violin plots
+
+- #### 22 `qqqAnnotateTopLabels()`
+
+  Annotate Top Labels on a ggplot. Creates a ggplot2 text layer that annotates one label per x-category  at the top of the plotting panel. Labels can be computed from the data (default)  or provided explicitly. 
+
+- #### 23 `.assertMaxCategories()`
+
+  Assert Maximum Categories in a DataFrame Column. Checks if the number of unique categories in a column of a dataframe is within the allowed limit.
+
+
+
+
+----
+
+## Function relationships
+> (of connected functions)
+
+```mermaid
+ flowchart LR 
+
+  zigzagger(zigzagger) --> intermingle2vec(intermingle2vec)
+  which_names_grep(which_names_grep) --> grepv(grepv)
+  translate(translate) --> printEveryN(printEveryN)
+  table_fixed_categories(table_fixed_categories) --> pc_TRUE(pc_TRUE)
+  table_decreasing_hybrid(table_decreasing_hybrid) --> sort.decreasing(sort.decreasing)
+  table_decreasing(table_decreasing) --> sort.decreasing(sort.decreasing)
+  symdiff.ls(symdiff.ls) --> symdiff(symdiff)
+  rowSEM(rowSEM) --> sem(sem)
+  rowGeoMeans(rowGeoMeans) --> geomean(geomean)
+  rowCV(rowCV) --> cv(cv)
+  movingSEM(movingSEM) --> sem(sem)
+  merge_numeric_df_by_rn(merge_numeric_df_by_rn) --> symdiff(symdiff)
+  merge_ls_of_named_vec_as_df_cols(merge_ls_of_named_vec_as_df_cols) --> unlapply(unlapply)
+  merge_dfs_by_rn(merge_dfs_by_rn) --> idim(idim)
+  merge_1col_dfs_by_rn(merge_1col_dfs_by_rn) --> union.ls(union.ls)
+  median_normalize(median_normalize) --> colMedians(colMedians)
+  mdlapply2df(mdlapply2df) --> arr.of.lists.2.df(arr.of.lists.2.df)
+  mdlapply2df(mdlapply2df) --> copy.dimension.and.dimnames(copy.dimension.and.dimnames)
+  mdlapply(mdlapply) --> copy.dimension.and.dimnames(copy.dimension.and.dimnames)
+  ls2categvec(ls2categvec) --> unlapply(unlapply)
+  list2fullDF.presence(list2fullDF.presence) --> matrix.fromNames(matrix.fromNames)
+  list2fullDF.byNames(list2fullDF.byNames) --> matrix.fromNames(matrix.fromNames)
+  list.2.replicated.name.vec(list.2.replicated.name.vec) --> unlapply(unlapply)
+  intermingle.cbind(intermingle.cbind) --> matrix.fromNames(matrix.fromNames)
+  intermingle.cbind(intermingle.cbind) --> intermingle2vec(intermingle2vec)
+  intermingle.cbind(intermingle.cbind) --> symdiff(symdiff)
+  intermingle.cbind(intermingle.cbind) --> idim(idim)
+  imovingSEM(imovingSEM) --> sem(sem)
+  idimnames(idimnames) --> idim(idim)
+  getRows(getRows) --> which_names(which_names)
+  which_names(which_names) --> as.logical.wNames(as.logical.wNames)
+  getCols(getCols) --> which_names(which_names)
+  getCols(getCols) --> symdiff(symdiff)
+  fix_tibble_lists(fix_tibble_lists) --> get_col_types(get_col_types)
+  df.remove.empty.rows.and.columns(df.remove.empty.rows.and.columns) --> pc_TRUE(pc_TRUE)
+  df.remove.empty.rows.and.columns(df.remove.empty.rows.and.columns) --> idim(idim)
+  combine.matrices.by.rowname.intersect(combine.matrices.by.rowname.intersect) --> symdiff(symdiff)
+  sem(sem) --> na.omit.strip(na.omit.strip)
+  colSEM(colSEM) --> sem(sem)
+  colGeoMeans(colGeoMeans) --> geomean(geomean)
+  colCV(colCV) --> cv(cv)
+  as.named.vector.df(as.named.vector.df) --> idim(idim)
+  as.list.df.by.row(as.list.df.by.row) --> zero.omit(zero.omit)
+  as.list.df.by.row(as.list.df.by.row) --> na.omit.strip(na.omit.strip)
+  as.list.df.by.col(as.list.df.by.col) --> zero.omit(zero.omit)
+  as.list.df.by.col(as.list.df.by.col) --> na.omit.strip(na.omit.strip)
+  any.duplicated.rownames.ls.of.df(any.duplicated.rownames.ls.of.df) --> any.duplicated(any.duplicated)
+  any.duplicated(any.duplicated) --> sort.decreasing(sort.decreasing)
+subgraph SubGraphOne
+
+end
+```
+*created by `convert_igraph_to_mermaid()`*
 

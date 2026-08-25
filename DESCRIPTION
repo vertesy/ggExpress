@@ -20,21 +20,21 @@ Description: ggExpress is a set of R functions that allows you to generate
 License: GPL-3 + file LICENSE
 BugReports: https://github.com/vertesy/ggExpress/issues
 Depends: 
-    MarkdownHelpers,
-    Stringendo,
     ggplot2,
-    ggpubr
+    ggpubr,
+    MarkdownHelpers,
+    Stringendo
 Imports: 
     CodeAndRoll2,
-    MarkdownReports,
-    RColorBrewer,
     cowplot,
     ggVennDiagram,
+    MarkdownReports,
     qs,
+    RColorBrewer,
     tibble,
     tictoc,
     tidyr
 Encoding: UTF-8
-Packaged: 2025-12-02 20:10:54.974737
+Packaged: 2026-08-25 16:21:03.226729
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
