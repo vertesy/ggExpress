@@ -15,7 +15,7 @@ qdensity(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   xlab = FALSE,
   xlab.angle = 90,
   logX = FALSE,
@@ -24,7 +24,7 @@ qdensity(
   legend.position = "none",
   max.names = 50,
   grid = FALSE,
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = 5,
   h = w,
   ...

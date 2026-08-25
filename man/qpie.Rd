@@ -18,7 +18,7 @@ qpie(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   legend.position = "none",
   LegendSide = TRUE,
   LegendTitle = "",
@@ -32,7 +32,7 @@ qpie(
   decr.order = TRUE,
   w = 7,
   h = 5,
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   ...
 )
 }

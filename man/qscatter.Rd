@@ -17,7 +17,7 @@ qscatter(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   label = NULL,
   repel = TRUE,
   legend.position = "none",
@@ -42,7 +42,7 @@ qscatter(
   add_contour_plot = FALSE,
   correlation_r2 = FALSE,
   grid = "xy",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = 7,
   h = w,
   ...

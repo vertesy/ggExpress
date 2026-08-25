@@ -18,7 +18,7 @@ qviolin(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   add.params = NULL,
   fill = getOption("gg.fill.col", "gold"),
   stat.test = FALSE,
@@ -34,7 +34,7 @@ qviolin(
   vline = FALSE,
   max.categ = 100,
   grid = FALSE,
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...

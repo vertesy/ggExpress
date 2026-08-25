@@ -19,7 +19,7 @@ qbarplot.stacked.from.wide.df(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   color = 1,
   label = NULL,
   scale = TRUE,
@@ -34,7 +34,7 @@ qbarplot.stacked.from.wide.df(
   limitsize = FALSE,
   max.categ = 10,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(df, factor = 0.7),
   h = 5,
   ...

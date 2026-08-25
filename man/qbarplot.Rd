@@ -15,7 +15,7 @@ qbarplot(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   hline = FALSE,
   filtercol = 1,
   filtercol_default = TRUE,
@@ -33,7 +33,7 @@ qbarplot(
   limitsize = FALSE,
   ylab = NULL,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(vec, factor = 0.25),
   h = 5,
   ...

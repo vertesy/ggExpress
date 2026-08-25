@@ -15,7 +15,7 @@ qheatmap(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   colors = (grDevices::colorRampPalette(c("#313695", "#FFFFFF", "#A50026")))(256),
   legend_title = "Intensity",
   scale = c("none", "row", "column"),
@@ -27,7 +27,7 @@ qheatmap(
   col_annot_colors = NULL,
   xlab = "x axis",
   ylab = "y axis",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = 7,
   h = 6,
   ...

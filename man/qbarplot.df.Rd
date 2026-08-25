@@ -21,7 +21,7 @@ qbarplot.df(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   scale = TRUE,
   position = if (scale) "fill" else "dodge",
   xlab.angle = 45,
@@ -35,7 +35,7 @@ qbarplot.df(
   limitsize = FALSE,
   max.categ = 10,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(df),
   h = 5,
   ...

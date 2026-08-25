@@ -15,7 +15,7 @@ qhistogram(
   save = TRUE,
   also.pdf = FALSE,
   ext = "png",
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   xlab = FALSE,
   logX = FALSE,
   logY = FALSE,
@@ -30,7 +30,7 @@ qhistogram(
   legend.position = "none",
   max.names = 50,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = 5,
   h = w,
   ...

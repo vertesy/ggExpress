@@ -29,7 +29,7 @@ devtools::install_local(repository.dir, upgrade = F)
 
 
 # Test if you can install from github ------------------------------------------------
-remote.path <- file.path(DESCRIPTION$'github.user', DESCRIPTION$'package.name')
+(remote.path <- file.path(DESCRIPTION$'github.user', DESCRIPTION$'package.name'))
 pak::pkg_install(remote.path)
 # unload(DESCRIPTION$'package.name')
 # require(DESCRIPTION$'package.name')
@@ -97,6 +97,6 @@ for (scriptX in ls.scripts.full.path) {
 }
 
 
-
+PackageTools::document_and_create_package(repository.dir, config_file = 'config.R')
 
 

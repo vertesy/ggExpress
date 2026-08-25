@@ -18,7 +18,7 @@ qstripchart(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   fill = getOption("gg.fill.col", "gold"),
   add = c("violin", "mean_sd"),
   size.point = 0.2,
@@ -40,7 +40,7 @@ qstripchart(
   custom_top_labels = FALSE,
   max.categ = 100,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...

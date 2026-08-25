@@ -17,7 +17,7 @@ qboxplot(
   save = TRUE,
   ext = "png",
   also.pdf = FALSE,
-  save.obj = getOption("gg.save.obj", F),
+  save.obj = getOption("gg.save.obj", FALSE),
   add.params = NULL,
   col = NULL,
   fill = getOption("gg.fill.col", "gold"),
@@ -37,7 +37,7 @@ qboxplot(
   max.categ = 100,
   add = NULL,
   grid = "y",
-  mdlink = getOption("gg.mdlink", F),
+  mdlink = getOption("gg.mdlink", FALSE),
   w = qqqAxisLength(df_XYcol_or_list),
   h = 6,
   ...
