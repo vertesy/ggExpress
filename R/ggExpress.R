@@ -2571,6 +2571,10 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #' @return A ggplot2 layer (\code{geom_text}) to be added to a ggplot object.
 #'
 #' @examples
+#' data("ToothGrowth")
+#' df <- ToothGrowth[, c("dose", "len")]
+#' df$dose <- factor(df$dose)
+#' p <- ggplot2::ggplot(df, ggplot2::aes(x = dose, y = len)) + ggplot2::geom_boxplot()
 #' p + qqqAnnotateTopLabels(df, x = "dose", y = "len")
 #' p + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
 #'
