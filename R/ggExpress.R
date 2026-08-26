@@ -1021,6 +1021,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param df The variable to plot.
 #' @param x Colname to split along X axis. Default: `colnames(df)[1]`.
 #' @param y Colname to count along y axis. Default: `colnames(df)[2]`.
+#'   If omitted and that column is not numeric, a single numeric column in `df` is auto-detected.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -1066,7 +1067,7 @@ qbarplot.stacked.from.wide.df <- function(
 #'   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 #' )
 #' freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
-#' qbarplot.df(freq_table)
+#' qbarplot.df(freq_table, y = "n", fill = "Column_2")
 #'
 #' @export qbarplot.df
 
@@ -1103,9 +1104,20 @@ qbarplot.df <- function(
 ) {
   message(plotname)
   cols <- colnames(df)
+  y_missing <- missing(y)
+  fill_missing <- missing(fill)
   x <- if (is.numeric(x)) cols[x] else x
   y <- if (is.numeric(y)) cols[y] else y
   fill <- if (is.numeric(fill)) cols[fill] else fill
+
+  if (y_missing && (is.na(y) || !is.numeric(df[[y]]))) {
+    numeric_cols <- cols[vapply(df, is.numeric, logical(1))]
+    if (length(numeric_cols) == 1) y <- numeric_cols[1]
+  }
+  if (fill_missing && identical(fill, y)) {
+    alt_fill <- setdiff(cols, c(x, y))
+    if (length(alt_fill) > 0) fill <- alt_fill[1]
+  }
 
   # Check inputs ____________________________________________________________
   stopifnot(
