@@ -546,7 +546,8 @@ qpie <- function(
   st <- paste("Sum:", sum.orig)
   subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
 
-  ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
+  shown.categories <- if (l.orig > max.categories) max.categories - 1 else l.orig
+  ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", shown.categories, " | max.names:", max.names) else NULL
   caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
 
   # Category handling ________________________________________________
