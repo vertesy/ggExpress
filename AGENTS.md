@@ -54,4 +54,3 @@ Depends on @vertesy `Stringendo`, `ReadWriter`, `CodeAndRoll2`, `MarkdownHelpers
 - `Development/`:  Files for documenting and re-creating the package. `config.R` contains very important parameters that will be propagated to namespace, description, or `CITATION.cff`.  
   scripts, incl. `Dependencies.R`.
 - Depends on @vertesy `Stringendo`, `CodeAndRoll2`, `ReadWriter`, `MarkdownHelpers`.
-
