@@ -2290,6 +2290,10 @@ qmosaic <- function(
     "   This function will not work until ggmosaic ships a ggplot2-4.0-compatible release."
   )
 
+  library(ggmosaic) # There is currently a bug in the upstream code, and this is the solution for it at the moment.
+  on.exit(detach("package:ggmosaic", unload = TRUE), add = TRUE)
+
+
   stopifnot(
     is.data.frame(df),
     all(c(x, y) %in% colnames(df))
