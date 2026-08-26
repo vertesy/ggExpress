@@ -37,10 +37,10 @@ The output contains one row per unique group, with corresponding mean and median
 \examples{
 # Example with a named list
 lst <- list(A = 1:3, B = 4:6)
-summarize_mean_median(lst)
+ggExpress:::qqqSummarize_mean_median(lst)
 
 # Example with a long-format data frame
 df <- data.frame(group = rep(c("A", "B"), each = 3), value = 1:6)
-summarize_mean_median(df)
+ggExpress:::qqqSummarize_mean_median(df)
 
 }
