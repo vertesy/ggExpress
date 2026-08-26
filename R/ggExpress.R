@@ -387,6 +387,10 @@ qhistogram <- function(
 #' @param logX Make X axis log10-scale.
 #' @param xlab X-axis label. Default: FALSE.
 #' @param xlab.angle Rotate X-axis labels by N degrees. Default: 90
+#' @param col A single color for the density curve: either a palette index (e.g. `2`) or a
+#' literal color (e.g. `"red"`, `"#FF0000"`). Default: NULL, which colors by the names of
+#' `vec` using `palette_use`. Unlike `qhistogram`, `qdensity` draws a single geom, so there
+#' is no threshold-based two-color split.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param logY Make Y axis log10-scale.
@@ -419,15 +423,42 @@ qdensity <- function(
   xlab = FALSE,
   xlab.angle = 90,
   logX = FALSE, logY = FALSE,
+  col = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
   legend.position = "none",
   max.names = 50,
   grid = FALSE, mdlink = getOption("gg.mdlink", FALSE),
   w = 5, h = w, ...
 ) {
-  stopifnot(is.numeric(vec), length(vec) > 0L, all(is.finite(vec)))
+  stopifnot(
+    is.numeric(vec), length(vec) > 0L, all(is.finite(vec)),
+    is.null(col) | is.numeric(col) | is.character(col)
+  )
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
+
+  # Resolve `col` to one literal colour ____________________________________________
+  # A single density curve has no groups to split, so `col` is deliberately limited to
+  # one colour: a palette index (numeric, or a numeric string such as "2") or a literal
+  # colour. NULL keeps the default behaviour of colouring by the names of `vec`.
+  col_resolved <- if (is.null(col)) {
+    NULL
+  } else if (is.numeric(col) || grepl("^[0-9]+$", col)) {
+    pal <- if (length(palette_use) == 1) {
+      ggpubr::get_palette(palette_use, max(2L, as.integer(col)))
+    } else {
+      palette_use
+    }
+    pal[as.integer(col)]
+  } else {
+    col
+  }
+
+  # A named `vec` yields one curve per name; recycle the single colour across them so
+  # ggpubr's manual scale gets one value per group.
+  if (!is.null(col_resolved)) {
+    col_resolved <- rep(col_resolved, length.out = length(unique(df$"names")))
+  }
 
   pobj <- ggpubr::ggdensity(
     data = df, x = "value", # , y = "..count.."
@@ -436,7 +467,9 @@ qdensity <- function(
     color = "names", fill = "names",
     subtitle = subtitle,
     caption = caption,
-    palette = palette_use,
+    # Supplying `col` as a one-colour palette keeps ggpubr's grouping (and its
+    # add = "median" line) intact, rather than replacing the mapping with a literal.
+    palette = if (is.null(col_resolved)) palette_use else col_resolved,
     ...
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +

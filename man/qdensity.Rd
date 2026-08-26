@@ -20,6 +20,7 @@ qdensity(
   xlab.angle = 90,
   logX = FALSE,
   logY = FALSE,
+  col = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
   legend.position = "none",
   max.names = 50,
@@ -60,6 +61,11 @@ qdensity(
 \item{logX}{Make X axis log10-scale.}
 
 \item{logY}{Make Y axis log10-scale.}
+
+\item{col}{A single color for the density curve: either a palette index (e.g. \code{2}) or a
+literal color (e.g. \code{"red"}, \code{"#FF0000"}). Default: NULL, which colors by the names of
+\code{vec} using \code{palette_use}. Unlike \code{qhistogram}, \code{qdensity} draws a single geom, so there
+is no threshold-based two-color split.}
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
