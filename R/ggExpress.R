@@ -2579,11 +2579,13 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #'
 #' @examples
 #' data("ToothGrowth")
-#' df <- ToothGrowth[, c("dose", "len")]
-#' df$dose <- factor(df$dose)
-#' pobj <- ggplot2::ggplot(df, ggplot2::aes(x = dose, y = len)) + ggplot2::geom_boxplot()
-#' pobj + qqqAnnotateTopLabels(df, x = "dose", y = "len")
-#' pobj + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
+#' pobj <- ggplot2::ggplot(ToothGrowth, ggplot2::aes(x = factor(dose), y = len)) +
+#'   ggplot2::geom_boxplot()
+#' pobj + ggExpress:::qqqAnnotateTopLabels(ToothGrowth, x = "dose", y = "len")
+#' pobj + ggExpress:::qqqAnnotateTopLabels(
+#'   ToothGrowth, x = "dose", y = "len",
+#'   labels = c("A", "B", "C")
+#' )
 #'
 qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2) {
   stopifnot(is.character(x), is.character(y))
@@ -2591,10 +2593,9 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
   lab_df <- df |>
     dplyr::group_by(.data[[x]]) |>
     dplyr::summarise(
-      lab = if (is.null(labels)) fun(.data[[y]], na.rm = TRUE) else labels[dplyr::cur_group_id()],
+      lab = if (is.null(labels)) round(fun(.data[[y]], na.rm = TRUE), digits) else labels[dplyr::cur_group_id()],
       .groups = "drop"
-    ) |>
-    dplyr::mutate(lab = round(lab, digits))
+    )
 
   ggplot2::geom_text(
     data = lab_df,
