@@ -2236,11 +2236,13 @@ qheatmap <- function(
 #' @importFrom scales hue_pal
 #'
 #' @examples
+#' \dontrun{
 #' df <- data.frame(
 #'   Group = rep(c("A", "B", "C"), each = 50),
 #'   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
 #' )
 #' qmosaic(df = df, x = "Group", y = "Outcome")
+#' }
 qmosaic <- function(
   df,
   x, y,

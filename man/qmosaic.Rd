@@ -82,9 +82,11 @@ to the group size and the Y-axis variable determines the color (fill). This func
 saving, Markdown linking, and default color palettes.
 }
 \examples{
+\dontrun{
 df <- data.frame(
   Group = rep(c("A", "B", "C"), each = 50),
   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
 )
 qmosaic(df = df, x = "Group", y = "Outcome")
+}
 }
