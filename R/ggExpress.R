@@ -902,12 +902,12 @@ qbarplot <- function(
 #'
 #' @examples
 #' # Example of wide-format data for stacked bar plot
-#' df.SingletSplit <- tibble::tibble(
+#' df.SingletSplit <- data.frame(
 #'   doublet = c(0.027886224, 0.007699141, 0.003704390, 0.003205128),
 #'   singlet = c(0.9686280, 0.9872668, 0.9925912, 0.9119822),
-#'   unassigned = c(0.0034857780, 0.0050340539, 0.0037043897, 0.0848126233)
+#'   unassigned = c(0.0034857780, 0.0050340539, 0.0037043897, 0.0848126233),
+#'   row.names = c("sc06.692", "sc06.693", "sc08.325", "sc08.327")
 #' )
-#' rownames(df.SingletSplit) <- c("sc06.692", "sc06.693", "sc08.325", "sc08.327")
 #'
 #' # Create the stacked bar plot using the new qbarplot.df2 function
 #' qbarplot.stacked.from.wide.df(df.SingletSplit)
@@ -957,7 +957,6 @@ qbarplot.stacked.from.wide.df <- function(
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
   df_long <- df |>
     tibble::rownames_to_column(var = x) |> # Convert row names to a column
@@ -966,6 +965,8 @@ qbarplot.stacked.from.wide.df <- function(
       names_to = z, # "category"
       values_to = y # "Fraction"
     )
+
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df_long[[y]])))
 
   if (is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
     df_long[[2]] <- factor(
