@@ -20,5 +20,6 @@ Stops the function execution if the number of unique categories exceeds max.cate
 Checks if the number of unique categories in a column of a dataframe is within the allowed limit.
 }
 \examples{
-assertMaxCategories(df_XYcol, "x", 10)
+df_XYcol <- data.frame(x = c("A", "B", "C"), y = 1:3)
+ggExpress:::.assertMaxCategories(df_XYcol, "x", 10)
 }

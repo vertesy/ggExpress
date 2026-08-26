@@ -116,11 +116,11 @@ otherwise to "dodge". Can also be "stack".}
 Draw and save a barplot for tibbles or dataframes
 }
 \examples{
-my_tibble <- tibble(
+my_tibble <- tibble::tibble(
   Column_1 = c("A", "A", "A", "B", "C", "C"),
   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 )
-freq_table <- my_tibble |> count(Column_1, Column_2)
+freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
 qbarplot.df(freq_table)
 
 }
