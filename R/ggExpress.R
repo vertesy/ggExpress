@@ -303,11 +303,19 @@ qhistogram <- function(
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   # Color handling (histogram-safe) _______________________________________
-  # `col` is either a palette index (a number, or a numeric string such as "2") or a
-  # literal colour. The palette must be long enough to cover the largest index asked
-  # for, otherwise pal[i] silently yields NA; the vline split below always needs two.
+  # `col` is either a palette index (a positive whole-number or a digit-only string such
+  # as "2") or a literal colour. The palette must be long enough to cover the requested
+  # index; pal[i] silently yields NA for i > length(pal).
+  # When the vline split is active `col` is ignored and pal[1:2] are used instead, so
+  # the palette is always sized to exactly 2 in that case — avoiding colour shifts in
+  # interpolated palettes (e.g. "RdBu") that vary with n.
   col_i <- suppressWarnings(as.integer(col))
-  col.is.index <- length(col) == 1L && !is.na(col_i) && col_i >= 1L && (is.numeric(col) || (is.character(col) && grepl("^[0-9]+$", col)))
+  col.is.index <- length(col) == 1L &&
+    !is.na(col_i) && col_i >= 1L &&
+    (
+      (is.numeric(col) && col == col_i) ||                         # whole-number numeric
+      (is.character(col) && grepl("^[0-9]+$", col))               # digit-only string
+    )
   split.active <- is.numeric(vline) && filtercol %in% c(1, -1)
   n.pal <- if (!split.active && isTRUE(col.is.index)) max(2L, col_i) else 2L
   pal <- if (length(palette_use) == 1) {
@@ -316,23 +324,16 @@ qhistogram <- function(
     palette_use
   }
 
-  # Resolve `col` to an actual color
-  col_resolved <- if (col.is.index) {
-    pal[as.integer(col)]
-  } else {
-    col
-  }
-
-  # Default: single-color histogram
+  # Default: single-color histogram (col is ignored when split is active)
   df$colour <- factor("all")
-  pal2 <- c(all = col_resolved)
-
-  # Optional split by vline
   if (split.active) {
     df$colour <- factor(
       if (filtercol == 1) df$value > vline else df$value < vline
     )
     pal2 <- setNames(pal[1:2], levels(df$colour))
+  } else {
+    col_resolved <- if (col.is.index) pal[col_i] else col
+    pal2 <- c(all = col_resolved)
   }
 
   pobj <- ggpubr::gghistogram(
