@@ -1065,7 +1065,7 @@ qbarplot.stacked.from.wide.df <- function(
 #'   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 #' )
 #' freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
-#' qbarplot.df(freq_table)
+#' qbarplot.df(freq_table, y = "n", fill = "Column_2")
 #'
 #' @export qbarplot.df
 
