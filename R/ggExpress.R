@@ -308,7 +308,8 @@ qhistogram <- function(
   # for, otherwise pal[i] silently yields NA; the vline split below always needs two.
   col_i <- suppressWarnings(as.integer(col))
   col.is.index <- length(col) == 1L && !is.na(col_i) && col_i >= 1L && (is.numeric(col) || (is.character(col) && grepl("^[0-9]+$", col)))
-  n.pal <- if (isTRUE(col.is.index)) max(2L, col_i) else 2L
+  split.active <- is.numeric(vline) && filtercol %in% c(1, -1)
+  n.pal <- if (!split.active && isTRUE(col.is.index)) max(2L, col_i) else 2L
   pal <- if (length(palette_use) == 1) {
     ggpubr::get_palette(palette_use, n.pal)
   } else {
@@ -327,7 +328,7 @@ qhistogram <- function(
   pal2 <- c(all = col_resolved)
 
   # Optional split by vline
-  if (is.numeric(vline) && filtercol %in% c(1, -1)) {
+  if (split.active) {
     df$colour <- factor(
       if (filtercol == 1) df$value > vline else df$value < vline
     )
