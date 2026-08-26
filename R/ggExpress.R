@@ -1060,11 +1060,11 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param h Height of the plot.
 #' @param ... Pass any other parameter of the corresponding plotting function (most of them should work).
 #'
-#' @examples my_tibble <- tibble(
+#' @examples my_tibble <- tibble::tibble(
 #'   Column_1 = c("A", "A", "A", "B", "C", "C"),
 #'   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 #' )
-#' freq_table <- my_tibble |> count(Column_1, Column_2)
+#' freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
 #' qbarplot.df(freq_table)
 #'
 #' @export qbarplot.df
