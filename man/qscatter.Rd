@@ -21,7 +21,7 @@ qscatter(
   label = NULL,
   repel = TRUE,
   legend.position = "none",
-  col = c(NULL, 3)[1],
+  col = 3,
   palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL,
   ylab = NULL,
@@ -81,7 +81,12 @@ qscatter(
 
 \item{legend.position}{Character indicating the position of the legend. Default is is 'none' to hide the legend.}
 
-\item{col}{Color of the plot.}
+\item{col}{Color of the points, passed directly to \code{ggpubr::ggscatter(color = )}.
+Either a literal color (\code{"red"}, \code{"#FF0000"}), or the name of a \emph{discrete} column to
+color by, or a number. Note that a number here is a base R color code (the default \code{3}
+is green), NOT an index into \code{palette_use} as in \code{qbarplot()} and \code{qhistogram()}.
+Coloring by a numeric column fails, because \code{palette_use} is a discrete scale.
+Default: 3.}
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
