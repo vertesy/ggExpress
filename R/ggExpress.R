@@ -2562,6 +2562,10 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #' p <- ggplot2::ggplot(ToothGrowth, ggplot2::aes(x = factor(dose), y = len)) +
 #'   ggplot2::geom_boxplot()
 #' p + ggExpress:::qqqAnnotateTopLabels(ToothGrowth, x = "dose", y = "len")
+#' p + ggExpress:::qqqAnnotateTopLabels(
+#'   ToothGrowth, x = "dose", y = "len",
+#'   labels = c("A", "B", "C")
+#' )
 #'
 qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2) {
   stopifnot(is.character(x), is.character(y))
@@ -2569,10 +2573,9 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
   lab_df <- df |>
     dplyr::group_by(.data[[x]]) |>
     dplyr::summarise(
-      lab = if (is.null(labels)) fun(.data[[y]], na.rm = TRUE) else labels[dplyr::cur_group_id()],
+      lab = if (is.null(labels)) round(fun(.data[[y]], na.rm = TRUE), digits) else labels[dplyr::cur_group_id()],
       .groups = "drop"
-    ) |>
-    dplyr::mutate(lab = round(lab, digits))
+    )
 
   ggplot2::geom_text(
     data = lab_df,
