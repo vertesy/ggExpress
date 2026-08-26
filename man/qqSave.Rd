@@ -12,7 +12,7 @@ qqSave(
   ext = "png",
   subdir = FALSE,
   png.subdir = FALSE,
-  png.dir.name = "pdf",
+  png.dir.name = "png",
   also.pdf = getOption("gg.save.pdf", TRUE),
   pdf.subdir = FALSE,
   pdf.dir.name = "pdf",

@@ -91,7 +91,7 @@ qqSave <- function(
   ## Atm, png is always saved. This may be changed in the future.
   ext = "png",
   subdir = FALSE,
-  png.subdir = FALSE, png.dir.name = "pdf",
+  png.subdir = FALSE, png.dir.name = "png",
   also.pdf = getOption("gg.save.pdf", TRUE),
   pdf.subdir = FALSE, pdf.dir.name = "pdf",
   save.obj = getOption("gg.save.obj", FALSE),
@@ -105,8 +105,8 @@ qqSave <- function(
 ) {
   stopifnot(
     is.ggplot(ggobj), is.numeric(max.obj.size), is.numeric(w), is.numeric(h),
-    is.logical(also.pdf), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
-    is.character(bgcol), is.character(pdf.dir.name), is.character(obj.dir.name),
+    is.logical(also.pdf), is.logical(png.subdir), is.logical(pdf.subdir), is.logical(save.obj), is.logical(obj.subdir),
+    is.character(bgcol), is.character(png.dir.name), is.character(pdf.dir.name), is.character(obj.dir.name),
     is.null(suffix) | is.character(suffix),
     is.logical(title) | is.character(title), is.logical(fname) | is.character(fname)
   )
@@ -134,7 +134,13 @@ qqSave <- function(
     h <- dimA4[2]
   }
 
-  # Create PDF / object subdirectories and adjust file paths if needed ___________________________
+  # Create PNG / PDF / object subdirectories and adjust file paths if needed ___________________________
+  fname_png <- add_ext_if_missing(fname, "png")
+  if (png.subdir) {
+    dir.create(png.dir.name, showWarnings = FALSE)
+    fname_png <- file.path(png.dir.name, fname_png)
+  }
+
   if (also.pdf) {
     fname_pdf <- add_ext_if_missing(fname, "pdf")
     if (pdf.subdir) {
@@ -158,10 +164,10 @@ qqSave <- function(
 
   # Save the plot
   cowplot::save_plot(
-    plot = ggobj, filename = add_ext_if_missing(fname, "png"),
+    plot = ggobj, filename = fname_png,
     base_width = w, base_height = h, ...
   )
-  FnPp <- spps(getwd(), "/", add_ext_if_missing(fname, "png"))
+  FnPp <- spps(getwd(), "/", fname_png)
   message(FnPp)
 
   # Saving ______________________________________________________________________________________
