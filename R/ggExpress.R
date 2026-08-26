@@ -552,7 +552,8 @@ qpie <- function(
   st <- paste("Sum:", sum.orig)
   subtitle <- if (is.null(subtitle)) st else paste0(subtitle, "\n", st)
 
-  ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", (max.categories - 1), " | max.names:", max.names) else NULL
+  shown.categories <- if (l.orig > max.categories) max.categories - 1 else l.orig
+  ct <- if (caption.ext) paste0("Total elements:", l.orig, "; shown:", shown.categories, " | max.names:", max.names) else NULL
   caption <- if (is.null(caption)) ct else paste0(caption, "\n", ct)
 
   # Category handling ________________________________________________
@@ -959,7 +960,8 @@ qbarplot.stacked.from.wide.df <- function(
   message(plotname)
   stopifnot(
     is.data.frame(df),
-    ncol(df) >= 2
+    ncol(df) >= 2,
+    "Number of categories (columns of the wide-format df) exceeds 'max.categ'." = ncol(df) <= max.categ
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
