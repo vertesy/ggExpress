@@ -46,7 +46,8 @@ qbarplot.df(
 
 \item{x}{Colname to split along X axis. Default: \code{colnames(df)[1]}.}
 
-\item{y}{Colname to count along y axis. Default: \code{colnames(df)[2]}.}
+\item{y}{Colname to count along y axis. Default: \code{colnames(df)[2]}.
+If omitted and that column is not numeric, a single numeric column in \code{df} is auto-detected.}
 
 \item{plotname}{The title of the plot and the name of the file (unless specified in \code{filename}).}
 
@@ -121,6 +122,6 @@ my_tibble <- tibble::tibble(
   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 )
 freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
-qbarplot.df(freq_table)
+qbarplot.df(freq_table, y = "n", fill = "Column_2")
 
 }

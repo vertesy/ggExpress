@@ -17,5 +17,5 @@ qqqAxisLength(vec = 1:20, minLength = 6, factor = 0.4)
 Define Axis Length
 }
 \examples{
-qqqAxisLength()
+ggExpress:::qqqAxisLength()
 }

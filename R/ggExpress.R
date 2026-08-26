@@ -902,12 +902,12 @@ qbarplot <- function(
 #'
 #' @examples
 #' # Example of wide-format data for stacked bar plot
-#' df.SingletSplit <- tibble::tibble(
+#' df.SingletSplit <- data.frame(
 #'   doublet = c(0.027886224, 0.007699141, 0.003704390, 0.003205128),
 #'   singlet = c(0.9686280, 0.9872668, 0.9925912, 0.9119822),
-#'   unassigned = c(0.0034857780, 0.0050340539, 0.0037043897, 0.0848126233)
+#'   unassigned = c(0.0034857780, 0.0050340539, 0.0037043897, 0.0848126233),
+#'   row.names = c("sc06.692", "sc06.693", "sc08.325", "sc08.327")
 #' )
-#' rownames(df.SingletSplit) <- c("sc06.692", "sc06.693", "sc08.325", "sc08.327")
 #'
 #' # Create the stacked bar plot using the new qbarplot.df2 function
 #' qbarplot.stacked.from.wide.df(df.SingletSplit)
@@ -957,7 +957,6 @@ qbarplot.stacked.from.wide.df <- function(
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
 
   df_long <- df |>
     tibble::rownames_to_column(var = x) |> # Convert row names to a column
@@ -966,6 +965,8 @@ qbarplot.stacked.from.wide.df <- function(
       names_to = z, # "category"
       values_to = y # "Fraction"
     )
+
+  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df_long[[y]])))
 
   if (is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
     df_long[[2]] <- factor(
@@ -1020,6 +1021,7 @@ qbarplot.stacked.from.wide.df <- function(
 #' @param df The variable to plot.
 #' @param x Colname to split along X axis. Default: `colnames(df)[1]`.
 #' @param y Colname to count along y axis. Default: `colnames(df)[2]`.
+#'   If omitted and that column is not numeric, a single numeric column in `df` is auto-detected.
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
 #' @param suffix Optional suffix added to the filename. Default is NULL.
@@ -1065,7 +1067,7 @@ qbarplot.stacked.from.wide.df <- function(
 #'   Column_2 = c("X", "Y", "Y", "Z", "X", "Z")
 #' )
 #' freq_table <- my_tibble |> dplyr::count(Column_1, Column_2)
-#' qbarplot.df(freq_table)
+#' qbarplot.df(freq_table, y = "n", fill = "Column_2")
 #'
 #' @export qbarplot.df
 
@@ -1102,9 +1104,20 @@ qbarplot.df <- function(
 ) {
   message(plotname)
   cols <- colnames(df)
+  y_missing <- missing(y)
+  fill_missing <- missing(fill)
   x <- if (is.numeric(x)) cols[x] else x
   y <- if (is.numeric(y)) cols[y] else y
   fill <- if (is.numeric(fill)) cols[fill] else fill
+
+  if (y_missing && (is.na(y) || !is.numeric(df[[y]]))) {
+    numeric_cols <- cols[vapply(df, is.numeric, logical(1))]
+    if (length(numeric_cols) == 1) y <- numeric_cols[1]
+  }
+  if (fill_missing && identical(fill, y)) {
+    alt_fill <- setdiff(cols, c(x, y))
+    if (length(alt_fill) > 0) fill <- alt_fill[1]
+  }
 
   # Check inputs ____________________________________________________________
   stopifnot(
@@ -2236,11 +2249,13 @@ qheatmap <- function(
 #' @importFrom scales hue_pal
 #'
 #' @examples
+#' \dontrun{
 #' df <- data.frame(
 #'   Group = rep(c("A", "B", "C"), each = 50),
 #'   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
 #' )
 #' qmosaic(df = df, x = "Group", y = "Outcome")
+#' }
 qmosaic <- function(
   df,
   x, y,
@@ -2260,7 +2275,12 @@ qmosaic <- function(
   w = 6, h = 5,
   ...
 ) {
-  warning("   !!! qmosaic is in experimental status !!! ")
+  warning(
+    "   !!! qmosaic is in experimental status !!! \n",
+    "   Known incompatibility: ggmosaic 0.4.0 (latest CRAN) crashes with ggplot2 >= 4.0\n",
+    "   ('Discrete value supplied to a continuous scale').\n",
+    "   This function will not work until ggmosaic ships a ggplot2-4.0-compatible release."
+  )
 
   stopifnot(
     is.data.frame(df),
@@ -2465,7 +2485,7 @@ qMarkdownImageLink <- function(file_name = "myplot.pdf") {
 #' @param minLength minLength
 #' @param factor Length adjustment factor.
 #'
-#' @examples qqqAxisLength()
+#' @examples ggExpress:::qqqAxisLength()
 qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
   max(round(length(vec) * factor), minLength)
 }
@@ -2481,7 +2501,7 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 #' @param thr thr
 #'
 #' @importFrom tibble tibble as_tibble
-#' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
+#' @examples ggExpress:::qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
 #'
 qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 

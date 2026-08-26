@@ -24,6 +24,6 @@ qqqNamed.Vec.2.Tbl(
 Convert a named vector to a table.
 }
 \examples{
-qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
+ggExpress:::qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
 
 }
