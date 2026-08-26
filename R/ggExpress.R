@@ -789,7 +789,16 @@ qbarplot <- function(
   # Palette argument
   # When `col` holds indices, the palette must be long enough to cover the largest
   # one requested, otherwise pal[i] silently yields NA.
-  n.pal <- if (is.numeric(col)) max(length(vec), max(col, na.rm = TRUE)) else length(vec)
+  split_uses_palette <- is.numeric(hline) && filtercol %in% c(1, -1) && !isTRUE(filtercol_default)
+  n.pal <- if (split_uses_palette) {
+    2L
+  }
+  else if (is.numeric(col)) {
+    max(length(vec), max(col, na.rm = TRUE))
+  }
+  else {
+    length(vec)
+  }
   pal <- if (length(palette_use) == 1) {
     ggpubr::get_palette(palette_use, n.pal)
   } # For a name of a palette or a single color.
