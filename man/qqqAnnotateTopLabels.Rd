@@ -30,7 +30,9 @@ at the top of the plotting panel. Labels can be computed from the data (default)
 or provided explicitly.
 }
 \examples{
-p + qqqAnnotateTopLabels(df, x = "dose", y = "len")
-p + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
+data("ToothGrowth")
+p <- ggplot2::ggplot(ToothGrowth, ggplot2::aes(x = factor(dose), y = len)) +
+  ggplot2::geom_boxplot()
+p + ggExpress:::qqqAnnotateTopLabels(ToothGrowth, x = "dose", y = "len")
 
 }
