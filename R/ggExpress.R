@@ -243,7 +243,11 @@ qqSave <- function(
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
-#' @param col Color of the plot. Default is '1'.
+#' @param col A single color for the histogram: either a palette index (a number, or a
+#' numeric string such as `"2"`) or a literal color (e.g. `"red"`, `"#FF0000"`).
+#' Default is '1', the 1st color of `palette_use`. Note that when the bars are split by
+#' `vline` + `filtercol`, the two resulting groups are colored from the first two colors
+#' of `palette_use` and `col` is not used.
 #' @param xlab.angle Angle to rotate X-axis labels. Default is 90 degrees.
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param max.names Maximum number of names to show on the axis. Default is 50.
@@ -299,29 +303,37 @@ qhistogram <- function(
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   # Color handling (histogram-safe) _______________________________________
+  # `col` is either a palette index (a positive whole-number or a digit-only string such
+  # as "2") or a literal colour. The palette must be long enough to cover the requested
+  # index; pal[i] silently yields NA for i > length(pal).
+  # When the vline split is active `col` is ignored and pal[1:2] are used instead, so
+  # the palette is always sized to exactly 2 in that case — avoiding colour shifts in
+  # interpolated palettes (e.g. "RdBu") that vary with n.
+  col_i <- suppressWarnings(as.integer(col))
+  col.is.index <- length(col) == 1L &&
+    !is.na(col_i) && col_i >= 1L &&
+    (
+      (is.numeric(col) && col == col_i) ||                         # whole-number numeric
+      (is.character(col) && grepl("^[0-9]+$", col))               # digit-only string
+    )
+  split.active <- is.numeric(vline) && filtercol %in% c(1, -1)
+  n.pal <- if (!split.active && isTRUE(col.is.index)) max(2L, col_i) else 2L
   pal <- if (length(palette_use) == 1) {
-    ggpubr::get_palette(palette_use, 2)
+    ggpubr::get_palette(palette_use, n.pal)
   } else {
     palette_use
   }
 
-  # Resolve `col` to an actual color
-  col_resolved <- if (is.numeric(col) || grepl("^[0-9]+$", col)) {
-    pal[as.integer(col)]
-  } else {
-    col
-  }
-
-  # Default: single-color histogram
+  # Default: single-color histogram (col is ignored when split is active)
   df$colour <- factor("all")
-  pal2 <- c(all = col_resolved)
-
-  # Optional split by vline
-  if (is.numeric(vline) && filtercol %in% c(1, -1)) {
+  if (split.active) {
     df$colour <- factor(
       if (filtercol == 1) df$value > vline else df$value < vline
     )
     pal2 <- setNames(pal[1:2], levels(df$colour))
+  } else {
+    col_resolved <- if (col.is.index) pal[col_i] else col
+    pal2 <- c(all = col_resolved)
   }
 
   pobj <- ggpubr::gghistogram(
@@ -679,7 +691,13 @@ qpie <- function(
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #'
-#' @param col The fill color of the bars. Default: 1st color of the palette.
+#' @param col The fill color of the bars. Default: 1st color of the palette. Accepts:
+#' (1) a single palette index (e.g. `2`) or a single literal color (e.g. `"red"`, `"#FF0000"`);
+#' (2) a vector with one entry per bar, either palette indices or literal colors. Logical
+#' vectors and 0-based numeric vectors (e.g. from `grepl()`) are shifted to 1-based palette
+#' indices, so `FALSE`/`0` is the 1st and `TRUE`/`1` the 2nd palette color;
+#' (3) a *named* vector of colors, matched against `names(vec)` by name rather than by
+#' position (see also `palette_use`, which is name-matched the same way).
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by
@@ -770,10 +788,31 @@ qbarplot <- function(
     # partial overlap: warn only, do NOT touch col
   }
 
+  # Normalise palette indices ______________________________________________________
+  # `col` may encode palette indices instead of literal colors. Two common inputs are
+  # not valid 1-based indices and are shifted here: logical flags (e.g. from grepl())
+  # and 0-based numeric flags. Both map FALSE/0 -> 1st, TRUE/1 -> 2nd palette color.
+  # Without this, pal[0] returns nothing (silently shortening the colour vector) and
+  # logical input falls through to the literal-colour branch below. See issue #74.
+  if (is.logical(col)) col <- as.integer(col) + 1L
+  if (is.numeric(col) && any(col == 0, na.rm = TRUE)) col <- as.integer(col) + 1L
+
   # Handling colors ________________________________________________________________
   # Palette argument
+  # When `col` holds indices, the palette must be long enough to cover the largest
+  # one requested, otherwise pal[i] silently yields NA.
+  split_uses_palette <- is.numeric(hline) && filtercol %in% c(1, -1) && !isTRUE(filtercol_default)
+  n.pal <- if (split_uses_palette) {
+    2L
+  }
+  else if (is.numeric(col)) {
+    max(length(vec), max(col, na.rm = TRUE))
+  }
+  else {
+    length(vec)
+  }
   pal <- if (length(palette_use) == 1) {
-    ggpubr::get_palette(palette_use, length(vec))
+    ggpubr::get_palette(palette_use, n.pal)
   } # For a name of a palette or a single color.
   else {
     palette_use
@@ -2521,10 +2560,15 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
   nr.uniq.names <- length(unique(names(namedVec)))
   if (nr.uniq.names > thr & verbose) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
-  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1)
+  # Stripping only makes sense when there ARE too many names. An unnamed vector has
+  # nothing to strip: assigning into names() of a NULL-names vector CREATES names
+  # (NA for the untouched positions, "" for the rest), manufacturing two spurious
+  # groups that split the plot into two series. Unnamed input is instead handled by
+  # the rep(".") fallback below.
+  too.many.names <- (nr.uniq.names > thr)
 
   idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
-  if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
+  if (strip.too.many.names & too.many.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
 
   if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
