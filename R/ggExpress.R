@@ -691,7 +691,13 @@ qpie <- function(
 #' @param also.pdf Save plot in both png and pdf formats.
 #' @param save.obj Save the ggplot object to a file. Default: FALSE.
 #'
-#' @param col The fill color of the bars. Default: 1st color of the palette.
+#' @param col The fill color of the bars. Default: 1st color of the palette. Accepts:
+#' (1) a single palette index (e.g. `2`) or a single literal color (e.g. `"red"`, `"#FF0000"`);
+#' (2) a vector with one entry per bar, either palette indices or literal colors. Logical
+#' vectors and 0-based numeric vectors (e.g. from `grepl()`) are shifted to 1-based palette
+#' indices, so `FALSE`/`0` is the 1st and `TRUE`/`1` the 2nd palette color;
+#' (3) a *named* vector of colors, matched against `names(vec)` by name rather than by
+#' position (see also `palette_use`, which is name-matched the same way).
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #' @param hline Draw a horizontal line on the plot.
 #' @param filtercol Color bars below/above the threshold with red/green. Define the direction by
@@ -782,10 +788,31 @@ qbarplot <- function(
     # partial overlap: warn only, do NOT touch col
   }
 
+  # Normalise palette indices ______________________________________________________
+  # `col` may encode palette indices instead of literal colors. Two common inputs are
+  # not valid 1-based indices and are shifted here: logical flags (e.g. from grepl())
+  # and 0-based numeric flags. Both map FALSE/0 -> 1st, TRUE/1 -> 2nd palette color.
+  # Without this, pal[0] returns nothing (silently shortening the colour vector) and
+  # logical input falls through to the literal-colour branch below. See issue #74.
+  if (is.logical(col)) col <- as.integer(col) + 1L
+  if (is.numeric(col) && any(col == 0, na.rm = TRUE)) col <- as.integer(col) + 1L
+
   # Handling colors ________________________________________________________________
   # Palette argument
+  # When `col` holds indices, the palette must be long enough to cover the largest
+  # one requested, otherwise pal[i] silently yields NA.
+  split_uses_palette <- is.numeric(hline) && filtercol %in% c(1, -1) && !isTRUE(filtercol_default)
+  n.pal <- if (split_uses_palette) {
+    2L
+  }
+  else if (is.numeric(col)) {
+    max(length(vec), max(col, na.rm = TRUE))
+  }
+  else {
+    length(vec)
+  }
   pal <- if (length(palette_use) == 1) {
-    ggpubr::get_palette(palette_use, length(vec))
+    ggpubr::get_palette(palette_use, n.pal)
   } # For a name of a palette or a single color.
   else {
     palette_use

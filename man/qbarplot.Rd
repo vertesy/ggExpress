@@ -72,7 +72,13 @@ first two colors of the palette. Default: TRUE, \code{c("#008B45FF", "#EE0000FF"
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
-\item{col}{The fill color of the bars. Default: 1st color of the palette.}
+\item{col}{The fill color of the bars. Default: 1st color of the palette. Accepts:
+(1) a single palette index (e.g. \code{2}) or a single literal color (e.g. \code{"red"}, \code{"#FF0000"});
+(2) a vector with one entry per bar, either palette indices or literal colors. Logical
+vectors and 0-based numeric vectors (e.g. from \code{grepl()}) are shifted to 1-based palette
+indices, so \code{FALSE}/\code{0} is the 1st and \code{TRUE}/\code{1} the 2nd palette color;
+(3) a \emph{named} vector of colors, matched against \code{names(vec)} by name rather than by
+position (see also \code{palette_use}, which is name-matched the same way).}
 
 \item{xlab}{X-axis label. Default: "".}
 
