@@ -19,21 +19,33 @@ Description: ggExpress is a set of R functions that allows you to generate
     Github or a personal website.
 License: GPL-3 + file LICENSE
 BugReports: https://github.com/vertesy/ggExpress/issues
-Depends: 
+Depends:
+    CodeAndRoll2,
     ggplot2,
     ggpubr,
     MarkdownHelpers,
     Stringendo
-Imports: 
-    CodeAndRoll2,
+Imports:
     cowplot,
+    dplyr,
+    ggmosaic,
+    ggplotify,
     ggVennDiagram,
+    grDevices,
+    heatmaply,
     MarkdownReports,
     qs,
     RColorBrewer,
+    ReadWriter,
+    rlang,
+    scales,
     tibble,
     tictoc,
-    tidyr
+    tidyr,
+    tools,
+    utils
+Suggests:
+    rstudioapi
 Encoding: UTF-8
 Packaged: 2026-08-25 16:21:03.226729
 Roxygen: list(markdown = TRUE)

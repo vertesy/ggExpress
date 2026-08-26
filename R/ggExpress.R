@@ -2232,6 +2232,7 @@ qheatmap <- function(
 #' @importFrom ggmosaic geom_mosaic ddecker product
 #' @importFrom ggplot2 ggplot aes labs theme_minimal scale_fill_brewer scale_fill_manual
 #' @importFrom RColorBrewer brewer.pal.info
+#' @importFrom ReadWriter write.simple.tsv
 #' @importFrom scales hue_pal
 #'
 #' @examples
