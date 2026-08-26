@@ -2262,7 +2262,12 @@ qmosaic <- function(
   w = 6, h = 5,
   ...
 ) {
-  warning("   !!! qmosaic is in experimental status !!! ")
+  warning(
+    "   !!! qmosaic is in experimental status !!! \n",
+    "   Known incompatibility: ggmosaic 0.4.0 (latest CRAN) crashes with ggplot2 >= 4.0\n",
+    "   ('Discrete value supplied to a continuous scale').\n",
+    "   This function will not work until ggmosaic ships a ggplot2-4.0-compatible release."
+  )
 
   stopifnot(
     is.data.frame(df),
