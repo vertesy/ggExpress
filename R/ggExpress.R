@@ -953,7 +953,8 @@ qbarplot.stacked.from.wide.df <- function(
   message(plotname)
   stopifnot(
     is.data.frame(df),
-    ncol(df) >= 2
+    ncol(df) >= 2,
+    "Number of categories (columns of the wide-format df) exceeds 'max.categ'." = ncol(df) <= max.categ
   )
 
   # if (is.null(xlab)) xlab <- if (scale) paste("%", x ) else x
