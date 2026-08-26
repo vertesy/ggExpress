@@ -306,9 +306,9 @@ qhistogram <- function(
   # `col` is either a palette index (a number, or a numeric string such as "2") or a
   # literal colour. The palette must be long enough to cover the largest index asked
   # for, otherwise pal[i] silently yields NA; the vline split below always needs two.
-  col.is.index <- is.numeric(col) || grepl("^[0-9]+$", col)
-  n.pal <- if (col.is.index) max(2L, as.integer(col)) else 2L
-
+  col_i <- suppressWarnings(as.integer(col))
+  col.is.index <- length(col) == 1L && !is.na(col_i) && col_i >= 1L && (is.numeric(col) || (is.character(col) && grepl("^[0-9]+$", col)))
+  n.pal <- if (isTRUE(col.is.index)) max(2L, col_i) else 2L
   pal <- if (length(palette_use) == 1) {
     ggpubr::get_palette(palette_use, n.pal)
   } else {
