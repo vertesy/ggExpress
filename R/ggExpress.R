@@ -243,7 +243,11 @@ qqSave <- function(
 #' @param vline Numeric value at which to draw a vertical line on the plot. Default is FALSE (no line).
 #' @param filtercol Numeric value indicating the direction to color bars above/below the threshold. Default is 0 (no color change).
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
-#' @param col Color of the plot. Default is '1'.
+#' @param col A single color for the histogram: either a palette index (a number, or a
+#' numeric string such as `"2"`) or a literal color (e.g. `"red"`, `"#FF0000"`).
+#' Default is '1', the 1st color of `palette_use`. Note that when the bars are split by
+#' `vline` + `filtercol`, the two resulting groups are colored from the first two colors
+#' of `palette_use` and `col` is not used.
 #' @param xlab.angle Angle to rotate X-axis labels. Default is 90 degrees.
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
 #' @param max.names Maximum number of names to show on the axis. Default is 50.
@@ -299,29 +303,37 @@ qhistogram <- function(
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
   # Color handling (histogram-safe) _______________________________________
+  # `col` is either a palette index (a positive whole-number or a digit-only string such
+  # as "2") or a literal colour. The palette must be long enough to cover the requested
+  # index; pal[i] silently yields NA for i > length(pal).
+  # When the vline split is active `col` is ignored and pal[1:2] are used instead, so
+  # the palette is always sized to exactly 2 in that case — avoiding colour shifts in
+  # interpolated palettes (e.g. "RdBu") that vary with n.
+  col_i <- suppressWarnings(as.integer(col))
+  col.is.index <- length(col) == 1L &&
+    !is.na(col_i) && col_i >= 1L &&
+    (
+      (is.numeric(col) && col == col_i) ||                         # whole-number numeric
+      (is.character(col) && grepl("^[0-9]+$", col))               # digit-only string
+    )
+  split.active <- is.numeric(vline) && filtercol %in% c(1, -1)
+  n.pal <- if (!split.active && isTRUE(col.is.index)) max(2L, col_i) else 2L
   pal <- if (length(palette_use) == 1) {
-    ggpubr::get_palette(palette_use, 2)
+    ggpubr::get_palette(palette_use, n.pal)
   } else {
     palette_use
   }
 
-  # Resolve `col` to an actual color
-  col_resolved <- if (is.numeric(col) || grepl("^[0-9]+$", col)) {
-    pal[as.integer(col)]
-  } else {
-    col
-  }
-
-  # Default: single-color histogram
+  # Default: single-color histogram (col is ignored when split is active)
   df$colour <- factor("all")
-  pal2 <- c(all = col_resolved)
-
-  # Optional split by vline
-  if (is.numeric(vline) && filtercol %in% c(1, -1)) {
+  if (split.active) {
     df$colour <- factor(
       if (filtercol == 1) df$value > vline else df$value < vline
     )
     pal2 <- setNames(pal[1:2], levels(df$colour))
+  } else {
+    col_resolved <- if (col.is.index) pal[col_i] else col
+    pal2 <- c(all = col_resolved)
   }
 
   pobj <- ggpubr::gghistogram(
