@@ -2465,7 +2465,7 @@ qMarkdownImageLink <- function(file_name = "myplot.pdf") {
 #' @param minLength minLength
 #' @param factor Length adjustment factor.
 #'
-#' @examples qqqAxisLength()
+#' @examples ggExpress:::qqqAxisLength()
 qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
   max(round(length(vec) * factor), minLength)
 }
@@ -2481,7 +2481,7 @@ qqqAxisLength <- function(vec = 1:20, minLength = 6, factor = 0.4) {
 #' @param thr thr
 #'
 #' @importFrom tibble tibble as_tibble
-#' @examples qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
+#' @examples ggExpress:::qqqNamed.Vec.2.Tbl(namedVec = c("A" = 2, "B" = 29))
 #'
 qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.names = TRUE, thr = 50) { # Convert a named vector to a 2 column tibble (data frame) with 2 columns: value, name.
 
