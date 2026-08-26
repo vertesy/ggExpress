@@ -31,10 +31,10 @@ or provided explicitly.
 }
 \examples{
 data("ToothGrowth")
-p <- ggplot2::ggplot(ToothGrowth, ggplot2::aes(x = factor(dose), y = len)) +
+pobj <- ggplot2::ggplot(ToothGrowth, ggplot2::aes(x = factor(dose), y = len)) +
   ggplot2::geom_boxplot()
-p + ggExpress:::qqqAnnotateTopLabels(ToothGrowth, x = "dose", y = "len")
-p + ggExpress:::qqqAnnotateTopLabels(
+pobj + ggExpress:::qqqAnnotateTopLabels(ToothGrowth, x = "dose", y = "len")
+pobj + ggExpress:::qqqAnnotateTopLabels(
   ToothGrowth, x = "dose", y = "len",
   labels = c("A", "B", "C")
 )

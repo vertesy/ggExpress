@@ -2517,10 +2517,15 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
   nr.uniq.names <- length(unique(names(namedVec)))
   if (nr.uniq.names > thr & verbose) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
-  an.issue.w.names <- (nr.uniq.names > thr | nr.uniq.names < 1)
+  # Stripping only makes sense when there ARE too many names. An unnamed vector has
+  # nothing to strip: assigning into names() of a NULL-names vector CREATES names
+  # (NA for the untouched positions, "" for the rest), manufacturing two spurious
+  # groups that split the plot into two series. Unnamed input is instead handled by
+  # the rep(".") fallback below.
+  too.many.names <- (nr.uniq.names > thr)
 
   idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
-  if (strip.too.many.names & an.issue.w.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
+  if (strip.too.many.names & too.many.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
 
   if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
