@@ -2589,7 +2589,8 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 #' @param max.categ The maximum allowed number of unique categories.
 #' @return Stops the function execution if the number of unique categories exceeds max.categ.
 #' @examples
-#' assertMaxCategories(df_XYcol, "x", 10)
+#' df_XYcol <- data.frame(x = c("A", "B", "C"), y = 1:3)
+#' ggExpress:::.assertMaxCategories(df_XYcol, "x", 10)
 .assertMaxCategories <- function(df, col, max.categ) {
   nrCategories <- length(unique(df[[col]]))
 
@@ -2625,11 +2626,11 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 #' @examples
 #' # Example with a named list
 #' lst <- list(A = 1:3, B = 4:6)
-#' summarize_mean_median(lst)
+#' ggExpress:::qqqSummarize_mean_median(lst)
 #'
 #' # Example with a long-format data frame
 #' df <- data.frame(group = rep(c("A", "B"), each = 3), value = 1:6)
-#' summarize_mean_median(df)
+#' ggExpress:::qqqSummarize_mean_median(df)
 #'
 qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y = 2) {
   # --- Input checks
