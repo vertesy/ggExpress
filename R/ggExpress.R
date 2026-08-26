@@ -1528,7 +1528,7 @@ qboxplot <- function(
 
 
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
+    if (is.numeric(col) & col < length(vars)) col <- vars[col]
     if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
     palette_use <- palette_use_bac
@@ -1668,7 +1668,7 @@ qviolin <- function(
     is.numeric(df_XYcol[[vars[y]]])
   )
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
+    if (is.numeric(col) & col < length(vars)) col <- vars[col]
     if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
@@ -1826,7 +1826,7 @@ qstripchart <- function(
   )
 
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
+    if (is.numeric(col) & col < length(vars)) col <- vars[col]
     if (col %in% vars) col <- vars[col]
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
