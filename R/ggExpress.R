@@ -318,7 +318,7 @@ qhistogram <- function(
     pal2 <- setNames(pal[1:2], levels(df$colour))
   }
 
-  p <- ggpubr::gghistogram(
+  pobj <- ggpubr::gghistogram(
     data = df, x = "value",
     title = plotname, xlab = xlab,
     add = add,
@@ -331,15 +331,15 @@ qhistogram <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
-  if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
+  if (logX) pobj <- pobj + ggplot2::scale_x_log10()
+  if (annotation_logticks_X) pobj <- pobj + ggplot2::annotation_logticks(sides = "b")
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
 
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (!isFALSE(vline)) pobj <- pobj + ggplot2::geom_vline(xintercept = vline)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -348,10 +348,10 @@ qhistogram <- function(
   }
   file_name <- FixPlotName(file_name)
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -423,7 +423,7 @@ qdensity <- function(
   if (isFALSE(xlab)) xlab <- plotname
   df <- qqqNamed.Vec.2.Tbl(namedVec = vec, thr = max.names)
 
-  p <- ggpubr::ggdensity(
+  pobj <- ggpubr::ggdensity(
     data = df, x = "value", # , y = "..count.."
     title = plotname, xlab = xlab,
     add = "median",
@@ -436,10 +436,10 @@ qdensity <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1)) +
     if (length(unique(df$"names")) == 1) ggplot2::theme(legend.position = "none")
 
-  if (logX) p <- p + ggplot2::scale_x_log10()
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (logX) pobj <- pobj + ggplot2::scale_x_log10()
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -447,10 +447,10 @@ qdensity <- function(
     FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "dens", ext)
   }
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -618,7 +618,7 @@ qpie <- function(
   # if (NamedSlices) labs <- paste(df$names, "\n", labs)
   # if (custom.order != FALSE) df$"names" <- factor(df$"names", levels = custom.order)
 
-  p <- ggpubr::ggpie(
+  pobj <- ggpubr::ggpie(
     data = df,
     x = "value",
     label = "label",
@@ -632,10 +632,10 @@ qpie <- function(
   ) +
     ggplot2::guides(fill = ggplot2::guide_legend(LegendTitle))
 
-  if (LegendSide) p <- ggpubr::ggpar(p, legend = "right")
-  if (extended.canvas) p <- p + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
-  if (custom.margin) p <- p + ggplot2::coord_polar(theta = "y", clip = "off")
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (LegendSide) pobj <- ggpubr::ggpar(pobj, legend = "right")
+  if (extended.canvas) pobj <- pobj + ggplot2::theme(plot.margin = ggplot2::margin(10, 10, 10, 10))
+  if (custom.margin) pobj <- pobj + ggplot2::coord_polar(theta = "y", clip = "off")
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -643,10 +643,10 @@ qpie <- function(
     FixPlotName(plotname, suffix, "pie", ext)
   }
 
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -813,7 +813,7 @@ qbarplot <- function(
   }
 
   # Plot _________________________________________________________________
-  p <- ggpubr::ggbarplot(
+  pobj <- ggpubr::ggbarplot(
     data = df, x = "names", y = "value",
     title = plotname, xlab = xlab,
     subtitle = subtitle,
@@ -827,13 +827,13 @@ qbarplot <- function(
     ggplot2::labs(y = ylab) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (length(vec) > max.names) p <- p + ggplot2::guides(x = "none")
-  if (!is.null(legend.title)) p <- p + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline)
+  if (length(vec) > max.names) pobj <- pobj + ggplot2::guides(x = "none")
+  if (!is.null(legend.title)) pobj <- pobj + ggplot2::guides(fill = ggplot2::guide_legend(title = legend.title), color = "none") # Hide the color legend
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
 
   file_name <- if (!is.null(filename)) {
@@ -844,13 +844,13 @@ qbarplot <- function(
 
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      ggobj = pobj, title = plotname, fname = file_name, ext = ext,
       w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -975,7 +975,7 @@ qbarplot.stacked.from.wide.df <- function(
     )
   }
 
-  p <- ggpubr::ggbarplot(
+  pobj <- ggpubr::ggbarplot(
     data = df_long, x = x, y = y,
     color = color,
     fill = z, # Use the 'category' column created in long format
@@ -989,12 +989,12 @@ qbarplot.stacked.from.wide.df <- function(
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (nrow(df) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when too many categories are present
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (nrow(df) > max.names) pobj <- pobj + ggplot2::guides(x = "none") # Hide x-axis labels when too many categories are present
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline)
 
   file_name <- if (!is.null(filename)) {
     filename
@@ -1004,13 +1004,13 @@ qbarplot.stacked.from.wide.df <- function(
 
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      ggobj = pobj, title = plotname, fname = file_name, ext = ext,
       w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1143,7 +1143,7 @@ qbarplot.df <- function(
   )
 
   # Plot _________________________________________________________________
-  p <- ggpubr::ggbarplot(
+  pobj <- ggpubr::ggbarplot(
     data = df, x = x, y = y,
     color = color,
     fill = fill,
@@ -1159,13 +1159,13 @@ qbarplot.df <- function(
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
   # Additional elements _________________________________________________________________
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (length(unique(df[[x]])) > max.names) p <- p + ggplot2::guides(x = "none") # Hide x-axis labels when number of unique categories exceeds limit
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (length(unique(df[[x]])) > max.names) pobj <- pobj + ggplot2::guides(x = "none") # Hide x-axis labels when number of unique categories exceeds limit
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline)
 
   # Save and print _________________________________________________________________
   file_name <- if (!is.null(filename)) {
@@ -1176,13 +1176,13 @@ qbarplot.df <- function(
 
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      ggobj = pobj, title = plotname, fname = file_name, ext = ext,
       w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1322,7 +1322,7 @@ qscatter <- function(
   }
 
   # Scatter plot ____________________________________________________________
-  p <- ggpubr::ggscatter(
+  pobj <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
     color = col,
     title = FixPlotName(plotname, suffix),
@@ -1339,25 +1339,25 @@ qscatter <- function(
   # +     ggplot2::scale_color_manual(values = palette_use) ### This is not a resolved problem. It does not take the same strings such as "jco" as the above palette argument.
 
   # Additional plot features ____________________________________________________________
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
-  if (!isFALSE(abline)) p <- p + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
-  if (add_contour_plot) p <- p + ggplot2::geom_density_2d()
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(vline)) pobj <- pobj + ggplot2::geom_vline(xintercept = vline, color = line.col, linewidth = line.width, linetype = line.type)
+  if (!isFALSE(abline)) pobj <- pobj + ggplot2::geom_abline(intercept = abline[1], slope = abline[2], color = line.col, linewidth = line.width, linetype = line.type)
+  if (add_contour_plot) pobj <- pobj + ggplot2::geom_density_2d()
 
   if (correlation_r2 %in% c("pearson", "spearman")) {
-    p <- p + ggpubr::stat_cor(method = correlation_r2)
+    pobj <- pobj + ggpubr::stat_cor(method = correlation_r2)
   } else if (!isFALSE(correlation_r2)) {
     warning("correlation_r2 must be either 'pearson' or 'spearman'")
   }
 
-  if (logX) p <- p + ggplot2::scale_x_log10()
-  if (annotation_logticks_X) p <- p + ggplot2::annotation_logticks(sides = "b")
+  if (logX) pobj <- pobj + ggplot2::scale_x_log10()
+  if (annotation_logticks_X) pobj <- pobj + ggplot2::annotation_logticks(sides = "b")
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
 
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   # Save plot and okject ____________________________________________________________
   file_name <- if (!is.null(filename)) {
@@ -1368,13 +1368,13 @@ qscatter <- function(
 
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h,
+      ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h,
       also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1534,7 +1534,7 @@ qboxplot <- function(
     palette_use <- palette_use_bac
   }
 
-  p <- ggpubr::ggboxplot(
+  pobj <- ggpubr::ggboxplot(
     data = df_XYcol, x = vars[x], y = vars[y],
     fill = fill,
     # size = 1,
@@ -1551,25 +1551,25 @@ qboxplot <- function(
 
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) pobj <- pobj + ggplot2::geom_vline(xintercept = vline)
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
 
-  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (stat.test) pobj <- pobj + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
   } else {
     FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1673,7 +1673,7 @@ qviolin <- function(
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
 
-  p <- ggpubr::ggviolin(
+  pobj <- ggpubr::ggviolin(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
     title = plotname,
     subtitle = subtitle,
@@ -1685,23 +1685,23 @@ qviolin <- function(
   ) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline)
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline)
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, hjust = 0, ...)
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline)
+  if (!isFALSE(vline)) pobj <- pobj + ggplot2::geom_vline(xintercept = vline)
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (stat.test) pobj <- pobj + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, hjust = 0, ...)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   file_name <- if (!is.null(filename)) {
     filename
   } else {
     FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1831,7 +1831,7 @@ qstripchart <- function(
     fill <- col # if col (color as a column name) is provided, fill is set to col
   }
 
-  p <- ggpubr::ggstripchart(
+  pobj <- ggpubr::ggstripchart(
     data = df_XYcol, x = vars[x], y = vars[y], fill = fill,
     title = plotname,
     subtitle = subtitle,
@@ -1846,13 +1846,13 @@ qstripchart <- function(
     ggplot2::ylab(ylab) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = xlab.angle, hjust = 1))
 
-  if (logY) p <- p + ggplot2::scale_y_log10()
-  if (annotation_logticks_Y) p <- p + ggplot2::annotation_logticks(sides = "l")
-  if (stat.test) p <- p + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
-  if (grid %in% c("xy", "x", "y")) p <- p + ggpubr::grids(axis = grid)
-  if (!isFALSE(hline)) p <- p + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
-  if (!isFALSE(vline)) p <- p + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
+  if (logY) pobj <- pobj + ggplot2::scale_y_log10()
+  if (annotation_logticks_Y) pobj <- pobj + ggplot2::annotation_logticks(sides = "l")
+  if (stat.test) pobj <- pobj + ggpubr::stat_compare_means(method = stat.method, label.y.npc = stat.label.y.npc, label.x = stat.label.x, ...)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
+  if (grid %in% c("xy", "x", "y")) pobj <- pobj + ggpubr::grids(axis = grid)
+  if (!isFALSE(hline)) pobj <- pobj + ggplot2::geom_hline(yintercept = hline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
+  if (!isFALSE(vline)) pobj <- pobj + ggplot2::geom_vline(xintercept = vline, color = "darkgrey", linewidth = 0.5, linetype = "dashed")
 
 
   # Top row annotation
@@ -1867,7 +1867,7 @@ qstripchart <- function(
       custom_top_labels
     }
 
-    p <- p + qqqAnnotateTopLabels(
+    pobj <- pobj + qqqAnnotateTopLabels(
       df = df_XYcol,
       x = xvar,
       y = yvar,
@@ -1884,7 +1884,7 @@ qstripchart <- function(
   #   } else {
   #     custom_top_labels
   #   }
-  #   p <- p + annotate_top_labels()
+  #   pobj <- pobj + annotate_top_labels()
   # }
 
 
@@ -1894,10 +1894,10 @@ qstripchart <- function(
   } else {
     FixPlotName(plotname, suffix, fix, flag.nameiftrue(logY), ext)
   }
-  if (save) qqSave(ggobj = p, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
+  if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -1966,7 +1966,7 @@ qvenn <- function(
 
   if (!is.null(caption2)) caption <- paste0(caption2, "\n", caption, "\n")
 
-  p <- ggVennDiagram::ggVennDiagram(list, ...) +
+  pobj <- ggVennDiagram::ggVennDiagram(list, ...) +
     ggplot2::scale_fill_gradient(low = col.min, high = col.max) +
     ggplot2::labs(
       title = paste(" ", plotname),
@@ -1976,7 +1976,7 @@ qvenn <- function(
     ggplot2::scale_x_continuous(expand = ggplot2::expansion(mult = x_exp)) + # expand axis to show long set labels
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = "white"))
 
-  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) p <- p + ggplot2::theme(legend.position = legend.position)
+  if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   s1 <- paste0(length(list), "s")
   s2 <- kpp(s1, paste0(length(unique(unlist(list))), "el"))
@@ -1984,13 +1984,13 @@ qvenn <- function(
   file_name <- if (!is.null(filename)) kpp(filename, s2) else sppp(plotname, suffix, s2, "venn", ext)
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name,
+      ggobj = pobj, title = plotname, fname = file_name,
       ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj
     )
   }
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -2315,7 +2315,7 @@ qmosaic <- function(
 
 
   # Build plot _______
-  p <- ggplot2::ggplot(data = df) +
+  pobj <- ggplot2::ggplot(data = df) +
     ggmosaic::geom_mosaic(
       ggplot2::aes(
         x = ggmosaic::product(!!rlang::sym(x)),
@@ -2353,14 +2353,14 @@ qmosaic <- function(
   # save
   if (save) {
     qqSave(
-      ggobj = p, title = plotname, fname = file_name, ext = ext,
+      ggobj = pobj, title = plotname, fname = file_name, ext = ext,
       w = w, h = h, limitsize = limitsize, also.pdf = also.pdf, save.obj = save.obj
     )
   }
 
   if (mdlink & save) qMarkdownImageLink(file_name)
-  if (plot) print(p)
-  invisible(p)
+  if (plot) print(pobj)
+  invisible(pobj)
 }
 
 
@@ -2581,9 +2581,9 @@ qqqList.2.DF.ggplot <- function(ls = LetterSets) {
 #' data("ToothGrowth")
 #' df <- ToothGrowth[, c("dose", "len")]
 #' df$dose <- factor(df$dose)
-#' p <- ggplot2::ggplot(df, ggplot2::aes(x = dose, y = len)) + ggplot2::geom_boxplot()
-#' p + qqqAnnotateTopLabels(df, x = "dose", y = "len")
-#' p + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
+#' pobj <- ggplot2::ggplot(df, ggplot2::aes(x = dose, y = len)) + ggplot2::geom_boxplot()
+#' pobj + qqqAnnotateTopLabels(df, x = "dose", y = "len")
+#' pobj + qqqAnnotateTopLabels(df, x = "dose", y = "len", labels = c("A", "B", "C"))
 #'
 qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2) {
   stopifnot(is.character(x), is.character(y))
