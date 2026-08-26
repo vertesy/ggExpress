@@ -2249,11 +2249,13 @@ qheatmap <- function(
 #' @importFrom scales hue_pal
 #'
 #' @examples
+#' \dontrun{
 #' df <- data.frame(
 #'   Group = rep(c("A", "B", "C"), each = 50),
 #'   Outcome = sample(c("Yes", "No"), 150, replace = TRUE, prob = c(0.6, 0.4))
 #' )
 #' qmosaic(df = df, x = "Group", y = "Outcome")
+#' }
 qmosaic <- function(
   df,
   x, y,
@@ -2273,7 +2275,12 @@ qmosaic <- function(
   w = 6, h = 5,
   ...
 ) {
-  warning("   !!! qmosaic is in experimental status !!! ")
+  warning(
+    "   !!! qmosaic is in experimental status !!! \n",
+    "   Known incompatibility: ggmosaic 0.4.0 (latest CRAN) crashes with ggplot2 >= 4.0\n",
+    "   ('Discrete value supplied to a continuous scale').\n",
+    "   This function will not work until ggmosaic ships a ggplot2-4.0-compatible release."
+  )
 
   stopifnot(
     is.data.frame(df),
