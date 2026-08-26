@@ -77,7 +77,11 @@ qhistogram(
 
 \item{palette_use}{Color palette to use. Either a \code{ggpubr::get_palette} palette or a custom vector of colors. Default: 'jco'.}
 
-\item{col}{Color of the plot. Default is '1'.}
+\item{col}{A single color for the histogram: either a palette index (a number, or a
+numeric string such as \code{"2"}) or a literal color (e.g. \code{"red"}, \code{"#FF0000"}).
+Default is '1', the 1st color of \code{palette_use}. Note that when the bars are split by
+\code{vline} + \code{filtercol}, the two resulting groups are colored from the first two colors
+of \code{palette_use} and \code{col} is not used.}
 
 \item{xlab.angle}{Angle to rotate X-axis labels. Default is 90 degrees.}
 
