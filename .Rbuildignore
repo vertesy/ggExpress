@@ -2,3 +2,13 @@
 ^\.Rproj\.user$
 ^ggExpress\.Rproj$
 ^PackageTools\.Rproj$
+^\.github$
+^Development$
+^AGENTS\.md$
+^CITATION\.cff$
+^Examples$
+^README\.assets$
+^Rplots\.pdf$
+^Mosaic\.plot\.Group\.vs\.Outcome\.ddecker\.png$
+^index\.md$
+^_config\.yml$
