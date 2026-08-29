@@ -603,7 +603,7 @@ qpie <- function(
 
   # Category handling ________________________________________________
   if (l.orig > max.categories) {
-    Stringendo::iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
+    Stringendo::iprint("Warning: there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are shown; the rest is summed.")
     sv <- sort(vec, decreasing = TRUE)
     vec.new <- sv[1:(max.categories - 1)]
     idx.remaining <- max.categories:length(vec)
