@@ -117,12 +117,12 @@ qqSave <- function(
   }
 
   # Helper
-  add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, sppp(x, ext))
+  add_ext_if_missing <- function(x, ext) ifelse(grepl(paste0("\\.", ext, "$"), x), x, Stringendo::sppp(x, ext))
 
   tictoc::tic()
   if (isFALSE(title)) title <- make.names(as.character(substitute(ggobj)))
 
-  fname <- if (isFALSE(fname)) sppp(ReplaceSpecialCharacters(title), suffix) else sppp(make.names(fname), suffix)
+  fname <- if (isFALSE(fname)) Stringendo::sppp(Stringendo::ReplaceSpecialCharacters(title), suffix) else Stringendo::sppp(make.names(fname), suffix)
 
   # Determine page size
   if (!isFALSE(plot_on_page)) {
@@ -167,14 +167,14 @@ qqSave <- function(
     plot = ggobj, filename = fname_png,
     base_width = w, base_height = h, ...
   )
-  FnPp <- spps(getwd(), "/", fname_png)
+  FnPp <- Stringendo::spps(getwd(), "/", fname_png)
   message(FnPp)
 
   # Saving ______________________________________________________________________________________
   if (also.pdf) {
     cowplot::save_plot(
       plot = ggobj, filename = fname_pdf, base_width = w, base_height = h,
-      title = ww.ttl_field(title, creator = "ggExpress"),
+      title = MarkdownHelpers::ww.ttl_field(title, creator = "ggExpress"),
       ...
     )
     message(getwd(), "/", fname_pdf)
@@ -184,7 +184,7 @@ qqSave <- function(
     ggobj.size <- object.size(ggobj)
     if (ggobj.size > max.obj.size) {
       warning(
-        "The ggplot object is larger than ", max.obj.size / 1e6, "MBs. It is: ", iround(ggobj.size / 1e6),
+        "The ggplot object is larger than ", max.obj.size / 1e6, "MBs. It is: ", CodeAndRoll2::iround(ggobj.size / 1e6),
         " MB. Increase max.obj.size to save the object.\n"
       )
     } else {
@@ -273,7 +273,7 @@ qqSave <- function(
 #' @export
 qhistogram <- function(
   vec,
-  plotname = FixPlotName(substitute(vec)),
+  plotname = Stringendo::FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -362,9 +362,9 @@ qhistogram <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "hist", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), "hist", ext)
   }
-  file_name <- FixPlotName(file_name)
+  file_name <- Stringendo::FixPlotName(file_name)
 
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -421,7 +421,7 @@ qhistogram <- function(
 #' qdensity(weight)
 qdensity <- function(
   vec,
-  plotname = FixPlotName(substitute(vec)),
+  plotname = Stringendo::FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -495,7 +495,7 @@ qdensity <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "dens", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), "dens", ext)
   }
 
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
@@ -558,7 +558,7 @@ qdensity <- function(
 #'
 qpie <- function(
   vec,
-  plotname = FixPlotName(substitute(vec)),
+  plotname = Stringendo::FixPlotName(substitute(vec)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -603,13 +603,13 @@ qpie <- function(
 
   # Category handling ________________________________________________
   if (l.orig > max.categories) {
-    iprint("Warning, there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are show, the rest is added up.")
+    Stringendo::iprint("Warning: there are more than", max.categories, "categories. Only the top", max.categories - 1, "items are shown; the rest is summed.")
     sv <- sort(vec, decreasing = TRUE)
     vec.new <- sv[1:(max.categories - 1)]
     idx.remaining <- max.categories:length(vec)
     sum.of.remaining <- sum(sv[idx.remaining])
-    fr.sum <- percentage_formatter(sum.of.remaining / sum(vec))
-    iprint("The remaining", length(idx.remaining), "values make up", fr.sum, "of the data.")
+    fr.sum <- Stringendo::percentage_formatter(sum.of.remaining / sum(vec))
+    Stringendo::iprint("The remaining", length(idx.remaining), "values make up", fr.sum, "of the data.")
 
     vec.new[max.categories] <- sum.of.remaining
     name.of.last <- paste("Sum of rem.", length(idx.remaining))
@@ -692,7 +692,7 @@ qpie <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "pie", ext)
+    Stringendo::FixPlotName(plotname, suffix, "pie", ext)
   }
 
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
@@ -767,8 +767,8 @@ qpie <- function(
 #' qbarplot(weight3, filtercol = 1, hline = .5)
 qbarplot <- function(
   vec,
-  plotname = FixPlotName(substitute(vec)),
-  subtitle = paste("Median:", iround(median(vec))),
+  plotname = Stringendo::FixPlotName(substitute(vec)),
+  subtitle = paste("Median:", CodeAndRoll2::iround(median(vec))),
   suffix = NULL,
   caption = suffix,
   filename = NULL,
@@ -785,7 +785,7 @@ qbarplot <- function(
   col = 1,
   xlab = "", xlab.angle = 45,
   logY = FALSE,
-  ylim = c(0, iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
+  ylim = c(0, CodeAndRoll2::iround(1.1 * as.numeric(max(vec, na.rm = TRUE)))),
   annotation_logticks_Y = logY,
   label = NULL,
   legend.position = "none",
@@ -918,7 +918,7 @@ qbarplot <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logY), "bar", ext)
   }
 
   if (save) {
@@ -1000,7 +1000,7 @@ qbarplot.stacked.from.wide.df <- function(
   y = "Fraction",
   z = "Category",
   y_axis_factor_levels = colnames(df),
-  plotname = FixPlotName(substitute(df)),
+  plotname = Stringendo::FixPlotName(substitute(df)),
   subtitle = NULL, suffix = NULL, caption = suffix,
   filename = NULL,
   plot = TRUE,
@@ -1046,7 +1046,7 @@ qbarplot.stacked.from.wide.df <- function(
       values_to = y # "Fraction"
     )
 
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df_long[[y]])))
+  if (is.null(subtitle)) subtitle <- paste("Median:", CodeAndRoll2::iround(median(df_long[[y]])))
 
   if (is.character(y_axis_factor_levels)) { # Explicitly set factor levels (first level = bottom of stacked bar)
     df_long[[2]] <- factor(
@@ -1079,7 +1079,7 @@ qbarplot.stacked.from.wide.df <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logY), "bar", ext)
   }
 
   if (save) {
@@ -1155,7 +1155,7 @@ qbarplot.df <- function(
   df,
   x = colnames(df)[1],
   y = colnames(df)[2],
-  plotname = FixPlotName(substitute(df)),
+  plotname = Stringendo::FixPlotName(substitute(df)),
   subtitle = NULL, suffix = NULL, caption = suffix,
   filename = NULL,
   fill = colnames(df)[3],
@@ -1207,7 +1207,7 @@ qbarplot.df <- function(
   )
 
   if (is.null(xlab)) xlab <- if (scale) paste("%", x) else x
-  if (is.null(subtitle)) subtitle <- paste("Median:", iround(median(df[[y]])))
+  if (is.null(subtitle)) subtitle <- paste("Median:", CodeAndRoll2::iround(median(df[[y]])))
 
   if (is.numeric(df[[fill]])) {
     df[[fill]] <- as.factor(df[[fill]])
@@ -1251,7 +1251,7 @@ qbarplot.df <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "bar", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logY), "bar", ext)
   }
 
   if (save) {
@@ -1330,7 +1330,7 @@ qbarplot.df <- function(
 qscatter <- function(
   df_XYcol,
   x = 1, y = 2,
-  plotname = FixPlotName(substitute(df_XYcol)),
+  plotname = Stringendo::FixPlotName(substitute(df_XYcol)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -1405,7 +1405,7 @@ qscatter <- function(
   pobj <- ggpubr::ggscatter(
     data = df_XYcol, x = vars[x], y = vars[y],
     color = col,
-    title = FixPlotName(plotname, suffix),
+    title = Stringendo::FixPlotName(plotname, suffix),
     subtitle = subtitle,
     caption = caption,
     palette = palette_use, # There is an upstream, internal problem with ggscatter that producing warnings.
@@ -1443,7 +1443,7 @@ qscatter <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logX), flag.nameiftrue(logY), "scatter", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logX), Stringendo::flag.nameiftrue(logY), "scatter", ext)
   }
 
   if (save) {
@@ -1519,7 +1519,7 @@ qscatter <- function(
 qboxplot <- function(
   df_XYcol_or_list,
   x = 1, y = 2,
-  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  plotname = Stringendo::FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -1644,7 +1644,7 @@ qboxplot <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, flag.nameiftrue(logY), "boxplot", ext)
+    Stringendo::FixPlotName(plotname, suffix, Stringendo::flag.nameiftrue(logY), "boxplot", ext)
   }
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -1708,7 +1708,7 @@ qboxplot <- function(
 qviolin <- function(
   df_XYcol_or_list,
   x = 1, y = 2, col = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  plotname = Stringendo::FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -1776,7 +1776,7 @@ qviolin <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, "violinplot", flag.nameiftrue(logY), ext)
+    Stringendo::FixPlotName(plotname, suffix, "violinplot", Stringendo::flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -1851,7 +1851,7 @@ qviolin <- function(
 qstripchart <- function(
   df_XYcol_or_list,
   x = 1, y = 2, col = NULL,
-  plotname = FixPlotName(substitute(df_XYcol_or_list)),
+  plotname = Stringendo::FixPlotName(substitute(df_XYcol_or_list)),
   subtitle = NULL,
   suffix = NULL,
   caption = suffix,
@@ -1968,11 +1968,11 @@ qstripchart <- function(
   # }
 
 
-  fix <- sppp("stripchart", sppp(add))
+  fix <- Stringendo::sppp("stripchart", Stringendo::sppp(add))
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(plotname, suffix, fix, flag.nameiftrue(logY), ext)
+    Stringendo::FixPlotName(plotname, suffix, fix, Stringendo::flag.nameiftrue(logY), ext)
   }
   if (save) qqSave(ggobj = pobj, title = plotname, fname = file_name, ext = ext, w = w, h = h, also.pdf = also.pdf, save.obj = save.obj)
   if (mdlink & save) qMarkdownImageLink(file_name)
@@ -2022,10 +2022,10 @@ qstripchart <- function(
 #' @export
 qvenn <- function(
   list,
-  plotname = FixPlotName(substitute(list)),
+  plotname = Stringendo::FixPlotName(substitute(list)),
   suffix = NULL,
   subtitle = paste(length(unique(unlist(list))), "elements in total"),
-  caption = parseParamStringWNames(sapply(list, length)),
+  caption = Stringendo::parseParamStringWNames(sapply(list, length)),
   caption2 = NULL,
   filename = NULL,
   plot = TRUE,
@@ -2059,9 +2059,9 @@ qvenn <- function(
   if (legend.position %in% c("left", "right", "top", "bottom", "none", "inside")) pobj <- pobj + ggplot2::theme(legend.position = legend.position)
 
   s1 <- paste0(length(list), "s")
-  s2 <- kpp(s1, paste0(length(unique(unlist(list))), "el"))
+  s2 <- Stringendo::kpp(s1, paste0(length(unique(unlist(list))), "el"))
 
-  file_name <- if (!is.null(filename)) kpp(filename, s2) else sppp(plotname, suffix, s2, "venn", ext)
+  file_name <- if (!is.null(filename)) Stringendo::kpp(filename, s2) else Stringendo::sppp(plotname, suffix, s2, "venn", ext)
   if (save) {
     qqSave(
       ggobj = pobj, title = plotname, fname = file_name,
@@ -2166,7 +2166,7 @@ qvenn <- function(
 #' @export
 qheatmap <- function(
   data_matrix,
-  plotname = FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
+  plotname = Stringendo::FixPlotName("Heatmap of", substitute(data_matrix)), # default plot title
   subtitle = NULL,
   suffix = NULL,
   caption = "caption",
@@ -2235,7 +2235,7 @@ qheatmap <- function(
     subtitle <- paste0(
       nrow(data_matrix), "-by-", ncol(data_matrix),
       " | Median:", median(data_matrix, na.rm = TRUE),
-      " | CV:", round(cv(data_matrix), digits = 1)
+      " | CV:", round(CodeAndRoll2::cv(data_matrix), digits = 1)
     )
   }
 
@@ -2256,10 +2256,10 @@ qheatmap <- function(
   file_name <- if (!is.null(filename)) {
     filename
   } else {
-    FixPlotName(
+    Stringendo::FixPlotName(
       plotname, suffix, "heatmap",
-      flag.nameiftrue(isTRUE(cluster_rows)),
-      flag.nameiftrue(isTRUE(cluster_cols)), ext
+      Stringendo::flag.nameiftrue(isTRUE(cluster_rows)),
+      Stringendo::flag.nameiftrue(isTRUE(cluster_cols)), ext
     )
   }
 
@@ -2425,13 +2425,13 @@ qmosaic <- function(
 
 
   # file name
-  file_name <- if (!is.null(filename)) filename else FixPlotName(plotname, "ddecker", ext)
+  file_name <- if (!is.null(filename)) filename else Stringendo::FixPlotName(plotname, "ddecker", ext)
 
   # print matrix
   {
     xy_matrix <- table(df[[x]], df[[y]]) # build contingency table
     print(xy_matrix)
-    if (save_matrix) write.simple.tsv(xy_matrix)
+    if (save_matrix) ReadWriter::write.simple.tsv(xy_matrix)
   }
 
   # save
@@ -2475,7 +2475,7 @@ qmosaic <- function(
 q32vA4_grid_plot <- function(
   plot_list,
   suffix = NULL,
-  plotname = FixPlotName(substitute(plot_list), suffix),
+  plotname = Stringendo::FixPlotName(substitute(plot_list), suffix),
   plot = FALSE,
   nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
   scale = 1,
@@ -2486,10 +2486,10 @@ q32vA4_grid_plot <- function(
   stopifnot(length(plot_list) < 7)
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname <- sppp(plotname, extension)
+  fname <- Stringendo::sppp(plotname, extension)
   p1 <- cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = LETTERS[1:length(plot_list)], ...)
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
-  ww.FnP_parser(fname)
+  MarkdownHelpers::ww.FnP_parser(fname)
   if (plot) p1
 }
 
@@ -2518,7 +2518,7 @@ q32vA4_grid_plot <- function(
 #' @export
 qA4_grid_plot <- function(
   plot_list,
-  plotname = FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
+  plotname = Stringendo::FixPlotName(substitute(plot_list), nrow, "by", ncol, suffix),
   suffix = NULL,
   nrow = 3, ncol = 2,
   plot = FALSE,
@@ -2533,11 +2533,11 @@ qA4_grid_plot <- function(
   message("Plot panels ", nrow, " rows by ", ncol, " cols, on an A4 page.")
 
   # if (plotname==F) plotname =  sppp(substitute(plot_list), suffix)
-  fname <- sppp(plotname, suffix, extension)
+  fname <- Stringendo::sppp(plotname, suffix, extension)
   p1 <- cowplot::plot_grid(plotlist = plot_list, nrow = nrow, ncol = ncol, labels = labels, ...) +
     ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
   cowplot::save_plot(plot = p1, filename = fname, base_height = h, base_width = w)
-  ww.FnP_parser(fname)
+  MarkdownHelpers::ww.FnP_parser(fname)
   if (plot) p1
 }
 
@@ -2591,7 +2591,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
 
   # Check naming issues
   nr.uniq.names <- length(unique(names(namedVec)))
-  if (nr.uniq.names > thr & verbose) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
+  if (nr.uniq.names > thr & verbose) Stringendo::iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
   if (nr.uniq.names < 1 & verbose) print("Vector has no names")
   # Stripping only makes sense when there ARE too many names. An unnamed vector has
   # nothing to strip: assigning into names() of a NULL-names vector CREATES names
@@ -2603,7 +2603,7 @@ qqqNamed.Vec.2.Tbl <- function(namedVec = 1:14, verbose = FALSE, strip.too.many.
   idx.elements.above.thr <- if (thr < length(namedVec)) thr:length(namedVec) else 1:length(namedVec)
   if (strip.too.many.names & too.many.names) names(namedVec)[idx.elements.above.thr] <- rep("", length(idx.elements.above.thr))
 
-  if (length(unique(names(namedVec))) > thr) iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
+  if (length(unique(names(namedVec))) > thr) Stringendo::iprint("Vector has", thr, "+ names. Can mess up auto-color legends.")
 
   df <- tibble::as_tibble(cbind("value" = namedVec))
   nm <- names(namedVec)
@@ -2755,7 +2755,7 @@ qqqSummarize_mean_median <- function(df_XYcol_or_list, x = 1, y = 2) {
   )
 
   # --- Convert list input to a long-format data.frame
-  if (is.list.simple(df_XYcol_or_list)) df_XYcol_or_list <- qqqList.2.DF.ggplot(df_XYcol_or_list) # convert list → 2-column long-format DF
+  if (CodeAndRoll2::is.list.simple(df_XYcol_or_list)) df_XYcol_or_list <- qqqList.2.DF.ggplot(df_XYcol_or_list) # convert list → 2-column long-format DF
 
   # --- Validate normalized data
   stopifnot(
