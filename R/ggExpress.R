@@ -2479,6 +2479,10 @@ q32vA4_grid_plot <- function(
   plot = FALSE,
   nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
   scale = 1,
+  # NOTE: BUG -- 'hA4'/'wA4' are not defined anywhere in this package (no default,
+  # no utils::globalVariables() declaration); calling this with default h/w errors
+  # with "object 'hA4' not found" unless the caller happens to have them in .GlobalEnv.
+  # A4 in inches is 8.27 x 11.69 (see pdfA4plot_on() below, which hardcodes 11.69).
   h = hA4 * scale, w = wA4 * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
@@ -2526,6 +2530,7 @@ qA4_grid_plot <- function(
   max.list.length = 16,
   extension = c("pdf", "png")[2],
   scale = 1,
+  # NOTE: BUG -- same undefined 'hA4'/'wA4' issue as q32vA4_grid_plot() above.
   h = hA4 * scale, w = wA4 * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
