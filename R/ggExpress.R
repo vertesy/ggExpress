@@ -2464,8 +2464,10 @@ qmosaic <- function(
 #' @param nrow number of rows for panels on the page. Default: 2
 #' @param ncol number of columns for panels on the page. Default: 2
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param hA4 A4 page height, in inches. Default: 11.69
+#' @param wA4 A4 page width, in inches. Default: 8.27
+#' @param h Height of the plot. Default: hA4 * scale
+#' @param w Width of the plot. Default: wA4 * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
 #' @importFrom cowplot plot_grid save_plot
@@ -2479,6 +2481,7 @@ q32vA4_grid_plot <- function(
   plot = FALSE,
   nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
   scale = 1,
+  hA4 = 11.69, wA4 = 8.27,
   h = hA4 * scale, w = wA4 * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
@@ -2508,8 +2511,10 @@ q32vA4_grid_plot <- function(
 #' @param max.list.length Max number of panels (per page). Default: 16
 #' @param extension file extension
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param hA4 A4 page height, in inches. Default: 11.69
+#' @param wA4 A4 page width, in inches. Default: 8.27
+#' @param h Height of the plot. Default: hA4 * scale
+#' @param w Width of the plot. Default: wA4 * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #'
 #' @importFrom cowplot plot_grid save_plot
@@ -2526,6 +2531,7 @@ qA4_grid_plot <- function(
   max.list.length = 16,
   extension = c("pdf", "png")[2],
   scale = 1,
+  hA4 = 11.69, wA4 = 8.27,
   h = hA4 * scale, w = wA4 * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
