@@ -13,8 +13,8 @@ q32vA4_grid_plot(
   ncol = 2,
   extension = c("pdf", "png")[2],
   scale = 1,
-  h = hA4 * scale,
-  w = wA4 * scale,
+  h = get0("hA4", ifnotfound = 11.69) * scale,
+  w = get0("wA4", ifnotfound = 8.27) * scale,
   ...
 )
 }
@@ -35,9 +35,9 @@ q32vA4_grid_plot(
 
 \item{scale}{Scaling factor of the canvas. Default: 1}
 
-\item{h}{Height of the plot. Default: wA4 * scale}
+\item{h}{Height of the plot, in inches. Default: get0("hA4", ifnotfound = 11.69) * scale}
 
-\item{w}{Width of the plot. Default: hA4 * scale}
+\item{w}{Width of the plot, in inches. Default: get0("wA4", ifnotfound = 8.27) * scale}
 
 \item{...}{Pass any other parameter to the internally called functions (most of them should work).}
 }
