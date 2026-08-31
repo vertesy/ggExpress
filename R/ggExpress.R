@@ -2464,8 +2464,8 @@ qmosaic <- function(
 #' @param nrow number of rows for panels on the page. Default: 2
 #' @param ncol number of columns for panels on the page. Default: 2
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param h Height of the plot, in inches. Default: get0("hA4", ifnotfound = 11.69) * scale
+#' @param w Width of the plot, in inches. Default: get0("wA4", ifnotfound = 8.27) * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
 #' @importFrom cowplot plot_grid save_plot
@@ -2479,7 +2479,7 @@ q32vA4_grid_plot <- function(
   plot = FALSE,
   nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
   scale = 1,
-  h = hA4 * scale, w = wA4 * scale,
+  h = get0("hA4", ifnotfound = 11.69) * scale, w = get0("wA4", ifnotfound = 8.27) * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
@@ -2508,8 +2508,8 @@ q32vA4_grid_plot <- function(
 #' @param max.list.length Max number of panels (per page). Default: 16
 #' @param extension file extension
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param h Height of the plot, in inches. Default: get0("hA4", ifnotfound = 11.69) * scale
+#' @param w Width of the plot, in inches. Default: get0("wA4", ifnotfound = 8.27) * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #'
 #' @importFrom cowplot plot_grid save_plot
@@ -2526,7 +2526,7 @@ qA4_grid_plot <- function(
   max.list.length = 16,
   extension = c("pdf", "png")[2],
   scale = 1,
-  h = hA4 * scale, w = wA4 * scale,
+  h = get0("hA4", ifnotfound = 11.69) * scale, w = get0("wA4", ifnotfound = 8.27) * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
   stopifnot(length(plot_list) < max.list.length)
