@@ -70,7 +70,11 @@ qboxplot(
 
 \item{save.obj}{Save the ggplot object to a file. Default: FALSE.}
 
-\item{col}{The index or name of the column to be used for coloring the plot. Default: \code{NULL}.}
+\item{col}{How to color the plot. Either (1) the \emph{name} of a column to color (group) by,
+colored through \code{palette_use}; (2) a single palette index - a positive whole number, or a
+digit-only string such as \code{"2"} - looked up in \code{palette_use}; or (3) a literal color such
+as \code{"red"} or \code{"#FF0000"}. A number is always a \emph{palette} index, never a column index,
+consistent with \code{qbarplot()} and \code{qhistogram()}. Default: \code{NULL}, which uses \code{fill}.}
 
 \item{fill}{Fill color of the plot. Default: \code{gold}.}
 

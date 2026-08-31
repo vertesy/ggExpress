@@ -1,7 +1,7 @@
 Package: ggExpress
 Title: ggExpress is the fastest way to create, annotate and export plots
     in R
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person("Abel", "Vertesy", , "av@imba.oeaw.ac.at", role = c("aut", "cre"))
 Description: ggExpress is a set of R functions that allows you to generate

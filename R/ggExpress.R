@@ -1293,7 +1293,12 @@ qbarplot.df <- function(
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
-#' @param col Color of the plot.
+#' @param col Color of the points, passed directly to `ggpubr::ggscatter(color = )`.
+#' Either a literal color (`"red"`, `"#FF0000"`), or the name of a *discrete* column to
+#' color by, or a number. Note that a number here is a base R color code (the default `3`
+#' is green), NOT an index into `palette_use` as in `qbarplot()` and `qhistogram()`.
+#' Coloring by a numeric column fails, because `palette_use` is a discrete scale.
+#' Default: 3.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #'
 #' @param xlab X-axis label. Default: NULL.
@@ -1343,7 +1348,11 @@ qscatter <- function(
   save.obj = getOption("gg.save.obj", FALSE),
   label = NULL, repel = TRUE,
   legend.position = "none",
-  col = c(NULL, 3)[1],
+  ## NOTE: `col` is passed straight to ggpubr::ggscatter(color = ), so a number here is a
+  ## base R colour code (3 = green), NOT a palette_use index as in qbarplot/qhistogram.
+  ## Previously written as c(NULL, 3)[1], which always evaluates to 3 because c() drops
+  ## NULL - it only looked as though NULL were a selectable alternative.
+  col = 3,
   # fill = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL, ylab = NULL,
@@ -1473,7 +1482,11 @@ qscatter <- function(
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
-#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param col How to color the plot. Either (1) the *name* of a column to color (group) by,
+#' colored through `palette_use`; (2) a single palette index - a positive whole number, or a
+#' digit-only string such as `"2"` - looked up in `palette_use`; or (3) a literal color such
+#' as `"red"` or `"#FF0000"`. A number is always a *palette* index, never a column index,
+#' consistent with `qbarplot()` and `qhistogram()`. Default: `NULL`, which uses `fill`.
 #' @param fill Fill color of the plot. Default: `gold`.
 #'
 #' @param plotname The title of the plot and the name of the file (unless specified in `filename`).
@@ -1608,9 +1621,10 @@ qboxplot <- function(
 
 
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
-    if (col %in% vars) col <- vars[col]
-    fill <- col # if col (color as a column name) is provided, fill is set to col
+    # `col` is either a column name to colour by, a palette index, or a literal colour.
+    # Resolve against palette_use_bac: by this point palette_use has been overwritten
+    # with the recycled `fill` colour above, and is no longer the requested palette.
+    fill <- .resolveColToFill(col, vars, palette_use_bac)
     palette_use <- palette_use_bac
   }
 
@@ -1666,7 +1680,11 @@ qboxplot <- function(
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
-#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param col How to color the plot. Either (1) the *name* of a column to color (group) by,
+#' colored through `palette_use`; (2) a single palette index - a positive whole number, or a
+#' digit-only string such as `"2"` - looked up in `palette_use`; or (3) a literal color such
+#' as `"red"` or `"#FF0000"`. A number is always a *palette* index, never a column index,
+#' consistent with `qbarplot()` and `qhistogram()`. Default: `NULL`, which uses `fill`.
 #' @param fill Fill color of the plot. Default: `gold`.
 #' @param plotname Name of the plot
 #' @param subtitle Optional subtitle text added below the title. Default is NULL.
@@ -1748,9 +1766,8 @@ qviolin <- function(
     is.numeric(df_XYcol[[vars[y]]])
   )
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
-    if (col %in% vars) col <- vars[col]
-    fill <- col # if col (color as a column name) is provided, fill is set to col
+    # `col` is either a column name to colour by, a palette index, or a literal colour.
+    fill <- .resolveColToFill(col, vars, palette_use)
   }
 
   pobj <- ggpubr::ggviolin(
@@ -1798,7 +1815,11 @@ qviolin <- function(
 #' @param df_XYcol_or_list Data as a two-column data frame, where column 1 is the X axis, alternatively a uniquely named list of values.
 #' @param x The index or name of the column to be plotted on the X axis. Default: `1`.
 #' @param y The index or name of the column to be plotted on the Y axis. Default: `2`.
-#' @param col The index or name of the column to be used for coloring the plot. Default: `NULL`.
+#' @param col How to color the plot. Either (1) the *name* of a column to color (group) by,
+#' colored through `palette_use`; (2) a single palette index - a positive whole number, or a
+#' digit-only string such as `"2"` - looked up in `palette_use`; or (3) a literal color such
+#' as `"red"` or `"#FF0000"`. A number is always a *palette* index, never a column index,
+#' consistent with `qbarplot()` and `qhistogram()`. Default: `NULL`, which uses `fill`.
 #' @param fill Fill color of the plot. Default: `gold`.
 #'
 #' @param plotname Name of the plot
@@ -1906,9 +1927,8 @@ qstripchart <- function(
   )
 
   if (!is.null(col)) {
-    if (is.numeric(col) & col < length(vars)) col <- col
-    if (col %in% vars) col <- vars[col]
-    fill <- col # if col (color as a column name) is provided, fill is set to col
+    # `col` is either a column name to colour by, a palette index, or a literal colour.
+    fill <- .resolveColToFill(col, vars, palette_use)
   }
 
   pobj <- ggpubr::ggstripchart(
@@ -2464,8 +2484,8 @@ qmosaic <- function(
 #' @param nrow number of rows for panels on the page. Default: 2
 #' @param ncol number of columns for panels on the page. Default: 2
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param h Height of the plot, in inches. Default: get0("hA4", ifnotfound = 11.69) * scale
+#' @param w Width of the plot, in inches. Default: get0("wA4", ifnotfound = 8.27) * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #' @param extension file extension
 #' @importFrom cowplot plot_grid save_plot
@@ -2479,7 +2499,7 @@ q32vA4_grid_plot <- function(
   plot = FALSE,
   nrow = 3, ncol = 2, extension = c("pdf", "png")[2],
   scale = 1,
-  h = hA4 * scale, w = wA4 * scale,
+  h = get0("hA4", ifnotfound = 11.69) * scale, w = get0("wA4", ifnotfound = 8.27) * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
   print("Plot panels on 3-by-2 vertical A4 page.")
@@ -2508,8 +2528,8 @@ q32vA4_grid_plot <- function(
 #' @param max.list.length Max number of panels (per page). Default: 16
 #' @param extension file extension
 #' @param scale Scaling factor of the canvas. Default: 1
-#' @param h Height of the plot. Default: wA4 * scale
-#' @param w Width of the plot. Default: hA4 * scale
+#' @param h Height of the plot, in inches. Default: get0("hA4", ifnotfound = 11.69) * scale
+#' @param w Width of the plot, in inches. Default: get0("wA4", ifnotfound = 8.27) * scale
 #' @param ... Pass any other parameter to the internally called functions (most of them should work).
 #'
 #' @importFrom cowplot plot_grid save_plot
@@ -2526,7 +2546,7 @@ qA4_grid_plot <- function(
   max.list.length = 16,
   extension = c("pdf", "png")[2],
   scale = 1,
-  h = hA4 * scale, w = wA4 * scale,
+  h = get0("hA4", ifnotfound = 11.69) * scale, w = get0("wA4", ifnotfound = 8.27) * scale,
   ...
 ) { # Save 4 umaps on an A4 page.
   stopifnot(length(plot_list) < max.list.length)
@@ -2711,6 +2731,69 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 
   # Assert that the number of categories is less than or equal to max.categ
   stopifnot(nrCategories <= max.categ)
+}
+
+
+# _________________________________________________________________________________________________
+#' @title Resolve the col argument to a ggpubr fill value
+#'
+#' @description Shared `col` resolution for the data frame / list based plotting functions
+#' (`qboxplot`, `qviolin`, `qstripchart`). `col` may be:
+#' (1) the name of a column to color (group) by, which is returned unchanged so ggpubr maps
+#' it through `palette_use`;
+#' (2) a single palette index - a positive whole number, or a digit-only string such as
+#' `"2"` - which is looked up in `palette_use` and returned as a literal color;
+#' (3) any other value, returned unchanged and used by ggpubr as a literal color.
+#' A numeric `col` is always a *palette* index, never a column index, which keeps these
+#' functions consistent with `qbarplot()` and `qhistogram()`.
+#' A named palette (e.g. `"jco"`) is regenerated to cover any requested index; a custom
+#' color vector cannot be extended, so an out-of-range index throws an informative error
+#' instead of silently resolving to `NA`.
+#'
+#' @param col The `col` argument as supplied by the caller. Must not be NULL.
+#' @param vars Column names of the data frame being plotted.
+#' @param palette_use The palette in use, passed through from the caller.
+#' @return A single string: either a column name for ggpubr to map, or a literal color.
+#'
+#' @examples
+#' ggExpress:::.resolveColToFill("dose", c("dose", "len"), "jco") # -> "dose"
+#' ggExpress:::.resolveColToFill(2, c("dose", "len"), "jco") # -> 2nd palette color
+#' ggExpress:::.resolveColToFill("red", c("dose", "len"), "jco") # -> "red"
+.resolveColToFill <- function(col, vars, palette_use) {
+  stopifnot(
+    "`col` must not be NULL." = !is.null(col),
+    "`vars` must be a character vector." = is.character(vars),
+    "`palette_use` must not be NULL." = !is.null(palette_use)
+  )
+
+  # (1) A column name colors by that column; ggpubr maps it through the palette.
+  if (is.character(col) && length(col) == 1L && col %in% vars) return(col)
+
+  # (2) A single positive whole number (or digit-only string) is a palette index.
+  col_i <- suppressWarnings(as.integer(col))
+  col.is.index <- length(col) == 1L &&
+    !is.na(col_i) && col_i >= 1L &&
+    (
+      (is.numeric(col) && col == col_i) || # whole-number numeric
+        (is.character(col) && grepl("^[0-9]+$", col)) # digit-only string
+    )
+
+  if (isTRUE(col.is.index)) {
+    if (length(palette_use) == 1) {
+      # Named palette (e.g. "jco"): regenerate it to cover the requested index.
+      pal <- ggpubr::get_palette(palette_use, max(2L, col_i))
+    } else {
+      # Custom color vector: it cannot be extended, so the index must fall within it.
+      stopifnot(
+        "`col` index exceeds the number of colors in the custom `palette_use`." = col_i <= length(palette_use)
+      )
+      pal <- palette_use
+    }
+    return(pal[col_i])
+  }
+
+  # (3) Anything else is used as a literal color.
+  col
 }
 
 
