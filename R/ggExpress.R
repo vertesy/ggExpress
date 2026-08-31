@@ -1293,7 +1293,12 @@ qbarplot.df <- function(
 #' @param label Point labels. Default: NULL.
 #' @param repel Repel labels from each other. Default: TRUE.
 #' @param legend.position Character indicating the position of the legend. Default is is 'none' to hide the legend.
-#' @param col Color of the plot.
+#' @param col Color of the points, passed directly to `ggpubr::ggscatter(color = )`.
+#' Either a literal color (`"red"`, `"#FF0000"`), or the name of a *discrete* column to
+#' color by, or a number. Note that a number here is a base R color code (the default `3`
+#' is green), NOT an index into `palette_use` as in `qbarplot()` and `qhistogram()`.
+#' Coloring by a numeric column fails, because `palette_use` is a discrete scale.
+#' Default: 3.
 #' @param palette_use Color palette to use. Either a `ggpubr::get_palette` palette or a custom vector of colors. Default: 'jco'.
 #'
 #' @param xlab X-axis label. Default: NULL.
@@ -1343,7 +1348,11 @@ qscatter <- function(
   save.obj = getOption("gg.save.obj", FALSE),
   label = NULL, repel = TRUE,
   legend.position = "none",
-  col = c(NULL, 3)[1],
+  ## NOTE: `col` is passed straight to ggpubr::ggscatter(color = ), so a number here is a
+  ## base R colour code (3 = green), NOT a palette_use index as in qbarplot/qhistogram.
+  ## Previously written as c(NULL, 3)[1], which always evaluates to 3 because c() drops
+  ## NULL - it only looked as though NULL were a selectable alternative.
+  col = 3,
   # fill = NULL,
   palette_use = getOption("gg.palette_use", "jco"),
   xlab = NULL, ylab = NULL,
