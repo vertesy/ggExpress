@@ -2746,6 +2746,9 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 #' (3) any other value, returned unchanged and used by ggpubr as a literal color.
 #' A numeric `col` is always a *palette* index, never a column index, which keeps these
 #' functions consistent with `qbarplot()` and `qhistogram()`.
+#' A named palette (e.g. `"jco"`) is regenerated to cover any requested index; a custom
+#' color vector cannot be extended, so an out-of-range index throws an informative error
+#' instead of silently resolving to `NA`.
 #'
 #' @param col The `col` argument as supplied by the caller. Must not be NULL.
 #' @param vars Column names of the data frame being plotted.
@@ -2757,6 +2760,12 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
 #' ggExpress:::.resolveColToFill(2, c("dose", "len"), "jco") # -> 2nd palette color
 #' ggExpress:::.resolveColToFill("red", c("dose", "len"), "jco") # -> "red"
 .resolveColToFill <- function(col, vars, palette_use) {
+  stopifnot(
+    "`col` must not be NULL." = !is.null(col),
+    "`vars` must be a character vector." = is.character(vars),
+    "`palette_use` must not be NULL." = !is.null(palette_use)
+  )
+
   # (1) A column name colors by that column; ggpubr maps it through the palette.
   if (is.character(col) && length(col) == 1L && col %in% vars) return(col)
 
@@ -2770,11 +2779,15 @@ qqqAnnotateTopLabels <- function(df, x, y, labels = NULL, fun = mean, digits = 2
     )
 
   if (isTRUE(col.is.index)) {
-    # Size the palette to cover the requested index; pal[i] yields NA for i > length(pal).
-    pal <- if (length(palette_use) == 1) {
-      ggpubr::get_palette(palette_use, max(2L, col_i))
+    if (length(palette_use) == 1) {
+      # Named palette (e.g. "jco"): regenerate it to cover the requested index.
+      pal <- ggpubr::get_palette(palette_use, max(2L, col_i))
     } else {
-      palette_use
+      # Custom color vector: it cannot be extended, so the index must fall within it.
+      stopifnot(
+        "`col` index exceeds the number of colors in the custom `palette_use`." = col_i <= length(palette_use)
+      )
+      pal <- palette_use
     }
     return(pal[col_i])
   }

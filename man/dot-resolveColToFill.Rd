@@ -26,6 +26,9 @@ it through \code{palette_use};
 (3) any other value, returned unchanged and used by ggpubr as a literal color.
 A numeric \code{col} is always a \emph{palette} index, never a column index, which keeps these
 functions consistent with \code{qbarplot()} and \code{qhistogram()}.
+A named palette (e.g. \code{"jco"}) is regenerated to cover any requested index; a custom
+color vector cannot be extended, so an out-of-range index throws an informative error
+instead of silently resolving to \code{NA}.
 }
 \examples{
 ggExpress:::.resolveColToFill("dose", c("dose", "len"), "jco") # -> "dose"
