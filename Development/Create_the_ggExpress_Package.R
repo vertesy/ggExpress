@@ -19,10 +19,10 @@ file.edit("~/GitHub/Packages/ggExpress/DESCRIPTION")
 file.edit(config.path)
 source(config.path)
 
+
 # Check and Document your package ------------------------------------------------
 devtools::check_man(repository.dir)
 PackageTools::document_and_create_package(repository.dir, config_file = 'config.R')
-
 
 # Automated Codebase linting to tidyverse style ------------------------------------------------
 styler::style_pkg(repository.dir)
